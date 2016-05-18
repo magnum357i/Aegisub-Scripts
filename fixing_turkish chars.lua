@@ -18,9 +18,9 @@
 	line.text = text
 	subs[i] = line
 	end
-    end
-    if pcs == true then prog("Bozuk karakterler düzeltiliyor...")
-    else aegisub.log(2, "Bir tane bile bozuk karakter bulunamadı.") end    
+    	end
+    	if pcs == true then prog("Bozuk karakterler düzeltiliyor...")
+    	else aegisub.log(2, "Bir tane bile bozuk karakter bulunamadı.") end    
 	aegisub.set_undo_point(script_name)
 	end
 
