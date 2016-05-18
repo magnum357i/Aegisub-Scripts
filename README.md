@@ -72,3 +72,15 @@ Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni bö
 Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir.
  
 **Oluşturduğu girdilere müdahalede bulunmayınız.**
+
+## Shaper
+Alt yazı veya video çözünürlüğüne göre resim için şekil çizer.
+
+## Sub Menu Maker
+Lua dosyalarını gruplar.
+
+## Trans State A1
+`Effect` kutucuğuna yüzdeler yazar.
+
+## Typewritter Maker
+Satıra daktilo tarzı bir efekt uygular.
