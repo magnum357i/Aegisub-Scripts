@@ -1,6 +1,11 @@
 ## [AUTOTAGS](autotagsv4.ass)
 İki etiket arasında sonsuz dönüşüm yapar.
 
+* **Interval:** İki etiket arasındaki dönüşüm zamanıdır.
+* **Accel:** `\transform` etiketinin `accel` parametresidir.
+* **Tags1:** İlk etiket. Bu etiketle başlar.
+* **Tags2:** İkinci etiket. Bu alandaki etiketin değerine dönüşüm yapar.
+
 ## [BASIC TURNING](basic_turning.lua)
 Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra sadece işaretleri yazmak yetmez, o satırı seçmelisiniz de.
 
@@ -52,6 +57,9 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 ## [COLOR FADE](color_fade_v2.ass)
 İki veya daha fazla renk arasında yatay renk geçişi yapar.
 
+* **Id:** Fonksiyonu her kullandığınızda buraya farklı bir değer girin. 1-50 arası sayılar alabilir.
+* **Colors:** Bu alana renkler girmeniz gerekiyor. Renkler arasına virgül koyun.
+
 ## [DELETE COMMENT BRACKET](delete_comment_bracket.lua)
 Yorum olarak düşülen notları siler.
 
@@ -74,19 +82,57 @@ Bozuk Türkçe karakterleri düzeltir.
 ## [LINE BREAKER CHECKER](line-breaker-checker.lua)
 Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni böl!**, karakter sınırı aşan ama satır bölme yapıldığı halde karakter sınırını aşan satırlara da **Beni düzgün böl!** şeklinde `Effect` kutucuğuna not düşer.
 
+* **Karakter Sınırı:** Varsayılan değeri 45'tir. Varsayılan değer üzerinden konuşacak olursak 45 ve üstü karakterde devreye girecektir.
+* **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
+
 ## [LINE SOURCE DUPLICATE](line_source_duplicate.lua)
 Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir.
- 
-**Oluşturduğu girdilere müdahalede bulunmayınız.**
+
+* **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
+* **Mod** 
+1. [M1A] Satır içinde yorum parantezleri
+*Metin. {Metin.}*
+2. [M1B] Satır içinde sadece yorum parantezleri
+*{Metin.}*
+3. [M2A] Satırdan sonra satır
+*(1. satır) Metin.*
+*(2. satır) Metin.*
+4. [M2B] Satırdan sonra yorum satırı
+*(1. satır) Metin.*
+*(Yorum satırı olarak 2. satır) Metin.*
+5. [M3A] Stilden sonra satır
+*(1. satır) Metin.*
+*(Stilin son satırından sonra 2. satır) Metin.*
+6. [M3B] Stilden sonra yorum satırı
+*(1. satır) Metin.*
+*(Stilin son satırından sonra yorum satırı olarak 2. satır) Metin.*
+
+###### Notlar
+Oluşturduğu girdilere müdahalede bulunmayınız.
 
 ## [RAINBOW](rainbow_v2.ass)
 Gökkuşağı renklerinde renk geçişi yapar.
+
+* **Id:** Fonksiyonu her kullandığınızda buraya farklı bir değer girin. 1-20 arası sayılar alabilir.
+* **Var1:** Buraya başlangıç değerini girin.
+* **Var2:** Buraya bitiş değerini girin.
+* **Saturation:** Buraya 0-1 arası ondalıklı değerler girin. 1'den düşük değerler rengin tonunu açar.
+* **Contrast:** Buraya 0-1 arası ondalıklı değerler girin. 1'den düşük değerler rengin tonunu koyulaştırır.
 
 ## [SHAPER(ASS)](shaper.ass)
 Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. ASS dosyası halinde.
 
 ## [SHAPER(LUA)](shaper.lua)
 Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua dosyası halinde.
+
+* **Resmin genişliği:** Resmin genişliğini girin.
+* **Resmin yüksekliği:** Resmin yüksekliğini girin.
+* **Resmin dizini:** İki adet ters slash kullanarak resmin dizinini girin.
+* **Çözünürlük şuna göre**
+1. ?script
+*Alt yazının çözünürlük değerine göre boyutlandırma yapar.*
+2. ?video
+*Videonun çözünürlük değerine göre boyutlandırma yapar.*
 
 ## [SUB MENU MAKER](sub_menu_maker.lua)
 Lua dosyalarını gruplar.
