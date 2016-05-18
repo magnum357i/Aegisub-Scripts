@@ -10,9 +10,7 @@
 	script_name="Line Source Duplicate/"
 	script_description="Kaynak metni bir şekilde çoğaltır. Bir şekilde çoğalttıklarını da silebilir."
 	script_author="Magnum357"
-	script_author_url="biskuvininkirintilari.blogspot.com.tr"	
 	script_version="2"
-	script_url="https://yadi.sk/d/ttsWwwHBqJnZY"
 
 	include("karaskel.lua")
 	
