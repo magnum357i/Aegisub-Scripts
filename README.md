@@ -67,8 +67,8 @@ Bozuk Türkçe karakterleri düzeltir.
 
 ## Line Breaker Checker
 Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni böl!**, karakter sınırı aşan ama satır bölme yapıldığı halde karakter sınırını aşan satırlara da **Beni düzgün böl!** şeklinde `Effect` kutucuğuna not düşer.
+
+## Line Source Duplicate
+Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir.
  
- ## Line Source Duplicate
- Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir.
- 
- **Oluşturduğu girdilere müdahalede bulunmayınız.**
+**Oluşturduğu girdilere müdahalede bulunmayınız.**
