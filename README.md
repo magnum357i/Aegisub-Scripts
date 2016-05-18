@@ -60,6 +60,7 @@ Stile ya da aktöre göre satır silme işlemi yapar.
 Bozuk Türkçe karakterleri düzeltir.
 
 ## Karaoke Cleaner
+Şunları yapar:
 * Şablonların oluşturduğu satırları siler.
 * Şablon efeklerinin olduğu satırların sürelerini sıfırlar.
 * Şablonun uygulandığı satırları görünür yapar.
