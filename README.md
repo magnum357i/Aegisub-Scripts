@@ -64,4 +64,7 @@ Bozuk Türkçe karakterleri düzeltir.
 * Şablon efeklerinin olduğu satırların sürelerini sıfırlar.
 * Şablonun uygulandığı satırları görünür yapar.
 * Şablon uygulandığında oluşan furigana stillerini siler.
+
+## Line Breaker Checker
+Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni böl!**, karakter sınırı aşan ama satır bölme yapıldığı halde karakter sınırını aşan satırlara da **Beni düzgün böl!** şeklinde `Effect` kutucuğuna not düşer.
  
