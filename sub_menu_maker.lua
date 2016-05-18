@@ -12,7 +12,7 @@
 	v2 = "Lua"
 	v3 = ""
 	v4 = "?default"
-	local default_path = "C:\\Program Files (x86)\\Aegisub\\automation\\autoload\\"
+	local default_path = aegisub.decode_path("?data") .. "\\automation\\autoload"
 	local path
 	repeat
 	local dialog_config=
