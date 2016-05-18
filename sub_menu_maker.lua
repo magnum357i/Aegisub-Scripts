@@ -2,7 +2,7 @@
 	script_description="Lua veya moon dosyalarını gruplamaya yarar."
 	script_author="Magnum357"
 	script_author_url="biskuvininkirintilari.blogspot.com.tr"
-	script_version="1.2"
+	script_version="1.3"
 	script_url="https://yadi.sk/d/GU3M25gHrior9"
 
 	function add_macro()
