@@ -46,6 +46,22 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 <br>ÖRNEK BİR CÜMLE.
 
 **Bu modlardan aynı anda sadece birini kullanın.**
- 
 
+# Delete Comment Bracket
+Yorum olarak düşülen notları siler.
+
+# Delete Lines
+Stile ya da aktöre göre satır silme işlemi yapar.
+
+# Fix Timing
+Ön izlemede görünmeyen satırları düzeltir.
+ 
+# Fixing Turkish Chars
+Bozuk Türkçe karakterleri düzeltir.
+
+# Karaoke Cleaner
+* Şablonların oluşturduğu satırları siler.
+* Şablon efeklerinin olduğu satırların sürelerini sıfırlar.
+* Şablonun uygulandığı satırları görünür yapar.
+* Şablon uygulandığında oluşan furigana stillerini siler.
  
