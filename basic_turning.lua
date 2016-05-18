@@ -1,9 +1,7 @@
 ﻿	script_name="Basic Turning/"
 	script_description="Bazı şeyleri bazı şeylere çevirir. Seçili satırlarda çevireceği şeyi bularak işlem yapar."
 	script_author="Magnum357"
-	script_author_url="biskuvininkirintilari.blogspot.com.tr"
 	script_version="1.8"
-	script_url="https://yadi.sk/d/PV_qIneVqW4D6"
 
 	unicode = require 'aegisub.unicode'
 	
