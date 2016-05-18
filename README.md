@@ -1,4 +1,4 @@
-## [autotagsv4](AUTOTAGS)
+## [AUTOTAGS](autotagsv4.ass)
 İki etiket arasında sonsuz dönüşüm yapar.
 
 ## BASIC TURNING
