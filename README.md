@@ -45,7 +45,7 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 Örnek bir `*S`cümle.`*S`
 <br>ÖRNEK BİR CÜMLE.
 
-**Bu modlardan sadece birini kullanın.**
+**Bu modlardan aynı anda sadece birini kullanın.**
  
 
  
