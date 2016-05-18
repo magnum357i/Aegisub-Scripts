@@ -1,6 +1,8 @@
-## Basic Turning
-Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra sadece işaretleri yazmak yetmez, o satırı seçmelisiniz de.
+## AUTOTAGS
+İki etiket arasında sonsuz dönüşüm yapar.
 
+## BASIC TURNING
+Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra sadece işaretleri yazmak yetmez, o satırı seçmelisiniz de.
 
 | İşaret | Dönüştüğü | Açıklama |
 |---|---|---|---|
@@ -47,41 +49,54 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 
 **Bu modlardan aynı anda sadece birini kullanın.**
 
-## Delete Comment Bracket
+## COLOR FADE
+İki veya daha fazla renk arasında yatay renk geçişi yapar.
+
+## DELETE COMMENT BRACKET
 Yorum olarak düşülen notları siler.
 
-## Delete Lines
+## DELETE LINES
 Stile ya da aktöre göre satır silme işlemi yapar.
 
-## Fix Timing
+## FIX TIMING
 Ön izlemede görünmeyen satırları düzeltir.
  
-## Fixing Turkish Chars
+## FIXING TURKISH CHARS
 Bozuk Türkçe karakterleri düzeltir.
 
-## Karaoke Cleaner
-Şunları yapar:
+## KARAOKE CLEANER
+Özetlersek şablon efeğinin oluşturduğu şeyleri siler. Ayrıntıya girersek de şunları yapıyor:
 * Şablonların oluşturduğu satırları siler.
 * Şablon efeklerinin olduğu satırların sürelerini sıfırlar.
 * Şablonun uygulandığı satırları görünür yapar.
 * Şablon uygulandığında oluşan furigana stillerini siler.
 
-## Line Breaker Checker
+## LINE BREAKER CHECKER
 Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni böl!**, karakter sınırı aşan ama satır bölme yapıldığı halde karakter sınırını aşan satırlara da **Beni düzgün böl!** şeklinde `Effect` kutucuğuna not düşer.
 
-## Line Source Duplicate
+## LINE SOURCE DUPLICATE
 Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir.
  
 **Oluşturduğu girdilere müdahalede bulunmayınız.**
 
-## Shaper
+## RAINBOW
+Gökkuşağı renklerinde renk geçişi yapar.
+
+## SHAPER(LUA + ASS)
 Alt yazı veya video çözünürlüğüne göre resim için şekil çizer.
 
-## Sub Menu Maker
+## T_CALC
+Girilen **frame** değerini alıp `\transform` etiketinin **t1** ve **t2** parametresi için **ms cinsinden** süre oluşturur.
+
+## SUB MENU MAKER
 Lua dosyalarını gruplar.
 
-## Trans State A1
+## TRANS STATE A1
 `Effect` kutucuğuna yüzdeler yazar.
 
-## Typewritter Maker
+## TYPEWRITTER MAKER
 Satıra daktilo tarzı bir efekt uygular.
+
+## VERTICAL KANJI
+Kanjiyi dikey şekilde konumlandırır.
+
