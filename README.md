@@ -1,7 +1,7 @@
 ## [AUTOTAGS](autotagsv4.ass)
 İki etiket arasında sonsuz dönüşüm yapar.
 
-## BASIC TURNING
+## [BASIC TURNING](basic_turning.lua)
 Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra sadece işaretleri yazmak yetmez, o satırı seçmelisiniz de.
 
 | İşaret | Dönüştüğü | Açıklama |
@@ -49,54 +49,57 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 
 **Bu modlardan aynı anda sadece birini kullanın.**
 
-## COLOR FADE
+## [COLOR FADE](color_fade_v2.ass)
 İki veya daha fazla renk arasında yatay renk geçişi yapar.
 
-## DELETE COMMENT BRACKET
+## [DELETE COMMENT BRACKET](delete_comment_bracket.lua)
 Yorum olarak düşülen notları siler.
 
-## DELETE LINES
+## [DELETE LINES](delete_lines.lua)
 Stile ya da aktöre göre satır silme işlemi yapar.
 
-## FIX TIMING
+## [FIX TIMING](fix_timing.lua)
 Ön izlemede görünmeyen satırları düzeltir.
  
-## FIXING TURKISH CHARS
+## [FIXING TURKISH CHARS](fixing_turkish chars.lua)
 Bozuk Türkçe karakterleri düzeltir.
 
-## KARAOKE CLEANER
+## [KARAOKE CLEANER](karaoke_cleaner.lua)
 Özetlersek şablon efeğinin oluşturduğu şeyleri siler. Ayrıntıya girersek de şunları yapıyor:
 * Şablonların oluşturduğu satırları siler.
 * Şablon efeklerinin olduğu satırların sürelerini sıfırlar.
 * Şablonun uygulandığı satırları görünür yapar.
 * Şablon uygulandığında oluşan furigana stillerini siler.
 
-## LINE BREAKER CHECKER
+## [LINE BREAKER CHECKER](line-breaker-checker.lua)
 Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni böl!**, karakter sınırı aşan ama satır bölme yapıldığı halde karakter sınırını aşan satırlara da **Beni düzgün böl!** şeklinde `Effect` kutucuğuna not düşer.
 
-## LINE SOURCE DUPLICATE
+## [LINE SOURCE DUPLICATE](line_source_duplicate.lua)
 Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir.
  
 **Oluşturduğu girdilere müdahalede bulunmayınız.**
 
-## RAINBOW
+## [RAINBOW](rainbow_v2.ass)
 Gökkuşağı renklerinde renk geçişi yapar.
 
-## SHAPER(LUA + ASS)
-Alt yazı veya video çözünürlüğüne göre resim için şekil çizer.
+## [SHAPER(ASS)](shaper.ass)
+Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. ASS dosyası halinde.
 
-## T_CALC
-Girilen **frame** değerini alıp `\transform` etiketinin **t1** ve **t2** parametresi için **ms cinsinden** süre oluşturur.
+## [SHAPER(LUA)](shaper.lua)
+Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua dosyası halinde.
 
-## SUB MENU MAKER
+## [SUB MENU MAKER](sub_menu_maker.lua)
 Lua dosyalarını gruplar.
 
-## TRANS STATE A1
+## [T_CALC](t_calc(v11).ass)
+Girilen **frame** değerini alıp `\transform` etiketinin **t1** ve **t2** parametresi için **ms cinsinden** süre oluşturur.
+
+## [TRANS STATE A1](trans_state_a1.lua)
 `Effect` kutucuğuna yüzdeler yazar.
 
-## TYPEWRITTER MAKER
+## [TYPEWRITTER MAKER](typewritter-maker.lua)
 Satıra daktilo tarzı bir efekt uygular.
 
-## VERTICAL KANJI
+## [VERTICAL KANJI](vertical_kanji.ass)
 Kanjiyi dikey şekilde konumlandırır.
 
