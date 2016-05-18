@@ -1,4 +1,4 @@
-# Basic Turning
+## Basic Turning
 Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra sadece işaretleri yazmak yetmez, o satırı seçmelisiniz de.
 
 
@@ -47,19 +47,19 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 
 **Bu modlardan aynı anda sadece birini kullanın.**
 
-# Delete Comment Bracket
+## Delete Comment Bracket
 Yorum olarak düşülen notları siler.
 
-# Delete Lines
+## Delete Lines
 Stile ya da aktöre göre satır silme işlemi yapar.
 
-# Fix Timing
+## Fix Timing
 Ön izlemede görünmeyen satırları düzeltir.
  
-# Fixing Turkish Chars
+## Fixing Turkish Chars
 Bozuk Türkçe karakterleri düzeltir.
 
-# Karaoke Cleaner
+## Karaoke Cleaner
 * Şablonların oluşturduğu satırları siler.
 * Şablon efeklerinin olduğu satırların sürelerini sıfırlar.
 * Şablonun uygulandığı satırları görünür yapar.
