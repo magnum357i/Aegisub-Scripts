@@ -157,10 +157,10 @@ Lua dosyalarını gruplar.
 * **Grup adı:** Grup adını giriniz.
 * **Dosya dizini:** Dosyanın dizinini giriniz.
  * **?default**<br>
- Bu giriliyken `Aegisub` programının yüklü olduğu dizindeki `automation` klasörünü dizin olarak girmiş olursunuz.
+ Bu giriliyken Aegisub programının yüklü olduğu dizindeki `automation` klasörünü dizin olarak girmiş olursunuz.
 
 ## [T_CALC](t_calc(v11).ass)
-Girilen **frame** değerini alıp `\transform` etiketinin **t1** ve **t2** parametresi için **ms cinsinden** süre oluşturur.
+Girilen frame değerini alıp `\transform` etiketinin `t1` ve `t2` parametresi için ms cinsinden süre oluşturur.
 
 * **Mode:** Fonksiyonu yazdığınız satırın retime modunu girin.
 * **Framev:** Bir frame girin. Bu frame değerinden sonra değişiklik olacaktır.
@@ -172,7 +172,7 @@ Girilen **frame** değerini alıp `\transform` etiketinin **t1** ve **t2** param
 
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
 * **Yüzde ondalığı:** Yüzdenin kaç basamaklı olacağını girin. Varsayılan değeri 2'dir. 0-2 arasında değerler girebilirsiniz.
-* **Eylem:**<br>
+* **Eylem**<br>
  *  **Seç**
  <br>Bu seçiliyken yüzde ekler.
  *  **Kaldır**
@@ -186,7 +186,7 @@ Kanjiyi dikey şekilde konumlandırır.
 
 * **Id:** Fonksiyonu her kullandığınızda buraya farklı bir değer girin. 1-30 arası sayılar alabilir.
 * **Space:** Karakterler arasında ne kadar boşluk olacağına karar verirsiniz.
-* **X_mode:** true yapılması halinde sağa tarafa konumlandırır.
-* **X:** Soldan kaç piksel boşluk bırakılacağına karar verirsiniz. `X_mode` eğer true ise sağ taraftan boşluk bırakır.
+* **X_mode:** `true` yapılması halinde sağa tarafa konumlandırır.
+* **X:** Yandan kaç piksel boşluk bırakılacağına karar verirsiniz.
 * **Y:** Buraya bir Aegisub değişkeni olan `$y` değişkenini girin.
 
