@@ -90,22 +90,27 @@ Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir
 
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
 * **Mod** 
-1. [M1A] Satır içinde yorum parantezleri
-*Metin. {Metin.}*
-2. [M1B] Satır içinde sadece yorum parantezleri
-*{Metin.}*
-3. [M2A] Satırdan sonra satır
-*(1. satır) Metin.*
-*(2. satır) Metin.*
-4. [M2B] Satırdan sonra yorum satırı
-*(1. satır) Metin.*
-*(Yorum satırı olarak 2. satır) Metin.*
-5. [M3A] Stilden sonra satır
-*(1. satır) Metin.*
-*(Stilin son satırından sonra 2. satır) Metin.*
-6. [M3B] Stilden sonra yorum satırı
-*(1. satır) Metin.*
-*(Stilin son satırından sonra yorum satırı olarak 2. satır) Metin.*
+ * **[M1A] Satır içinde yorum parantezleri**<br>
+ Metin. {Metin.}
+ * **[M1B] Satır içinde sadece yorum parantezleri**<br>
+ {Metin.}
+ * **[M2A] Satırdan sonra satır**<br>
+ (1. satır) Metin.<br>
+ (2. satır) Metin.
+ * **[M2B] Satırdan sonra yorum satırı**<br>
+ (1. satır) Metin.<br>
+ (Yorum satırı olarak 2. satır) Metin.
+ * **[M3A] Stilden sonra satır**<br>
+ (1. satır) Metin.<br>
+ (Stilin son satırından sonra 2. satır) Metin.
+ * **[M3B] Stilden sonra yorum satırı**<br>
+ (1. satır) Metin.*<br>
+ (Stilin son satırından sonra yorum satırı olarak 2. satır) Metin.
+* **Eylem**
+ * **Ekle**
+ <br> Bu seçiliyken seçilen moda göre kaynak metni çoğaltır.
+ * **Kaldır**
+ <br> Bu seçiliyken oluşturulan girdileri siler.
 
 ###### Notlar
 Oluşturduğu girdilere müdahalede bulunmayınız.
@@ -122,30 +127,66 @@ Gökkuşağı renklerinde renk geçişi yapar.
 ## [SHAPER(ASS)](shaper.ass)
 Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. ASS dosyası halinde.
 
+* **Img_path:** Resmin dizini ile beraber adını girin. Uzantıyı girmenize gerek yok.
+* **Width:** Resmin genişliğini girin.
+* **Height:** Resmin yüksekliğini girin.
+* **Res_type**
+ * **script**<br>
+ Bu giriliyken alt yazının çözünürlük değerine göre boyutlandırma yapar.
+ * **video**<br>
+ Bu giriliyken videonun çözünürlük değerine göre boyutlandırma yapar.
+
+
 ## [SHAPER(LUA)](shaper.lua)
 Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua dosyası halinde.
 
 * **Resmin genişliği:** Resmin genişliğini girin.
 * **Resmin yüksekliği:** Resmin yüksekliğini girin.
-* **Resmin dizini:** İki adet ters slash kullanarak resmin dizinini girin.
-* **Çözünürlük şuna göre**
-1. ?script
-*Alt yazının çözünürlük değerine göre boyutlandırma yapar.*
-2. ?video
-*Videonun çözünürlük değerine göre boyutlandırma yapar.*
+* **Resmin dizini:** İki adet ters slash kullanarak resmin adı ile beraber dizinini girin. Uzantıyı girmenize gerek yok.
+* **Çözünürlük şuna göre**<br>
+ * **?script**<br>
+ Bu seçiliyken alt yazının çözünürlük değerine göre boyutlandırma yapar.
+ * **?video**<br>
+ Bu seçiliyken videonun çözünürlük değerine göre boyutlandırma yapar.
 
 ## [SUB MENU MAKER](sub_menu_maker.lua)
 Lua dosyalarını gruplar.
 
+* **Dosya adı:** `Automation` menüsünde görünen adını değil `automation` dizininde görünen dosya adını giriniz.
+* **Dosya türü:** Dosya türünü giriniz.
+* **Grup adı:** Grup adını giriniz.
+* **Dosya dizini:** Dosyanın dizinini giriniz.
+ * **?default**<br>
+ Bu giriliyken `Aegisub` programının yüklü olduğu dizindeki `automation` klasörünü dizin olarak girmiş olursunuz.
+
 ## [T_CALC](t_calc(v11).ass)
 Girilen **frame** değerini alıp `\transform` etiketinin **t1** ve **t2** parametresi için **ms cinsinden** süre oluşturur.
 
+* **Mode:** Fonksiyonu yazdığınız satırın retime modunu girin.
+* **Framev:** Bir frame girin. Bu frame değerinden sonra değişiklik olacaktır.
+* **Interval:** Girdiğiniz frame değeriyle buraya girdiğiniz ms cinsinden değer arasında geçiş yapar.
+* **Tags:** Buraya çift ters slash ile etiketler girin.
+
 ## [TRANS STATE A1](trans_state_a1.lua)
 `Effect` kutucuğuna yüzdeler yazar.
+
+* **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
+* **Yüzde ondalığı:** Yüzdenin kaç basamaklı olacağını girin. Varsayılan değeri 2'dir. 0-2 arasında değerler girebilirsiniz.
+* **Eylem:**<br>
+ *  **Seç**
+ <br>Bu seçiliyken yüzde ekler.
+ *  **Kaldır**
+ <br>Bu seçiliyken eklediği yüzdeyi siler.
 
 ## [TYPEWRITTER MAKER](typewritter-maker.lua)
 Satıra daktilo tarzı bir efekt uygular.
 
 ## [VERTICAL KANJI](vertical_kanji.ass)
 Kanjiyi dikey şekilde konumlandırır.
+
+* **Id:** Fonksiyonu her kullandığınızda buraya farklı bir değer girin. 1-30 arası sayılar alabilir.
+* **Space:** Karakterler arasında ne kadar boşluk olacağına karar verirsiniz.
+* **X_mode:** true yapılması halinde sağa tarafa konumlandırır.
+* **X:** Soldan kaç piksel boşluk bırakılacağına karar verirsiniz. `X_mode` eğer true ise sağ taraftan boşluk bırakır.
+* **Y:** Buraya bir Aegisub değişkeni olan `$y` değişkenini girin.
 
