@@ -1,7 +1,7 @@
 ﻿	script_name="Delete Comment Bracket"
 	script_description="Çeviri notlarını siler."
 	script_author="Magnum357"
-	script_version="1.0"
+	script_version="1.1"
 
 	function delete_cb(subs)
 	pcs = false
@@ -9,10 +9,8 @@
 	if subs[i].class=="dialogue" then
 	line=subs[i]
 	text=subs[i].text
-	if text:match("{[^\\]+}") then
-	text = text
-	:gsub("{[^\\]+}","")
-	:gsub("{%s*}","")
+	if text:match("{[^\\]-}") then
+	text = text:gsub("{[^\\]-}","")
 	pcs = true
 	end
 	line.text=text
