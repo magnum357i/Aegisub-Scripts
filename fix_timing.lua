@@ -1,62 +1,41 @@
-﻿	script_name="Fix Timing"
+	script_name="Fix Timing"
 	script_description="Ön izlemede görünmeyen satırların zamanlamasını düzeltir."
 	script_author="Magnum357"
-	script_version="1.0"
+	script_version="1.1"
 
-	function line_breaker_chk(subs,sel,config)
-	local style_name = config["u_style_name"]
+	function fix_timing(subs)
+	pcs = false
+	local st, et
 	for i = 1, #subs do
 	if subs[i].class == "dialogue" then
-	if subs[i].style == style_name then
-	line=subs[i]
-	line.start_time = aegisub.ms_from_frame(aegisub.frame_from_ms(line.start_time))
-	line.end_time = aegisub.ms_from_frame(aegisub.frame_from_ms(line.end_time))
-	subs[i]=line
+	line = subs[i]
+	st = aegisub.ms_from_frame(aegisub.frame_from_ms(line.start_time))
+	et = aegisub.ms_from_frame(aegisub.frame_from_ms(line.end_time))
+	if line.start_time > st or line.end_time > et then
+	pcs = true
+	line.start_time = st
+	line.end_time = et
+	subs[i] = line
 	end
 	end
 	end
-	end
-
-	function collect_styles(subs)
-	local n, styles = 0, {}
-	for i = 1, #subs do
-	local sub = subs[i]
-	if sub.class == "style" then
-	n = n + 1
-	styles[n] = sub.name
-	end
-	end
-	return styles
+	if pcs == true then prog("Satırlar kare sürelerine göre zamanlanıyor...")
+	else aegisub.log("Düzeltilecek zaman bulunamadı.") end
+	aegisub.set_undo_point(script_name)
 	end
 
-	function create_config(subs)
-	local dialog_config=
-	{
-	{
-    class="label",
-    x=0,y=0,width=1,height=1,
-    label="Stil seç:"
-    },{
-	class="dropdown",name="u_style_name",
-	x=1,y=0,width=1,height=1,
-	items={"Seç"},value="Seç"
-	},
-	}
-	for _, style in ipairs(collect_styles(subs)) do
-	table.insert(dialog_config[2].items,style)
+	function delay()
+	local st = ""
+	for i = 0, 50000 do
+	st = st .. i
 	end
-	return dialog_config
+	return st
 	end
 
-	function add_macro(subs)
-	local ok, config
-	repeat
-	ok, config = aegisub.dialog.display(create_config(subs),{"Uygula","Kapat"})
-	until config.u_style_name ~= "Seç" or ok == "Kapat"
-	if ok == "Uygula" then
-	line_breaker_chk(subs,sel,config)
-    aegisub.set_undo_point(script_name)
-	end
+	function prog(str)
+	aegisub.progress.task(string.format("%s",str))
+	aegisub.progress.set(100)
+	delay()
 	end
 
-	aegisub.register_macro(script_name, script_description, add_macro)
+	aegisub.register_macro(script_name,script_description,fix_timing)
