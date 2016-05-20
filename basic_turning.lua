@@ -1,7 +1,7 @@
-﻿	script_name="Basic Turning/"
+	script_name="Basic Turning/"
 	script_description="Bazı şeyleri bazı şeylere çevirir. Seçili satırlarda çevireceği şeyi bularak işlem yapar."
 	script_author="Magnum357"
-	script_version="1.8"
+	script_version="1.8.2"
 
 	unicode = require 'aegisub.unicode'
 	
@@ -23,7 +23,7 @@
 	text = text:sub(0,t_t1 - 1)..capitalize(t_sub..string.rep(" ",tr_c))..text:sub(t_t2 - 2,string.len(text) * 2)
 	else
 	text = text:gsub(bt_sign.."t","")
-	text = capitalize(text_lower(text))
+	text = capitalize(text)
 	end
 	end
 	if not text:find(bt_sign.."2t") and not text:find(bt_sign.."t") and not text:find(bt_sign.."T") and text:find(bt_sign.."s") and not text:find(bt_sign.."S") then
@@ -61,12 +61,12 @@
 	t_t1 = text:find(bt_sign.."2t")
 	t_t2 = text:find(bt_sign.."2t",t_t1 + 1)
 	text = text:gsub(bt_sign.."2t","")
-	t_sub = text_lower(text:sub(t_t1,t_t2 - 3))
+	t_sub = text:sub(t_t1,t_t2 - 3)
 	tr_c = tr_counter(t_sub)
-	text = text:sub(0,t_t1 - 1)..turkish_capitalize(t_sub..string.rep(" ",tr_c))..text:sub(t_t2 - 2,string.len(text) * 2)
+	text = text:sub(0,t_t1 - 1)..turkish_capitalize(capitalize(t_sub..string.rep(" ",tr_c)))..text:sub(t_t2 - 2,string.len(text) * 2)
 	else
 	text = text:gsub(bt_sign.."2t","")
-	text = turkish_capitalize(text_lower(text))
+	text = turkish_capitalize(capitalize(text))
 	end
 	end		
 	local alpha_tag = ""
@@ -149,7 +149,7 @@
 	line.text = text
 	sub[li] = line
 	end
-    end
+	end
 	aegisub.set_undo_point(script_name)
 	end
 
@@ -244,224 +244,104 @@
 
 	function turkish_capitalize(line)
 	line = line .. " "
-	local n_tf = false
-	local N_tf = false
-	local h_tf = false
-	if line:match("\\N") then line = line:gsub("\\N","#sc1\\Nsc1#") N_tf = true end
-	if line:match("\\n") then line = line:gsub("\\n","#sc2\\nsc2#") n_tf = true end
-	if line:match("\\h") then line = line:gsub("\\h","#sc3\\hsc3#") h_tf = true end
-	local csc = 
+	line = line:gsub("([^a-zçşıüöğ])(\\N)","%1\\N#sp1 "):gsub("([^a-zçşıüöğ])(\\n)","%1\\n#sp2 "):gsub("([^a-zçşıüöğ])(\\h)","%1\\h#sp3 ")
+	local conjunctions = 
 	{"Ve","Veya","Ama","İle","İçin","Eğer","De","Da","Ya","Hem","Yani","Öyleyse",
 	"Yoksa","Sanki","Oysa","Fakat","Mısın","Misin","Musun","Mi","Mı","Mu","Mü"}
-	local bt = 0
-	local len = lt(line)
-	local pattern = ".-[A-Za-zŞşÇçiİıIğĞöÖüÜ]+[^A-Za-zŞşÇçiİıIğĞöÖüÜ]+"
-	local last_bt = ""
-	local rev_t = ""
-	local result = ""
-	local w_tmp = ""
-	local count = 0
-	local st = 0
-	local st_w = ""
-	local f = false
-	local ext = 0
-	for w in line:gmatch(pattern) do
-	rev_t = string.reverse(w)
-	if lt(w:sub(st,st + 2)) == 1 and bt == 0 then
-	w = upper(w:sub(st,st + 2)) .. w:sub(st + 3,len)
-	end
-	if lt(w:sub(st,st + 2)) == 2 and bt == 0 then
-	if count == 0 and w:find("{") and w:find("}") then f = true end
-	if count == 0 and w:find("[A-Za-zŞşÇçÖöÜüİiIı]") > 1 and f == false then
-	st = w:find("[A-Za-zŞşÇçÖöÜüİiIı]")
-	st_w = w:sub(0,st - 1)
-	end
-	if f == false then
-	if w:sub(0,1) == " " then
-	w = upper(w:sub(st,st)) .. w:sub(st + 1,len)
-	else
-	if lt(w:sub(st,st + 1 - ext)) == 2 then ext = 1 else ext = 0 end
-	w = upper(w:sub(st,st + 1 - ext)) .. w:sub(st + 2 - ext,len)
-	end
-	end
-	f = false
-	end
-	if bt == 0 and count > 0 then
-	w_tmp = remove_dot(w)
-	w_tmp = w_tmp:gsub("{",""):gsub("}","")
-	for i = 1, table.getn(csc) do
-	if w_tmp == csc[i] then
-	w = w:gsub(csc[i], lower(csc[i]))
+	local first_char = false
+	local in_space = false
+	local in_tag = false
+	local ccs = false
+	local l = ""
+	local stw = ""
+	for word in line:gmatch("[^%s]+%s+") do
+	stw = remove_dot(strip_text(word):gsub("%s+",""))
+	for k = 1, table.getn(conjunctions) do if stw == conjunctions[k] then ccs = true end end
+	for char in unicode.chars(word) do
+	if char == " " then in_space = true first_char = false end
+	if char == "{" then in_tag = true end
+	if char == "}" then in_tag = false end
+	if in_tag == false then
+	if in_space == true then
+	if char:match("[a-zA-ZçÇşŞıIiİüÜöÖ]") and first_char == false and ccs == true then
+	first_char = true
+	ccs = false
+	char = unicode.to_lower_case(char)
 	end
 	end
 	end
-	count = count + 1
-	if rev_t:match("[{}]+") then
-	last_bt = rev_t:match("[{}]+")
-	last_bt = last_bt:sub(0,1)
-	else
-	last_bt = ""
+	l = l .. char
 	end
-	if last_bt:find("{") then bt = 1 end
-	if last_bt:find("}") then bt = 0 end
-	w = st_w .. w
-	result = result .. w
-	st = 0
-	st_w = ""
 	end
-	if N_tf == true then result = result:gsub("#Sc1\\Nsc1#","\\N") end
-	if n_tf == true then result = result:gsub("#Sc2\\Nsc2#","\\n") end
-	if h_tf == true then result = result:gsub("#Sc3\\Hsc3#","\\h") end
-	result = result
-	:gsub("[a-zçşöüı]+'[A-ZÇŞÖÜİ]+",unicode.to_lower_case)
-	:gsub("[a-z]%-[A-Z]",unicode.to_lower_case)
-	result = result:sub(0,-2)
-	return result
+	return l:sub(1,-2):gsub("\\N#sp1 ","\\N"):gsub("\\n#sp2 ","\\n"):gsub("\\h#sp3 ","\\h")
 	end
 
 	function capitalize(line)
-	line = line .. " "
-	local n_tf = false
-	local N_tf = false
-	local h_tf = false
-	if line:match("\\N") then line = line:gsub("\\N","#sc1\\Nsc1#") N_tf = true end
-	if line:match("\\n") then line = line:gsub("\\n","#sc2\\nsc2#") n_tf = true end
-	if line:match("\\h") then line = line:gsub("\\h","#sc3\\hsc3#") h_tf = true end
-	local bt = 0
-	local len = lt(line)
-	local pattern = ".-[A-Za-zŞşÇçiİıIğĞöÖüÜ]+[^A-Za-zŞşÇçiİıIğĞöÖüÜ]+"
-	local last_bt = ""
-	local rev_t = ""
-	local result = ""
-	local w_tmp = ""
-	local count = 0
-	local st = 0
-	local st_w = ""
-	local f = false
-	local ext = 0
-	for w in line:gmatch(pattern) do
-	rev_t = string.reverse(w)
-	if lt(w:sub(st,st + 2)) == 1 and bt == 0 then
-	w = upper(w:sub(st,st + 2)) .. w:sub(st + 3,len)
-	end
-	if lt(w:sub(st,st + 2)) == 2 and bt == 0 then
-	if count == 0 and w:find("{") and w:find("}") then f = true end
-	if count == 0 and w:find("[A-Za-zŞşÇçÖöÜüİiIı]") > 1 and f == false then
-	st = w:find("[A-Za-zŞşÇçÖöÜüİiIı]")
-	st_w = w:sub(0,st - 1)
-	end
-	if f == false then
-	if w:sub(0,1) == " " then
-	w = upper(w:sub(st,st)) .. w:sub(st + 1,len)
-	else
-	if lt(w:sub(st,st + 1 - ext)) == 2 then ext = 1 else ext = 0 end
-	w = upper(w:sub(st,st + 1 - ext)) .. w:sub(st + 2 - ext,len)
+	line = " " .. line
+	line = line:gsub("([^a-zçşıüöğ])(\\N)","%1\\N#sp1 "):gsub("([^a-zçşıüöğ])(\\n)","%1\\n#sp2 "):gsub("([^a-zçşıüöğ])(\\h)","%1\\h#sp3 ")
+	local first_char = false
+	local in_space = false
+	local in_tag = false
+	local l = ""
+	for char in unicode.chars(line) do
+	if char == " " then in_space = true first_char = false end
+	if char == "{" then in_tag = true end
+	if char == "}" then in_tag = false end
+	if in_tag == false then
+	if in_space == true then
+	if char:match("[a-zA-ZçÇşŞıIiİüÜöÖ]") and first_char == false then
+	first_char = true
+	char = unicode.to_upper_case(char)
 	end
 	end
-	f = false
 	end
-	if bt == 0 and count > 0 then
-	w_tmp = remove_dot(w)
-	w_tmp = w_tmp:gsub("{",""):gsub("}","")
+	l = l .. char
 	end
-	count = count + 1
-	if rev_t:match("[{}]+") then
-	last_bt = rev_t:match("[{}]+")
-	last_bt = last_bt:sub(0,1)
-	else
-	last_bt = ""
+	return l:sub(2,-1):gsub("\\[nN]#sp1 ","\\N"):gsub("\\[nN]#sp2 ","\\n"):gsub("\\[hH]#sp3 ","\\h")
 	end
-	if last_bt:find("{") then bt = 1 end
-	if last_bt:find("}") then bt = 0 end
-	w = st_w .. w
-	result = result .. w
-	st = 0
-	st_w = ""
-	end
-	if N_tf == true then result = result:gsub("#Sc1\\Nsc1#","\\N") end
-	if n_tf == true then result = result:gsub("#Sc2\\Nsc2#","\\n") end
-	if h_tf == true then result = result:gsub("#Sc3\\Hsc3#","\\h") end
-	result = result
-	:gsub("[a-zçşöüı]+'[A-ZÇŞÖÜİ]+",unicode.to_lower_case)
-	:gsub("[a-z]%-[A-Z]",unicode.to_lower_case)
-	result = result:sub(0,-2)
-	return result
-	end	
 
 	function text_lower(line)
-	line = line .. " "
-	local n_tf = false
-	local N_tf = false
-	local h_tf = false
-	if line:match("\\N") then line = line:gsub("\\N","#sc1\\Nsc1#") N_tf = true end
-	if line:match("\\n") then line = line:gsub("\\n","#sc2\\nsc2#") n_tf = true end
-	if line:match("\\h") then line = line:gsub("\\h","#sc3\\hsc3#") h_tf = true end
-	local bt = 0
-	local pattern = ".-[A-Za-zŞşÇçiİıIğĞöÖüÜ]+[^A-Za-zŞşÇçiİıIğĞöÖüÜ]+"
-	local last_bt = ""
-	local rev_t = ""
-	local result = ""
-	local count = 0
-	for w in line:gmatch(pattern) do
-	count = count + 1
-	if bt == 0 and count > 1 then w = lower(w) end
-	if bt == 0 and count == 1 then
-	if w:find("{") then
-	w = w:sub(0,w:find("}")) .. lower(w:sub(w:find("}") + 1,string.len(w)))
-	else w = lower(w) end
+	line = " " .. line
+	line = line:gsub("\\N","\\N#sp1")
+	local in_space = false
+	local in_tag = false
+	local l = ""
+	for char in unicode.chars(line) do
+	if char == " " then in_space = true end
+	if char == "{" then in_tag = true end
+	if char == "}" then in_tag = false end
+	if in_tag == false then
+	if in_space == true then
+	if char:match("[a-zA-ZçÇşŞıIiİüÜöÖ]") then
+	char = unicode.to_lower_case(char)
 	end
-	rev_t = string.reverse(w)
-	if rev_t:match("[{}]+") then
-	last_bt = rev_t:match("[{}]+")
-	last_bt = last_bt:sub(0,1)
-	else last_bt = "" end
-	if last_bt:find("{") then bt = 1 end
-	if last_bt:find("}") then bt = 0 end
-	result = result .. w
 	end
-	if N_tf == true then result = result:gsub("#sc1\\nsc1#","\\N") end
-	if n_tf == true then result = result:gsub("#sc2\\nsc2#","\\n") end
-	if h_tf == true then result = result:gsub("#sc3\\hsc3#","\\h") end
-	result = result:sub(0,-2)
-	return result
+	end
+	l = l .. char
+	end
+	return l:sub(2,-1):gsub("\\n#sp1","\\N")
 	end
 
 	function text_upper(line)
-	line = line .. " "
-	local n_tf = false
-	local N_tf = false
-	local h_tf = false
-	if line:match("\\N") then line = line:gsub("\\N","#sc1\\Nsc1#") N_tf = true end
-	if line:match("\\n") then line = line:gsub("\\n","#sc2\\nsc2#") n_tf = true end
-	if line:match("\\h") then line = line:gsub("\\h","#sc3\\hsc3#") h_tf = true end
-	local bt = 0
-	local pattern = ".-[A-Za-zŞşÇçiİıIğĞöÖüÜ]+[^A-Za-zŞşÇçiİıIğĞöÖüÜ]+"
-	local last_bt = ""
-	local rev_t = ""
-	local result = ""
-	local count = 0
-	for w in line:gmatch(pattern) do
-	count = count + 1
-	if bt == 0 and count > 1 then w = upper(w) end
-	if bt == 0 and count == 1 then
-	if w:find("{") then
-	w = w:sub(0,w:find("}")) .. upper(w:sub(w:find("}") + 1,string.len(w)))
-	else w = upper(w) end
+	line = " " .. line
+	line = line:gsub("\\n","\\n#sp2"):gsub("\\h","\\h#sp3")
+	local in_space = false
+	local in_tag = false
+	local l = ""
+	for char in unicode.chars(line) do
+	if char == " " then in_space = true end
+	if char == "{" then in_tag = true end
+	if char == "}" then in_tag = false end
+	if in_tag == false then
+	if in_space == true then
+	if char:match("[a-zA-ZçÇşŞıIiİüÜöÖ]") then
+	char = unicode.to_upper_case(char)
 	end
-	rev_t = string.reverse(w)
-	if rev_t:match("[{}]+") then
-	last_bt = rev_t:match("[{}]+")
-	last_bt = last_bt:sub(0,1)
-	else last_bt = "" end
-	if last_bt:find("{") then bt = 1 end
-	if last_bt:find("}") then bt = 0 end
-	result = result .. w
 	end
-	if N_tf == true then result = result:gsub("#SC1\\NSC1#","\\N") end
-	if n_tf == true then result = result:gsub("#SC2\\NSC2#","\\n") end
-	if h_tf == true then result = result:gsub("#SC3\\HSC3#","\\h") end
-	result = result:sub(0,-2)
-	return result
+	end
+	l = l .. char
+	end
+	return l:sub(2,-1):gsub("\\N#SP2","\\n"):gsub("\\H#SP3","\\h")
 	end
 
 	function remove_dot(line)
@@ -515,7 +395,7 @@
 	},
 	{class="label",x=2,y=1,width=1,height=1,label=
 	"|  Dönüşüm"
-	.."\n-------------------"	
+	.."\n-------------------"
 	.."\n|  {\\i0}"
 	.."\n|  {\\i1}"
 	.."\n|  {\\an8}"
@@ -554,7 +434,7 @@
 	},
 	{class="label",x=2,y=1,width=1,height=1,label=
 	"|  Dönüşüm"
-	.."\n--------------------"	
+	.."\n--------------------"
 	.."\n|  â"
 	.."\n|  Â"
 	.."\n|  î"
@@ -672,7 +552,7 @@
 	},
 	}
 	return dialog_config
-	end	
+	end
 
 	function basic_turning_helper(subs)
 	local ok, cg, val
