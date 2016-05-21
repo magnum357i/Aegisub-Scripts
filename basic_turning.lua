@@ -1,7 +1,7 @@
 	script_name="Basic Turning/"
 	script_description="Bazı şeyleri bazı şeylere çevirir. Seçili satırlarda çevireceği şeyi bularak işlem yapar."
 	script_author="Magnum357"
-	script_version="1.8.2"
+	script_version="1.9"
 
 	unicode = require 'aegisub.unicode'
 	
@@ -19,8 +19,7 @@
 	t_t2 = text:find(bt_sign.."t",t_t1 + 1)
 	text = text:gsub(bt_sign.."t","")
 	t_sub = text_lower(text:sub(t_t1,t_t2 - 3))
-	tr_c = tr_counter(t_sub)
-	text = text:sub(0,t_t1 - 1)..capitalize(t_sub..string.rep(" ",tr_c))..text:sub(t_t2 - 2,string.len(text) * 2)
+	text = text:sub(0,t_t1 - 1)..capitalize(t_sub)..text:sub(t_t2 - 2,string.len(text) * 2)
 	else
 	text = text:gsub(bt_sign.."t","")
 	text = capitalize(text)
@@ -52,7 +51,7 @@
 	end
 	if not text:find(bt_sign.."2t") and not text:find(bt_sign.."t") and text:find(bt_sign.."T") and not text:find(bt_sign.."s") and not text:find(bt_sign.."S") then
 	text = text:gsub(bt_sign.."T","")
-	text = capitalize_sentences(text_lower(text))
+	text = capitalize_sentences(text)
 	text = respect(text)
 	end
 	if text:find(bt_sign.."2t") and not text:find(bt_sign.."t") and not text:find(bt_sign.."T") and not text:find(bt_sign.."s") and not text:find(bt_sign.."S") then
@@ -62,8 +61,7 @@
 	t_t2 = text:find(bt_sign.."2t",t_t1 + 1)
 	text = text:gsub(bt_sign.."2t","")
 	t_sub = text:sub(t_t1,t_t2 - 3)
-	tr_c = tr_counter(t_sub)
-	text = text:sub(0,t_t1 - 1)..turkish_capitalize(capitalize(t_sub..string.rep(" ",tr_c)))..text:sub(t_t2 - 2,string.len(text) * 2)
+	text = text:sub(0,t_t1 - 1)..turkish_capitalize(capitalize(t_sub))..text:sub(t_t2 - 2,string.len(text) * 2)
 	else
 	text = text:gsub(bt_sign.."2t","")
 	text = turkish_capitalize(capitalize(text))
@@ -157,8 +155,6 @@
 
 	function upper(text) return unicode.to_upper_case(text)	end
 
-	function lt(text) return unicode.len(text) end
-
 	function tr_counter(str)
 	local c_ct, c_ct_c = 0, 0
 	_, c_ct = str:gsub("ş","")
@@ -229,27 +225,35 @@
 	end
 
 	function capitalize_sentences(line)
-	line = "sp0. " .. line
-	line = line
-	:gsub("([\"%.%!%?%:%-%(%)]%s-[\\N]-%s-{[^é]-}%s-[\\N]-%s-)([a-z])",function(a,b) return a .. unicode.to_upper_case(b) end)
-	:gsub("([\"%.%!%?%:%-%(%)]%s-[\\N]-%s-{[^é]-}%s-[\\N]-%s-)([çşöüı]+)",function(a,b) return a .. unicode.to_upper_case(b) end)
-	:gsub("([\"%.%!%?%:%-%(%)]%s-[\\N]-%s-)([a-z])",function(a,b) return a .. unicode.to_upper_case(b) end)	
-	:gsub("([\"%.%!%?%:%-%(%)]%s-[\\N]-%s-)([çşöüı]+)",function(a,b) return a .. unicode.to_upper_case(b) end)	
-	:gsub("([ÖÜÇŞİA-Z]?)([ÖÜÇŞIİĞ]+)",function(a,b) return a .. unicode.to_lower_case(b) end)
-	:gsub("(%.%.%.)([A-ZÖÜÇŞİ]+)",function(a,b) return a .. unicode.to_lower_case(b) end)
-	:gsub("sp0%. ","")
-	:gsub("[a-z]%-[A-Z]",unicode.to_lower_case)
-	return line
+	line = "s#p1. " .. line
+	line = line:gsub("\\N","#\\\\\\#"):gsub("\\n","#\\\\\\\\\\\\#"):gsub("\\h","#\\\\\\\\\\\\\\\\\\#")
+	local in_tag = false
+	local l = ""
+	local first_char = false
+	for sentence in line:gmatch(".+[%.%!%?%:]+") do
+	for char in unicode.chars(sentence) do
+	if char == "{" then in_tag = true end
+	if char == "}" then in_tag = false end
+	if char:match("[%.%!%?%:]") then first_char = true end
+	if in_tag == false then
+	if char:match("[a-zA-ZçÇşŞıIiİüÜöÖ0-9]") then
+	if first_char == true then char = upper(char) end
+	first_char = false
+	end
+	end
+	l = l .. char
+	end
+	end
+	return l:sub(1,-1):gsub("s#p1%. ",""):gsub("#\\\\\\#","\\N"):gsub("#\\\\\\\\\\\\#","\\n"):gsub("#\\\\\\\\\\\\\\\\\\#","\\h")
 	end
 
 	function turkish_capitalize(line)
 	line = line .. " "
 	line = line:gsub("([^a-zçşıüöğ])(\\N)","%1\\N#sp1 "):gsub("([^a-zçşıüöğ])(\\n)","%1\\n#sp2 "):gsub("([^a-zçşıüöğ])(\\h)","%1\\h#sp3 ")
+	local n = 0
 	local conjunctions = 
 	{"Ve","Veya","Ama","İle","İçin","Eğer","De","Da","Ya","Hem","Yani","Öyleyse",
 	"Yoksa","Sanki","Oysa","Fakat","Mısın","Misin","Musun","Mi","Mı","Mu","Mü"}
-	local first_char = false
-	local in_space = false
 	local in_tag = false
 	local ccs = false
 	local l = ""
@@ -258,16 +262,13 @@
 	stw = remove_dot(strip_text(word):gsub("%s+",""))
 	for k = 1, table.getn(conjunctions) do if stw == conjunctions[k] then ccs = true end end
 	for char in unicode.chars(word) do
-	if char == " " then in_space = true first_char = false end
 	if char == "{" then in_tag = true end
 	if char == "}" then in_tag = false end
 	if in_tag == false then
-	if in_space == true then
-	if char:match("[a-zA-ZçÇşŞıIiİüÜöÖ]") and first_char == false and ccs == true then
-	first_char = true
+	if char:match("[a-zA-ZçÇşŞıIiİüÜöÖ0-9]") then
+	if ccs == true and n > 0 then char = lower(char) end
 	ccs = false
-	char = unicode.to_lower_case(char)
-	end
+	n = n + 1
 	end
 	end
 	l = l .. char
@@ -291,7 +292,7 @@
 	if in_space == true then
 	if char:match("[a-zA-ZçÇşŞıIiİüÜöÖ]") and first_char == false then
 	first_char = true
-	char = unicode.to_upper_case(char)
+	char = upper(char)
 	end
 	end
 	end
@@ -313,7 +314,7 @@
 	if in_tag == false then
 	if in_space == true then
 	if char:match("[a-zA-ZçÇşŞıIiİüÜöÖ]") then
-	char = unicode.to_lower_case(char)
+	char = lower(char)
 	end
 	end
 	end
@@ -335,7 +336,7 @@
 	if in_tag == false then
 	if in_space == true then
 	if char:match("[a-zA-ZçÇşŞıIiİüÜöÖ]") then
-	char = unicode.to_upper_case(char)
+	char = upper(char)
 	end
 	end
 	end
@@ -353,7 +354,7 @@
 	if last_value == nil then last_value = "Seç" end
 	local dialog_config=
 	{
-	{class="label",x=0,y=0,width=1,height=1,label="Bir kategori seçin:"},	
+	{class="label",x=0,y=0,width=1,height=1,label="Bir kategori seçin:"},
 	{class="dropdown",name="u_type",x=1,y=0,width=1,height=1,items={"Seç","Etiket Dönüşümleri","Harf Dönüşümleri","Büyük-Küçük Harf Dönüşümleri","Çeviri Siteleri","Satır Düzenleme"},value=last_value}
 	}
 	return dialog_config
