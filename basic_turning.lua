@@ -1,7 +1,7 @@
 	script_name="Basic Turning/"
 	script_description="Bazı şeyleri bazı şeylere çevirir. Seçili satırlarda çevireceği şeyi bularak işlem yapar."
 	script_author="Magnum357"
-	script_version="1.9"
+	script_version="1.9.2"
 
 	unicode = require 'aegisub.unicode'
 	
@@ -155,22 +155,7 @@
 
 	function upper(text) return unicode.to_upper_case(text)	end
 
-	function tr_counter(str)
-	local c_ct, c_ct_c = 0, 0
-	_, c_ct = str:gsub("ş","")
-	c_ct_c = c_ct
-	_, c_ct = str:gsub("ç","")
-	c_ct_c = c_ct_c + c_ct
-	_, c_ct = str:gsub("ğ","")
-	c_ct_c = c_ct_c + c_ct
-	_, c_ct = str:gsub("ı","")
-	c_ct_c = c_ct_c + c_ct
-	_, c_ct = str:gsub("ö","")
-	c_ct_c = c_ct_c + c_ct
-	_, c_ct = str:gsub("ü","")
-	c_ct_c = c_ct_c + c_ct
-	return tostring(c_ct_c)
-	end
+	--function lt(text) return unicode.len(text) end
 
 	function gt_redirect(text)
 	text = strip_text(text)
@@ -225,8 +210,9 @@
 	end
 
 	function capitalize_sentences(line)
-	line = "s#p1. " .. line
+	line = "s#p1. " .. line .. "."
 	line = line:gsub("\\N","#\\\\\\#"):gsub("\\n","#\\\\\\\\\\\\#"):gsub("\\h","#\\\\\\\\\\\\\\\\\\#")
+	local dots = 0
 	local in_tag = false
 	local l = ""
 	local first_char = false
@@ -237,14 +223,17 @@
 	if char:match("[%.%!%?%:]") then first_char = true end
 	if in_tag == false then
 	if char:match("[a-zA-ZçÇşŞıIiİüÜöÖ0-9]") then
-	if first_char == true then char = upper(char) end
+	if first_char == true and dots ~= 3 then char = upper(char) end
 	first_char = false
 	end
 	end
 	l = l .. char
+	if char:match("%.") then dots = dots + 1 else dots = 0 end
 	end
 	end
-	return l:sub(1,-1):gsub("s#p1%. ",""):gsub("#\\\\\\#","\\N"):gsub("#\\\\\\\\\\\\#","\\n"):gsub("#\\\\\\\\\\\\\\\\\\#","\\h")
+	--l = l:gsub("(%.%.%.)([A-ZŞÇÖÜİĞ]+)",
+	--function (a,b) if lt(b) == 1 then fc = true for c in unicode.chars(b) do if c:match("[A-ZŞÇÖÜİ]") and fc == true then b = lower(c) fc = false else b = b .. c end end end return a .. b end)
+	return l:sub(1,-2):gsub("s#p1%. ",""):gsub("#\\\\\\#","\\N"):gsub("#\\\\\\\\\\\\#","\\n"):gsub("#\\\\\\\\\\\\\\\\\\#","\\h")
 	end
 
 	function turkish_capitalize(line)
@@ -362,8 +351,7 @@
 
 	function gui1()
 	local dialog_config=
-	{
-	{class="label",x=0,y=0,width=3,height=1,label="------[ Etiket Dönüşümleri ]------"},
+	{{class="label",x=0,y=0,width=3,height=1,label="------[ Etiket Dönüşümleri ]------"},
 	{class="label",x=0,y=1,width=1,height=1,label=
 	" #"
 	.."\n---"
@@ -408,15 +396,13 @@
 	.."\n|  {\\2aH50}"
 	.."\n|  {\\3aH50}"
 	.."\n|  {\\4aH50}"
-	}
-	}
+	}}
 	return dialog_config
 	end
 
 	function gui2()
 	local dialog_config=
-	{
-	{class="label",x=0,y=0,width=3,height=1,label="-------[ Harf Dönüşümleri ]-------"},
+	{{class="label",x=0,y=0,width=3,height=1,label="-------[ Harf Dönüşümleri ]-------"},
 	{class="label",x=0,y=1,width=1,height=1,label=
 	" #"
 	.."\n---"
@@ -440,15 +426,13 @@
 	.."\n|  Â"
 	.."\n|  î"
 	.."\n|  Î"
-	}
-	}
+	}}
 	return dialog_config
 	end
 
 	function gui3()
 	local dialog_config=
-	{
-	{class="label",x=0,y=0,width=3,height=1,label="--------------------------------[ Büyük-Küçük Harf Dönüşümleri ]--------------------------------"},
+	{{class="label",x=0,y=0,width=3,height=1,label="--------------------------------[ Büyük-Küçük Harf Dönüşümleri ]--------------------------------"},
 	{class="label",x=0,y=1,width=1,height=1,label=
 	" #"
 	.."\n---"
@@ -482,15 +466,13 @@
 	{class="label",x=0,y=2,width=3,height=1,label=
 	"NOT: Cümlenin belli bir kısmını almak için o kısmın başına ve sonuna "..bt_sign.."T modu hariç\n bu işaretlerden koyun."
 	.. "\nÖrnek bir "..bt_sign.."(t-s-S-2t)cümle."..bt_sign.."(t-s-S-2t)"
-	}
-	}
+	}}
 	return dialog_config
 	end
 
 	function gui4()
 	local dialog_config=
-	{
-	{class="label",x=0,y=0,width=4,height=1,label="-------------------------------------------------------[ Çeviri Siteleri ]------------------------------------------------------"},	
+	{{class="label",x=0,y=0,width=4,height=1,label="-------------------------------------------------------[ Çeviri Siteleri ]------------------------------------------------------"},	
 	{class="label",x=0,y=1,width=1,height=1,label=
 	" #"
 	.."\n---"
@@ -514,15 +496,13 @@
 	.."\n-----------------------"
 	.."\n|  This is +a +sample."
 	.."\n|  This is %a sample%."
-	},
-	}
+	}}
 	return dialog_config
 	end
 
 	function gui5()
 	local dialog_config=
-	{
-	{class="label",x=0,y=0,width=4,height=1,label="-----------------------------------------------------------------------[ Satır Düzenleme ]------------------------------------------------------------------------"},	
+	{{class="label",x=0,y=0,width=4,height=1,label="-----------------------------------------------------------------------[ Satır Düzenleme ]------------------------------------------------------------------------"},	
 	{class="label",x=0,y=1,width=1,height=1,label=
 	" #"
 	.."\n---"
@@ -550,8 +530,7 @@
 	.."\n|  - Bu bir deneme.("..bt_sign.."l)\\N- Bu da bir deneme."
 	.."\n|  (1. satır)- Bu bir ("..bt_sign.."2l)deneme.(2. satır)\\N- Bu da bir deneme."
 	.."\n|  Bu bir (\\N)deneme. ("..bt_sign.."b)\\NBu da (\\N)bir deneme."
-	},
-	}
+	}}
 	return dialog_config
 	end
 
