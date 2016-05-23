@@ -124,6 +124,9 @@ Gökkuşağı renklerinde renk geçişi yapar.
 * **Saturation:** Buraya 0-1 arası ondalıklı değerler girin. 1'den düşük değerler rengin tonunu açar.
 * **Contrast:** Buraya 0-1 arası ondalıklı değerler girin. 1'den düşük değerler rengin tonunu koyulaştırır.
 
+## [Select not Selection Lines](select_not_selection_lines.lua)
+Seçtiğiniz satırların tersini, yani seçmediklerinizi seçer.
+
 ## [SHAPER(ASS)](shaper.ass)
 Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. ASS dosyası halinde.
 
