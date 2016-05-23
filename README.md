@@ -124,8 +124,20 @@ Gökkuşağı renklerinde renk geçişi yapar.
 * **Saturation:** Buraya 0-1 arası ondalıklı değerler girin. 1'den düşük değerler rengin tonunu açar.
 * **Contrast:** Buraya 0-1 arası ondalıklı değerler girin. 1'den düşük değerler rengin tonunu koyulaştırır.
 
-## [SELECT NOT SELECTION LINES](select_not_selection_lines.lua)
-Seçtiğiniz satırların tersini, yani seçmediklerinizi seçer.
+## [SELECT LINES](select_lines.lua)
+Birçok ayarda satır seçme işlemi yapar.
+* **Geçerli satır:** O an bulunduğunuz, metin kutusunda içeriğini gördüğünüz satırın olduğu noktadan işlem yaparsınız.
+  * **Öncesi:** Geçerli satır ve öncesini seçer.
+  * **Sonrası:** Geçerli satır ve sonrasını seçer.
+* **Stil:** O an bulunduğunuz, metin kutusunda içeriğini gördüğünüz satırın stiline göre işlem yaparsınız.
+  * **İlk satır:** Stilin ilk satırına atlarsınız.
+  * **Son satır:** Stilin son satırına atlarsınız.
+  * **Tüm satırlar:** Stilin tüm satırlarını seçersiniz.
+* **Satır:** Satırlara göre işlem yaparsınız.
+  * **Satır aralığı:** Girdiğiniz iki farklı sayının olduğu aralığı seçer.
+  * **Satır atlama:** Girdiğiniz satır numarasına atlarsınız.
+* **Seçimin tersi:** Seçiminiz dışında kalan satırları seçersiniz.
+ 
 
 ## [SHAPER(ASS)](shaper.ass)
 Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. ASS dosyası halinde.
