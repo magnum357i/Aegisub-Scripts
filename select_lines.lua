@@ -1,6 +1,6 @@
 	script_name = "Select Lines"
 	script_desription = "Her türlü yolla satır seçir."
-	script_version = "1"
+	script_version = "1.1"
 	script_author = "Magnum357"
 
 	function prev_act(subs,sel,act)
@@ -59,6 +59,7 @@
 	ok, config = aegisub.dialog.display(dlg,{"Uygula","Kapat"})
 	if config.var2 ~= 0 and config.var1 > config.var2 then aegisub.log("Başlangıç satırı, bitiş satırından büyük.\n") pcs = false end
 	if config.var1 > total_line(subs) or config.var2 > total_line(subs) then aegisub.log("Başlangıç veya bitiş satırı kadar satır yok.\n") pcs = false end
+	if ok == "Kapat" then pcs = false end
 	if pcs == true then
 	if config.var1 < 1 then config.var1 = 1 end
 	config.var1 = (#subs - total_line(subs)) + config.var1
@@ -70,15 +71,19 @@
 	end
 
 	function line_jumping(subs)
+	local pcs = true
 	local index = {}
 	local dlg =
 	{{class="label",x=0,y=0,width=1,height=1,label="Satır numarası:"}
 	,{class="intedit",name="var",x=1,y=0,width=3,height=1,min=1}}
 	ok, config = aegisub.dialog.display(dlg,{"Uygula","Kapat"})
+	if ok == "Kapat" then pcs = false end
+	if pcs == true then
 	if config.var < 1 then config.var = 1 end
 	if config.var > total_line(subs) then config.var = total_line(subs) end
 	index[1] = (#subs - total_line(subs)) + config.var
 	return index
+	end
 	end
 
 	aegisub.register_macro(script_name.."/Geçerli satır/Öncesi",script_desription,prev_act)
