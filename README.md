@@ -136,6 +136,8 @@ Birçok ayarda satır seçme işlemi yapar.
 * **Satır:** Satırlara göre işlem yaparsınız.
   * **Satır aralığı:** Girdiğiniz iki farklı sayının olduğu aralığı seçer.
   * **Satır atlama:** Girdiğiniz satır numarasına atlarsınız.
+  * **Önceki satır:** O an metin kutusunda içeriğini gördüğünüz satırın üstündeki satıra, yani bir önceki satıra atlar.
+  * **Sonraki satır:** O an metin kutusunda içeriğini gördüğünüz satırın altındaki satıra, yani bir sonraki satıra atlar.
 * **Seçimin tersi:** Seçiminiz dışında kalan satırları seçersiniz.
  
 
