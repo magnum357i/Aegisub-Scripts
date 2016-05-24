@@ -1,18 +1,34 @@
 	script_name = "Select Lines"
-	script_desription = "Her türlü yolla satır seçir."
-	script_version = "1.1"
+	script_desription = "Her türlü yolla satır seçer."
+	script_version = "1.2"
 	script_author = "Magnum357"
 
-	function prev_act(subs,sel,act)
+	function act_before(subs,sel,act)
 	local idx, index = 0, {}
 	for i = 1, act do if subs[i].class == "dialogue" then idx = idx + 1 index[idx] = i end end
 	return index
 	end
 
-	function next_act(subs,sel,act)
+	function act_after(subs,sel,act)
 	local idx, index = 0, {}
 	for i = act, #subs do idx = idx + 1 index[idx] = i end
 	return index
+	end
+
+	function prev_act(subs,sel,act)
+	if subs[act - 1].class == "dialogue" then
+	local index = {}
+	index[1] = act - 1
+	return index
+	end
+	end
+
+	function next_act(subs,sel,act)
+	if act < #subs then
+	local index = {}
+	index[1] = act + 1
+	return index
+	end
 	end
 
 	function first_style_line(subs,sel,act)
@@ -61,7 +77,6 @@
 	if config.var1 > total_line(subs) or config.var2 > total_line(subs) then aegisub.log("Başlangıç veya bitiş satırı kadar satır yok.\n") pcs = false end
 	if ok == "Kapat" then pcs = false end
 	if pcs == true then
-	if config.var1 < 1 then config.var1 = 1 end
 	config.var1 = (#subs - total_line(subs)) + config.var1
 	if config.var2 == 0 then config.var2 = #subs
 	else config.var2 = (#subs - total_line(subs)) + config.var2 end	
@@ -79,18 +94,19 @@
 	ok, config = aegisub.dialog.display(dlg,{"Uygula","Kapat"})
 	if ok == "Kapat" then pcs = false end
 	if pcs == true then
-	if config.var < 1 then config.var = 1 end
 	if config.var > total_line(subs) then config.var = total_line(subs) end
 	index[1] = (#subs - total_line(subs)) + config.var
 	return index
 	end
 	end
 
-	aegisub.register_macro(script_name.."/Geçerli satır/Öncesi",script_desription,prev_act)
-	aegisub.register_macro(script_name.."/Geçerli satır/Sonrası",script_desription,next_act)
+	aegisub.register_macro(script_name.."/Geçerli satır/Öncesi",script_desription,act_before)
+	aegisub.register_macro(script_name.."/Geçerli satır/Sonrası",script_desription,act_after)
 	aegisub.register_macro(script_name.."/Stil/İlk satır",script_desription,first_style_line)
 	aegisub.register_macro(script_name.."/Stil/Son satır",script_desription,last_style_line)
 	aegisub.register_macro(script_name.."/Stil/Tüm satırlar",script_desription,style_all_lines)
 	aegisub.register_macro(script_name.."/Satır/Satır aralığı",script_desription,lines_from_to)
 	aegisub.register_macro(script_name.."/Satır/Satır atlama",script_desription,line_jumping)
+	aegisub.register_macro(script_name.."/Satır/Önceki satır",script_desription,prev_act)
+	aegisub.register_macro(script_name.."/Satır/Sonraki satır",script_desription,next_act)	
 	aegisub.register_macro(script_name.."/Seçimin tersi",script_desription,not_selection)
