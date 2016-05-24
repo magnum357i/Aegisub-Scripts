@@ -348,7 +348,5 @@
 	end
 	end
 	end
-
-	script_name = script_name.." ".."v"..script_version
 	
 	aegisub.register_macro(script_name, script_description, add_macro)
