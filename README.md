@@ -152,6 +152,13 @@ Birçok ayarda satır seçme işlemi yapar.
   * **Sonraki satır:** O an metin kutusunda içeriğini gördüğünüz satırın altındaki satıra, yani bir sonraki satıra atlar.
 * **Seçimin tersi:** Seçiminiz dışında kalan satırları seçersiniz.
  
+![GUI SS](GUI/select_lines.png)
+
+![GUI SS](GUI/select_lines_1.png)
+
+![GUI SS](GUI/select_lines_2.png)
+
+![GUI SS](GUI/select_lines_3.png)
 
 ## [SHAPER(ASS)](shaper.ass)
 Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. ASS dosyası halinde.
