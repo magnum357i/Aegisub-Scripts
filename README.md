@@ -129,6 +129,8 @@ Birçok ayarda satır seçme işlemi yapar.
 * **Geçerli satır:** O an bulunduğunuz, metin kutusunda içeriğini gördüğünüz satırın olduğu noktadan işlem yaparsınız.
   * **Öncesi:** Geçerli satır ve öncesini seçer.
   * **Sonrası:** Geçerli satır ve sonrasını seçer.
+  * **Önceki(Stil):** Geçerli satırı ve ondan önceki onunla aynı stile sahip olan satırları seçer.
+  * **Sonraki(Stil):** Geçerli satırı ve ondan sonraki onunla aynı stile sahip olan satırları seçer.
 * **Stil:** O an bulunduğunuz, metin kutusunda içeriğini gördüğünüz satırın stiline göre işlem yaparsınız.
   * **İlk satır:** Stilin ilk satırına atlarsınız.
   * **Son satır:** Stilin son satırına atlarsınız.
