@@ -66,6 +66,12 @@ Yorum olarak düşülen notları siler.
 ## [DELETE LINES](delete_lines.lua)
 Stile ya da aktöre göre satır silme işlemi yapar.
 
+![GUI SS](GUI/delete_lines.png)
+
+![GUI SS](GUI/delete_lines_style.png)
+
+![GUI SS](GUI/delete_lines_actor.png)
+
 ## [FIX TIMING](fix_timing.lua)
 Ön izlemede görünmeyen satırları düzeltir.
  
@@ -84,6 +90,8 @@ Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni bö
 
 * **Karakter Sınırı:** Varsayılan değeri 45'tir. Varsayılan değer üzerinden konuşacak olursak 45 ve üstü karakterde devreye girecektir.
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
+
+![GUI SS](GUI/line_breaker_checker.png)
 
 ## [LINE SOURCE DUPLICATE](line_source_duplicate.lua)
 Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir.
@@ -114,6 +122,8 @@ Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir
 
 ###### Notlar
 Oluşturduğu girdilere müdahalede bulunmayınız.
+
+![GUI SS](GUI/line_source_duplicate.png)
 
 ## [RAINBOW](rainbow_v2.ass)
 Gökkuşağı renklerinde renk geçişi yapar.
@@ -155,7 +165,6 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. ASS d
  * **video**<br>
  Bu giriliyken videonun çözünürlük değerine göre boyutlandırma yapar.
 
-
 ## [SHAPER(LUA)](shaper.lua)
 Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua dosyası halinde.
 
@@ -168,6 +177,8 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
  * **?video**<br>
  Bu seçiliyken videonun çözünürlük değerine göre boyutlandırma yapar.
 
+![GUI SS](GUI/shaper.png)
+
 ## [SUB MENU MAKER](sub_menu_maker.lua)
 Lua dosyalarını gruplar.
 
@@ -177,6 +188,8 @@ Lua dosyalarını gruplar.
 * **Dosya dizini:** Dosyanın dizinini giriniz.
  * **?default**<br>
  Bu giriliyken Aegisub programının yüklü olduğu dizindeki `automation` klasörünü dizin olarak girmiş olursunuz.
+
+![GUI SS](GUI/sub_menu_maker.png)
 
 ## [T_CALC](t_calc(v11).ass)
 Girilen frame değerini alıp `\transform` etiketinin `t1` ve `t2` parametresi için ms cinsinden süre oluşturur.
@@ -196,6 +209,8 @@ Girilen frame değerini alıp `\transform` etiketinin `t1` ve `t2` parametresi i
  <br>Bu seçiliyken yüzde ekler.
  *  **Kaldır**
  <br>Bu seçiliyken eklediği yüzdeyi siler.
+
+![GUI SS](GUI/trans_state_a1.png)
 
 ## [TYPEWRITTER MAKER](typewritter-maker.lua)
 Satıra daktilo tarzı bir efekt uygular.
