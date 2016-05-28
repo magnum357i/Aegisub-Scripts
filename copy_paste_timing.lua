@@ -1,7 +1,7 @@
-﻿	script_name="Copy - Paste Timing"
+	script_name="Copy - Paste Timing"
 	script_description="Seçilen satırların zamanlamasını kopyalar ve bunu başka seçilen satırlara yapıştırır."
 	script_author="Magnum357"
-	script_version="1.0"
+	script_version="1.0.1"
 
 	clipboard = require 'aegisub.clipboard'
 
@@ -46,7 +46,7 @@
 	subs[li] = line
 	pcs = true
 	end
-	if pcs == true then prog("Zamanlar panodan alınıyor...") 
+	if pcs == true then prog("Zamanlar panodan alınıyor...") clipboard.set("")
 	else aegisub.log("Bir hata oluştu.") end
 	else
 	aegisub.log("Kaynak satır sayısıyla hedef satır sayısı tutmuyor.")
