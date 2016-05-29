@@ -60,6 +60,9 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 * **Id:** Fonksiyonu her kullandığınızda buraya farklı bir değer girin. 1-50 arası sayılar alabilir.
 * **Colors:** Bu alana renkler girmeniz gerekiyor. Renkler arasına virgül koyun.
 
+## [COPY - PASTE LINE](copy_paste_line.lua)
+Bir satır grubuna ait herhangi bir bilgiyi kopyalar ve bunu başka bir satır grubuna yapıştırabilir.
+
 ## [DELETE COMMENT BRACKET](delete_comment_bracket.lua)
 Yorum olarak düşülen notları siler.
 
