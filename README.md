@@ -63,6 +63,8 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 ## [COPY - PASTE LINE](copy_paste_line.lua)
 Bir satır grubuna ait herhangi bir bilgiyi kopyalar ve bunu başka bir satır grubuna yapıştırabilir.
 
+![GUI SS](GUI/copy_paste_line.png)
+
 ## [DELETE COMMENT BRACKET](delete_comment_bracket.lua)
 Yorum olarak düşülen notları siler.
 
