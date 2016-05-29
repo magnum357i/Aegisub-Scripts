@@ -1,7 +1,7 @@
 	script_name = "Copy - Paste Line"
 	script_description = "Seçilen satırların her özelliğini kopyalar ve kopyaladığı bilgileri başka seçili satırlara yapıştırabilir."
 	script_author = "Magnum357"
-	script_version = "2.2"
+	script_version = "2.2.1"
 
 	check_start_time      = false
 	check_end_time        = false
@@ -57,7 +57,7 @@
 	and config.u_style           == false
 	and config.u_actor           == false
 	and config.u_effect          == false
-	and config.u_tex             == false
+	and config.u_text            == false
 	then aegisub.log("Arayüzden hiçbir tercih yapılmadı.")
 	else
 	if ok == "Kopyala" then
