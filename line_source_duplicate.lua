@@ -7,10 +7,10 @@
 
 	]]--
 
-	script_name="Line Source Duplicate"
-	script_description="Kaynak metni bir şekilde çoğaltır. Bir şekilde çoğalttıklarını da silebilir."
-	script_author="Magnum357"
-	script_version="2.0.1"
+	script_name = "M357/Line Source Duplicate"
+	script_description = "Kaynak metni bir şekilde çoğaltır. Bir şekilde çoğalttıklarını da silebilir."
+	script_author = "Magnum357"
+	script_version = "2.0.2"
 
 	include("karaskel.lua")
 	
@@ -36,10 +36,10 @@
 	for i = 1, #subs do
 	line = subs[i]
 	text = subs[i].text
-	if style_name ~= equal_msg then style_name = subs[i].style end
+	if style_name     ~= equal_msg     then style_name = subs[i].style                        end
 	if selected_style == "Tüm stiller" then selected_style = equal_msg style_name = equal_msg end
-	if subs[i].class == "dialogue" then
-	if selected_style == style_name then
+	if subs[i].class  == "dialogue"    then
+	if selected_style == style_name    then
 	t = t + 1
 	if t == 1 then tt = i end
 	text_stripped = stripped(text)
@@ -111,9 +111,9 @@
 	for i = #subs, 1, -1 do
 	line = subs[i]
 	text = subs[i].text
-	if style_name ~= equal_msg then style_name = line.style end
-	if selected_style == "Tüm stiller" then selected_style = equal_msg style_name = equal_msg end
-	if line.class == "dialogue" and line.effect == lsd_msg3 and style_name == selected_style then
+	if style_name     ~= equal_msg                                                               then style_name = line.style                           end
+	if selected_style == "Tüm stiller"                                                           then selected_style = equal_msg style_name = equal_msg end
+	if line.class     == "dialogue" and line.effect == lsd_msg3 and style_name == selected_style then
 	subs.delete(i)
 	pcs = true
 	end
@@ -167,10 +167,10 @@
 	local n, m = 0, 0
 	for i = 1, #subs do
 	local source_style, target_style = subs[i].style, style_name
-	if subs[i].class == "dialogue" then	
-	if source_style == target_style then
-	if subs[i].effect == lsd_msg3 then m = m + 1 end
-	if subs[i].effect ~= lsd_msg3 then n = n + 1 end
+	if subs[i].class  == "dialogue"   then
+	if source_style   == target_style then
+	if subs[i].effect == lsd_msg3     then m = m + 1 end
+	if subs[i].effect ~= lsd_msg3     then n = n + 1 end
 	end
 	end
 	end
@@ -192,12 +192,18 @@
 	return styles
 	end
 
-	function create_config(subs, sel, config)
-	local dialog_config=
-	{{class="label",x=0,y=0,width=1,height=1,label="Stil:"},
-	{class="dropdown",name="u_style",x=1,y=0,width=20,height=1,items={"Tüm stiller"},value="Tüm stiller"},
-	{class="label",x=0,y=1,width=1,height=1,label="Mod:"},
-	{class="dropdown",name="u_mod",x=1,y=1,width=20,height=1,items={"Seç","[M1A] Satır içinde yorum parantezleri","[M1B] Satır içinde sadece yorum parantezleri","[M2A] Satırdan sonra satır","[M2B] Satırdan sonra yorum satırı","[M3A] Stilden sonra satır","[M3B] Stilden sonra yorum satırı"},value="Seç"}}
+	function create_config(subs,sel,config)
+	local dialog_config =
+	{{class = "label",                                           x = 0, y = 0, width = 1, height = 1, label = wall(" ",22).."Stil:"                                                                   }
+	,{class = "dropdown", name = "u_style", value="Tüm stiller", x = 1, y = 0, width = 1, height = 1,                                        items = {"Tüm stiller"}                                  }
+	,{class = "label"   ,                                        x = 0, y = 1, width = 1, height = 1, label = wall(" ",19).."Mod:"                                                                    }
+	,{class = "dropdown", name = "u_mod",   value="Seç",         x = 1, y = 1, width = 1, height = 1,                                        items = {"Seç",                                           
+	                                                                                                                                                  "[M1A] Satır içinde yorum parantezleri",         
+	                                                                                                                                                  "[M1B] Satır içinde sadece yorum parantezleri",  
+	                                                                                                                                                  "[M2A] Satırdan sonra satır",                    
+	                                                                                                                                                  "[M2B] Satırdan sonra yorum satırı",             
+	                                                                                                                                                  "[M3A] Stilden sonra satır",                     
+	                                                                                                                                                  "[M3B] Stilden sonra yorum satırı"}            }}
 	for _, style in ipairs(collect_styles_total(subs)) do
 	table.insert(dialog_config[2].items,style)
 	end
@@ -209,18 +215,18 @@
 	k = false
 	repeat
 	repeat
-	ok, config = aegisub.dialog.display(create_config(subs, sel, config),{"Uygula",tr_ascii("Kaldır"),tr_ascii("Yardım"),"Kapat"})
-	if config.u_mod ~= "Seç" and ok == "Uygula" then k = true end
-	if config.u_mod == "Seç" and ok == tr_ascii("Kaldır") then k = true end
-	if config.u_mod == "Seç" and ok == "Uygula" then aegisub.log("Ekleme işlemi sırasında mod seçmeniz gerekiyor.\n") end
+	ok, config = aegisub.dialog.display(create_config(subs,sel,config),{"Uygula",tr_ascii("Kaldır"),tr_ascii("Yardım"),"Kapat"})
+	if config.u_mod ~= "Seç" and ok == "Uygula"           then k = true                                                            end
+	if config.u_mod == "Seç" and ok == tr_ascii("Kaldır") then k = true                                                            end
+	if config.u_mod == "Seç" and ok == "Uygula"           then aegisub.log("Ekleme işlemi sırasında mod seçmeniz gerekiyor.\n")    end
 	if config.u_mod ~= "Seç" and ok == tr_ascii("Kaldır") then aegisub.log("Kaldırma işlemi sırasında mod seçmenize gerek yok.\n") end
 	until k == true or ok == "Kapat" or ok == tr_ascii("Yardım")
 	if ok == tr_ascii("Yardım") then
 	helper_macro(subs)
 	end
 	if ok == "Uygula" or ok == tr_ascii("Kaldır") then
-	if ok == "Uygula" then config.u_action = "Ekle" end
-	if ok == tr_ascii("Kaldır") then config.u_action = "Kaldır" end
+	if ok == "Uygula"                             then config.u_action = "Ekle"   end
+	if ok == tr_ascii("Kaldır")                   then config.u_action = "Kaldır" end
 	line_source_duplicate(subs,sel,config)
 	end
 	until k == true or ok == "Kapat"
@@ -230,7 +236,7 @@
 	function helper_macro(subs)
 	local dialog_config =
 	{
-	{class="label",x=0,y=0,width=1,height=1,label=
+	{class = "label", x = 0, y = 0, width = 1, height = 1, label =
 	"MOD"
 	.."\n———"
 	.."\nM1A"
@@ -245,7 +251,7 @@
 	.."\n———"
 	.."\nM3B"
 	},
-	{class="label",x=1,y=0,width=1,height=1,label=
+	{class = "label", x = 1, y = 0, width = 1, height = 1, label =
 	"|  AÇIKLAMA"
 	.."\n———————————————————————————————"
 	.."\n|  Kaynak metni satırın sonuna yorum parantezi şeklinde yazar."
@@ -260,7 +266,7 @@
 	.."\n———————————————————————————————"
 	.."\n|  Kaynak metni stilin son satırından sonra yorum satırı olarak satır ekler."
 	},
-	{class="label",x=2,y=0,width=1,height=1,label=
+	{class = "label", x = 2, y = 0, width = 1, height = 1, label =
 	"|  ÖRNEK"
 	.."\n———————————————————————————————————————"
 	.."\n|  This is a sample. {This is a sample.}"
@@ -278,6 +284,8 @@
 	}
 	aegisub.dialog.display(dialog_config,{tr_ascii("Geri dön")})
 	end
+
+	function wall(mode,loop) return string.rep(mode,loop) end
 
 	function tr_ascii(str)
 	str = str
