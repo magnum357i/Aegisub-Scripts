@@ -1,4 +1,4 @@
-﻿	--[[
+	--[[
 
 	Oluşturulan bilgilere dokunmayınız. Effect kutucuklarına yazılan bilgiler ile 
 	satır içine yazılan bilgilere dokunmayın yani. Bir diğer konu da stil seçimi 
@@ -7,10 +7,10 @@
 
 	]]--
 
-	script_name="Line Source Duplicate/"
+	script_name="Line Source Duplicate"
 	script_description="Kaynak metni bir şekilde çoğaltır. Bir şekilde çoğalttıklarını da silebilir."
 	script_author="Magnum357"
-	script_version="2"
+	script_version="2.0.1"
 
 	include("karaskel.lua")
 	
@@ -160,7 +160,7 @@
 	function prog(str)
 	aegisub.progress.task(string.format("%s",str))
 	aegisub.progress.set(100)
-	delay()	
+	delay()
 	end
 
 	function total_lines(subs,style_name)
@@ -195,11 +195,9 @@
 	function create_config(subs, sel, config)
 	local dialog_config=
 	{{class="label",x=0,y=0,width=1,height=1,label="Stil:"},
-	{class="dropdown",name="u_style",x=1,y=0,width=1,height=1,items={"Tüm stiller"},value="Tüm stiller"},
+	{class="dropdown",name="u_style",x=1,y=0,width=20,height=1,items={"Tüm stiller"},value="Tüm stiller"},
 	{class="label",x=0,y=1,width=1,height=1,label="Mod:"},
-	{class="dropdown",name="u_mod",x=1,y=1,width=1,height=1,items={"Seç","[M1A] Satır içinde yorum parantezleri","[M1B] Satır içinde sadece yorum parantezleri","[M2A] Satırdan sonra satır","[M2B] Satırdan sonra yorum satırı","[M3A] Stilden sonra satır","[M3B] Stilden sonra yorum satırı"},value="Seç"},
-	{class="label",x=0,y=2,width=1,height=1,label="Eylem:"},
-	{class="dropdown",name="u_action",x=1,y=2,width=1,height=1,items={"Ekle","Kaldır"},value="Ekle"}}
+	{class="dropdown",name="u_mod",x=1,y=1,width=20,height=1,items={"Seç","[M1A] Satır içinde yorum parantezleri","[M1B] Satır içinde sadece yorum parantezleri","[M2A] Satırdan sonra satır","[M2B] Satırdan sonra yorum satırı","[M3A] Stilden sonra satır","[M3B] Stilden sonra yorum satırı"},value="Seç"}}
 	for _, style in ipairs(collect_styles_total(subs)) do
 	table.insert(dialog_config[2].items,style)
 	end
@@ -210,20 +208,27 @@
 	local ok, config, k
 	k = false
 	repeat
-	ok, config = aegisub.dialog.display(create_config(subs, sel, config),{"Uygula","Kapat"})
-	if config.u_mod ~= "Seç" and config.u_action == "Ekle" then k = true end
-	if config.u_mod == "Seç" and config.u_action == "Kaldır" then k = true end
-	if config.u_mod == "Seç" and config.u_action == "Ekle" and ok == "Uygula" then aegisub.log("Ekleme işlemi sırasında mod seçmeniz gerekiyor.\n") end	
-	if config.u_mod ~= "Seç" and config.u_action == "Kaldır" then aegisub.log("Kaldırma işlemi sırasında mod seçmenize gerek yok.\n") end
-	until k == true or ok == "Kapat"
-	if ok == "Uygula" then
-	line_source_duplicate(subs,sel,config)
-    aegisub.set_undo_point(script_name)
+	repeat
+	ok, config = aegisub.dialog.display(create_config(subs, sel, config),{"Uygula",tr_ascii("Kaldır"),tr_ascii("Yardım"),"Kapat"})
+	if config.u_mod ~= "Seç" and ok == "Uygula" then k = true end
+	if config.u_mod == "Seç" and ok == tr_ascii("Kaldır") then k = true end
+	if config.u_mod == "Seç" and ok == "Uygula" then aegisub.log("Ekleme işlemi sırasında mod seçmeniz gerekiyor.\n") end
+	if config.u_mod ~= "Seç" and ok == tr_ascii("Kaldır") then aegisub.log("Kaldırma işlemi sırasında mod seçmenize gerek yok.\n") end
+	until k == true or ok == "Kapat" or ok == tr_ascii("Yardım")
+	if ok == tr_ascii("Yardım") then
+	helper_macro(subs)
 	end
+	if ok == "Uygula" or ok == tr_ascii("Kaldır") then
+	if ok == "Uygula" then config.u_action = "Ekle" end
+	if ok == tr_ascii("Kaldır") then config.u_action = "Kaldır" end
+	line_source_duplicate(subs,sel,config)
+	end
+	until k == true or ok == "Kapat"
+	aegisub.set_undo_point(script_name)
 	end
 
 	function helper_macro(subs)
-	local dialog_config=
+	local dialog_config =
 	{
 	{class="label",x=0,y=0,width=1,height=1,label=
 	"MOD"
@@ -271,8 +276,24 @@
 	.."\n|  [1. satır]This is a sample. [2. satır][stilin son satırından sonra][comment]This is a sample."
 	}
 	}
-	aegisub.dialog.display(dialog_config,{"Kapat"})
-	end	
+	aegisub.dialog.display(dialog_config,{tr_ascii("Geri dön")})
+	end
 
-	aegisub.register_macro(script_name.."Run",script_description,add_macro)
-	aegisub.register_macro(script_name.."Helper",script_description,helper_macro)
+	function tr_ascii(str)
+	str = str
+	:gsub("ç",string.char(231))
+	:gsub("Ç",string.char(199))
+	:gsub("ü",string.char(252))
+	:gsub("Ü",string.char(220))
+	:gsub("ö",string.char(246))
+	:gsub("Ö",string.char(214))
+	:gsub("ğ",string.char(240))
+	:gsub("Ğ",string.char(208))
+	:gsub("ş",string.char(254))
+	:gsub("Ş",string.char(222))
+	:gsub("ı",string.char(253))
+	:gsub("İ",string.char(221))
+	return str
+	end
+
+	aegisub.register_macro(script_name,script_description,add_macro)
