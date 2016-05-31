@@ -1,51 +1,49 @@
-﻿	script_name="Translate State A1"
-	script_description="Çevirinin yüzde kaçında olduğunuzu gösterir."
-	script_author="Magnum357"
-	script_version="1.6"
+	script_name = "Translate State A1"
+	script_description = "Çevirinin yüzde kaçında olduğunuzu gösterir."
+	script_author = "Magnum357"
+	script_version = "1.6.2"
 
-	function transstatea1(subs,sel,config)
+	function trans_state_a1(subs,sel,config)
 	local style_name = config["u_style_name"]:gsub("%(%d+%)%s","")
-	local action = config["u_action"]
 	local percent_digit = tonumber(config["u_percent"]) + 2
 	local n = 0
-	local total_line = total_lines(subs, style_name)
+	local total_line = total_lines(subs,style_name)
 	local percent
 	local pcs = false
-	local remove_data = false
-	if action == "Çıktı verilerini temizle" then remove_data = true end
 	for i=1, #subs do
-	sub, line = subs[i], subs[i]
-	if sub.class == "dialogue" then
-	local source_style, target_style = sub.style, style_name
-	if style_name == "Tüm stiller" then	source_style, target_style = 1, 1 end	
-	if source_style == target_style then
-	if remove_data == false then
-	line.effect = ""
+	line = subs[i]
+	if subs[i].class == "dialogue" then
+	if style_name == "Tüm stiller" then style1 = 1 style2 = 1 else style1 = subs[i].style style2 = style_name end
+	if style1 == style2 then
 	n = n + 1
 	percent = percent_calc(total_line,n,percent_digit)
-	n = zero(n, total_line)
+	n = zero(n,total_line)
 	line.effect = string.format("%s / %s ( %s )",total_line,n,percent)
 	pcs = true
-	else
-	if line.effect:match("%d+ / %d+ %( %d+%.%d+%% %)") then
+	subs[i] = line
+	end
+	end
+	end
+	if pcs == true then prog("Yüzde hesaplanıyor...") else aegisub.log("İşleminiz gerçekleştirilemedi!") end
+	end
+
+	function remove_trans_state_a1(subs,sel,config)
+	local pcs = false
+	local style_name = config["u_style_name"]:gsub("%(%d+%)%s","")
+	for i=1, #subs do
+	if subs[i].class == "dialogue" then
+	line = subs[i]
+	if style_name == "Tüm stiller" then style1 = 1 style2 = 1 else style1 = subs[i].style style2 = style_name end
+	if style1 == style2 then
+	if line.effect:match("%d+ / %d+ %( %d+%.%d+%% %)") or line.effect:match("%d+ / %d+ %( +%d+%% %)") then
 	line.effect = ""
 	pcs = true
-	end
-	if line.effect:match("%d+ / %d+ %( +%d+%% %)") then
-	line.effect = ""
-	pcs = true
+	subs[i] = line
 	end
 	end
-	subs[i]=line
 	end
 	end
-    end
-    if remove_data == true and pcs == true then
-    prog("Çıktı verileri siliniyor...")
-	elseif remove_data == false and pcs == true then
-	prog("Yüzde hesaplanıyor...")
-	end
-	if pcs == false then aegisub.log("İşleminiz gerçekleştirilemedi!") end
+	if pcs == true then prog("Çıktı verileri temizleniyor...") else aegisub.log("İşleminiz gerçekleştirilemedi!") end
 	end
 
 	function delay()
@@ -59,7 +57,7 @@
 	function prog(str)
 	aegisub.progress.task(string.format("%s",str))
 	aegisub.progress.set(100)
-	delay()	
+	delay()
 	end
 
 	function percent_calc(number1,number2,number3)
@@ -110,7 +108,7 @@
 	convert = string.format("%s%s",string.rep("0",total_digit - digit),str)
 	end
 	return convert
-	end	
+	end
 
 	function total_lines(subs,style_name)
 	local n = 0
@@ -128,6 +126,7 @@
 
 	function collect_styles_total(subs)
 	local n, styles = 0, {}
+	local sub_name
 	for i = 1, #subs do
 	local sub = subs[i]
 	if sub.class == "style" then
@@ -141,29 +140,43 @@
 	return styles
 	end
 
+	function wall(mode,loop) return string.rep(mode,loop) end
+
 	function create_config(subs)
-	local dialog_config=
-	{
-	{class="label",x=0,y=0,width=1,height=1,label="Stil:"},
-	{class="dropdown",name="u_style_name",x=1,y=0,width=1,height=1,items={"Tüm stiller"},value="Tüm stiller"},
-	{class="label",x=0,y=1,width=1,height=1,label="Yüzde ondalığı(0-2):"},
-	{class="intedit",name="u_percent",x=1,y=1,width=1,height=1,value=2},
-	{class="label",x=0,y=2,width=1,height=1,label="Eylem:"},
-	{class="dropdown",name="u_action",x=1,y=2,width=1,height=1,items={"Seç", "Çıktı verilerini temizle"},value="Seç"},
-	}
+	local dialog_config =
+	{{class = "label",                                                  x = 0, y = 0, width = 1,  height = 1, label = wall(" ",3)..wall(" ",21).."Stil:"}
+	,{class = "dropdown", name = "u_style_name", value = "Tüm stiller", x = 1, y = 0, width = 13, height = 1, items = {"Tüm stiller"}                   }
+	,{class = "label",                                                  x = 0, y = 1, width = 1,  height = 1, label = wall(" ",3).."Yüzde ondalığı:"    }
+	,{class = "intedit",  name = "u_percent",    value = 2,             x = 1, y = 1, width = 13, height = 1, min = 0, max = 2                         }}
 	for _, style in ipairs(collect_styles_total(subs)) do
 	table.insert(dialog_config[2].items,style)
 	end
 	return dialog_config
 	end
 
-	function add_macro(subs)
-	local ok, config
-	ok, config = aegisub.dialog.display(create_config(subs),{"Uygula","Kapat"})
-	if ok == "Uygula" then
-	transstatea1(subs,sel,config)
-    aegisub.set_undo_point(script_name)
-	end
+	function tr_ascii(str)
+	str = str
+	:gsub("ç",string.char(231))
+	:gsub("Ç",string.char(199))
+	:gsub("ü",string.char(252))
+	:gsub("Ü",string.char(220))
+	:gsub("ö",string.char(246))
+	:gsub("Ö",string.char(214))
+	:gsub("ğ",string.char(240))
+	:gsub("Ğ",string.char(208))
+	:gsub("ş",string.char(254))
+	:gsub("Ş",string.char(222))
+	:gsub("ı",string.char(253))
+	:gsub("İ",string.char(221))
+	return str
 	end
 
-	aegisub.register_macro(script_name, script_description, add_macro)
+	function add_macro(subs)
+	local ok, config
+	ok, config = aegisub.dialog.display(create_config(subs),{"Hesapla",tr_ascii("Kaldır"),"Kapat"})
+	if ok == "Hesapla" then trans_state_a1(subs,sel,config)
+	elseif ok == tr_ascii("Kaldır") then remove_trans_state_a1(subs,sel,config) end
+	aegisub.set_undo_point(script_name)
+	end
+
+	aegisub.register_macro(script_name,script_description,add_macro)
