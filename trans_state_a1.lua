@@ -1,7 +1,7 @@
 	script_name = "Translate State A1"
 	script_description = "Çevirinin yüzde kaçında olduğunuzu gösterir."
 	script_author = "Magnum357"
-	script_version = "1.6.2"
+	script_version = "1.6.2.1"
 
 	function trans_state_a1(subs,sel,config)
 	local style_name = config["u_style_name"]:gsub("%(%d+%)%s","")
@@ -144,10 +144,10 @@
 
 	function create_config(subs)
 	local dialog_config =
-	{{class = "label",                                                  x = 0, y = 0, width = 1,  height = 1, label = wall(" ",3)..wall(" ",21).."Stil:"}
-	,{class = "dropdown", name = "u_style_name", value = "Tüm stiller", x = 1, y = 0, width = 13, height = 1, items = {"Tüm stiller"}                   }
-	,{class = "label",                                                  x = 0, y = 1, width = 1,  height = 1, label = wall(" ",3).."Yüzde ondalığı:"    }
-	,{class = "intedit",  name = "u_percent",    value = 2,             x = 1, y = 1, width = 13, height = 1, min = 0, max = 2                         }}
+	{{class = "label",                                                  x = 0, y = 0, width = 1,  height = 1, label = wall(" ",3)..wall(" ",21).."Stil:"                              }
+	,{class = "dropdown", name = "u_style_name", value = "Tüm stiller", x = 1, y = 0, width = 13, height = 1, items = {"Tüm stiller"}, hint = "Sadece kullanılan stiller listelenir. "}
+	,{class = "label",                                                  x = 0, y = 1, width = 1,  height = 1, label = wall(" ",3).."Yüzde ondalığı:"                                  }
+	,{class = "intedit",  name = "u_percent",    value = 2,             x = 1, y = 1, width = 13, height = 1, min = 0, max = 2                                                       }}
 	for _, style in ipairs(collect_styles_total(subs)) do
 	table.insert(dialog_config[2].items,style)
 	end
