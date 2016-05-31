@@ -1,12 +1,13 @@
-## [AUTOTAGS](autotagsv4.ass)
-İki etiket arasında sonsuz dönüşüm yapar.
+## TANITIM
+Bu sayfayı açmamdaki amaç kendi yazdığım lua dosyalarının sürüm takibi ve indirme bağlantısı sunmak Bu dosyalar sadece Aegisub üzerinde çalışır.
 
-* **Interval:** İki etiket arasındaki dönüşüm zamanıdır.
-* **Accel:** `\transform` etiketinin `accel` parametresidir.
-* **Tags1:** İlk etiket. Bu etiketle başlar.
-* **Tags2:** İkinci etiket. Bu alandaki etiketin değerine dönüşüm yapar.
+## MODÜL
+### [Mag](Modul/mag.lua)
+Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında *mag.* ön eki varsa bu modülü kullanıyor demektir. Bu modülü *automation/include/* dizinine atınız.
 
-## [BASIC TURNING](basic_turning.lua)
+## MACROS
+
+### [Basic Turning](Macros/basic_turning.lua)
 Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra sadece işaretleri yazmak yetmez, o satırı seçmelisiniz de.
 
 | İşaret | Dönüştüğü | Açıklama |
@@ -54,51 +55,35 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 
 **Bu modlardan aynı anda sadece birini kullanın.**
 
-## [COLOR FADE](color_fade_v2.ass)
-İki veya daha fazla renk arasında yatay renk geçişi yapar.
-
-* **Id:** Fonksiyonu her kullandığınızda buraya farklı bir değer girin. 1-50 arası sayılar alabilir.
-* **Colors:** Bu alana renkler girmeniz gerekiyor. Renkler arasına virgül koyun.
-
-## [COPY - PASTE LINE](copy_paste_line.lua)
+### [Copy Paste Line](Macros/copy_paste_line.lua)
 Bir satır grubuna ait herhangi bir bilgiyi kopyalar ve bunu başka bir satır grubuna yapıştırabilir.
 
-![GUI SS](GUI/copy_paste_line.png)
-
-## [DELETE COMMENT BRACKET](delete_comment_bracket.lua)
+### [Delete Comment Bracket](Macros/delete_comment_bracket.lua)
 Yorum olarak düşülen notları siler.
 
-## [DELETE LINES](delete_lines.lua)
+### [Delete Lines](Macros/delete_lines.lua)
 Stile ya da aktöre göre satır silme işlemi yapar.
 
-![GUI SS](GUI/delete_lines.png)
-
-![GUI SS](GUI/delete_lines_style.png)
-
-![GUI SS](GUI/delete_lines_actor.png)
-
-## [FIX TIMING](fix_timing.lua)
+### [Fix Timing](Macros/fix_timing.lua)
 Ön izlemede görünmeyen satırları düzeltir.
  
-## [FIXING TURKISH CHARS](fixing_turkish chars.lua)
+### [Fixing Turkish Chars](Macros/fixing_turkish chars.lua)
 Bozuk Türkçe karakterleri düzeltir.
 
-## [KARAOKE CLEANER](karaoke_cleaner.lua)
+### [Karaoke Cleaner](Macros/karaoke_cleaner.lua)
 Özetlersek şablon efeğinin oluşturduğu şeyleri siler. Ayrıntıya girersek de şunları yapıyor:
 * Şablonların oluşturduğu satırları siler.
 * Şablon efeklerinin olduğu satırların sürelerini sıfırlar.
 * Şablonun uygulandığı satırları görünür yapar.
 * Şablon uygulandığında oluşan furigana stillerini siler.
 
-## [LINE BREAKER CHECKER](line-breaker-checker.lua)
+### [Line Breaker Checker](Macros/mag.line_breaker_checker.lua)
 Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni böl!**, karakter sınırı aşan ama satır bölme yapıldığı halde karakter sınırını aşan satırlara da **Beni düzgün böl!** şeklinde `Effect` kutucuğuna not düşer.
 
 * **Karakter Sınırı:** Varsayılan değeri 45'tir. Varsayılan değer üzerinden konuşacak olursak 45 ve üstü karakterde devreye girecektir.
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
 
-![GUI SS](GUI/line_breaker_checker.png)
-
-## [LINE SOURCE DUPLICATE](line_source_duplicate.lua)
+### [Line Source Duplicate](Macros/line_source_duplicate.lua)
 Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir.
 
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
@@ -128,18 +113,7 @@ Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir
 ###### Notlar
 Oluşturduğu girdilere müdahalede bulunmayınız.
 
-![GUI SS](GUI/line_source_duplicate.png)
-
-## [RAINBOW](rainbow_v2.ass)
-Gökkuşağı renklerinde renk geçişi yapar.
-
-* **Id:** Fonksiyonu her kullandığınızda buraya farklı bir değer girin. 1-20 arası sayılar alabilir.
-* **Var1:** Buraya başlangıç değerini girin.
-* **Var2:** Buraya bitiş değerini girin.
-* **Saturation:** Buraya 0-1 arası ondalıklı değerler girin. 1'den düşük değerler rengin tonunu açar.
-* **Contrast:** Buraya 0-1 arası ondalıklı değerler girin. 1'den düşük değerler rengin tonunu koyulaştırır.
-
-## [SELECT LINES](select_lines.lua)
+### [Select Lines](Macros/select_lines.lua)
 Birçok ayarda satır seçme işlemi yapar.
 * **Geçerli satır:** O an bulunduğunuz, metin kutusunda içeriğini gördüğünüz satırın olduğu noktadan işlem yaparsınız.
   * **Öncesi:** Geçerli satır ve öncesini seçer.
@@ -156,28 +130,8 @@ Birçok ayarda satır seçme işlemi yapar.
   * **Önceki satır:** O an metin kutusunda içeriğini gördüğünüz satırın üstündeki satıra, yani bir önceki satıra atlar.
   * **Sonraki satır:** O an metin kutusunda içeriğini gördüğünüz satırın altındaki satıra, yani bir sonraki satıra atlar.
 * **Seçimin tersi:** Seçiminiz dışında kalan satırları seçersiniz.
- 
-![GUI SS](GUI/select_lines.png)
 
-![GUI SS](GUI/select_lines_1.png)
-
-![GUI SS](GUI/select_lines_2.png)
-
-![GUI SS](GUI/select_lines_3.png)
-
-## [SHAPER(ASS)](shaper.ass)
-Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. ASS dosyası halinde.
-
-* **Img_path:** Resmin dizini ile beraber adını girin. Uzantıyı girmenize gerek yok.
-* **Width:** Resmin genişliğini girin.
-* **Height:** Resmin yüksekliğini girin.
-* **Res_type**
- * **script**<br>
- Bu giriliyken alt yazının çözünürlük değerine göre boyutlandırma yapar.
- * **video**<br>
- Bu giriliyken videonun çözünürlük değerine göre boyutlandırma yapar.
-
-## [SHAPER(LUA)](shaper.lua)
+### [Shaper](Macros/shaper.lua)
 Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua dosyası halinde.
 
 * **Resmin genişliği:** Resmin genişliğini girin.
@@ -189,9 +143,7 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
  * **?video**<br>
  Bu seçiliyken videonun çözünürlük değerine göre boyutlandırma yapar.
 
-![GUI SS](GUI/shaper.png)
-
-## [SUB MENU MAKER](sub_menu_maker.lua)
+### [Sub Menu Maker](Macros/sub_menu_maker.lua)
 Lua dosyalarını gruplar.
 
 * **Dosya adı:** `Automation` menüsünde görünen adını değil `automation` dizininde görünen dosya adını giriniz.
@@ -201,17 +153,7 @@ Lua dosyalarını gruplar.
  * **?default**<br>
  Bu giriliyken Aegisub programının yüklü olduğu dizindeki `automation` klasörünü dizin olarak girmiş olursunuz.
 
-![GUI SS](GUI/sub_menu_maker.png)
-
-## [T_CALC](t_calc(v11).ass)
-Girilen frame değerini alıp `\transform` etiketinin `t1` ve `t2` parametresi için ms cinsinden süre oluşturur.
-
-* **Mode:** Fonksiyonu yazdığınız satırın retime modunu girin.
-* **Framev:** Bir frame girin. Bu frame değerinden sonra değişiklik olacaktır.
-* **Interval:** Girdiğiniz frame değeriyle buraya girdiğiniz ms cinsinden değer arasında geçiş yapar.
-* **Tags:** Buraya çift ters slash ile etiketler girin.
-
-## [TRANS STATE A1](trans_state_a1.lua)
+### [Trans State A1](Macros/trans_state_a1.lua)
 `Effect` kutucuğuna yüzdeler yazar.
 
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
@@ -222,12 +164,54 @@ Girilen frame değerini alıp `\transform` etiketinin `t1` ve `t2` parametresi i
  *  **Kaldır**
  <br>Bu seçiliyken eklediği yüzdeyi siler.
 
-![GUI SS](GUI/trans_state_a1.png)
-
-## [TYPEWRITTER MAKER](typewritter-maker.lua)
+### [Typewritter Maker](Macros/typewritter-maker.lua)
 Satıra daktilo tarzı bir efekt uygular.
 
-## [VERTICAL KANJI](vertical_kanji.ass)
+## ASS
+### [Autotags](ass/autotagsv4.ass)
+İki etiket arasında sonsuz dönüşüm yapar.
+
+* **Interval:** İki etiket arasındaki dönüşüm zamanıdır.
+* **Accel:** `\transform` etiketinin `accel` parametresidir.
+* **Tags1:** İlk etiket. Bu etiketle başlar.
+* **Tags2:** İkinci etiket. Bu alandaki etiketin değerine dönüşüm yapar.
+
+### [Color Fade](ass/color_fade_v2.ass)
+İki veya daha fazla renk arasında yatay renk geçişi yapar.
+
+* **Id:** Fonksiyonu her kullandığınızda buraya farklı bir değer girin. 1-50 arası sayılar alabilir.
+* **Colors:** Bu alana renkler girmeniz gerekiyor. Renkler arasına virgül koyun.
+
+### [Rainbow](ass/rainbow_v2.ass)
+Gökkuşağı renklerinde renk geçişi yapar.
+
+* **Id:** Fonksiyonu her kullandığınızda buraya farklı bir değer girin. 1-20 arası sayılar alabilir.
+* **Var1:** Buraya başlangıç değerini girin.
+* **Var2:** Buraya bitiş değerini girin.
+* **Saturation:** Buraya 0-1 arası ondalıklı değerler girin. 1'den düşük değerler rengin tonunu açar.
+* **Contrast:** Buraya 0-1 arası ondalıklı değerler girin. 1'den düşük değerler rengin tonunu koyulaştırır.
+
+### [Shaper](ass/shaper.ass)
+Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. ASS dosyası halinde.
+
+* **Img_path:** Resmin dizini ile beraber adını girin. Uzantıyı girmenize gerek yok.
+* **Width:** Resmin genişliğini girin.
+* **Height:** Resmin yüksekliğini girin.
+* **Res_type**
+ * **script**<br>
+ Bu giriliyken alt yazının çözünürlük değerine göre boyutlandırma yapar.
+ * **video**<br>
+ Bu giriliyken videonun çözünürlük değerine göre boyutlandırma yapar.
+
+### [T_Calc](ass/t_calc(v11).ass)
+Girilen frame değerini alıp `\transform` etiketinin `t1` ve `t2` parametresi için ms cinsinden süre oluşturur.
+
+* **Mode:** Fonksiyonu yazdığınız satırın retime modunu girin.
+* **Framev:** Bir frame girin. Bu frame değerinden sonra değişiklik olacaktır.
+* **Interval:** Girdiğiniz frame değeriyle buraya girdiğiniz ms cinsinden değer arasında geçiş yapar.
+* **Tags:** Buraya çift ters slash ile etiketler girin.
+
+### [Vertical Kanji](ass/vertical_kanji.ass)
 Kanjiyi dikey şekilde konumlandırır.
 
 * **Id:** Fonksiyonu her kullandığınızda buraya farklı bir değer girin. 1-30 arası sayılar alabilir.
@@ -235,4 +219,3 @@ Kanjiyi dikey şekilde konumlandırır.
 * **X_mode:** `true` yapılması halinde sağa tarafa konumlandırır.
 * **X:** Yandan kaç piksel boşluk bırakılacağına karar verirsiniz.
 * **Y:** Buraya bir Aegisub değişkeni olan `$y` değişkenini girin.
-
