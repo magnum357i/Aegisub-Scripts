@@ -1,4 +1,11 @@
-﻿	unicode = require 'aegisub.unicode'
+	--[[
+
+	Tekrar eden fonksiyonların yazıldığı lua modülüdür. Automation/include klasörüne atınız.
+	v = 1.0.1
+
+	]]
+
+	unicode = require 'aegisub.unicode'
 
 	local mag = {}
 
@@ -36,9 +43,15 @@
 
 	function mag.removedot(str) return mag.gsub(str,"['., -/*:;+!)?\"=(]+", "") end
 
-	function mag.wall(mode,loop) return mag.rep(mode,loop) end
+	function mag.wall(char,loop) return mag.rep(char,loop) end
 
 	function mag.unstyles(style) return mag.gsub(style,"%(%d+%+?%d-%)%s","") end
+
+	function mag.total_full(subs)
+	local n = 0
+	for i = 1, #subs do if subs[i].class == "dialogue" then n = n + 1 end end
+	return n
+	end
 
 	function mag.total(subs,style_name,mode,value)
 	local n, m = 0, 0
@@ -100,6 +113,40 @@
 	end
 	if last == true then parts[n] = mag.reverse(mag.gsub(mag.reverse(parts[n]),mag.reverse(split),"",1)) end
 	return n, parts
+	end
+
+	function mag.esc(str)
+	str = mag.gsub(str,"(%()","%%1")
+	str = mag.gsub(str,"(%))","%%1")
+	str = mag.gsub(str,"(%.)","%%1")
+	str = mag.gsub(str,"(%%)","%%1")
+	str = mag.gsub(str,"(%+)","%%1")
+	str = mag.gsub(str,"(%-)","%%1")
+	str = mag.gsub(str,"(%*)","%%1")
+	str = mag.gsub(str,"(%?)","%%1")
+	str = mag.gsub(str,"(%[)","%%1")
+	str = mag.gsub(str,"(%])","%%1")
+	str = mag.gsub(str,"(%^)","%%1")
+	str = mag.gsub(str,"(%$)","%%1")
+	return str
+	end
+
+	function mag.zero(total_number,number)
+	local zero_count = mag.len(mag.s(total_number)) - mag.len(mag.s(number))
+	if zero_count > 0 then number = mag.format("%s%s",mag.rep("0",zero_count),number) end
+	return number
+	end
+
+	function mag.percent(total_number,number,digit_mode)
+	local calc
+	if number <= total_number then
+	calc = 100 - ((total_number - number) / total_number * 100)
+	calc = mag.gsub(mag.s(calc),"(%.5[^%d]-)","%10")
+	if mag.match(calc,"%.%d+") then calc = mag.gsub(mag.s(calc),"(%.%d%d)%d+","%1")
+	else if mag.match(calc,"100") then calc = calc..".0" else calc = calc..".00" end end
+	else calc = 0 end
+	if digit_mode == true then calc = mag.gsub(calc,"%.%d+","") end
+	return mag.s(calc)
 	end
 
 	mag.s       = tostring
