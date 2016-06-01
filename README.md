@@ -157,12 +157,8 @@ Lua dosyalarını gruplar.
 `Effect` kutucuğuna yüzdeler yazar.
 
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
-* **Yüzde ondalığı:** Yüzdenin kaç basamaklı olacağını girin. Varsayılan değeri 2'dir. 0-2 arasında değerler girebilirsiniz.
-* **Eylem**<br>
- *  **Seç**
- <br>Bu seçiliyken yüzde ekler.
- *  **Kaldır**
- <br>Bu seçiliyken eklediği yüzdeyi siler.
+* **Yüzde küsuratını ekle:** Yüzdenin iki basamaklı küsuratını ekler. Seçilmemesi durumunda yüzdeyi küsuratsız ekler.
+* **Satır sayılarını ekle:** Toplam satır bölü o anki satır şeklinde bulduğu yüzdeyi ondan önce ekler. Seçilmemesi durumunda sadece yüzdeyi ekler.
 
 ### [Typewritter Maker](Macros/typewritter-maker.lua)
 Satıra daktilo tarzı bir efekt uygular.
