@@ -1,9 +1,9 @@
 ## TANITIM
-Bu sayfayı açmamdaki amaç kendi yazdığım lua dosyalarının sürüm takibi ve indirme bağlantısı sunmak Bu dosyalar sadece Aegisub üzerinde çalışır.
+Bu sayfayı açmamdaki amaç kendi yazdığım lua dosyalarının sürüm takibi ve indirme bağlantısı sunmak. Bu dosyalar sadece Aegisub üzerinde çalışır. Lua isimlerini ve içerdiği kodları(değişkenleri) İngilizce yaparken arayüz ve iletileri Türkçe yapmayı tercih ediyorum.
 
 ## MODÜL
 ### [Mag](Modul/mag.lua)
-Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında *mag.* ön eki varsa bu modülü kullanıyor demektir. Bu modülü *automation/include/* dizinine atınız.
+Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında **mag.** ön eki varsa bu modülü kullanıyor demektir. Bu modülü **automation/include/** dizinine atınız.
 
 ## MACROS
 
@@ -81,7 +81,8 @@ Bozuk Türkçe karakterleri düzeltir.
 Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni böl!**, karakter sınırı aşan ama satır bölme yapıldığı halde karakter sınırını aşan satırlara da **Beni düzgün böl!** şeklinde `Effect` kutucuğuna not düşer.
 
 * **Karakter Sınırı:** Varsayılan değeri 45'tir. Varsayılan değer üzerinden konuşacak olursak 45 ve üstü karakterde devreye girecektir.
-* **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
+* **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin. Sadece kullanılan stiller listelenir. Stil isimlerinin başındaki ilk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır.
+* **Yorum satırlarını geç:** Yorum satırı yapılmış satırları işleme almaz.
 
 ### [Line Source Duplicate](Macros/line_source_duplicate.lua)
 Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir.
@@ -104,11 +105,6 @@ Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir
  * **[M3B] Stilden sonra yorum satırı**<br>
  (1. satır) Metin.*<br>
  (Stilin son satırından sonra yorum satırı olarak 2. satır) Metin.
-* **Eylem**
- * **Ekle**
- <br> Bu seçiliyken seçilen moda göre kaynak metni çoğaltır.
- * **Kaldır**
- <br> Bu seçiliyken oluşturulan girdileri siler.
 
 ###### Notlar
 Oluşturduğu girdilere müdahalede bulunmayınız.
@@ -134,9 +130,7 @@ Birçok ayarda satır seçme işlemi yapar.
 ### [Shaper](Macros/shaper.lua)
 Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua dosyası halinde.
 
-* **Resmin genişliği:** Resmin genişliğini girin.
-* **Resmin yüksekliği:** Resmin yüksekliğini girin.
-* **Resmin dizini:** İki adet ters slash kullanarak resmin adı ile beraber dizinini girin. Uzantıyı girmenize gerek yok.
+* **Resmin dizini ve adı:** Resmin adıyla beraber bulunduğu dizini yazın. Uzantıyı girmenize gerek yok.
 * **Çözünürlük şuna göre**<br>
  * **?script**<br>
  Bu seçiliyken alt yazının çözünürlük değerine göre boyutlandırma yapar.
