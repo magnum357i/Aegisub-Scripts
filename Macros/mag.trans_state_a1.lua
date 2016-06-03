@@ -1,9 +1,9 @@
 	script_name = "Translate State A1"
 	script_description = "Çevirinin yüzde kaçında olduğunuzu gösterir."
 	script_author = "Magnum357"
-	script_version = "1.6.3"
+	script_version = "1.6.3.1"
 
-	mag = require 'mag'
+	mag_import, mag = pcall(require,"mag")
 
 	function trans_state_a1(subs,sel,config)
 	local style_name = mag.unstyles(config["u_style_name"])
@@ -73,4 +73,7 @@
 	aegisub.set_undo_point(script_name)
 	end
 
-	mag.register(false,add_macro)
+	if mag_import then mag.register(false,add_macro) else function mag()
+	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})
+	if k == "Evet" then os.execute("start https://github.com/magnum357i/Magnum-s-Aegisub-Scripts") end end
+	aegisub.register_macro(script_name,script_desription,mag) end
