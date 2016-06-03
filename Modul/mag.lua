@@ -1,7 +1,7 @@
 	--[[
 
 	Tekrar eden fonksiyonların yazıldığı lua modülüdür. Automation/include klasörüne atınız.
-	v = 1.0.1
+	v = 1.0.1.1
 
 	]]
 
@@ -97,8 +97,8 @@
 	end
 
 	function mag.register(name,macro)
-	if name == false then return aegisub.register_macro(script_name,script_desription,macro) end
-	if name ~= false then return aegisub.register_macro(name,script_desription,macro) end
+	if name ~= false then script_name = name end
+	mag.rmacro(script_name,script_desription,macro)
 	end
 
 	function mag.log(str) return aegisub.log(mag.s(str).."\n") end
@@ -169,5 +169,6 @@
 	mag.up      = unicode.to_upper_case
 	mag.low     = unicode.to_lower_case
 	mag.len     = unicode.len
+	mag.rmacro  = aegisub.register_macro
 
 	return mag
