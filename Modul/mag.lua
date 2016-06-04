@@ -1,9 +1,7 @@
-	--[[
-
-	Tekrar eden fonksiyonların yazıldığı lua modülüdür. Automation/include klasörüne atınız.
-	v = 1.0.1.1
-
-	]]
+	module_name = "Mag"
+	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
+	module_version = "1.1"
+	module_author = "Magnum357"
 
 	unicode = require 'aegisub.unicode'
 
@@ -101,7 +99,15 @@
 	mag.rmacro(script_name,script_desription,macro)
 	end
 
-	function mag.log(str) return aegisub.log(mag.s(str).."\n") end
+	function mag.log(mode,str,vars)
+	if mode == nil or mode < 1 or mode > 3 then mode = 0 end
+	local alert_message = ""
+	if vars ~= nil then for i = 1, #vars do str = mag.gsub(str,"%%s",mag.s(vars[i]),1) end end
+	if mode == 1 then alert_message = "HATA: " end
+	if mode == 2 then alert_message = "UYARI: " end
+	if mode == 3 then alert_message = "NOT: " end
+	if mode == 0 then aegisub.log(alert_message..str.."\n") else aegisub.log(mode,alert_message..str.."\n") end
+	end
 
 	function mag.splitter(split,str,last)
 	local n = 0
