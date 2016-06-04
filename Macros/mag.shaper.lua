@@ -1,11 +1,11 @@
 	script_name = "Shaper"
 	script_description = "Çözünürlüğe bağlı olarak resminiz için şekil çizer."
 	script_author = "Magnum357"
-	script_version = "1.1"
+	script_version = "1.2"
 
 	include("karaskel.lua")
 	ImageSize = require 'imagesize'
-	mag = require 'mag'
+	mag_import, mag = pcall(require,"mag")
 
 	--ImageSize ve mag modüllerine ihtiyaç duyar.
 	--ImageSize modülü için indirme sayfası: https://github.com/ScottPhillips/Corona-SDK-Lua-Image-Size
@@ -20,7 +20,7 @@
 	if rev_path:find("gnp%.") ~= 1 then path = path..".png" end
 	local width, height, format = ImageSize.imgsize(path)
 	if width == nil and height == nil then
-	mag.log("İstenilen türdeki resim dosyası bulunamadı.")
+	mag.log(2,"İstenilen türdeki resim dosyası bulunamadı.")
 	else
 	pcs = true
 	local meta = karaskel.collect_head(subs)
@@ -35,7 +35,7 @@
 	end
 	end
 	if pcs == true then mag.prog("Resminiz için şekil çiziliyor...")
-	else mag.log("Şekliniz çizilemedi!") end
+	else mag.log(1,"Şekliniz çizilemedi.") end
 	end
 
 	function add_macro(subs,sel)
@@ -53,4 +53,7 @@
 	end
 	end
 
-	mag.register(false,add_macro)
+	if mag_import then mag.register(false,add_macro) else function mag()
+	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})
+	if k == "Evet" then os.execute("start https://github.com/magnum357i/Magnum-s-Aegisub-Scripts") end end
+	aegisub.register_macro(script_name,script_desription,mag) end
