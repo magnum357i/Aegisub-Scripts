@@ -1,7 +1,9 @@
 	script_name = "Copy - Paste Line"
 	script_description = "Seçilen satırların her özelliğini kopyalar ve kopyaladığı bilgileri başka seçili satırlara yapıştırabilir."
 	script_author = "Magnum357"
-	script_version = "2.2.1"
+	script_version = "2.3.1"
+
+	mag_import, mag = pcall(require,"mag")
 
 	check_start_time      = false
 	check_end_time        = false
@@ -18,35 +20,35 @@
 	local ok, config
 	if #sel > 0 then
 	local dlg =
-	{{class="label",x=0,y=0,width=1,height=1,label="Zamanlar"}
-	,{class="checkbox",x=0,y=1,width=1,height=1,label="Başlangıç",value=check_start_time,name="u_start_time"}
-	,{class="checkbox",x=0,y=2,width=1,height=1,label="Bitiş",value=check_end_time,name="u_end_time"}
-	,{class="label",x=1,y=0,width=1,height=1,label="|   "}
-	,{class="label",x=1,y=1,width=1,height=1,label="|   "}
-	,{class="label",x=1,y=2,width=1,height=1,label="|   "}
-	,{class="label",x=1,y=3,width=1,height=1,label="|   "}
-	,{class="label",x=2,y=0,width=1,height=1,label="Boşluk"}
-	,{class="checkbox",x=2,y=1,width=1,height=1,label="Sol boşluk",value=check_left_margin,name="u_left_margin"}
-	,{class="checkbox",x=2,y=2,width=1,height=1,label="Sağ boşluk",value=check_right_margin,name="u_right_margin"}
-	,{class="checkbox",x=2,y=3,width=1,height=1,label="Alt boşluk",value=check_vertical_margin,name="u_vertical_margin"}
-	,{class="label",x=3,y=0,width=1,height=1,label="|   "}
-	,{class="label",x=3,y=1,width=1,height=1,label="|   "}
-	,{class="label",x=3,y=2,width=1,height=1,label="|   "}
-	,{class="label",x=3,y=3,width=1,height=1,label="|   "}
-	,{class="label",x=4,y=0,width=1,height=1,label="Satır"}
-	,{class="checkbox",x=4,y=1,width=1,height=1,label="Stil",value=check_style,name="u_style"}
-	,{class="checkbox",x=4,y=2,width=1,height=1,label="Aktör",value=check_actor,name="u_actor"}
-	,{class="checkbox",x=4,y=3,width=1,height=1,label="Metin",value=check_text,name="u_text"}
-	,{class="label",x=5,y=0,width=1,height=1,label="|   "}
-	,{class="label",x=5,y=1,width=1,height=1,label="|   "}
-	,{class="label",x=5,y=2,width=1,height=1,label="|   "}
-	,{class="label",x=5,y=3,width=1,height=1,label="|   "}	
-	,{class="label",x=6,y=0,width=1,height=1,label="Diğer"}
-	,{class="checkbox",x=6,y=1,width=1,height=1,label="Katman",value=check_layer,name="u_layer"}
-	,{class="checkbox",x=6,y=2,width=1,height=1,label="Efekt",value=check_effect,name="u_effect"}
-	,{class="label",x=0,y=4,width=7,height=1,label="------------------------------------------------------------------"}
-	,{class="label",x=0,y=5,width=7,height=1,label=#sel.." satır seçildi."}}
-	ok, config = aegisub.dialog.display(dlg,{"Kopyala",tr_ascii("Yapıştır"),"Kapat"})
+	{{ class = "label"   ,                                                            x = 0, y= 0, width = 1, height = 1, label = "Zamanlar"              }
+	,{ class = "checkbox", name = "u_start_time",      value = check_start_time,      x = 0, y= 1, width = 1, height = 1, label = "Başlangıç"             }
+	,{ class = "checkbox", name = "u_end_time",        value = check_end_time,        x = 0, y= 2, width = 1, height = 1, label = "Bitiş"                 }
+	,{ class = "label",                                                               x = 1, y= 0, width = 1, height = 1, label = mag.wall("|   ",1)          }
+	,{ class = "label",                                                               x = 1, y= 1, width = 1, height = 1, label = mag.wall("|   ",1)          }
+	,{ class = "label",                                                               x = 1, y= 2, width = 1, height = 1, label = mag.wall("|   ",1)          }
+	,{ class = "label",                                                               x = 1, y= 3, width = 1, height = 1, label = mag.wall("|   ",1)          }
+	,{ class = "label",                                                               x = 2, y= 0, width = 1, height = 1, label = "Boşluk"                }
+	,{ class = "checkbox", name = "u_left_margin",     value = check_left_margin,     x = 2, y= 1, width = 1, height = 1, label = "Sol boşluk"            }
+	,{ class = "checkbox", name = "u_right_margin",    value = check_right_margin,    x = 2, y= 2, width = 1, height = 1, label = "Sağ boşluk"            }
+	,{ class = "checkbox", name = "u_vertical_margin", value = check_vertical_margin, x = 2, y= 3, width = 1, height = 1, label = "Alt boşluk"            }
+	,{ class = "label",                                                               x = 3, y= 0, width = 1, height = 1, label = mag.wall("|   ",1)          }
+	,{ class = "label",                                                               x = 3, y= 1, width = 1, height = 1, label = mag.wall("|   ",1)          }
+	,{ class = "label",                                                               x = 3, y= 2, width = 1, height = 1, label = mag.wall("|   ",1)          }
+	,{ class = "label",                                                               x = 3, y= 3, width = 1, height = 1, label = mag.wall("|   ",1)          }
+	,{ class = "label",                                                               x = 4, y= 0, width = 1, height = 1, label = "Satır"                 }
+	,{ class = "checkbox", name = "u_style",           value = check_style,           x = 4, y= 1, width = 1, height = 1, label = "Stil"                  }
+	,{ class = "checkbox", name = "u_actor",           value = check_actor,           x = 4, y= 2, width = 1, height = 1, label = "Aktör"                 }
+	,{ class = "checkbox", name = "u_text",            value = check_text,            x = 4, y= 3, width = 1, height = 1, label = "Metin"                 }
+	,{ class = "label",                                                               x = 5, y= 0, width = 1, height = 1, label = mag.wall("|   ",1)          }
+	,{ class = "label",                                                               x = 5, y= 1, width = 1, height = 1, label = mag.wall("|   ",1)          }
+	,{ class = "label",                                                               x = 5, y= 2, width = 1, height = 1, label = mag.wall("|   ",1)          }
+	,{ class = "label",                                                               x = 5, y= 3, width = 1, height = 1, label = mag.wall("|   ",1)          }
+	,{ class = "label",                                                               x = 6, y= 0, width = 1, height = 1, label = "Diğer"                 }
+	,{ class = "checkbox", name = "u_layer",           value = check_layer,           x = 6, y= 1, width = 1, height = 1, label = "Katman"                }
+	,{ class = "checkbox", name = "u_effect",          value = check_effect,          x = 6, y= 2, width = 1, height = 1, label = "Efekt"                 }
+	,{ class = "label",                                                               x = 0, y= 4, width = 7, height = 1, label = mag.wall("-",66)            }
+	,{ class = "label",                                                               x = 0, y= 5, width = 7, height = 1, label = #sel.." satır seçildi."}}
+	ok, config = mag.dlg(dlg,{"Kopyala","Yapıştır","Kapat"})
 	if ok ~= "Kapat" then
 	if config.u_start_time       == false
 	and config.u_end_time        == false
@@ -58,23 +60,24 @@
 	and config.u_actor           == false
 	and config.u_effect          == false
 	and config.u_text            == false
-	then aegisub.log("Arayüzden hiçbir tercih yapılmadı.")
+	then mag.log(2,"Arayüzden hiçbir tercih yapılmadı.")
 	else
 	if ok == "Kopyala" then
 	copy(subs,sel,config)
 	conf(subs,sel,config)
-	prog("Satır bilgileri kopyalanıyor...")
+	mag.prog("Satır bilgileri kopyalanıyor...")
 	end
-	if ok == tr_ascii("Yapıştır") then
+	if ok == mag.ascii("Yapıştır") then
 	paste(subs,sel,config)
 	conf(subs,sel,config)
-	prog("Kopyalanan bilgiler yapıştırılıyor...")
+	mag.prog("Kopyalanan bilgiler yapıştırılıyor...")
 	end
 	end
 	end
 	else
-	aegisub.log("Seçili satır yok!")
+	mag.log(2,"Seçili satır yok!")
 	end
+	aegisub.set_undo_point(script_name)
 	end
 
 	function conf(subs,sel,config)
@@ -88,23 +91,6 @@
 	check_text            = config.u_text
 	check_layer           = config.u_layer
 	check_effect          = config.u_effect
-	end
-
-	function tr_ascii(str)
-	str = str
-	:gsub("ç",string.char(231))
-	:gsub("Ç",string.char(199))
-	:gsub("ü",string.char(252))
-	:gsub("Ü",string.char(220))
-	:gsub("ö",string.char(246))
-	:gsub("Ö",string.char(214))
-	:gsub("ğ",string.char(240))
-	:gsub("Ğ",string.char(208))
-	:gsub("ş",string.char(254))
-	:gsub("Ş",string.char(222))
-	:gsub("ı",string.char(253))
-	:gsub("İ",string.char(221))
-	return str
 	end
 
 	function reset()
@@ -140,9 +126,9 @@
 	end
 
 	function paste(subs,sel,config)
-	if number == nil then aegisub.log("Kopyalanmış veri yok.") aegisub.cancel()
+	if number == nil then mag.log(2,"Kopyalanmış veri yok.") aegisub.cancel()
 	else
-	if #sel ~= number then aegisub.log("İşleminiz gerçekleştirilemiyor. %s adet seçili satır varken %s adet kopyalanmış satır bilgisi var.",#sel,number)
+	if #sel ~= number then mag.log(1,"İşleminiz gerçekleştirilemiyor. %s adet seçili satır varken %s adet kopyalanmış satır bilgisi var.",{#sel,number})
 	else
 	for si, li in pairs(sel) do
 	line = subs[li]
@@ -162,18 +148,7 @@
 	end
 	end
 
-	function delay()
-	local st = ""
-	for i = 0, 50000 do
-	st = st .. i
-	end
-	return st
-	end
-
-	function prog(str)
-	aegisub.progress.task(string.format("%s",str))
-	aegisub.progress.set(100)
-	delay()
-	end
-
-	aegisub.register_macro(script_name,script_description,gui)
+	if mag_import then mag.register(false,gui) else function mag()
+	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})
+	if k == "Evet" then os.execute("start https://github.com/magnum357i/Magnum-s-Aegisub-Scripts") end end
+	aegisub.register_macro(script_name,script_desription,mag) end
