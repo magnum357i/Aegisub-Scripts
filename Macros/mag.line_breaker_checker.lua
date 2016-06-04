@@ -1,9 +1,9 @@
 	script_name="Line Breaker Checker"
 	script_description="Karakter sınırını aşan satırları bulur."
 	script_author="Magnum357"
-	script_version="2.4"
+	script_version="2.5"
 
-	mag = require 'mag'
+	mag_import, mag = pcall(require,"mag")
 
 	function line_breaker_check(subs,sel,config)
 	local style_name = mag.unstyles(config["u_style_name"])
@@ -42,7 +42,7 @@
 	end
 	end
 	end
-	if pcs == true then mag.prog("Tespit ediliyor...") else mag.log("Karakter sınırını aşan bölünmemiş satır bulunamadı.") end
+	if pcs == true then mag.prog("Tespit ediliyor...") else mag.log(2,"Karakter sınırını aşan bölünmemiş satır bulunamadı.") end
 	end
 
 	function create_config(subs)
@@ -67,4 +67,7 @@
 	end
 	end
 
-	mag.register(false,add_macro)
+	if mag_import then mag.register(false,add_macro) else function mag()
+	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})
+	if k == "Evet" then os.execute("start https://github.com/magnum357i/Magnum-s-Aegisub-Scripts") end end
+	aegisub.register_macro(script_name,script_desription,mag) end
