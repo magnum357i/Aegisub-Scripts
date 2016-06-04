@@ -1,6 +1,6 @@
 	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1"
+	module_version = "1.1.0.1"
 	module_author = "Magnum357"
 
 	unicode = require 'aegisub.unicode'
@@ -38,6 +38,15 @@
 	end
 
 	function mag.strip(str) return mag.gsub(str,"{[^}]+}", "") end
+
+	function mag.full_strip(str)
+	str = mag.gsub(str,"{[^}]+}", "")
+	str = mag.gsub(str,"\\N", " ")
+	str = mag.gsub(str,"\\n", " ")
+	str = mag.gsub(str,"\\h", " ")
+	str = mag.gsub(str,"%s+", " ")
+	return str
+	end
 
 	function mag.removedot(str) return mag.gsub(str,"['., -/*:;+!)?\"=(]+", "") end
 
@@ -154,6 +163,14 @@
 	if digit_mode == true then calc = mag.gsub(calc,"%.%d+","") end
 	return mag.s(calc)
 	end
+
+	function mag.first_index(subs)
+	local first_index
+	for i = 1, #subs do if subs[i].class == "dialogue" then if first_index == nil then first_index = i end end end
+	return first_index
+	end
+
+	function mag.last_index(subs) return #subs end	
 
 	mag.s       = tostring
 	mag.n       = tonumber
