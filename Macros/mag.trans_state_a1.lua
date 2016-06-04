@@ -1,7 +1,7 @@
 	script_name = "Translate State A1"
 	script_description = "Çevirinin yüzde kaçında olduğunuzu gösterir."
 	script_author = "Magnum357"
-	script_version = "1.6.3.1"
+	script_version = "1.6.4.1"
 
 	mag_import, mag = pcall(require,"mag")
 
@@ -33,7 +33,7 @@
 	end
 	end
 	end
-	if pcs == true then mag.prog("Yüzde hesaplanıyor...") else mag.log("İşleminiz gerçekleştirilemedi!") end
+	if pcs == true then mag.prog("Yüzde hesaplanıyor...") else mag.log(1,"İşleminiz gerçekleştirilemedi!") end
 	end
 
 	function remove_trans_state_a1(subs,sel,config)
@@ -52,15 +52,15 @@
 	end
 	end
 	end
-	if pcs == true then mag.prog("Çıktı verileri temizleniyor...") else mag.log("İşleminiz gerçekleştirilemedi!") end
+	if pcs == true then mag.prog("Çıktı verileri temizleniyor...") else mag.log(1,"İşleminiz gerçekleştirilemedi!") end
 	end
 
 	function create_config(subs)
 	local dialog_config =
-	{{class = "label",                                                  x = 0, y = 0, width = 1,  height = 1, label = "Stil:"                                                         }
-	,{class = "dropdown", name = "u_style_name", value = "Tüm stiller", x = 1, y = 0, width = 9,  height = 1, items = {"Tüm stiller"}, hint = "Sadece kullanılan stiller listelenir. "}
-	,{class = "checkbox", name = "u_percent_mode", value = true,        x = 1, y = 1, width = 1,  height = 1, label = "Yüzde küsuratını ekle."                                        }
-	,{class = "checkbox", name = "u_number_mode", value = true,         x = 1, y = 2, width = 1,  height = 1, label = "Satır sayılarını ekle."                                       }}
+	{{class = "label",                                                    x = 0, y = 0, width = 1,  height = 1, label = "Stil:"                                                         }
+	,{class = "dropdown", name = "u_style_name",   value = "Tüm stiller", x = 1, y = 0, width = 9,  height = 1, items = {"Tüm stiller"}, hint = "Sadece kullanılan stiller listelenir. "}
+	,{class = "checkbox", name = "u_percent_mode", value = true,          x = 1, y = 1, width = 1,  height = 1, label = "Yüzde küsuratını ekle."                                        }
+	,{class = "checkbox", name = "u_number_mode",  value = true,          x = 1, y = 2, width = 1,  height = 1, label = "Satır sayılarını ekle."                                       }}
 	mag.styles_insert(subs,dialog_config,2,"default","")
 	return dialog_config
 	end
