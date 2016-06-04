@@ -1,0 +1,108 @@
+	script_name = "Strip Line"
+	script_description = "Satırın metni hariç diğer tüm girdileri temizleyebilir."
+	script_author = "Magnum357"
+	script_version = "1"
+
+	mag_import, mag = pcall(require,"mag")
+
+	function strip_line(subs,sel,config)
+	local pcs = false
+	local style_name = mag.unstyles(config["u_style_name"])
+	local line_property = config["u_line_property"]
+	local extra_options = config["u_extra_options"]	
+	local style1, style2
+	for i = 1, #subs do
+	if subs[i].class == "dialogue" then
+	style1 = subs[i].style
+	style2 = style_name
+	if style_name == "Tüm stiller" then style1 = 1 style2 = 1 end
+	if style1 == style2 then
+	line = subs[i]
+	if line_property == true then
+	config.u_text            = true
+	config.u_layer           = true
+	config.u_actor           = true
+	config.u_effect          = true
+	config.u_left_margin     = true
+	config.u_right_margin    = true
+	config.u_vertical_margin = true
+	end
+	if config.u_text == true then
+	if line.text:match("{")     then pcs = true line.text = mag.strip(line.text)          end
+	if line.text:match("\\N")   then pcs = true line.text = mag.gsub(line.text,"\\N"," ") end
+	if line.text:match("\\n")   then pcs = true line.text = mag.gsub(line.text,"\\n"," ") end
+	if line.text:match("\\h")   then pcs = true line.text = mag.gsub(line.text,"\\h"," ") end
+	if line.text:match("%s%s+") then pcs = true line.text = mag.gsub(line.text,"%s+"," ") end
+	end
+	if config.u_layer           == true and line.layer    >  0  then pcs = true line.layer    = 0  end
+	if config.u_actor           == true and line.actor    ~= "" then pcs = true line.actor    = "" end
+	if config.u_effect          == true and line.effect   ~= "" then pcs = true line.effect   = "" end
+	if config.u_left_margin     == true and line.margin_l >  0  then pcs = true line.margin_l = 0  end
+	if config.u_right_margin    == true and line.margin_r >  0  then pcs = true line.margin_r = 0  end
+	if config.u_vertical_margin == true and line.margin_t >  0  then pcs = true line.margin_t = 0  end
+	if pcs == true then subs[i] = line end
+	end
+	end
+	end
+	for i = #subs, 1, -1 do
+	if subs[i].class == "dialogue" then
+	style1 = subs[i].style
+	style2 = style_name
+	if style_name == "Tüm stiller" then style1 = 1 style2 = 1 end
+	if style1 == style2 then
+	line = subs[i]
+	if extra_options == true then
+	config.u_empty_text   = true
+	config.u_comment_line = true
+	end
+	if config.u_empty_text   == true and mag.length(line.text) == 0    then pcs = true subs.delete(i) end
+	if config.u_comment_line == true and line.comment          == true then pcs = true subs.delete(i) end
+	end
+	end
+	end
+	if pcs == true then mag.prog("Satırlar temizleniyor...") else mag.log(2,"Temizlenecek bir şey bulunamadı.") end
+	end
+
+	function create_config(subs)
+	local dialog_config =
+	{{class = "checkbox", name = "u_line_property",                          x = 0, y = 0, width = 2, height = 1, label = "Satır Özellikleri",     hint = "Aşağıdaki ayarların hepsini seçmek için bu satırın başındaki kutucuğu işaretleyin."}
+	,{class = "checkbox", name = "u_text",            value = true,          x = 1, y = 1, width = 1, height = 1, label = "Text",                  hint = "Satırdakki metin hariç her şeyi siler."                                            }
+	,{class = "checkbox", name = "u_layer",                                  x = 1, y = 2, width = 1, height = 1, label = "Layer"                                                                                                             }
+	,{class = "checkbox", name = "u_actor",                                  x = 1, y = 3, width = 1, height = 1, label = "Actor"                                                                                                             }
+	,{class = "checkbox", name = "u_effect",                                 x = 1, y = 4, width = 1, height = 1, label = "Effect"                                                                                                            }
+	,{class = "checkbox", name = "u_left_margin",                            x = 2, y = 1, width = 1, height = 1, label = "Left Margin"                                                                                                       }
+	,{class = "checkbox", name = "u_right_margin",                           x = 2, y = 2, width = 1, height = 1, label = "Right Margin"                                                                                                      }
+	,{class = "checkbox", name = "u_vertical_margin",                        x = 2, y = 3, width = 1, height = 1, label = "Vertical Margin"                                                                                                   }
+	,{class = "checkbox", name = "u_extra_options",                          x = 0, y = 5, width = 2, height = 1, label = "Ekstra Ayarlar",        hint = "Aşağıdaki ayarların hepsini seçmek için bu satırın başındaki kutucuğu işaretleyin."}
+	,{class = "checkbox", name = "u_empty_text",                             x = 1, y = 6, width = 1, height = 1, label = "Boş satırları sil."                                                                                                }
+	,{class = "checkbox", name = "u_comment_line",                           x = 1, y = 7, width = 1, height = 1, label = "Yorum satırlarını sil."                                                                                            }
+	,{class = "label",                                                       x = 0, y = 8, width = 1, height = 1, label = "Stil:"                                                                                                             }
+	,{class = "dropdown", name = "u_style_name",      value = "Tüm stiller", x = 1, y = 8, width = 2, height = 1, items = {"Tüm stiller"},         hint = "Sadece kullanılan stiller listelenir."                                             }
+	}
+	mag.styles_insert(subs,dialog_config,13,"default","")
+	return dialog_config
+	end
+
+	function add_macro(subs)
+	local ok, config
+	ok, config = mag.dlg(create_config(subs),{"Temizle","Kapat"})
+	if  config.u_line_property   == false
+	and config.u_text            == false
+	and config.u_layer           == false
+	and config.u_actor           == false
+	and config.u_effect          == false
+	and config.u_left_margin     == false
+	and config.u_right_margin    == false
+	and config.u_vertical_margin == false
+	and config.u_extra_options   == false
+	and config.u_empty_text      == false
+	and config.u_comment_line    == false
+	then mag.log(2,"Hiçbir tercih yapmadınız.")
+	else if ok == "Temizle" then strip_line(subs,sel,config) end end
+	aegisub.set_undo_point(script_name)
+	end
+
+	if mag_import then mag.register(false,add_macro) else function mag()
+	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})
+	if k == "Evet" then os.execute("start https://github.com/magnum357i/Magnum-s-Aegisub-Scripts") end end
+	aegisub.register_macro(script_name,script_desription,mag) end
