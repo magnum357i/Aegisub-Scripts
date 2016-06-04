@@ -1,12 +1,13 @@
 	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.0.1"
+	module_version = "1.1.0.3"
 	module_author = "Magnum357"
 
 	unicode = require 'aegisub.unicode'
 
 	local mag = {}
 
+	--mag.delay()
 	function mag.delay()
 	local st = ""
 	for i = 0, 50000 do
@@ -15,12 +16,15 @@
 	return st
 	end
 
+	--mag.prog("İşleminiz yapılıyor...")
 	function mag.prog(str)
 	aegisub.progress.task(mag.format("%s",str))
 	aegisub.progress.set(100)
 	mag.delay()
 	end
 
+	--ascii_text = mag.ascii("Şekil Çıta")
+	-->>Şekil Çıta
 	function mag.ascii(str)
 	str = mag.gsub(str,"ç",mag.char(231))
 	str = mag.gsub(str,"Ç",mag.char(199))
@@ -37,8 +41,12 @@
 	return str
 	end
 
+	--strip_text = mag.strip("{\bord2}Bu bir deneme.")
+	-->>Bu bir deneme.
 	function mag.strip(str) return mag.gsub(str,"{[^}]+}", "") end
 
+	--full_strip_text = mag.full_strip("{\bord2}Bu\hbir\hdeneme.")
+	-->>Bu bir deneme.
 	function mag.full_strip(str)
 	str = mag.gsub(str,"{[^}]+}", "")
 	str = mag.gsub(str,"\\N", " ")
@@ -48,18 +56,29 @@
 	return str
 	end
 
+	--remove_dot_text = mag.removedot("Bu bir deneme.")
+	-->>Bu bir deneme
 	function mag.removedot(str) return mag.gsub(str,"['., -/*:;+!)?\"=(]+", "") end
 
+	--mag.wall(" ",5)
+	-->>5x" "
 	function mag.wall(char,loop) return mag.rep(char,loop) end
 
+	--stil = mag.unstyles(stil)
+	--(5) Default
+	-->>Default
+	--(5+0) Default
+	-->>Default
 	function mag.unstyles(style) return mag.gsub(style,"%(%d+%+?%d-%)%s","") end
 
+	--total_line = mag.total_full(subs)
 	function mag.total_full(subs)
 	local n = 0
 	for i = 1, #subs do if subs[i].class == "dialogue" then n = n + 1 end end
 	return n
 	end
 
+	--mag.total(subs,stil,[default,comment,effect],[effect -> Mac])
 	function mag.total(subs,style_name,mode,value)
 	local n, m = 0, 0
 	for i = 1, #subs do
@@ -80,6 +99,7 @@
 	return n, m
 	end
 
+	--mag.styles(subs,[default,comment,effect],[effect -> Mac])
 	function mag.styles(subs,mode,value)
 	local n, styles = 0, {}
 	for i = 1, #subs do
@@ -94,8 +114,10 @@
 	return styles
 	end
 
+	--mag.styles_insert(subs,dlg_array,3,[default,comment,effect],[effect -> Mac])
 	function mag.styles_insert(subs,var,id,mode,value) for _, style in ipairs(mag.styles(subs,mode,value)) do table.insert(var[id].items,style) end end
 
+	--mag.dlg(gui_array,{"Tamam","Kapat"})
 	function mag.dlg(var,buttons)
 	local ok, config
 	for i = 1, table.getn(buttons) do buttons[i] = mag.ascii(buttons[i]) end
@@ -103,12 +125,35 @@
 	return ok, config
 	end
 
+	--mag.register(false,macro_function)
+	--mag.register("My_Script_Name",macro_function)
 	function mag.register(name,macro)
 	if name ~= false then script_name = name end
 	mag.rmacro(script_name,script_desription,macro)
 	end
 
+	--mag.log("Deneme.")
+	-->>Deneme.
+	--mag.log([0-4],"Deneme.")
+	-->> 1 == HATA: Deneme.
+	-->> 2 == UYARI: Deneme.
+	-->> 3 == NOT: Deneme.
+	-->> 0 == Deneme.
+	--mag.log("Deneme. %s",{"Deneme."})
+	-->> Deneme. Deneme.
+	--mag.log([0-4],"Deneme. %s",{"Deneme."})
+	-->> 1 == HATA: Deneme. Deneme.
+	-->> 2 == UYARI: Deneme. Deneme.
+	-->> 3 == NOT: Deneme. Deneme.
+	-->> 0 == Deneme. Deneme.
 	function mag.log(mode,str,vars)
+	if mag.n(mode) == nil then
+	vars = str
+	str  = mode
+	mode = 0
+	else
+	mode = mag.n(mode)
+	end
 	if mode == nil or mode < 1 or mode > 3 then mode = 0 end
 	local alert_message = ""
 	if vars ~= nil then for i = 1, #vars do str = mag.gsub(str,"%%s",mag.s(vars[i]),1) end end
@@ -118,6 +163,11 @@
 	if mode == 0 then aegisub.log(alert_message..str.."\n") else aegisub.log(mode,alert_message..str.."\n") end
 	end
 
+	--text_split = mag.splitter("\N","Bu bir deneme. \N Bu da bir deneme.",false)
+	-->>Bu bir deneme.
+	--text_split = mag.splitter("\N","Bu bir deneme. \N Bu da bir deneme.",true)
+	-->>Bu bir deneme.
+	-->>Bu da bir deneme.
 	function mag.splitter(split,str,last)
 	local n = 0
 	local parts = {}
@@ -130,28 +180,36 @@
 	return n, parts
 	end
 
+	--esc_text = mag.esc("Nasılsın?")
+	-->>Nasılsın%?
 	function mag.esc(str)
-	str = mag.gsub(str,"(%()","%%1")
-	str = mag.gsub(str,"(%))","%%1")
-	str = mag.gsub(str,"(%.)","%%1")
-	str = mag.gsub(str,"(%%)","%%1")
-	str = mag.gsub(str,"(%+)","%%1")
-	str = mag.gsub(str,"(%-)","%%1")
-	str = mag.gsub(str,"(%*)","%%1")
-	str = mag.gsub(str,"(%?)","%%1")
-	str = mag.gsub(str,"(%[)","%%1")
-	str = mag.gsub(str,"(%])","%%1")
-	str = mag.gsub(str,"(%^)","%%1")
-	str = mag.gsub(str,"(%$)","%%1")
+	str = mag.gsub(str,"(%()","%%%1")
+	str = mag.gsub(str,"(%))","%%%1")
+	str = mag.gsub(str,"(%.)","%%%1")
+	str = mag.gsub(str,"(%%)","%%%1")
+	str = mag.gsub(str,"(%+)","%%%1")
+	str = mag.gsub(str,"(%-)","%%%1")
+	str = mag.gsub(str,"(%*)","%%%1")
+	str = mag.gsub(str,"(%?)","%%%1")
+	str = mag.gsub(str,"(%[)","%%%1")
+	str = mag.gsub(str,"(%])","%%%1")
+	str = mag.gsub(str,"(%^)","%%%1")
+	str = mag.gsub(str,"(%$)","%%%1")
 	return str
 	end
 
+	--zero_text = mag.zero(300,30)
+	-->>030
 	function mag.zero(total_number,number)
 	local zero_count = mag.len(mag.s(total_number)) - mag.len(mag.s(number))
 	if zero_count > 0 then number = mag.format("%s%s",mag.rep("0",zero_count),number) end
 	return number
 	end
 
+	--mag.percent("200",100,true)
+	-->>50
+	--mag.percent("200",100,false)
+	-->>50.00	
 	function mag.percent(total_number,number,digit_mode)
 	local calc
 	if number <= total_number then
@@ -164,12 +222,16 @@
 	return mag.s(calc)
 	end
 
+	--first_text_index = mag.first_index(subs)
+	-->>13
 	function mag.first_index(subs)
 	local first_index
 	for i = 1, #subs do if subs[i].class == "dialogue" then if first_index == nil then first_index = i end end end
 	return first_index
 	end
 
+	--last_text_index = mag.last_index(subs)
+	-->>287
 	function mag.last_index(subs) return #subs end	
 
 	mag.s       = tostring
