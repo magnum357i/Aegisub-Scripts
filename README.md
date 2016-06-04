@@ -5,7 +5,7 @@ Bu sayfayı açmamdaki amaç kendi yazdığım lua dosyalarının sürüm takibi
 ### [Mag](Modul/mag.lua)
 Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında **mag.** ön eki varsa bu modülü kullanıyor demektir. Bu modülü **automation/include/** dizinine atınız.
 
-## MACROS
+## MAKROLAR
 
 ### [Basic Turning](Macros/basic_turning.lua)
 Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra sadece işaretleri yazmak yetmez, o satırı seçmelisiniz de.
@@ -55,7 +55,7 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 
 **Bu modlardan aynı anda sadece birini kullanın.**
 
-### [Copy Paste Line](Macros/copy_paste_line.lua)
+### [Copy Paste Line](Macros/mag.copy_paste_line.lua)
 Bir satır grubuna ait herhangi bir bilgiyi kopyalar ve bunu başka bir satır grubuna yapıştırabilir.
 
 ### [Delete Comment Bracket](Macros/delete_comment_bracket.lua)
@@ -127,7 +127,7 @@ Birçok ayarda satır seçme işlemi yapar.
   * **Sonraki satır:** O an metin kutusunda içeriğini gördüğünüz satırın altındaki satıra, yani bir sonraki satıra atlar.
 * **Seçimin tersi:** Seçiminiz dışında kalan satırları seçersiniz.
 
-### [Shaper](Macros/shaper.lua)
+### [Shaper](Macros/mag.shaper.lua)
 Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua dosyası halinde.
 
 * **Resmin dizini ve adı:** Resmin adıyla beraber bulunduğu dizini yazın. Uzantıyı girmenize gerek yok.
@@ -136,6 +136,9 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
  Bu seçiliyken alt yazının çözünürlük değerine göre boyutlandırma yapar.
  * **?video**<br>
  Bu seçiliyken videonun çözünürlük değerine göre boyutlandırma yapar.
+
+### [Strip Line](Macros/mag.strip_line)
+Satırın metni hariç diğer tüm girdileri temizleyebilir.
 
 ### [Sub Menu Maker](Macros/sub_menu_maker.lua)
 Lua dosyalarını gruplar.
@@ -147,7 +150,7 @@ Lua dosyalarını gruplar.
  * **?default**<br>
  Bu giriliyken Aegisub programının yüklü olduğu dizindeki `automation` klasörünü dizin olarak girmiş olursunuz.
 
-### [Trans State A1](Macros/trans_state_a1.lua)
+### [Trans State A1](Macros/mag.trans_state_a1.lua)
 `Effect` kutucuğuna yüzdeler yazar.
 
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
