@@ -1,7 +1,7 @@
 	script_name="Line Breaker Checker"
 	script_description="Karakter sınırını aşan satırları bulur."
 	script_author="Magnum357"
-	script_version="2.5"
+	script_version="2.5.1"
 
 	mag_import, mag = pcall(require,"mag")
 
@@ -32,7 +32,7 @@
 	clear_text = clear_text:gsub("\\h",""):gsub("\\n","")
 	if text:match("\\N") then
 	local split_count, split_text = 0, {}
-	split_count, split_text = mag.splitter("\\N",clear_text,true)
+	split_count, split_text = mag.splitter(true,clear_text,"\\N")
 	for j = 1, split_count do if mag.len(split_text[j]) > max_char then pcs = true line.effect = msg2 end end
 	else
 	text_len = mag.len(clear_text:gsub("\\N",""))
