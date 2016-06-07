@@ -1,6 +1,6 @@
 	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.0.3"
+	module_version = "1.1.0.5"
 	module_author = "Magnum357"
 
 	unicode = require 'aegisub.unicode'
@@ -64,10 +64,9 @@
 	-->>5x" "
 	function mag.wall(char,loop) return mag.rep(char,loop) end
 
-	--stil = mag.unstyles(stil)
-	--(5) Default
+	--stil = mag.unstyles("(5) Default")
 	-->>Default
-	--(5+0) Default
+	--stil = mag.unstyles("(5+0) Default")
 	-->>Default
 	function mag.unstyles(style) return mag.gsub(style,"%(%d+%+?%d-%)%s","") end
 
@@ -128,8 +127,8 @@
 	--mag.register(false,macro_function)
 	--mag.register("My_Script_Name",macro_function)
 	function mag.register(name,macro)
-	if name ~= false then script_name = name end
-	mag.rmacro(script_name,script_desription,macro)
+	if name == false then name = script_name end
+	mag.rmacro(name,script_desription,macro)
 	end
 
 	--mag.log("Deneme.")
@@ -147,6 +146,7 @@
 	-->> 3 == NOT: Deneme. Deneme.
 	-->> 0 == Deneme. Deneme.
 	function mag.log(mode,str,vars)
+	if str == nil and vars == nil then str = mag.s(mode) mode = 0 end
 	if mag.n(mode) == nil then
 	vars = str
 	str  = mode
@@ -161,23 +161,6 @@
 	if mode == 2 then alert_message = "UYARI: " end
 	if mode == 3 then alert_message = "NOT: " end
 	if mode == 0 then aegisub.log(alert_message..str.."\n") else aegisub.log(mode,alert_message..str.."\n") end
-	end
-
-	--text_split = mag.splitter("\N","Bu bir deneme. \N Bu da bir deneme.",false)
-	-->>Bu bir deneme.
-	--text_split = mag.splitter("\N","Bu bir deneme. \N Bu da bir deneme.",true)
-	-->>Bu bir deneme.
-	-->>Bu da bir deneme.
-	function mag.splitter(split,str,last)
-	local n = 0
-	local parts = {}
-	if last == true then str = str..split end
-	for part in str:gmatch("[^"..split.."]+"..split) do
-	n = n + 1
-	parts[n] = part
-	end
-	if last == true then parts[n] = mag.reverse(mag.gsub(mag.reverse(parts[n]),mag.reverse(split),"",1)) end
-	return n, parts
 	end
 
 	--esc_text = mag.esc("Nasılsın?")
@@ -195,6 +178,7 @@
 	str = mag.gsub(str,"(%])","%%%1")
 	str = mag.gsub(str,"(%^)","%%%1")
 	str = mag.gsub(str,"(%$)","%%%1")
+	str = mag.gsub(str,"(%\\)","\\\\%1")
 	return str
 	end
 
@@ -232,7 +216,96 @@
 
 	--last_text_index = mag.last_index(subs)
 	-->>287
-	function mag.last_index(subs) return #subs end	
+	function mag.last_index(subs) return #subs end
+
+	--nil_value == mag.unnil(nil_value)
+	-->>empty string
+	function mag.unnil(var)
+	if var == nil then var = "" end
+	return var
+	end
+
+	--split_count, split_text = mag.splitter(true,"Bu bir deneme. \\NBu da bir deneme. \\NBu hala deneme.","\\N")
+	-->>3
+	-->>Bu bir deneme. \\N
+	-->>Bu da bir deneme. \\N
+	-->>Bu hala bir deneme.
+	--split_count, split_text = mag.splitter(false,"Bu bir deneme. \\NBu da bir deneme. \\NBu hala deneme.","\\N")
+	-->>2
+	-->>Bu bir deneme. \\N
+	-->>Bu da bir deneme. \\N
+	--split_count, split_text = mag.splitter([true,false],"Bu bir deneme. \\NBu da bir deneme. \\NBu hala deneme.","\\h")
+	-->>1
+	-->>Bu bir deneme. \\NBu da bir deneme. \\NBu hala deneme.
+	function mag.splitter(last,str,split)
+	local n = 0
+	local parts = {}
+	if mag.match(str,split) then if last == true then str = str..mag.match(str,split) end
+	for part in str:gmatch(".-"..split) do
+	n = n + 1
+	parts[n] = part
+	end
+	if last == true then
+	parts[n] = mag.gsub(parts[n],split,"")
+	if parts[n] == "" then parts[n] = nil n = n - 1 end
+	end
+	else
+	parts[1] = str
+	n = 1
+	end
+	return n, parts
+	end
+
+	--text = mag.tag_replacer("Bu bir deneme. \\nBu da bir deneme. \\nBu hala deneme.","\\n","\\N")
+	-->>Bu bir deneme. \\NBu da bir deneme. \\NBu hala deneme.
+	--text = mag.tag_replacer("Bu bir deneme. \\hBu da bir deneme. \\hBu hala deneme.","\\n","\\N")
+	-->>Bu bir deneme. \\nBu da bir deneme. \\nBu hala deneme.
+	function mag.tag_replacer(str,sign,tag)
+	local split_text
+	local split_count
+	local result = ""
+	if mag.match(str,sign) then
+	split_count, split_text = mag.splitter(true,str,sign)
+	for i = 1, split_count do result = result..mag.tag_changer(split_text[i],sign,tag) end
+	return result else return str
+	end
+	end
+
+	--text = mag.tag_changer("Bu bir deneme. *1Bu da bir deneme. {\b*1}Bu hala deneme.","*1","{\i1}")
+	-->>Bu bir deneme. {\i1}Bu da bir deneme. {\b\1}Bu hala deneme.
+	--text = mag.tag_changer("Bu bir deneme. *1Bu da bir deneme. {\b*1}Bu hala deneme.","*0","{\i0}")
+	-->>Bu bir deneme. *1Bu da bir deneme. {\b*1}Bu hala deneme.
+	function mag.tag_changer(str,sign,tag)
+	local function no_bra(tag) tag = mag.gsub(tag,"{","") tag = tag.gsub(tag,"}","") return tag end
+	local sp1, sp2
+	local result = ""
+	local t
+	t = tag
+	rev = mag.reverse(str)
+	s1 = mag.find(rev,"{")
+	s2 = mag.find(rev,"}")
+	if s1 == nil then s1 = -2 end
+	if s2 == nil then s2 = s1 + 1 end
+	if s1 < s2 and s1 > -1 then t = no_bra(t) end
+	if t ~= nil then result = mag.gsub(str,sign,t) else result = str end
+	return result
+	end
+
+	--mag.last_find("Deneme.","e")
+	-->>6
+	--mag.last_find("Deneme","a")
+	-->>false
+	function mag.last_find(str,find)
+	local find_idx = {}
+	local n = 0
+	local _, find_count = mag.gsub(str,find,"")
+	for i = 1, find_count do
+	n = n + 1
+	if i == 1 then find_idx[i] = mag.find(str,find)
+	else find_idx[i] = mag.find(str,find,find_idx[i - 1] + 1) end
+	end
+	if find_count == 0 then return false else return find_idx[n] end
+	end
 
 	mag.s       = tostring
 	mag.n       = tonumber
