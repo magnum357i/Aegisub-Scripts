@@ -1,6 +1,6 @@
 	script_name = "Select Lines"
 	script_desription = "Her türlü yolla satır seçer."
-	script_version = "1.4"
+	script_version = "1.4.2"
 	script_author = "Magnum357"
 
 	mag_import, mag = pcall(require,"mag")
@@ -76,19 +76,45 @@
 	end
 	end
 
+	jumping_lines = {}
+
 	function line_jumping(subs,sel,act)
+	local line_jumping_lines = "Henüz atlanmış bir satır yok."
+	local line_jumping_lines_val = "Henüz atlanmış bir satır yok."
 	local total_line = mag.total_full(subs)
 	local index = {}
-	local dlg =
-	{{class = "label",                                                        x = 0, y = 0, width = 1, height = 1, label = "Gidilecek satır:"}
-	,{class = "intedit", name = "var", value = mag.current_act(subs,sel,act), x = 1, y = 0, width = 1, height = 1, min = 1, max = total_line, hint = "Bu kutucukta ilk gördüğünüz değer bulunduğunuz satırın numarasıdır."}
-	,{class = "label",                                                        x = 0, y = 1, width = 1, height = 1, label = mag.wall(" ",2).."Toplam satır:"}
-	,{class = "label",                                                        x = 1, y = 1, width = 1, height = 1, label = total_line}}
-	ok, config = mag.dlg(dlg,{"Atla","Kapat"})
-	if ok == "Atla" then return {(#subs - total_line) + config.var} end
+	local jumping
+	local double = 0
+	if j == nil then j = 0 end
+	if j > 0 then
+	line_jumping_lines = nil
+	line_jumping_lines_val = jumping_lines[j]
+	if jumping_lines[j] == nil then line_jumping_lines_val = jumping_lines[j - 1] end
 	end
-
-
+	local dlg =
+	{{class = "label",                                                                     x = 0, y = 0, width = 2, height = 1, label = "Gidilecek satır:"}
+	,{class = "intedit",  name = "var",             value = mag.current_act(subs,sel,act), x = 2, y = 0, width = 1, height = 1, min = 1, max = total_line, hint = "Bu kutucukta ilk gördüğünüz değer bulunduğunuz satırın numarasıdır."}
+	,{class = "label",                                                                     x = 0, y = 1, width = 2, height = 1, label = mag.wall(" ",2).."Toplam satır:"}
+	,{class = "label",                                                                     x = 2, y = 1, width = 1, height = 1, label = total_line}
+	,{class = "label",                                                                     x = 0, y = 2, width = 1, height = 1, label = mag.wall(" ",3)}
+	,{class = "checkbox", name = "u_line_jumping",                                         x = 1, y = 2, width = 1, height = 1, label = "Şuna git:"}
+	,{class = "dropdown", name = "u_lines_jumping", value = line_jumping_lines_val,        x = 2, y = 2, width = 1, height = 1, items = {line_jumping_lines}, hint = "Buradan daha önce atladığınız satırlar arasında geçiş yapabilirsiniz."}
+	,{class = "checkbox", name = "u_reset_jumping",                                        x = 2, y = 3, width = 1, height = 1, label = "Son atlananlar listesini temizle."}}
+	if j > 0 then for _, jlines in ipairs(jumping_lines) do table.insert(dlg[7].items,jlines) end end
+	ok, config = mag.dlg(dlg,{"Atla","Kapat"})
+	if config.u_line_jumping == true and mag.n(config.u_lines_jumping) == nil then mag.log(1,"Atlanmış satır yokken atlanmış satıra göre atlayamazsınız.") aegisub.cancel() end
+	if ok == "Atla" then
+	if config.u_reset_jumping == true then jumping_lines = {} end
+	if config.u_line_jumping == false then
+	table.insert(jumping_lines,config.var)
+	j = table.getn(jumping_lines)
+	mag.double_value(jumping_lines)
+	end
+	if config.u_line_jumping == true then config.var = config.u_lines_jumping end
+	jumping = (#subs - total_line) + config.var
+	return {jumping}
+	end
+	end
 	if mag_import then
 	mag.register(script_name.."/Geçerli satır/Öncesi",        act_before      )
 	mag.register(script_name.."/Geçerli satır/Sonrası",       act_after       )
