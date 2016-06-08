@@ -1,6 +1,6 @@
 	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.0.6"
+	module_version = "1.1.0.7"
 	module_author = "Magnum357"
 
 	unicode = require 'aegisub.unicode'
@@ -325,6 +325,24 @@
 	local index
 	for i = #subs, 1, -1 do if subs[i].style == style_name then index =  i break end end
 	return index
+	end
+
+	--vars = {10,50,70,80,50}
+	--mag.double_value(vars)
+	-->>10,70,80,50
+	function mag.double_value(array)
+	local index = {}
+	local n = 0
+	local double
+	local max_n = table.getn(array)
+	if max_n > 1 then
+	for i = 1, max_n do
+	double = 0
+	for k = i, max_n do if array[i] == array[k] then double = double + 1 end end
+	if double > 1 then table.insert(index,i) end	
+	end	
+	end
+	for d = 1, table.getn(index) do table.remove(array,index[d]) end
 	end
 
 	mag.s       = tostring
