@@ -1,6 +1,6 @@
 	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.0.5"
+	module_version = "1.1.0.6"
 	module_author = "Magnum357"
 
 	unicode = require 'aegisub.unicode'
@@ -305,6 +305,26 @@
 	else find_idx[i] = mag.find(str,find,find_idx[i - 1] + 1) end
 	end
 	if find_count == 0 then return false else return find_idx[n] end
+	end
+
+	--current_act = mag.current_act(subs,sel,act)
+	-->>85
+	function mag.current_act(subs,sel,act) return act - mag.first_index(subs) + 1 end
+
+	--style_first_index = mag.style_first_index(subs,"Default")
+	-->>11
+	function mag.style_first_index(subs,style_name)
+	local index
+	for i = 1, #subs do if subs[i].style == style_name then index =  i break end end
+	return index
+	end
+
+	--style_last_index = mag.style_last_index(subs,"Default")
+	-->>320
+	function mag.style_last_index(subs,style_name)
+	local index
+	for i = #subs, 1, -1 do if subs[i].style == style_name then index =  i break end end
+	return index
 	end
 
 	mag.s       = tostring
