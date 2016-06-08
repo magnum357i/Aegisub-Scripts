@@ -1,13 +1,43 @@
-## TANITIM
+İÇİNDEKİLER
+===========
+1. [**TANITIM**](#tanitim)
+2. [**MODÜL**](#modÜl)
+ * [**Mag**](#mag)
+3. [**MAKROLAR**](#makrolar)
+ * [**Basic Turning**](#basic-turning)
+ * [**Copy Paste Line**](#copy-paste-line)
+ * [**K Char**](#k-char)
+ * [**Delete Comment Bracket**](#delete-comment-bracket)
+ * [**Delete Lines**](#delete-lines)
+ * [**Fix Timing**](#fix-timing)
+ * [**Fixing Turkish Chars**](#fixing-turkish-chars)
+ * [**Karaoke Cleaner**](#karaoke-cleaner)
+ * [**Line Breaker Checker**](#line-breaker-checker)
+ * [**Line Source Duplicate**](#line-source-duplicate)
+ * [**Shaper**](#shaper)
+ * [**Strip Line**](#strip-line)
+ * [**Sub Menu Maker**](#sub-menu-maker)
+ * [**Trans State A1**](#trans-state-a1)
+ * [**Typewritter Maker**](#typewritter-maker)
+4. [**ASS**](#ass)
+ * [**Autotags**](#autotags)
+ * [**Rainbow**](#rainbow)
+ * [**Shaper**](#shaper-1)
+ * [**T_Calc**](#t_calc)
+ * [**Vertical Kanji**](#vertical-kanji)
+
+### TANITIM
+
 Bu sayfayı açmamdaki amaç kendi yazdığım lua dosyalarının sürüm takibi ve indirme bağlantısı sunmak. Bu dosyalar sadece Aegisub üzerinde çalışır. Lua isimlerini ve içerdiği kodları(değişkenleri) İngilizce yaparken arayüz ve iletileri Türkçe yapmayı tercih ediyorum.
 
-## MODÜL
+### MODÜL
+
 ### [Mag](Modul/mag.lua)
 Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında **mag.** ön eki varsa bu modülü kullanıyor demektir. Bu modülü **automation/include/** dizinine atınız.
 
-## MAKROLAR
+### MAKROLAR
 
-### [Basic Turning](Macros/basic_turning.lua)
+### [Basic Turning](Macros/mag.sbasic_turning.lua)
 Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra sadece işaretleri yazmak yetmez, o satırı seçmelisiniz de.
 
 | İşaret | Dönüştüğü | Açıklama |
@@ -17,7 +47,7 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 | ****8*** | {\an8} | Satırı yukarı alma etiketine dönüşüm yapar.
 | ****n*** | \N | Satır bölme karakteri koyar.
 | ****h*** | \h | Boşluk karakteri koyar.
-| ****300,200**** | \fad(300,200) | **\fad** etiketine dönüşüm yapar.
+| ****f300,200**** | \fad(300,200) | **\fad** etiketine dönüşüm yapar.
 | ****t*** | Örnek Bir Cümle. | Her kelimenin baş harfini büyük harfe dönüştürür.
 | ****2t*** | Örnek Bir Cümle. | Türkçe bağlaçlar hariç her kelimenin baş harfini büyük yapar.
 | ****T*** | Örnek bir cümle. | Her cümlenin baş harfini büyük harfe dönüşüm yapar.
@@ -35,7 +65,8 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 | ***+*** | This is +a +sample. | Kelimenin başına bu işaretten koyarak **Tureng** sitesinde arama yaparsınız.
 | ***%*** | %This is a sample.% | Bu işaretle bir alan seçerek **Google Translate** sitesinde arama yaparsınız.
 | ****l*** | - Metin.\N- Metin. | Konulduğu yerden satırı konuşma çizgilerine böler.
-| ****2l*** | (ÖS)- Metin.(OAS)\N- Metin. | Bir **ö**nceki **s**atırla **o** **a**nki **s**atırı konuşma çizgileri koyarak birleştirir.
+| ****lp*** | (ÖS)- Metin.(OAS)\N- Metin. | Bir **ö**nceki **s**atırla **o** **a**nki **s**atırı konuşma çizgileri koyarak birleştirir.
+| ****ln*** | (SS)- Metin.(OAS)\N- Metin. | Bir **s**onraki **s**atırla **o** **a**nki **s**atırı konuşma çizgileri koyarak birleştirir.
 | ****b*** | (\N)Metin.\N Metin. | **\N** karakterlerini silip işaretin olduğu konuma bir tane ekler.
 
 ###### Notlar
@@ -57,6 +88,9 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 
 ### [Copy Paste Line](Macros/mag.copy_paste_line.lua)
 Bir satır grubuna ait herhangi bir bilgiyi kopyalar ve bunu başka bir satır grubuna yapıştırabilir.
+
+### [K Char](Macros/mag.k_char.lua)
+Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
 
 ### [Delete Comment Bracket](Macros/delete_comment_bracket.lua)
 Yorum olarak düşülen notları siler.
@@ -109,7 +143,7 @@ Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir
 ###### Notlar
 Oluşturduğu girdilere müdahalede bulunmayınız.
 
-### [Select Lines](Macros/select_lines.lua)
+### [Select Lines](Macros/mag.select_lines.lua)
 Birçok ayarda satır seçme işlemi yapar.
 * **Geçerli satır:** O an bulunduğunuz, metin kutusunda içeriğini gördüğünüz satırın olduğu noktadan işlem yaparsınız.
   * **Öncesi:** Geçerli satır ve öncesini seçer.
@@ -160,7 +194,7 @@ Lua dosyalarını gruplar.
 ### [Typewritter Maker](Macros/typewritter-maker.lua)
 Satıra daktilo tarzı bir efekt uygular.
 
-## ASS
+### ASS
 ### [Autotags](ass/autotagsv4.ass)
 İki etiket arasında sonsuz dönüşüm yapar.
 
