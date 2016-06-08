@@ -1,7 +1,9 @@
 	script_name = "Select Lines"
 	script_desription = "Her türlü yolla satır seçer."
-	script_version = "1.3"
+	script_version = "1.4"
 	script_author = "Magnum357"
+
+	mag_import, mag = pcall(require,"mag")
 
 	function act_style_before(subs,sel,act)
 	local idx, index = 0, {}
@@ -27,33 +29,13 @@
 	return index
 	end
 
-	function prev_act(subs,sel,act)
-	if subs[act - 1].class == "dialogue" then 
-	local index = {}
-	index[1] = act - 1
-	return index
-	end
-	end
+	function prev_act(subs,sel,act) if subs[act - 1].class == "dialogue" then return {act - 1} end end
 
-	function next_act(subs,sel,act)
-	if act < #subs then
-	local index = {}
-	index[1] = act + 1
-	return index
-	end
-	end
+	function next_act(subs,sel,act) if act < #subs then return {act + 1} end end
 
-	function first_style_line(subs,sel,act)
-	local i, index = 0, {}
-	while true do i = i + 1 if subs[act].style == subs[i].style then index[1] = i break end end
-	return index
-	end
+	function first_style_line(subs,sel,act) return {mag.style_first_index(subs,subs[act].style)} end
 
-	function last_style_line(subs,sel,act)
-	local i, index = #subs, {}
-	while true do if subs[act].style == subs[i].style then index[1] = i break end i = i - 1 end
-	return index
-	end
+	function last_style_line(subs,sel,act) return {mag.style_last_index(subs,subs[act].style)} end
 
 	function style_all_lines(subs,sel,act)
 	local idx, index = 0, {}
@@ -70,57 +52,57 @@
 	end
 	end
 
-	function total_line(subs)
-	local n = 0
-	for i = 1, #subs do if subs[i].class == "dialogue" then n = n + 1 end end
-	return n
-	end
-
 	function lines_from_to(subs)
+	local total_line = mag.total_full(subs)
+	local first_index = mag.first_index(subs)
 	local idx, index = 0, {}
-	local pcs = true
+	local var_tmp
 	local dlg =
-	{{class="label",x=0,y=0,width=1,height=1,label="Başlangıç satırı:"}
-	,{class="intedit",name="var1",x=1,y=0,width=3,height=1,min=1}
-	,{class="label",x=0,y=1,width=1,height=1,label="Bitiş satırı:"}
-	,{class="intedit",name="var2",x=1,y=1,width=3,height=1,min=0,value=total_line(subs),hint="Bu kutucukta ilk gördüğünüz değer alt yazıdaki satır sayısının toplamıdır. Ayrıca sıfır değeri de toplam satır sayısına eşittir."}}
-	ok, config = aegisub.dialog.display(dlg,{"Uygula","Kapat"})
-	if config.var2 ~= 0 and config.var1 > config.var2 then aegisub.log("Başlangıç satırı, bitiş satırından büyük.\n") pcs = false end
-	if config.var1 > total_line(subs) or config.var2 > total_line(subs) then aegisub.log("Başlangıç veya bitiş satırı kadar satır yok.\n") pcs = false end
-	if ok == "Kapat" then pcs = false end
-	if pcs == true then
-	config.var1 = (#subs - total_line(subs)) + config.var1
-	if config.var2 == 0 then config.var2 = #subs
-	else config.var2 = (#subs - total_line(subs)) + config.var2 end	
-	for i = 1, #subs do if subs[i].class == "dialogue" then if i >= config.var1 and i <= config.var2 then idx = idx + 1 index[idx] = i end end end
+	{{class = "label",                                      x = 0, y = 0, width = 1, height = 1, label = "Başlangıç:"}
+	,{class = "intedit", name = "var1",                     x = 1, y = 0, width = 1, height = 1, min = 1}
+	,{class = "label",                                      x = 0, y = 1, width = 1, height = 1, label = mag.wall(" ",9).."Bitiş:"}
+	,{class = "intedit", name = "var2", value = total_line, x = 1, y = 1, width = 1, height = 1, min = 1, max = total_line, hint = "Bu kutucukta ilk gördüğünüz değer alt yazıdaki satır sayısının toplamıdır."}}
+	ok, config = mag.dlg(dlg,{"Seç","Kapat"})
+	if ok == mag.ascii("Seç") then
+	if config.var1 > config.var2 then
+	var_tmp = config.var2
+	config.var2 = config.var1
+	config.var1 = var_tmp
 	end
-	if pcs == true then	return index end
-	end
-
-	function line_jumping(subs)
-	local pcs = true
-	local index = {}
-	local dlg =
-	{{class="label",x=0,y=0,width=1,height=1,label="Satır numarası:"}
-	,{class="intedit",name="var",x=1,y=0,width=3,height=1,min=1,value=total_line(subs),hint="Bu kutucukta ilk gördüğünüz değer alt yazıdaki satır sayısının toplamıdır."}}
-	ok, config = aegisub.dialog.display(dlg,{"Uygula","Kapat"})
-	if ok == "Kapat" then pcs = false end
-	if pcs == true then
-	if config.var > total_line(subs) then config.var = total_line(subs) end
-	index[1] = (#subs - total_line(subs)) + config.var
+	config.var1 = config.var1 + first_index - 1
+	config.var2 = config.var2 + first_index - 1
+	for i = 1, #subs do if subs[i].class == "dialogue" and i >= config.var1 and i <= config.var2 then idx = idx + 1 index[idx] = i end end
 	return index
 	end
 	end
 
-	aegisub.register_macro(script_name.."/Geçerli satır/Öncesi",script_desription,act_before)
-	aegisub.register_macro(script_name.."/Geçerli satır/Sonrası",script_desription,act_after)
-	aegisub.register_macro(script_name.."/Geçerli satır/Öncesi(Stil)",script_desription,act_style_before)
-	aegisub.register_macro(script_name.."/Geçerli satır/Sonrası(Stil)",script_desription,act_style_after)
-	aegisub.register_macro(script_name.."/Stil/İlk satır",script_desription,first_style_line)
-	aegisub.register_macro(script_name.."/Stil/Son satır",script_desription,last_style_line)
-	aegisub.register_macro(script_name.."/Stil/Tüm satırlar",script_desription,style_all_lines)
-	aegisub.register_macro(script_name.."/Satır/Satır aralığı",script_desription,lines_from_to)
-	aegisub.register_macro(script_name.."/Satır/Satır atlama",script_desription,line_jumping)
-	aegisub.register_macro(script_name.."/Satır/Önceki satır",script_desription,prev_act)
-	aegisub.register_macro(script_name.."/Satır/Sonraki satır",script_desription,next_act)
-	aegisub.register_macro(script_name.."/Seçimin tersi",script_desription,not_selection)
+	function line_jumping(subs,sel,act)
+	local total_line = mag.total_full(subs)
+	local index = {}
+	local dlg =
+	{{class = "label",                                                        x = 0, y = 0, width = 1, height = 1, label = "Gidilecek satır:"}
+	,{class = "intedit", name = "var", value = mag.current_act(subs,sel,act), x = 1, y = 0, width = 1, height = 1, min = 1, max = total_line, hint = "Bu kutucukta ilk gördüğünüz değer bulunduğunuz satırın numarasıdır."}
+	,{class = "label",                                                        x = 0, y = 1, width = 1, height = 1, label = mag.wall(" ",2).."Toplam satır:"}
+	,{class = "label",                                                        x = 1, y = 1, width = 1, height = 1, label = total_line}}
+	ok, config = mag.dlg(dlg,{"Atla","Kapat"})
+	if ok == "Atla" then return {(#subs - total_line) + config.var} end
+	end
+
+
+	if mag_import then
+	mag.register(script_name.."/Geçerli satır/Öncesi",        act_before      )
+	mag.register(script_name.."/Geçerli satır/Sonrası",       act_after       )
+	mag.register(script_name.."/Geçerli satır/Öncesi(Stil)",  act_style_before)
+	mag.register(script_name.."/Geçerli satır/Sonrası(Stil)", act_style_after )
+	mag.register(script_name.."/Stil/İlk satır",              first_style_line)
+	mag.register(script_name.."/Stil/Son satır",              last_style_line )
+	mag.register(script_name.."/Stil/Tüm satırlar",           style_all_lines )
+	mag.register(script_name.."/Satır/Satır aralığı",         lines_from_to   )
+	mag.register(script_name.."/Satır/Satır atlama",          line_jumping    )
+	mag.register(script_name.."/Satır/Önceki satır",          prev_act        )
+	mag.register(script_name.."/Satır/Sonraki satır",         next_act        )
+	mag.register(script_name.."/Seçimin tersi",               not_selection   )
+	else function mag()
+	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})
+	if k == "Evet" then os.execute("start https://github.com/magnum357i/Magnum-s-Aegisub-Scripts") end end
+	aegisub.register_macro(script_name,script_desription,mag) end
