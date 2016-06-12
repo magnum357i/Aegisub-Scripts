@@ -1,0 +1,122 @@
+	script_name = "Text Align"
+	script_description = "Yazıyı hizalar."
+	script_author = "Magnum357"
+	script_version = "0.6"
+
+	mag_import, mag = pcall(require,"mag")
+
+	function text_align(subs,sel,config)
+	local index = {}
+	local line_height = config["line_height"]
+	local align = config["align"]
+	local line_width = config["line_width"]
+	local sline = config["sline"]
+	local line, l, pos_x, pos_y, scount, stext
+	for _, li in pairs(sel) do
+	if sline == true then table.insert(index,li) end
+	line = subs[li]
+	line.comment = true
+	pos_x, pos_y = mag.get_pos(line.text, true)
+	line.text = mag.gsub(line.text,"{\\pos%(%d+%.-%d-,%d+%.-%d-%)}","")
+	line.text = mag.gsub(line.text,"\\pos%(%d+%.-%d-,%d+%.-%d-%)","")
+	if pos_x and pos_y then
+	if align == "Sağ" or align == "Sol" then scount, stext = text_split(line.text,line_width) end
+	if align == "Orta" then scount, stext = text_split2(line.text,line_width) end
+	if scount ~= false or stext ~= false then
+	for i = 1, scount do
+	l = table.copy(line)
+	l.comment = false
+	if align == "Sağ"  then l.text = mag.format("{\\an6\\pos(%s,%s)}%s",pos_x,pos_y + ((i - 1) * line_height),stext[i]) end
+	if align == "Sol"  then l.text = mag.format("{\\an4\\pos(%s,%s)}%s",pos_x,pos_y + ((i - 1) * line_height),stext[i]) end
+	if align == "Orta" then l.text = mag.format("{\\an4\\pos(%s,%s)}%s",pos_x,pos_y + ((i - 1) * line_height),stext[i]) end
+	subs.insert(li + i,l)
+	end end end
+	subs[li] = line
+	end	
+	if sline == true and index[1] ~= nil then for f = 1, table.getn(index) do subs.delete(index[f]) end end
+	end
+
+	function strip_and_len(str) return mag.len(mag.gsub(mag.full_strip(str),"%s+","")) end
+
+	function text_split(str,max_char)
+	local split = {}
+	local word = {}
+	local s = ""
+	local in_tags = false
+	local n = 0
+	if mag.len(mag.full_strip(str)) > max_char then
+	str = str.." "
+	for char in unicode.chars(str) do
+	s = s..char
+	if char == "{" then in_tags = true end
+	if in_tags == false then
+	if char == " " then table.insert(word,s) s = "" end
+	end
+	if char == "}" then in_tags = false end
+	end
+	s = ""
+	table.insert(word," ")
+	for k = 1, table.getn(word) - 1 do
+	s = s..word[k]
+	if strip_and_len(s) + strip_and_len(word[k + 1]) >= max_char then
+	table.insert(split,s)
+	n = n + 1
+	s = ""
+	end
+	end
+	if mag.len(s) >	0 then table.insert(split,s) n = n + 1 end
+	end
+	if n == 0 then return false, false else return n, split end
+	end
+
+	function text_split2(str,max_char)
+	if mag.len(mag.full_strip(str)) > max_char then
+	local split = {}
+	local s = ""
+	local in_tags = false
+	local n = 0
+	local m = 0
+	for char in unicode.chars(str) do
+	s = s..char
+	if char == "{" then in_tags = true end
+	if in_tags == false then
+	n = n + 1
+	mag.log(n)
+	if n == max_char then
+	table.insert(split,s)
+	mag.log("%s %s",{s,mag.len(s)})
+	s = ""
+	n = 0
+	m = m + 1
+	end
+	end
+	if char == "}" then in_tags = false end
+	end
+	if mag.len(s) >	0 then table.insert(split,s) m = m + 1 end
+	return m, split
+	else
+	return false, false
+	end
+	end
+
+	function add_macro(subs,sel)
+	local ok, config, buttons
+	buttons = {"Hizala","Kapat"}
+	local dialog_config =
+	{{class = "label",                                          x = 0, y = 0, width = 1, height = 1, label = "Satır aralığı:"}
+	,{class = "intedit",  name = "line_height", value = 50,     x = 1, y = 0, width = 1, height = 1, min = -100, max = 100}
+	,{class = "label",                                          x = 0, y = 1, width = 1, height = 1, label = "Karakter sınırı:"}
+	,{class = "intedit",  name = "line_width",  value = 20,     x = 1, y = 1, width = 1, height = 1, min = 1, max = 2000, hint = "Bir satırdaki maksimum karakterdir. Satır uzunluğu için bir değer de diyebiliriz."}
+	,{class = "label",                                          x = 0, y = 2, width = 1, height = 1, label = "Metin hizalama:"}
+	,{class = "dropdown", name = "align",       value = "Sol",  x = 1, y = 2, width = 1, height = 1, items = {"Sol","Sağ","Orta"}}}
+	ok, config = mag.dlg(dialog_config,buttons)
+	if ok == buttons[1] then
+	text_align(subs,sel,config)
+	aegisub.set_undo_point(script_name)
+	end
+	end
+
+	if mag_import then mag.register(false,add_macro) else function mag()
+	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})
+	if k == "Evet" then os.execute("start https://github.com/magnum357i/Magnum-s-Aegisub-Scripts") end end
+	aegisub.register_macro(script_name,script_desription,mag) end
