@@ -1,9 +1,10 @@
 	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.0.7"
+	module_version = "1.1.0.8"
 	module_author = "Magnum357"
 
 	unicode = require 'aegisub.unicode'
+	include("karaskel.lua")
 
 	local mag = {}
 
@@ -343,6 +344,38 @@
 	end	
 	end
 	for d = 1, table.getn(index) do table.remove(array,index[d]) end
+	end
+
+	--pos = mag.get_pos("{\\pos(848,204)}Deneme.")
+	-->>\\pos(848,204)
+	--pos = mag.get_pos("Deneme.")
+	-->>false
+	--pos_x, pos_y = mag.get_pos("{\\pos(848,204)}Deneme.",true)
+	-->>848
+	-->>204
+	--pos_x, pos_y = mag.get_pos("Deneme.",true)
+	-->>false
+	-->>false
+	function mag.get_pos(str,xy_mode)
+	local ptn1 = "\\pos%(%d+%.-%d-,%d+%.-%d-%)"
+	local ptn2 = "\\pos%((%d+%.-%d-),(%d+%.-%d-)%)"
+	if xy_mode == false or xy_mode == nil then
+	if mag.match(str,ptn1) then return mag.match(str,ptn1) else return false end
+	else
+	if mag.match(str,ptn2) then return mag.match(str,ptn2) else return false, false end
+	end
+	end
+
+	--rfind_text = mag.rfind("Bu bir deneme.","e")
+	-->>13
+	--rfind_text = mag.rfind("Bu bir deneme.","a")
+	-->>false
+	function mag.rfind(str,pattern)
+	local result
+	local len = mag.len(str)
+	for i = len, 1, -1 do result = mag.find(str,pattern,i) if result ~= nil then break end end
+	if result == nil then result = false end
+	return result
 	end
 
 	mag.s       = tostring
