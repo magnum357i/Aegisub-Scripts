@@ -81,10 +81,8 @@
 	if char == "{" then in_tags = true end
 	if in_tags == false then
 	n = n + 1
-	mag.log(n)
 	if n == max_char then
 	table.insert(split,s)
-	mag.log("%s %s",{s,mag.len(s)})
 	s = ""
 	n = 0
 	m = m + 1
