@@ -1,6 +1,6 @@
 	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.0.8"
+	module_version = "1.1.0.9"
 	module_author = "Magnum357"
 
 	unicode = require 'aegisub.unicode'
@@ -82,19 +82,19 @@
 	function mag.total(subs,style_name,mode,value)
 	local n, m = 0, 0
 	for i = 1, #subs do
-	if subs[i].class == "dialogue" then
-	if mode == "default" then
-	if subs[i].style == style_name then n = n + 1 end
-	end
-	if mode == "comment" then
-	if subs[i].style == style_name and subs[i].comment == false then n = n + 1 end
-	if subs[i].style == style_name and subs[i].comment == true then m = m + 1 end
-	end
-	if mode == "effect" then
-	if subs[i].style == style_name and subs[i].effect ~= value then n = n + 1 end
-	if subs[i].style == style_name and subs[i].effect == value then m = m + 1 end
-	end
-	end
+		if subs[i].class == "dialogue" then
+			if mode == "default" then
+			if subs[i].style == style_name then n = n + 1 end
+			end
+			if mode == "comment" then
+			if subs[i].style == style_name and subs[i].comment == false then n = n + 1 end
+			if subs[i].style == style_name and subs[i].comment == true then m = m + 1 end
+			end
+			if mode == "effect" then
+			if subs[i].style == style_name and subs[i].effect ~= value then n = n + 1 end
+			if subs[i].style == style_name and subs[i].effect == value then m = m + 1 end
+			end
+		end
 	end
 	return n, m
 	end
@@ -103,13 +103,13 @@
 	function mag.styles(subs,mode,value)
 	local n, styles = 0, {}
 	for i = 1, #subs do
-	if subs[i].class == "style" then
-	local total, total2 = mag.total(subs,subs[i].name,mode,value)
-	if total > 0 or total2 > 0 then
-	if mode == "default" then n = n + 1 styles[n] = mag.format("(%d) %s",total,subs[i].name) end
-	if mode == "comment" or mode == "effect" then n = n + 1 styles[n] = mag.format("(%d+%d) %s",total,total2,subs[i].name) end
-	end
-	end
+		if subs[i].class == "style" then
+		local total, total2 = mag.total(subs,subs[i].name,mode,value)
+			if total > 0 or total2 > 0 then
+			if mode == "default" then n = n + 1 styles[n] = mag.format("(%d) %s",total,subs[i].name) end
+			if mode == "comment" or mode == "effect" then n = n + 1 styles[n] = mag.format("(%d+%d) %s",total,total2,subs[i].name) end
+			end
+		end
 	end
 	return styles
 	end
@@ -302,8 +302,11 @@
 	local _, find_count = mag.gsub(str,find,"")
 	for i = 1, find_count do
 	n = n + 1
-	if i == 1 then find_idx[i] = mag.find(str,find)
-	else find_idx[i] = mag.find(str,find,find_idx[i - 1] + 1) end
+		if i == 1 then
+		find_idx[i] = mag.find(str,find)
+		else
+		find_idx[i] = mag.find(str,find,find_idx[i - 1] + 1)
+		end
 	end
 	if find_count == 0 then return false else return find_idx[n] end
 	end
@@ -337,11 +340,15 @@
 	local double
 	local max_n = table.getn(array)
 	if max_n > 1 then
-	for i = 1, max_n do
-	double = 0
-	for k = i, max_n do if array[i] == array[k] then double = double + 1 end end
-	if double > 1 then table.insert(index,i) end	
-	end	
+		for i = 1, max_n do
+		double = 0
+			for k = i, max_n do
+				if array[i] == array[k] then
+				double = double + 1
+				end
+			end
+		if double > 1 then table.insert(index,i) end
+		end
 	end
 	for d = 1, table.getn(index) do table.remove(array,index[d]) end
 	end
@@ -362,9 +369,19 @@
 	if xy_mode == false or xy_mode == nil then
 	if mag.match(str,ptn1) then return mag.match(str,ptn1) else return false end
 	else
-	if mag.match(str,ptn2) then return mag.match(str,ptn2) else return false, false end
+	if mag.match(str,ptn2) then return mag.match(str,ptn2) else return false,false end
 	end
 	end
+
+	function mag.get_move(str,xy_mode)
+	local ptn1 = "\\move%(%d+%.-%d-,%d+%.-%d-%,%d+%.-%d-,%d+%.-%d-%)"
+	local ptn2 = "\\move%((%d+%.-%d-),(%d+%.-%d-),(%d+%.-%d-),(%d+%.-%d-)%)"
+	if xy_mode == false or xy_mode == nil then
+	if mag.match(str,ptn1) then return mag.match(str,ptn1) else return false end
+	else
+	if mag.match(str,ptn2) then return mag.match(str,ptn2) else return false,false,false,false end
+	end
+	end	
 
 	--rfind_text = mag.rfind("Bu bir deneme.","e")
 	-->>13
@@ -377,6 +394,32 @@
 	if result == nil then result = false end
 	return result
 	end
+
+	--ccount = mag.ccount("Deneme.","e")
+	-->>3
+	--ccount = mag.ccount("Deneme.","t")
+	-->>0
+	function mag.ccount(str,char) local _, count = mag.gsub(str,char,"") return count end
+
+	--values = {5,8,1,2,4,7}
+	--values = mag.revert_short_array(values)
+	-->>7,4,2,1,8,5
+	function mag.reverse_short_array(array)
+	local array_temp = {}
+	local array_length = table.getn(array)
+	for i = 1, array_length do array_temp[i] = array[(array_length + 1) - i] end
+	return array_temp
+	end
+
+	--values = {5,8,1,2,4,7}
+	--mag.array_log(values)
+	-->>5
+	-->>8
+	-->>1
+	-->>2
+	-->>4
+	-->>7
+	function mag.array_log(array) for i = 1, table.getn(array) do mag.log(array[i]) end end
 
 	mag.s       = tostring
 	mag.n       = tonumber
