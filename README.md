@@ -4,23 +4,26 @@
 2. [**MODÜL**](#modÜl)
  * [**Mag**](#mag)
 3. [**MAKROLAR**](#makrolar)
- * [**Basic Turning**](#basic-turning)
- * [**Copy Paste Line**](#copy-paste-line)
- * [**K Char**](#k-char)
  * [**Delete Comment Bracket**](#delete-comment-bracket)
  * [**Delete Lines**](#delete-lines)
  * [**Fix Timing**](#fix-timing)
  * [**Fixing Turkish Chars**](#fixing-turkish-chars)
  * [**Karaoke Cleaner**](#karaoke-cleaner)
- * [**Line Breaker Checker**](#line-breaker-checker)
  * [**Line Source Duplicate**](#line-source-duplicate)
+ * [**Basic Turning**](#basic-turning)
+ * [**Copy Paste Line**](#copy-paste-line)
+ * [**K Char**](#k-char)
+ * [**Line Breaker Checker**](#line-breaker-checker)
+ * [**Select Lines**](#select-lines)
  * [**Shaper**](#shaper)
  * [**Strip Line**](#strip-line)
  * [**Sub Menu Maker**](#sub-menu-maker)
+ * [**Text Align**](#text-align)
  * [**Trans State A1**](#trans-state-a1)
  * [**Typewritter Maker**](#typewritter-maker)
 4. [**ASS**](#ass)
  * [**Autotags**](#autotags)
+ * [**Color Fade**](#color-fade)
  * [**Rainbow**](#rainbow)
  * [**Shaper**](#shaper-1)
  * [**T_Calc**](#t_calc)
@@ -36,6 +39,50 @@ Bu sayfayı açmamdaki amaç kendi yazdığım lua dosyalarının sürüm takibi
 Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında **mag.** ön eki varsa bu modülü kullanıyor demektir. Bu modülü **automation/include/** dizinine atınız.
 
 ### MAKROLAR
+
+### [Delete Comment Bracket](Macros/delete_comment_bracket.lua)
+Yorum olarak düşülen notları siler.
+
+### [Delete Lines](Macros/delete_lines.lua)
+Stile ya da aktöre göre satır silme işlemi yapar.
+
+### [Fix Timing](Macros/fix_timing.lua)
+Ön izlemede görünmeyen satırları düzeltir.
+ 
+### [Fixing Turkish Chars](Macros/fixing_turkish chars.lua)
+Bozuk Türkçe karakterleri düzeltir.
+
+### [Karaoke Cleaner](Macros/karaoke_cleaner.lua)
+Özetlersek şablon efeğinin oluşturduğu şeyleri siler. Ayrıntıya girersek de şunları yapıyor:
+* Şablonların oluşturduğu satırları siler.
+* Şablon efeklerinin olduğu satırların sürelerini sıfırlar.
+* Şablonun uygulandığı satırları görünür yapar.
+* Şablon uygulandığında oluşan furigana stillerini siler.
+
+### [Line Source Duplicate](Macros/line_source_duplicate.lua)
+Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir.
+
+* **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
+* **Mod** 
+ * **[M1A] Satır içinde yorum parantezleri**<br>
+ Metin. {Metin.}
+ * **[M1B] Satır içinde sadece yorum parantezleri**<br>
+ {Metin.}
+ * **[M2A] Satırdan sonra satır**<br>
+ (1. satır) Metin.<br>
+ (2. satır) Metin.
+ * **[M2B] Satırdan sonra yorum satırı**<br>
+ (1. satır) Metin.<br>
+ (Yorum satırı olarak 2. satır) Metin.
+ * **[M3A] Stilden sonra satır**<br>
+ (1. satır) Metin.<br>
+ (Stilin son satırından sonra 2. satır) Metin.
+ * **[M3B] Stilden sonra yorum satırı**<br>
+ (1. satır) Metin.*<br>
+ (Stilin son satırından sonra yorum satırı olarak 2. satır) Metin.
+
+###### Notlar
+Oluşturduğu girdilere müdahalede bulunmayınız.
 
 ### [Basic Turning](Macros/mag.sbasic_turning.lua)
 Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra sadece işaretleri yazmak yetmez, o satırı seçmelisiniz de.
@@ -92,56 +139,12 @@ Bir satır grubuna ait herhangi bir bilgiyi kopyalar ve bunu başka bir satır g
 ### [K Char](Macros/mag.k_char.lua)
 Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
 
-### [Delete Comment Bracket](Macros/delete_comment_bracket.lua)
-Yorum olarak düşülen notları siler.
-
-### [Delete Lines](Macros/delete_lines.lua)
-Stile ya da aktöre göre satır silme işlemi yapar.
-
-### [Fix Timing](Macros/fix_timing.lua)
-Ön izlemede görünmeyen satırları düzeltir.
- 
-### [Fixing Turkish Chars](Macros/fixing_turkish chars.lua)
-Bozuk Türkçe karakterleri düzeltir.
-
-### [Karaoke Cleaner](Macros/karaoke_cleaner.lua)
-Özetlersek şablon efeğinin oluşturduğu şeyleri siler. Ayrıntıya girersek de şunları yapıyor:
-* Şablonların oluşturduğu satırları siler.
-* Şablon efeklerinin olduğu satırların sürelerini sıfırlar.
-* Şablonun uygulandığı satırları görünür yapar.
-* Şablon uygulandığında oluşan furigana stillerini siler.
-
 ### [Line Breaker Checker](Macros/mag.line_breaker_checker.lua)
 Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni böl!**, karakter sınırı aşan ama satır bölme yapıldığı halde karakter sınırını aşan satırlara da **Beni düzgün böl!** şeklinde `Effect` kutucuğuna not düşer.
 
 * **Karakter Sınırı:** Varsayılan değeri 45'tir. Varsayılan değer üzerinden konuşacak olursak 45 ve üstü karakterde devreye girecektir.
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin. Sadece kullanılan stiller listelenir. Stil isimlerinin başındaki ilk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır.
 * **Yorum satırlarını geç:** Yorum satırı yapılmış satırları işleme almaz.
-
-### [Line Source Duplicate](Macros/line_source_duplicate.lua)
-Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir.
-
-* **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
-* **Mod** 
- * **[M1A] Satır içinde yorum parantezleri**<br>
- Metin. {Metin.}
- * **[M1B] Satır içinde sadece yorum parantezleri**<br>
- {Metin.}
- * **[M2A] Satırdan sonra satır**<br>
- (1. satır) Metin.<br>
- (2. satır) Metin.
- * **[M2B] Satırdan sonra yorum satırı**<br>
- (1. satır) Metin.<br>
- (Yorum satırı olarak 2. satır) Metin.
- * **[M3A] Stilden sonra satır**<br>
- (1. satır) Metin.<br>
- (Stilin son satırından sonra 2. satır) Metin.
- * **[M3B] Stilden sonra yorum satırı**<br>
- (1. satır) Metin.*<br>
- (Stilin son satırından sonra yorum satırı olarak 2. satır) Metin.
-
-###### Notlar
-Oluşturduğu girdilere müdahalede bulunmayınız.
 
 ### [Select Lines](Macros/mag.select_lines.lua)
 Birçok ayarda satır seçme işlemi yapar.
@@ -175,14 +178,27 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
 Satırın metni hariç diğer tüm girdileri temizleyebilir.
 
 ### [Sub Menu Maker](Macros/sub_menu_maker.lua)
-Lua dosyalarını gruplar.
+Automation menüsünde listelenen lua isimlerini gruplar. Bu gruplamayı girdiğiniz dosya adına göre yapıyor.
 
-* **Dosya adı:** `Automation` menüsünde görünen adını değil `automation` dizininde görünen dosya adını giriniz.
-* **Dosya türü:** Dosya türünü giriniz.
-* **Grup adı:** Grup adını giriniz.
+#### İLK PENCERE
+* **Dosya adı:** `Automation` menüsünde görünen adını değil `automation` dizininde görünen dosya adını giriniz. Dosya adları arasına virgül koyarak çoklu işlem yapabilirsiniz.
+* *Grup adı:** Buraya girdiğiniz metin bir sonraki pencerede çıkacak grup adı kısmına değer gönderir.
+* **Dosya dizini:** Lua dosyanız Aegisub programının kurulu olduğu `automation` dizininde ise **Automation**, Aegisub programının ayarlarının saklandığı `automation` dizininde ise **AppData Automation** seçeneğini seçiniz.
 * **Dosya dizini:** Dosyanın dizinini giriniz.
- * **?default**<br>
- Bu giriliyken Aegisub programının yüklü olduğu dizindeki `automation` klasörünü dizin olarak girmiş olursunuz.
+* **Lua yoksa moon uzantısı ara:** Bu ayarın seçilmesi durumunda önce dosya adı girilen dosyanın lua, ondan sonra moon uzantılı olanını arar. Seçilmemesi durumunda bu işlemin tam tersini yapar. 
+* **Arayüzdeki tercihleri hatırla:** Arayüzdeki tercihleri geçici hafızasında tutar.
+
+#### İKİNCİ PENCERE
+* **Ad:** Seçilen dosyanın programda görünen yani **Automation Manager** penceresinde görünen ismi.
+* **Dosya adı:** Seçilen dosyanın adı.
+* **Grup:** Lua isminin olmasını istediğiniz grup. Boş bırakırsanız mevcut grubu siler.
+
+### [Text Align](Macros/mag.text_align)
+Karaktere göre metni böler.
+* **Satır aralığı:** Satırlar arasında kaç piksel boşluk olacağına karar verirsiniz.
+* **Karakter sınırı:** Bir satırda kaç karakter olacağına karar verirsiniz.
+* **Hizalama:** Hangi tarafa hizalanacağına karar verirsiniz.
+* **Arayüzdeki tercihleri hatırla:** Arayüzdeki tercihleri geçici hafızasında tutar.
 
 ### [Trans State A1](Macros/mag.trans_state_a1.lua)
 `Effect` kutucuğuna yüzdeler yazar.
