@@ -13,7 +13,7 @@
 	script_name="Sub Menu Maker"
 	script_description="Lua veya moon dosyalarını gruplamaya yarar."
 	script_author="Magnum357"
-	script_version="1.6.3"
+	script_version="1.6.4.2"
 
 	mag_import, mag = pcall(require,"mag")
 
@@ -28,9 +28,9 @@
 	automation_path         = aegisub.decode_path("?data\\automation\\autoload\\")
 	appdata_automation_path = aegisub.decode_path("?user\\automation\\autoload\\")
 
-	function rgui(mode,x,y,label,name)
-	if mode == 1 then return {class = "label", x = x, y = y, width = 1, height = 1, label = label} end
-	if mode == 2 then return {class = "edit",  x = x, y = y, width = 10, height = 1, name  = name, value = label, hint = "Grubu kaldırmak için bu alana bir değer girmeyin. İç içe gruplamayı grup1/grup2 şeklinde yapabilirsiniz. Daha önce grupladığınız bir luanın grubu hala duruyorsa bu kısımda gözükebilir."} end
+	function rgui(mode,x,y,label,name,width)
+	if mode == 1 then return {class = "label", x = x, y = y, width = width, height = 1, label = label} end
+	if mode == 2 then return {class = "edit",  x = x, y = y, width = width, height = 1, name  = name, value = label, hint = "Grubu kaldırmak için bu alana bir değer girmeyin. İç içe gruplamayı grup1/grup2 şeklinde yapabilirsiniz. Daha önce grupladığınız bir luanın grubu hala duruyorsa bu kısımda gözükebilir."} end
 	end
 
 	function add_macro()
@@ -44,7 +44,7 @@
 	dialog_filename = ""
 	local gui =
 	{{class = "label",                                                                                               x = 0, y = 0, width = 1, height = 1, label = mag.wall(" ",4).."Dosya adı:"}
-	,{class = "textbox",     name = "u_file_name", value = file_name,                                                x = 1, y = 0, width = 5, height = 3, hint  = "Automation menüsünde görünen ismini değil automation dizinine attığınız dosyanın ismini girmeniz gerekmekte. Dosya isimleri arasına virgül koyarak çoklu işlem yapabilirsiniz."}
+	,{class = "textbox",  name = "u_file_name", value = file_name,                                                   x = 1, y = 0, width = 5, height = 3, hint  = "Automation menüsünde görünen ismini değil automation dizinine attığınız dosyanın ismini girmeniz gerekmekte. Dosya isimleri arasına virgül koyarak çoklu işlem yapabilirsiniz."}
 	,{class = "label",                                                                                               x = 0, y = 3, width = 1, height = 1, label = mag.wall(" ",6).."Grup adı:"}
 	,{class = "edit",     name = "u_sub_menu",     value = sub_menu,                                                 x = 1, y = 3, width = 5, height = 1, hint  = "Bu kutucuktan bir sonraki pencerede listelenecek olan lua dosyalarına toplu şekilde grup girebilirsiniz."}
 	,{class = "label",                                                                                               x = 0, y = 4, width = 1, height = 1, label = "Dosya dizini:"}
@@ -104,22 +104,35 @@
 	if table.getn(file_ext) > 0 then
 	local gui2 = {}
 	local st_name
-	gui2[1] = rgui(1,0,0,"[AD]","")
-	gui2[2] = rgui(1,1,0,"[DOSYA]","")
-	gui2[3] = rgui(1,2,0,"[GRUP]","")
+	local gp_name
+	local sh
+	gui2[1] = rgui(1,0,0,"[GRUP]","",1)
+	gui2[2] = rgui(1,10,0,"[AD]",1)
+	gui2[3] = rgui(1,11,0,"[DOSYA]",1)
 	for i = 1, table.getn(file_ext) do
+	mag.progress("Dosyalar taranıyor...",i,table.getn(file_ext),true)
  	st_name = get_script_name(file_ext[i])
+ 	gp_name = get_group(file_ext[i])
+ 	sh = ""
  	if st_name == nil then st_name = "Bulunamadı." end
-	gui2[i * 3 + 1] = rgui(1,0,i,st_name,"")
-	gui2[i * 3 + 2] = rgui(1,1,i,"*"..mag.gsub(file_ext[i],".+\\","").."*","")
-	gui2[i * 3 + 3] = rgui(2,2,i,get_group(file_ext[i])..config.u_sub_menu,"u_sub_menu_"..i)
+ 	if config.u_sub_menu ~= "" and mag.find(mag.reverse(config.u_sub_menu),"/") ~= 1 and gp_name ~= "" then sh = "/" end
+ 	gp_name = lsh(gp_name)
+ 	config.u_sub_menu = lsh(config.u_sub_menu)
+	gui2[i * 3 + 1] = rgui(2,0,i,config.u_sub_menu..sh..gp_name,"u_sub_menu_"..i,10)
+	gui2[i * 3 + 2] = rgui(1,10,i,"/"..st_name,"",1)
+	gui2[i * 3 + 3] = rgui(1,11,i,"*"..mag.gsub(file_ext[i],".+\\","").."*","",1)
 	end
 	ok, config = mag.dlg(gui2,{"Grupla","Geri Dön","Kapat"})
 	if ok == "Grupla" then
 	local fc = table.getn(file_ext)
-	for k = 1, fc do
-	if config["u_sub_menu_"..k] ~= "" then add_group(file_ext[k],config["u_sub_menu_"..k],k,fc) else remove_group(file_ext[k],k,fc) end
-	end
+		for k = 1, fc do
+		mag.progress("İşleminiz yapılıyor...",k,fc,true)
+			if config["u_sub_menu_"..k] ~= "" then
+			add_group(file_ext[k],config["u_sub_menu_"..k],k,fc)
+			else
+			remove_group(file_ext[k],k,fc)
+			end
+		end
 	end
 	else
 	mag.log(2,"Belirtilen lua dosyası veya dosyaları ile işlem yapılamıyor.")
@@ -144,6 +157,11 @@
 	end
 
 	function r(str) return mag.gsub(str,"\".+\"%.%.\"\"%.%.","") end
+
+	function lsh(str)
+	if mag.find(mag.reverse(str),"/") == 1 then str = mag.sub(str,1,-2) end
+	return str
+	end
 
 	function add_group(file,sub_menu,i,last_i)
 	if mag.find(mag.reverse(sub_menu),"/") ~= 1 then sub_menu = sub_menu.."/" end
@@ -203,7 +221,7 @@
 		f = nil
 		mag.log("(%s/%s) %s dosyası için %s adet gruplama yapıldı.",{last_i,i,mag.gsub(file,".+\\",""),count})
 		else
-		mag.log("(%s/%s) %s dosyasında gruplama işlemi başarısızlık ile sonuçlandı.",{last_i,i,mag.gsub(file,".+\\","")})
+		mag.log("(%s/%s) [HATA] %s dosyasında gruplama işlemi başarısızlık ile sonuçlandı.",{last_i,i,mag.gsub(file,".+\\","")})
 		end
 	else
 	mag.log(1,"\"%s\" dosyası açılamadı.",{mag.gsub(file,".+\\","")})
@@ -212,7 +230,7 @@
 
 	function get_group(file)
 	local result = ""
-	local f = io.open(file)
+	local f = io.open(file,"r")
 	if f ~= nil then
 	f = nil
 		for line in io.lines(file) do
@@ -248,14 +266,14 @@
 		f = nil
 		mag.log("(%s/%s) %s dosyası için %s adet grup kaldırma işlemi yapıldı.",{i,last_i,mag.gsub(file,".+\\",""),count})
 		else
-		mag.log("(%s/%s) %s dosyasında grup kaldırma işlemi başarısızlık ile sonuçlandı.",{i,last_i,mag.gsub(file,".+\\","")})
+		mag.log("(%s/%s) [HATA] %s dosyasında grup kaldırma işlemi başarısızlık ile sonuçlandı.",{i,last_i,mag.gsub(file,".+\\","")})
 		end
 	end
 	return result
 	end
 
 	if mag_import then
-	mag.register(script_name,add_macro)
+	mag.register(false,add_macro)
 	else function mag()
 	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})
 	if k == "Evet" then os.execute("start https://github.com/magnum357i/Magnum-s-Aegisub-Scripts") end end
