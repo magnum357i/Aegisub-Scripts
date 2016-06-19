@@ -1,6 +1,6 @@
 	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.0.9"
+	module_version = "1.1.1.0"
 	module_author = "Magnum357"
 
 	unicode = require 'aegisub.unicode'
@@ -8,20 +8,27 @@
 
 	local mag = {}
 
+	--mag.progress("İşleminiz yapılıyor",i,7,true)
+	function mag.progress(str,i,max,delay)
+	aegisub.progress.task(mag.format("(%s/%s) %s",max,i,str))
+	aegisub.progress.set(mag.percent(max,i,true))
+	if delay == true then mag.delay(10000) end
+	end
+
 	--mag.delay()
-	function mag.delay()
+	function mag.delay(t)
 	local st = ""
-	for i = 0, 50000 do
+	for i = 0, t do
 	st = st .. i
 	end
 	return st
-	end
+	end	
 
 	--mag.prog("İşleminiz yapılıyor...")
 	function mag.prog(str)
 	aegisub.progress.task(mag.format("%s",str))
 	aegisub.progress.set(100)
-	mag.delay()
+	mag.delay(50000)
 	end
 
 	--ascii_text = mag.ascii("Şekil Çıta")
@@ -135,18 +142,19 @@
 	--mag.log("Deneme.")
 	-->>Deneme.
 	--mag.log([0-4],"Deneme.")
-	-->> 1 == HATA: Deneme.
-	-->> 2 == UYARI: Deneme.
-	-->> 3 == NOT: Deneme.
+	-->> 1 == [ HATA ]\nDeneme.
+	-->> 2 == [ UYARI ]\nDeneme.
+	-->> 3 == [ NOT ]\nDeneme.
 	-->> 0 == Deneme.
 	--mag.log("Deneme. %s",{"Deneme."})
 	-->> Deneme. Deneme.
 	--mag.log([0-4],"Deneme. %s",{"Deneme."})
-	-->> 1 == HATA: Deneme. Deneme.
-	-->> 2 == UYARI: Deneme. Deneme.
-	-->> 3 == NOT: Deneme. Deneme.
+	-->> 1 == [ HATA ]\nDeneme. Deneme.
+	-->> 2 == [ UYARI ]\nDeneme. Deneme.
+	-->> 3 == [ NOT ]\nDeneme. Deneme.
 	-->> 0 == Deneme. Deneme.
 	function mag.log(mode,str,vars)
+	local divide = ""
 	if str == nil and vars == nil then str = mag.s(mode) mode = 0 end
 	if mag.n(mode) == nil then
 	vars = str
@@ -158,10 +166,11 @@
 	if mode == nil or mode < 1 or mode > 3 then mode = 0 end
 	local alert_message = ""
 	if vars ~= nil then for i = 1, #vars do str = mag.gsub(str,"%%s",mag.s(vars[i]),1) end end
-	if mode == 1 then alert_message = "HATA: " end
-	if mode == 2 then alert_message = "UYARI: " end
-	if mode == 3 then alert_message = "NOT: " end
-	if mode == 0 then aegisub.log(alert_message..str.."\n") else aegisub.log(mode,alert_message..str.."\n") end
+		if mode == 1 then alert_message = "[ HATA ]\n"     end
+		if mode == 2 then alert_message = "[ UYARI ]\n"    end
+		if mode == 3 then alert_message = "[ NOT ]\n"      end
+		if mode ~= 0 then divide = "\n"..mag.wall("-",114) end
+		if mode == 0 then aegisub.log(alert_message..str.."\n") else aegisub.log(mode,alert_message..str..divide.."\n") end
 	end
 
 	--esc_text = mag.esc("Nasılsın?")
@@ -420,6 +429,32 @@
 	-->>4
 	-->>7
 	function mag.array_log(array) for i = 1, table.getn(array) do mag.log(array[i]) end end
+
+	--sc, st = mag.vars("Bu, bir, deneme.")
+	-->>3
+	-->>Bu
+	-->> bir
+	-->> deneme.
+	function mag.vars(str)
+	local var = {}
+	if mag.find(mag.reverse(str),",") ~= 1 then str = str.."," end
+	for s in mag.gmatch(str,"(.-),%s*") do table.insert(var,s) end
+	return table.getn(var), var
+	end
+
+	--numbers = {10,20,10,80,90,20,10,20,10,80,90,20,10,20,10,80,90,20}
+	--mag.full_double(numbers)
+	-->>10,80,90,20
+	function mag.full_double(array)
+	local c, index = 0, {}
+	for i = 1, table.getn(array) do
+	c = 0
+	for j = i, table.getn(array) do if array[i] == array[j] then c = c + 1 end end
+	if c > 1 then table.insert(index,i) end
+	end
+	c = 0
+	for k = 1, table.getn(index) do table.remove(array,index[k] - c) c = c + 1 end
+	end
 
 	mag.s       = tostring
 	mag.n       = tonumber
