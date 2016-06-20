@@ -1,6 +1,6 @@
 	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.1.0"
+	module_version = "1.1.1.1"
 	module_author = "Magnum357"
 
 	unicode = require 'aegisub.unicode'
@@ -9,13 +9,14 @@
 	local mag = {}
 
 	--mag.progress("İşleminiz yapılıyor",i,7,true)
-	function mag.progress(str,i,max,delay)
+	function mag.progress(str,i,max,delay,delay_value)
+	aegisub.progress.title(mag.format("%s %s%%",script_name,mag.percent(max,i,true)))
 	aegisub.progress.task(mag.format("(%s/%s) %s",max,i,str))
 	aegisub.progress.set(mag.percent(max,i,true))
-	if delay == true then mag.delay(10000) end
+	if delay == true then mag.delay(delay_value) end
 	end
 
-	--mag.delay()
+	--mag.delay(5000)
 	function mag.delay(t)
 	local st = ""
 	for i = 0, t do
@@ -84,6 +85,12 @@
 	for i = 1, #subs do if subs[i].class == "dialogue" then n = n + 1 end end
 	return n
 	end
+
+	function mag.total_comment_full(subs)
+	local n = 0
+	for i = 1, #subs do if subs[i].class == "dialogue" and subs[i].comment == false then n = n + 1 end end
+	return n
+	end	
 
 	--mag.total(subs,stil,[default,comment,effect],[effect -> Mac])
 	function mag.total(subs,style_name,mode,value)
