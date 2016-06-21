@@ -35,31 +35,31 @@ Bu sayfayı açmamdaki amaç kendi yazdığım lua dosyalarının sürüm takibi
 
 ### MODÜL
 
-### [Mag](Modul/mag.lua)
+### [Mag](automation/include/mag.lua)
 Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında **mag.** ön eki varsa bu modülü kullanıyor demektir. Bu modülü **automation/include/** dizinine atınız.
 
 ### MAKROLAR
 
-### [Delete Comment Bracket](Macros/delete_comment_bracket.lua)
+### [Delete Comment Bracket](automation/autoload/delete_comment_bracket.lua)
 Yorum olarak düşülen notları siler.
 
-### [Delete Lines](Macros/delete_lines.lua)
+### [Delete Lines](automation/autoload/delete_lines.lua)
 Stile ya da aktöre göre satır silme işlemi yapar.
 
-### [Fix Timing](Macros/fix_timing.lua)
+### [Fix Timing](automation/autoload/fix_timing.lua)
 Ön izlemede görünmeyen satırları düzeltir.
  
-### [Fixing Turkish Chars](Macros/fixing_turkish chars.lua)
+### [Fixing Turkish Chars](automation/autoload/fixing_turkish chars.lua)
 Bozuk Türkçe karakterleri düzeltir.
 
-### [Karaoke Cleaner](Macros/karaoke_cleaner.lua)
+### [Karaoke Cleaner](automation/autoload/karaoke_cleaner.lua)
 Özetlersek şablon efeğinin oluşturduğu şeyleri siler. Ayrıntıya girersek de şunları yapıyor:
 * Şablonların oluşturduğu satırları siler.
 * Şablon efeklerinin olduğu satırların sürelerini sıfırlar.
 * Şablonun uygulandığı satırları görünür yapar.
 * Şablon uygulandığında oluşan furigana stillerini siler.
 
-### [Line Source Duplicate](Macros/line_source_duplicate.lua)
+### [Line Source Duplicate](automation/autoload/line_source_duplicate.lua)
 Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir.
 
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
@@ -84,7 +84,7 @@ Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir
 ###### Notlar
 Oluşturduğu girdilere müdahalede bulunmayınız.
 
-### [Basic Turning](Macros/mag.sbasic_turning.lua)
+### [Basic Turning](automation/autoload/mag.basic_turning.lua)
 Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra sadece işaretleri yazmak yetmez, o satırı seçmelisiniz de.
 
 | İşaret | Dönüştüğü | Açıklama |
@@ -133,20 +133,20 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 
 **Bu modlardan aynı anda sadece birini kullanın.**
 
-### [Copy Paste Line](Macros/mag.copy_paste_line.lua)
+### [Copy Paste Line](automation/autoload/mag.copy_paste_line.lua)
 Bir satır grubuna ait herhangi bir bilgiyi kopyalar ve bunu başka bir satır grubuna yapıştırabilir.
 
-### [K Char](Macros/mag.k_char.lua)
+### [K Char](automation/autoload/mag.k_char.lua)
 Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
 
-### [Line Breaker Checker](Macros/mag.line_breaker_checker.lua)
+### [Line Breaker Checker](automation/autoload/mag.line_breaker_checker.lua)
 Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni böl!**, karakter sınırı aşan ama satır bölme yapıldığı halde karakter sınırını aşan satırlara da **Beni düzgün böl!** şeklinde `Effect` kutucuğuna not düşer.
 
 * **Karakter Sınırı:** Varsayılan değeri 45'tir. Varsayılan değer üzerinden konuşacak olursak 45 ve üstü karakterde devreye girecektir.
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin. Sadece kullanılan stiller listelenir. Stil isimlerinin başındaki ilk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır.
 * **Yorum satırlarını geç:** Yorum satırı yapılmış satırları işleme almaz.
 
-### [Select Lines](Macros/mag.select_lines.lua)
+### [Select Lines](automation/autoload/mag.select_lines.lua)
 Birçok ayarda satır seçme işlemi yapar.
 * **Geçerli satır:** O an bulunduğunuz, metin kutusunda içeriğini gördüğünüz satırın olduğu noktadan işlem yaparsınız.
   * **Öncesi:** Geçerli satır ve öncesini seçer.
@@ -164,7 +164,7 @@ Birçok ayarda satır seçme işlemi yapar.
   * **Sonraki satır:** O an metin kutusunda içeriğini gördüğünüz satırın altındaki satıra, yani bir sonraki satıra atlar.
 * **Seçimin tersi:** Seçiminiz dışında kalan satırları seçersiniz.
 
-### [Shaper](Macros/mag.shaper.lua)
+### [Shaper](automation/autoload/mag.shaper.lua)
 Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua dosyası halinde.
 
 * **Resmin dizini ve adı:** Resmin adıyla beraber bulunduğu dizini yazın. Uzantıyı girmenize gerek yok.
@@ -174,10 +174,10 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
  * **?video**<br>
  Bu seçiliyken videonun çözünürlük değerine göre boyutlandırma yapar.
 
-### [Strip Line](Macros/mag.strip_line)
+### [Strip Line](automation/autoload/mag.strip_line)
 Satırın metni hariç diğer tüm girdileri temizleyebilir.
 
-### [Sub Menu Maker](Macros/sub_menu_maker.lua)
+### [Sub Menu Maker](automation/autoload/sub_menu_maker.lua)
 Automation menüsünde listelenen lua isimlerini gruplar. Bu gruplamayı girdiğiniz dosya adına göre yapıyor.
 
 #### İLK PENCERE
@@ -193,21 +193,21 @@ Automation menüsünde listelenen lua isimlerini gruplar. Bu gruplamayı girdiğ
 * **Dosya adı:** Seçilen dosyanın adı.
 * **Grup:** Lua isminin olmasını istediğiniz grup. Boş bırakırsanız mevcut grubu siler.
 
-### [Text Align](Macros/mag.text_align)
+### [Text Align](automation/autoload/mag.text_align)
 Karaktere göre metni böler.
 * **Satır aralığı:** Satırlar arasında kaç piksel boşluk olacağına karar verirsiniz.
 * **Karakter sınırı:** Bir satırda kaç karakter olacağına karar verirsiniz.
 * **Hizalama:** Hangi tarafa hizalanacağına karar verirsiniz.
 * **Arayüzdeki tercihleri hatırla:** Arayüzdeki tercihleri geçici hafızasında tutar.
 
-### [Trans State A1](Macros/mag.trans_state_a1.lua)
+### [Trans State A1](automation/autoload/mag.trans_state_a1.lua)
 `Effect` kutucuğuna yüzdeler yazar.
 
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
 * **Yüzde küsuratını ekle:** Yüzdenin iki basamaklı küsuratını ekler. Seçilmemesi durumunda yüzdeyi küsuratsız ekler.
 * **Satır sayılarını ekle:** Toplam satır bölü o anki satır şeklinde bulduğu yüzdeyi ondan önce ekler. Seçilmemesi durumunda sadece yüzdeyi ekler.
 
-### [Typewritter Maker](Macros/typewritter-maker.lua)
+### [Typewritter Maker](automation/autoload/typewritter-maker.lua)
 Satıra daktilo tarzı bir efekt uygular.
 
 ### ASS
