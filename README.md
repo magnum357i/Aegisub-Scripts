@@ -177,7 +177,7 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
 ### [Strip Line](automation/autoload/mag.strip_line)
 Satırın metni hariç diğer tüm girdileri temizleyebilir.
 
-### [Sub Menu Maker](automation/autoload/sub_menu_maker.lua)
+### [Sub Menu Maker](automation/autoload/mag.sub_menu_maker.lua)
 Automation menüsünde listelenen lua isimlerini gruplar. Bu gruplamayı girdiğiniz dosya adına göre yapıyor.
 
 #### İLK PENCERE
@@ -207,7 +207,7 @@ Karaktere göre metni böler.
 * **Yüzde küsuratını ekle:** Yüzdenin iki basamaklı küsuratını ekler. Seçilmemesi durumunda yüzdeyi küsuratsız ekler.
 * **Satır sayılarını ekle:** Toplam satır bölü o anki satır şeklinde bulduğu yüzdeyi ondan önce ekler. Seçilmemesi durumunda sadece yüzdeyi ekler.
 
-### [Typewritter Maker](automation/autoload/typewritter-maker.lua)
+### [Typewritter Maker](automation/autoload/mag.typewritter.lua)
 Satıra daktilo tarzı bir efekt uygular.
 
 ### ASS
