@@ -10,10 +10,10 @@
 	-------------------------------------------------------------------------------------
 	]]
 
-	script_name="Sub Menu Maker"
-	script_description="Lua veya moon dosyalarını gruplamaya yarar."
-	script_author="Magnum357"
-	script_version="1.6.4.2"
+	script_name        = "Sub Menu Maker"
+	script_description = "Lua veya moon dosyalarını gruplamaya yarar."
+	script_author      = "Magnum357"
+	script_version     = "1.6.4.3"
 
 	mag_import, mag = pcall(require,"mag")
 
@@ -22,7 +22,6 @@
 	sub_menu    = ""
 	file_path   = "Automation"
 	file_type   = true
-	save_config = false
 	end
 
 	automation_path         = aegisub.decode_path("?data\\automation\\autoload\\")
@@ -38,7 +37,7 @@
 	local dialog_filename = {}
 	local dfile
 	local path
-	if save_config == false or save_config == nil then reset() end
+	reset()
 	repeat
 	repeat
 	dialog_filename = ""
@@ -50,7 +49,6 @@
 	,{class = "label",                                                                                               x = 0, y = 4, width = 1, height = 1, label = "Dosya dizini:"}
 	,{class = "dropdown", name = "u_file_path",    value = file_path,   items = {"Automation","AppData Automation"}, x = 1, y = 4, width = 5, height = 1, hint  = "Automation\n"..automation_path.."\n".."AppData Automation\n"..appdata_automation_path}
 	,{class = "checkbox", name = "u_file_type",    value = file_type,                                                x = 1, y = 5, width = 1, height = 1, label = "Lua yoksa moon uzantısı ara.", hint = "Bu seçeneğin işaretlenmemesi halinde tam tersi şeklinde işlem yapar."}
-	,{class = "checkbox", name = "u_save_config",  value = save_config,                                              x = 1, y = 6, width = 1, height = 1, label = "Arayüzdeki tercihleri hatırla."}
 	}
 	ok, config = mag.dlg(gui,{"Gruplamaya geç","Dosya seç","Kapat"})
 	if config.u_file_name == "" and ok == mag.ascii("Gruplamaya geç") then mag.log(2,"Hiçbir dosya ismi belirtmediniz.") end
@@ -71,7 +69,6 @@
 	sub_menu  = config.u_sub_menu
 	file_path = config.u_file_path
 	file_type = config.u_file_type
-	if ok == mag.ascii("Gruplamaya geç") then save_config = config.u_save_config end
 	until ok == mag.ascii("Gruplamaya geç") and config.u_file_name ~= "" or ok == "Kapat"
 	if ok == mag.ascii("Gruplamaya geç") then
 	local f_names = {}
@@ -110,7 +107,7 @@
 	gui2[2] = rgui(1,10,0,"[AD]",1)
 	gui2[3] = rgui(1,11,0,"[DOSYA]",1)
 	for i = 1, table.getn(file_ext) do
-	mag.progress("Dosyalar taranıyor...",i,table.getn(file_ext),true)
+	mag.progress("Dosyalar taranıyor...",i,table.getn(file_ext),true,10000)
  	st_name = get_script_name(file_ext[i])
  	gp_name = get_group(file_ext[i])
  	sh = ""
@@ -126,7 +123,7 @@
 	if ok == "Grupla" then
 	local fc = table.getn(file_ext)
 		for k = 1, fc do
-		mag.progress("İşleminiz yapılıyor...",k,fc,true)
+		mag.progress("İşleminiz yapılıyor...",k,fc,true,10000)
 			if config["u_sub_menu_"..k] ~= "" then
 			add_group(file_ext[k],config["u_sub_menu_"..k],k,fc)
 			else
@@ -143,7 +140,7 @@
 
 	function get_script_name(file)
 	local f = io.open(file)
-	local ptrn = "script_name%s-=[tr%s]-\"(.+)\""
+	local ptrn = "script_name%s-=[tr%s]-%(?[\"'](.+)%)?[\"']"
 	local result
 	if f ~= nil then
 	f = nil
