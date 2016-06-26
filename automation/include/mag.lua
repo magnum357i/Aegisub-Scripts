@@ -1,6 +1,6 @@
 	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.1.1"
+	module_version = "1.1.1.3"
 	module_author = "Magnum357"
 
 	unicode = require 'aegisub.unicode'
@@ -238,7 +238,7 @@
 	--nil_value == mag.unnil(nil_value)
 	-->>empty string
 	function mag.unnil(var)
-	if var == nil then var = "" end
+	if not var then var = "" end
 	return var
 	end
 
@@ -407,7 +407,6 @@
 	local result
 	local len = mag.len(str)
 	for i = len, 1, -1 do result = mag.find(str,pattern,i) if result ~= nil then break end end
-	if result == nil then result = false end
 	return result
 	end
 
@@ -461,6 +460,133 @@
 	end
 	c = 0
 	for k = 1, table.getn(index) do table.remove(array,index[k] - c) c = c + 1 end
+	end
+
+	--mag.words("Lorem ipsum {\\bord2}dolor sit amet, {\\shad3}consectetur {lorem} adipiscing elit.")
+	-->>Lorem 
+	-->>ipsum 
+	-->>{\bord2}dolor 
+	-->>sit 
+	-->>amet, 
+	-->>{\shad3}consectetur 
+	-->>{lorem} 
+	-->>adipiscing 
+	-->>elit.
+	function mag.words(str)
+	str = str.." "
+	local word, w, in_tags = {}, "", false
+	for c in unicode.chars(str) do
+	if c == "{" then in_tags = true end
+	w = w..c
+	if not in_tags and c == " " then table.insert(word,w) w = "" end
+	if c == "}" then in_tags = false end
+	end
+	word[table.getn(word)] = mag.sub(word[table.getn(word)],1,-2)
+	return table.getn(word), word
+	end
+
+	--txt_lmt = mag.text_limit("Bu bir deneme.",5)
+	-->>Bu bi
+	function mag.text_limit(text,limit,dot)
+	local dots = ""
+	if dot == true and limit < mag.len(text) then dots = "..." end
+	local s, n = "", 0
+	for c in unicode.chars(text) do
+	n = n + 1
+	s = s..c
+	if n == limit then break end
+	end
+	if dot == true then s = mag.right_space_trim(s) end
+	return s..dots
+	end
+
+	--mag.usub("Bu bır deneme. Bu da bir deneme. Bu hala bir deneme.",1,10)
+	-->>Bu bır den
+	function mag.usub(text,trim1,trim2)
+	local s, n = "", 0
+	for c in unicode.chars(text) do n = n + 1 if n >= trim1 and n <= trim2 then s = s..c end end
+	return s
+	end
+
+	--finds = mag.finds("Bu bir deneme. Bu da bir deneme. Bu hala bir deneme.","deneme",0,false)
+	-->>9
+	-->>27
+	-->>47
+	--finds = mag.finds("Bu bir de.neme. Bu da bir deneme. Bu hala bir deneme.","de.neme",-3,true)
+	-->>6
+	-->>24
+	-->>44
+	function mag.finds(text,pattern,int,regex)
+	if not int then int = 0 end
+	if not regex then regex = false end
+	local f, next_find = {}, 0
+	if mag.match(text,pattern) then
+		while true do
+		next_find = mag.find(text,pattern,next_find + 1,regex)
+		if not next_find then break end
+		table.insert(f,next_find + int)
+		end
+	end
+	if f[1] then return f else return false end	
+	end
+
+	--text = mag.space_trim("   bu       bir deneme.    {deneme}     ")
+	-->>bu       bir deneme.{deneme}
+	--text = mag.space_trim(" {deneme deneme}  bu bir     deneme.    {deneme}     ")
+	-->>{deneme deneme}bu bir     deneme.{deneme}
+	function mag.space_trim(text)
+	local txt = text
+	txt = mag.left_space_trim(txt)
+	txt = mag.right_space_trim(txt)
+	return txt
+	end
+
+	--text = mag.left_space_trim("   bu       bir deneme.    {deneme}     ")
+	-->>bu       bir deneme.    {deneme}     
+	--text = mag.left_space_trim(" {deneme deneme}  bu bir     deneme.    {deneme}     ")
+	-->>{deneme deneme}bu bir     deneme.    {deneme}     
+	function mag.left_space_trim(text)
+	local s, in_tags, first, w = "", false, false, false
+	for c in unicode.chars(text) do
+	if c == "{" then in_tags = true end
+	if mag.match(c,"[^%s]") and not in_tags then first = true end
+	if mag.match(c,"%s") and not in_tags and not first then w = true else w = false end
+	if w == false then s = s..c end
+	if c == "}" then in_tags = false end
+	end
+	return s
+	end
+
+	--text = mag.right_space_trim("   bu       bir deneme.    {deneme}     ")
+	-->>   bu       bir deneme.{deneme}
+	--text = mag.right_space_trim(" {deneme deneme}  bu bir     deneme.    {deneme}     ")
+	-->> {deneme deneme}  bu bir     deneme.{deneme}
+	function mag.right_space_trim(text)
+	text = mag.reverse(text)
+	local s, in_tags, last, w = "", false, false, false
+	for c in unicode.chars(text) do
+	if c == "}" then in_tags = true end
+	if mag.match(c,"[^%s]") and not in_tags then last = true end
+	if mag.match(c,"%s") and not in_tags and not last then w = true else w = false end
+	if w == false then s = s..c end
+	if c == "{" then in_tags = false end
+	end
+	return mag.reverse(s)
+	end
+
+	--mag.time_strip("0:01:30.30")
+	--90300
+	function mag.time_strip(time)
+	if mag.match(time,"(%d+):(%d+):(%d+)%.(%d+)") then
+	local hour, min, sec, ms = mag.match(time,"(%d+):(%d+):(%d+)%.(%d+)")
+	local result
+	result = mag.format("%s%s%s",hour * 36,mag.n(min) * 60 + sec,ms)
+	result = mag.n(result)
+	result = result * 10
+	return result
+	else
+	return 0
+	end
 	end
 
 	mag.s       = tostring

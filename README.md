@@ -158,10 +158,13 @@ Birçok ayarda satır seçme işlemi yapar.
   * **Son satır:** Stilin son satırına atlarsınız.
   * **Tüm satırlar:** Stilin tüm satırlarını seçersiniz.
 * **Satır:** Satırlara göre işlem yaparsınız.
-  * **Satır aralığı:** Girdiğiniz iki farklı sayının olduğu aralığı seçer.
+  * **Satır aralığı:** Girdiğiniz iki farklı sayının olduğu aralığı seçersiniz.
   * **Satır atlama:** Girdiğiniz satır numarasına atlarsınız.
   * **Önceki satır:** O an metin kutusunda içeriğini gördüğünüz satırın üstündeki satıra, yani bir önceki satıra atlar.
   * **Sonraki satır:** O an metin kutusunda içeriğini gördüğünüz satırın altındaki satıra, yani bir sonraki satıra atlar.
+* **Süre:** Sürelere göre işlem yaparsınız.
+  * **Süre aralığı:** Girilen iki farklı sürenin veya kare değerinin olduğu aralığı seçersiniz.
+  * **Süre atlama:** Girdiğiniz süreye ya da kare değerine atlarsınız.
 * **Seçimin tersi:** Seçiminiz dışında kalan satırları seçersiniz.
 
 ### [Shaper](automation/autoload/mag.shaper.lua)
