@@ -1,6 +1,6 @@
 	script_name       = "Select Lines"
 	script_desription = "Her türlü yolla satır seçme işlemi yapar."
-	script_version    = "1.5.1"
+	script_version    = "1.5.2"
 	script_author     = "Magnum357"
 
 	mag_import, mag = pcall(require,"mag")
@@ -163,7 +163,7 @@
 			end
 		end
 		end
-	if count > 0 then return index else mag.log(1,"Belirtilen süreler arasında hiçbir satır bulunamadı.") end
+	if count > 0 then return index else mag.log(2,"Belirtilen süreler arasında hiçbir satır bulunamadı.") end
 	end
 	end
 
@@ -187,13 +187,25 @@
 			for i = 1, #subs do
 			line = subs[i]
 				if line.class == "dialogue" then
-					if line.start_time >= config.time then index = i break end
+				if line.start_time >= config.time then index = i break end
 				end
 			end
 		end
-	if index ~= "" then return {index} else mag.log(1,"Belirtilen süreler arasında hiçbir satır bulunamadı.") end
+	if index ~= "" then return {index} else mag.log(2,"Girilen süre veya üstünde bir süreye sahip bir satır yok.") end
 	end
 	end
+
+	function first_line(subs)
+	local index
+	for i = 1, #subs do if subs[i].class == "dialogue" then index = i break end end
+	return {index}
+	end
+
+	function last_line(subs)
+	local index
+	for i = #subs, 1, -1 do index = i break end
+	return {index}
+	end	
 
 	if mag_import then
 	sub_menus = {"Geçerli satır","Stil","Satır","Süre"}
@@ -201,15 +213,17 @@
 	mag.register(script_name.."/"..sub_menus[1].."/Sonrası",      act_after)
 	mag.register(script_name.."/"..sub_menus[1].."/Öncesi(Stil)", act_style_before)
 	mag.register(script_name.."/"..sub_menus[1].."/Sonrası(Stil)",act_style_after)
-	mag.register(script_name.."/"..sub_menus[2].."/İlk satır",    first_style_line)
-	mag.register(script_name.."/"..sub_menus[2].."/Son satır",    last_style_line)
-	mag.register(script_name.."/"..sub_menus[2].."/Tüm satırlar", style_all_lines)
-	mag.register(script_name.."/"..sub_menus[3].."/Satır aralığı",lines_from_to)
-	mag.register(script_name.."/"..sub_menus[3].."/Satır atlama", line_numb_jumping)
-	mag.register(script_name.."/"..sub_menus[3].."/Önceki satır", prev_act)
-	mag.register(script_name.."/"..sub_menus[3].."/Sonraki satır",next_act)
-	mag.register(script_name.."/"..sub_menus[4].."/Süre aralığı", times_from_to)
-	mag.register(script_name.."/"..sub_menus[4].."/Süre atlama",  line_time_jumping)
+	mag.register(script_name.."/"..sub_menus[1].."/Önceki",       prev_act)
+	mag.register(script_name.."/"..sub_menus[1].."/Sonraki",      next_act)	
+	mag.register(script_name.."/"..sub_menus[2].."/İlk",          first_style_line)
+	mag.register(script_name.."/"..sub_menus[2].."/Son",          last_style_line)
+	mag.register(script_name.."/"..sub_menus[2].."/Tüm",          style_all_lines)
+	mag.register(script_name.."/"..sub_menus[3].."/İlk",          first_line)
+	mag.register(script_name.."/"..sub_menus[3].."/Son",          last_line)
+	mag.register(script_name.."/"..sub_menus[3].."/Aralık",       lines_from_to)
+	mag.register(script_name.."/"..sub_menus[3].."/Atlama",       line_numb_jumping)
+	mag.register(script_name.."/"..sub_menus[4].."/Aralık",       times_from_to)
+	mag.register(script_name.."/"..sub_menus[4].."/Atlama",       line_time_jumping)
 	mag.register(script_name.."/Seçimin tersi",                   not_selection)
 	else function mag()
 	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})

@@ -153,18 +153,20 @@ Birçok ayarda satır seçme işlemi yapar.
   * **Sonrası:** Geçerli satır ve sonrasını seçer.
   * **Önceki(Stil):** Geçerli satırı ve ondan önceki onunla aynı stile sahip olan satırları seçer.
   * **Sonraki(Stil):** Geçerli satırı ve ondan sonraki onunla aynı stile sahip olan satırları seçer.
+  * **Önceki satır:** Geçerli satırın bir öncesindeki satıra atlarsınız.
+  * **Sonraki satır:** Geçerli satırın bir sonrasındaki satıra atlarsınız.
 * **Stil:** O an bulunduğunuz, metin kutusunda içeriğini gördüğünüz satırın stiline göre işlem yaparsınız.
-  * **İlk satır:** Stilin ilk satırına atlarsınız.
-  * **Son satır:** Stilin son satırına atlarsınız.
-  * **Tüm satırlar:** Stilin tüm satırlarını seçersiniz.
+  * **İlk:** Stilin ilk satırına atlarsınız.
+  * **Son:** Stilin son satırına atlarsınız.
+  * **Tüm:** Stilin tüm satırlarını seçersiniz.
 * **Satır:** Satırlara göre işlem yaparsınız.
-  * **Satır aralığı:** Girdiğiniz iki farklı sayının olduğu aralığı seçersiniz.
-  * **Satır atlama:** Girdiğiniz satır numarasına atlarsınız.
-  * **Önceki satır:** O an metin kutusunda içeriğini gördüğünüz satırın üstündeki satıra, yani bir önceki satıra atlar.
-  * **Sonraki satır:** O an metin kutusunda içeriğini gördüğünüz satırın altındaki satıra, yani bir sonraki satıra atlar.
+  * **İlk:** İlk satıra atlarsınız.
+  * **Son:** Son satıra atlarsınız.
+  * **Aralık:** Girdiğiniz iki farklı sayının olduğu aralığı seçersiniz.
+  * **Atlama:** Girdiğiniz satır numarasına atlarsınız.
 * **Süre:** Sürelere göre işlem yaparsınız.
-  * **Süre aralığı:** Girilen iki farklı sürenin veya kare değerinin olduğu aralığı seçersiniz.
-  * **Süre atlama:** Girdiğiniz süreye ya da kare değerine atlarsınız.
+  * **Aralık:** Girilen iki farklı sürenin veya kare değerinin olduğu aralığı seçersiniz.
+  * **Atlama:** Girdiğiniz süreye ya da kare değerine atlarsınız.
 * **Seçimin tersi:** Seçiminiz dışında kalan satırları seçersiniz.
 
 ### [Shaper](automation/autoload/mag.shaper.lua)
