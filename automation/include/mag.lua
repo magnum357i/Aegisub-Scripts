@@ -1,6 +1,6 @@
-	module_name = "Mag"
+﻿	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.1.3"
+	module_version = "1.1.1.4"
 	module_author = "Magnum357"
 
 	unicode = require 'aegisub.unicode'
@@ -50,9 +50,32 @@
 	return str
 	end
 
-	--strip_text = mag.strip("{\bord2}Bu bir deneme.")
+	--strip_text = mag.strip("{\bord2}Bu bir {deneme}deneme.")
 	-->>Bu bir deneme.
 	function mag.strip(str) return mag.gsub(str,"{[^}]+}", "") end
+
+	--strip_text = mag.special_strip("Bu bir deneme. \\NBu da\\Nbir deneme.\\N Bu hala bir deneme.")
+	-->>Bu bir deneme. Bu da bir deneme. Bu hala bir deneme.
+	function mag.special_strip(str)
+	local function strip(text,special)
+	text = mag.gsub(text,"%s"..special," ")
+	text = mag.gsub(text,special.."%s"," ")
+	text = mag.gsub(text,special," ")
+	return text
+	end
+	str = strip(str,"\\N")
+	str = strip(str,"\\n")
+	str = strip(str,"\\h")
+	return str
+	end
+
+	--strip_text = mag.tag_strip("{\bord2}Bu bir {deneme}deneme.")
+	-->>Bu bir {deneme}deneme.
+	function mag.tag_strip(str) return mag.gsub(str,"{\\.-}", "") end
+
+	--strip_text = mag.comment_strip("{\bord2}Bu bir {deneme}deneme.")
+	-->>{\bord2}Bu bir deneme.
+	function mag.comment_strip(str) return mag.gsub(str,"{[^\\]+}", "") end
 
 	--full_strip_text = mag.full_strip("{\bord2}Bu\hbir\hdeneme.")
 	-->>Bu bir deneme.

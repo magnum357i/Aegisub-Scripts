@@ -1,4 +1,4 @@
-	script_name = "Text Align"
+﻿	script_name = "Text Align"
 	script_description = "Yazıyı hizalar."
 	script_author = "Magnum357"
 	script_version = "0.7"
@@ -26,17 +26,18 @@
 		line.comment = true
 		if align == "Sağdan" or align == "Soldan" then scount, stext = split(line_text,line_width) end
 		if align == "Ortadan" then scount, stext = split2(line_text,line_width) end
-			if scount ~= false or stext ~= false then
-				for i = 1, scount do
-				n = n + 1
-				l = table.copy(line)
-				l.comment = false
-				if align == "Sağdan"  then l.text = mag.format("{\\an6\\pos(%s,%s)}%s",pos_x,pos_y + ((i - 1) * line_height),stext[i]) end
-				if align == "Soldan"  then l.text = mag.format("{\\an4\\pos(%s,%s)}%s",pos_x,pos_y + ((i - 1) * line_height),stext[i]) end
-				if align == "Ortadan" then l.text = mag.format("{\\an4\\pos(%s,%s)}%s",pos_x,pos_y + ((i - 1) * line_height),stext[i]) end
-				subs.insert(li + i,l)
-				end
-			end
+			--if scount ~= false or stext ~= false then
+				--for i = 1, scount do
+				--n = n + 1
+				--l = table.copy(line)
+				--l.comment = false
+				--if align == "Sağdan"  then l.text = mag.format("{\\an6\\pos(%s,%s)}%s",pos_x,pos_y + ((i - 1) * line_height),stext[i]) end
+				--if align == "Soldan"  then l.text = mag.format("{\\an4\\pos(%s,%s)}%s",pos_x,pos_y + ((i - 1) * line_height),stext[i]) end
+				--if align == "Ortadan" then l.text = mag.format("{\\an4\\pos(%s,%s)}%s",pos_x,pos_y + ((i - 1) * line_height),stext[i]) end
+				--subs.insert(li + i,l)
+				--end
+			--end
+		
 		else mag.log(2,"Satırda pos etiketi bulunamadı.")
 		end
 		subs[li] = line
@@ -165,8 +166,8 @@
 	}
 	ok, config = mag.dlg(dialog_config,buttons)
 	if ok == buttons[1] then
-		if config.save_conf == true then
 		save_conf   = config.save_conf
+		if config.save_conf == true then
 		line_height = config.line_height
 		line_width  = config.line_width
 		align       = config.align
@@ -177,7 +178,7 @@
 	end
 	end
 
-	if mag_import then mag.register(false,add_macro) else function mag()
+	if mag_import then mag.register("M357/"..""..script_name,add_macro) else function mag()
 	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})
 	if k == "Evet" then os.execute("start https://github.com/magnum357i/Magnum-s-Aegisub-Scripts") end end
-	aegisub.register_macro(script_name,script_desription,mag) end
+	aegisub.register_macro("M357/"..""..script_name,script_desription,mag) end
