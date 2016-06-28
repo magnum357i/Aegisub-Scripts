@@ -4,7 +4,6 @@
 2. [**MODÜL**](#modÜl)
  * [**Mag**](#mag)
 3. [**MAKROLAR**](#makrolar)
- * [**Delete Comment Bracket**](#delete-comment-bracket)
  * [**Delete Lines**](#delete-lines)
  * [**Fix Timing**](#fix-timing)
  * [**Fixing Turkish Chars**](#fixing-turkish-chars)
@@ -39,9 +38,6 @@ Bu sayfayı açmamdaki amaç kendi yazdığım lua dosyalarının sürüm takibi
 Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında **mag.** ön eki varsa bu modülü kullanıyor demektir. Bu modülü **automation/include/** dizinine atınız.
 
 ### MAKROLAR
-
-### [Delete Comment Bracket](automation/autoload/delete_comment_bracket.lua)
-Yorum olarak düşülen notları siler.
 
 ### [Delete Lines](automation/autoload/delete_lines.lua)
 Stile ya da aktöre göre satır silme işlemi yapar.
@@ -180,7 +176,23 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
  Bu seçiliyken videonun çözünürlük değerine göre boyutlandırma yapar.
 
 ### [Strip Line](automation/autoload/mag.strip_line)
-Satırın metni hariç diğer tüm girdileri temizleyebilir.
+* **Satır Özellikleri:** Bu seçeneğin seçilmesi halinde bir aşağısında detaylı olarak sunulan özelliklerin hepsini uygular. Hepsini değil de bazılarını uygulamak için bu satırın başındaki işareti kaldırın ve aşağısındakilerden tercih yapın.
+  * **Layer:** Ön izlemede hangi satırın daha üst planda olacağı bilgisini siler.
+  * **Actor:** Satırın aktör bilgisini siler.
+  * **Effect:** Satırın farklı lua dosyaları tarafından efekt kutucuğuna yazılmış bilgiyi siler.
+  * **Left Margin:** Satırın özel olarak girimiş soldan kaç piksel boşluk bırakılacağı bilgisini siler.
+  * **Right Margin:** Satırın özel olarak girimiş sağdan kaç piksel boşluk bırakılacağı bilgisini siler.
+  * **Vertical Margin:** Satırın özel olarak girimiş aşağıdan -bazı durumlarda üstten- kaç piksel boşluk bırakılacağı bilgisini siler.
+  * **Text:** Bu seçeneğin seçilmesi halinde bir aşağısında detaylı olarak sunulan özelliklerin hepsini uygular. Hepsini değil de bazılarını uygulamak için bu satırın başındaki işareti kaldırın ve aşağısındakilerden tercih yapın.
+    * **Etiketler:** Satırdaki etiketleri temizler.
+    * **Özel karakterler:** Satırdaki \N, \h veya \n gibi karakterlerini temizler. Bu karakterlerin etrafında boşluk varsa direkt temizlerken boşluk yoksa boşlukla yer değiştirir.
+    * **Yorum parantezleri:** Satırdaki etiket içermeyen yorum parantezlerini temizler.
+    * **Tekrar eden boşluklar:** İki veya daha fazla kendini tekrar eden boşlukları tek boşluğa indirir.
+    * **Baştaki ve sondaki boşluklar:** Satırın başındaki ve sonundaki boşlukları siler.
+* **Ekstra Ayarlar:** Bu seçeneğin seçilmesi halinde bir aşağısında detaylı olarak sunulan özelliklerin hepsini uygular. Hepsini değil de bazılarını uygulamak için bu satırın başındaki işareti kaldırın ve aşağısındakilerden tercih yapın.
+  * **Boş satırlarını sil:** Metni olmayan satırları siler.
+  * **Yorum satırlarını sil:** Yorum yapılmış satırları siler.
+  * **Sıralı satırları sil:** Aynı metne sahip satırların en sondaki satırındaki bitiş süresini ilk baştaki satırın bitiş süresine taşır ve ilk baştaki hariç diğer tüm tekrar satırlarını siler.
 
 ### [Sub Menu Maker](automation/autoload/mag.sub_menu_maker.lua)
 Automation menüsünde listelenen lua isimlerini gruplar. Bu gruplamayı girdiğiniz dosya adına göre yapıyor.
