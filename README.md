@@ -194,7 +194,7 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
   * **Yorum satırlarını sil:** Yorum yapılmış satırları siler.
   * **Sıralı satırları sil:** Aynı metne sahip satırların en sondaki satırındaki bitiş süresini ilk baştaki satırın bitiş süresine taşır ve ilk baştaki hariç diğer tüm tekrar satırlarını siler.
 
-### [Sub Menu Maker](automation/autoload/mag.sub_menu_maker.lua)
+### [Sub Menu Maker](automation/autoload/mag.sub_menu_maker_r1.lua)
 Automation menüsünde listelenen lua isimlerini gruplar. Bu gruplamayı girdiğiniz dosya adına göre yapıyor.
 
 #### İLK PENCERE
@@ -203,12 +203,13 @@ Automation menüsünde listelenen lua isimlerini gruplar. Bu gruplamayı girdiğ
 * **Dosya dizini:** Lua dosyanız Aegisub programının kurulu olduğu `automation` dizininde ise **Automation**, Aegisub programının ayarlarının saklandığı `automation` dizininde ise **AppData Automation** seçeneğini seçiniz.
 * **Dosya dizini:** Dosyanın dizinini giriniz.
 * **Lua yoksa moon uzantısı ara:** Bu ayarın seçilmesi durumunda önce dosya adı girilen dosyanın lua, ondan sonra moon uzantılı olanını arar. Seçilmemesi durumunda bu işlemin tam tersini yapar. 
-* **Arayüzdeki tercihleri hatırla:** Arayüzdeki tercihleri geçici hafızasında tutar.
+* **Önceki grupları ekleme:** Bu ayarın seçilmesi durumunda daha önce eklenen grupları ikinci pencereye eklemez.
 
 #### İKİNCİ PENCERE
+* **Grup:** Lua isminin olmasını istediğiniz grup. Boş bırakırsanız mevcut grubu siler.
 * **Ad:** Seçilen dosyanın programda görünen yani **Automation Manager** penceresinde görünen ismi.
 * **Dosya adı:** Seçilen dosyanın adı.
-* **Grup:** Lua isminin olmasını istediğiniz grup. Boş bırakırsanız mevcut grubu siler.
+
 
 ### [Text Align](automation/autoload/mag.text_align)
 Karaktere göre metni böler.
