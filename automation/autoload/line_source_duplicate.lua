@@ -7,7 +7,7 @@
 
 	]]--
 
-	script_name = "M357/Line Source Duplicate"
+	script_name = "Line Source Duplicate"
 	script_description = "Kaynak metni bir şekilde çoğaltır. Bir şekilde çoğalttıklarını da silebilir."
 	script_author = "Magnum357"
 	script_version = "2.0.2"
