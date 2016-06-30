@@ -24,6 +24,7 @@
  * [**Autotags**](#autotags)
  * [**Color Fade**](#color-fade)
  * [**Rainbow**](#rainbow)
+ * [**Rand Color**](#randcolor)
  * [**Shaper**](#shaper-1)
  * [**T_Calc**](#t_calc)
  * [**Vertical Kanji**](#vertical-kanji)
@@ -251,6 +252,13 @@ Gökkuşağı renklerinde renk geçişi yapar.
 * **Var2:** Buraya bitiş değerini girin.
 * **Saturation:** Buraya 0-1 arası ondalıklı değerler girin. 1'den düşük değerler rengin tonunu açar.
 * **Contrast:** Buraya 0-1 arası ondalıklı değerler girin. 1'den düşük değerler rengin tonunu koyulaştırır.
+
+### [Rand Color](ass/randcolor.ass)
+Girilen renkleri ya sırasıyla ya da rastgele bir biçimde döndürür.
+
+* **Id:** Fonksiyonu her kullandığınızda buraya farklı bir değer girin. 1-50 arası sayılar alabilir.
+* **Rank:** Girilen renkleri iki şekilde döndürür. `true` girilmesi halinde sırasıyla, `false` girilmesi halinde rastgele bir biçimde renk döndürür.
+* **Colors:** Bu alana renkler girmeniz gerekiyor. Renkler arasına virgül koyun.
 
 ### [Shaper](ass/shaper.ass)
 Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. ASS dosyası halinde.
