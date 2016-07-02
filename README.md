@@ -24,7 +24,7 @@
  * [**Autotags**](#autotags)
  * [**Color Fade**](#color-fade)
  * [**Rainbow**](#rainbow)
- * [**Rand Color**](#randcolor)
+ * [**Rand Color**](#rand-color)
  * [**Shaper**](#shaper-1)
  * [**T_Calc**](#t_calc)
  * [**Vertical Kanji**](#vertical-kanji)
@@ -176,7 +176,7 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
  * **?video**<br>
  Bu seçiliyken videonun çözünürlük değerine göre boyutlandırma yapar.
 
-### [Strip Line](automation/autoload/mag.strip_line)
+### [Strip Line](automation/autoload/mag.strip_line.lua)
 * **Satır Özellikleri:** Bu seçeneğin seçilmesi halinde bir aşağısında detaylı olarak sunulan özelliklerin hepsini uygular. Hepsini değil de bazılarını uygulamak için bu satırın başındaki işareti kaldırın ve aşağısındakilerden tercih yapın.
   * **Layer:** Ön izlemede hangi satırın daha üst planda olacağı bilgisini siler.
   * **Actor:** Satırın aktör bilgisini siler.
@@ -212,7 +212,7 @@ Automation menüsünde listelenen lua isimlerini gruplar. Bu gruplamayı girdiğ
 * **Dosya adı:** Seçilen dosyanın adı.
 
 
-### [Text Align](automation/autoload/mag.text_align)
+### [Text Align](automation/autoload/mag.text_align.lua)
 Karaktere göre metni böler.
 * **Satır aralığı:** Satırlar arasında kaç piksel boşluk olacağına karar verirsiniz.
 * **Karakter sınırı:** Bir satırda kaç karakter olacağına karar verirsiniz.
@@ -238,7 +238,7 @@ Satıra daktilo tarzı bir efekt uygular.
 * **Tags1:** İlk etiket. Bu etiketle başlar.
 * **Tags2:** İkinci etiket. Bu alandaki etiketin değerine dönüşüm yapar.
 
-### [Color Fade](ass/color_fade_v2.ass)
+### [Color Fade](ass/color_fade_v3.ass)
 İki veya daha fazla renk arasında yatay renk geçişi yapar.
 
 * **Id:** Fonksiyonu her kullandığınızda buraya farklı bir değer girin. 1-50 arası sayılar alabilir.
