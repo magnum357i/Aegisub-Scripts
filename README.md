@@ -144,7 +144,7 @@ Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni bö
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin. Sadece kullanılan stiller listelenir. Stil isimlerinin başındaki ilk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır.
 * **Yorum satırlarını geç:** Yorum satırı yapılmış satırları işleme almaz.
 
-### [Manual Hardsub Timer](automation/autoload/mag.manual_hardsub_timer)
+### [Manual Hardsub Timer](automation/autoload/mag.manual_hardsub_timer.lua)
 Manuel olarak hardsub videoya zamanlama yapmanızı sağlar. Herhangi bir hardsub satırın önce başladığı ve sonra da bittiği karede lua dosyasını çalıştırın. Geçerli satırın bir altına o karelerin süreye dönüşmüş haliyle yeni bir satır oluşturacaktır.
 
 ### [Select Lines](automation/autoload/mag.select_lines.lua)

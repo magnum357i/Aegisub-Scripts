@@ -1,6 +1,6 @@
 	script_name       = "Manual Hardsub Timer"
 	script_desription = "Manuel olarak hardsub alt yazıya zamanlama yapmaya yarar."
-	script_version    = "1"
+	script_version    = "1.0.2"
 	script_author     = "Magnum357"
 
 	mag_import, mag = pcall(require,"mag")
@@ -8,7 +8,6 @@
 	start_time = 0
 	end_time   = 0
 	count      = 0
-	act_index  = 0
 
 	function timing(subs,sel,act)
 	local current_time = aegisub.ms_from_frame(aegisub.project_properties().video_position)
@@ -26,25 +25,23 @@
 			end_time   = 1
 			end
 		end
-	if start_time ~= 0 and end_time ~= 0 then
-		if act_index ~= act then
-		act_index = act
-		count = 0
+		if start_time ~= 0 and end_time ~= 0 then
+		count = count + 1
+		local l = table.copy(subs[act])
+		l.layer      = 0
+		l.start_time = start_time
+		l.end_time   = end_time
+		l.text       = mag.format("{örnek yazı %s}",count)
+		l.actor      = ""
+		l.effect     = ""
+		l.margin_l   = 0
+		l.margin_r   = 0
+		l.margin_t   = 0
+		subs.insert(act + 1,l)
+		start_time   = 0
+		end_time     = 0
+		return {act + 1}
 		end
-	count = count + 1
-	local l = table.copy(subs[act])
-	l.layer      = 0
-	l.start_time = start_time
-	l.end_time   = end_time
-	l.text       = mag.format("{örnek yazı %s}",count)
-	l.actor      = ""
-	l.effect     = ""
-	l.margin_l   = 0
-	l.margin_r   = 0
-	l.margin_t   = 0
-	subs.insert(act + count,l)
-	end
-	if start_time ~= 0 and end_time ~= 0 then start_time = 0 end_time = 0 end
 	end
 	end
 	
