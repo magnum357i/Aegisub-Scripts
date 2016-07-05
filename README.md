@@ -13,6 +13,7 @@
  * [**Copy Paste Line**](#copy-paste-line)
  * [**K Char**](#k-char)
  * [**Line Breaker Checker**](#line-breaker-checker)
+ * [**Manual Hardsub Timer**](#manual-hardsub-timer)
  * [**Select Lines**](#select-lines)
  * [**Shaper**](#shaper)
  * [**Strip Line**](#strip-line)
@@ -142,6 +143,9 @@ Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni bö
 * **Karakter Sınırı:** Varsayılan değeri 45'tir. Varsayılan değer üzerinden konuşacak olursak 45 ve üstü karakterde devreye girecektir.
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin. Sadece kullanılan stiller listelenir. Stil isimlerinin başındaki ilk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır.
 * **Yorum satırlarını geç:** Yorum satırı yapılmış satırları işleme almaz.
+
+### [Manual Hardsub Timer](automation/autoload/mag.manual_hardsub_timer)
+Manuel olarak hardsub videoya zamanlama yapmanızı sağlar. Herhangi bir hardsub satırın önce başladığı ve sonra da bittiği karede lua dosyasını çalıştırın. Geçerli satırın bir altına o karelerin süreye dönüşmüş haliyle yeni bir satır oluşturacaktır.
 
 ### [Select Lines](automation/autoload/mag.select_lines.lua)
 Birçok ayarda satır seçme işlemi yapar.
