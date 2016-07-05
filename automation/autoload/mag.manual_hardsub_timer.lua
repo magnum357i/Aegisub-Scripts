@@ -21,8 +21,8 @@
 		end_time = current_time
 			if start_time > end_time then
 			mag.log(1,"Başlangıç süresi(%s), bitiş süresinden(%s) büyük.",{aegisub.frame_from_ms(start_time),aegisub.frame_from_ms(end_time)})
-			start_time = 1
-			end_time   = 1
+			start_time = 0
+			end_time   = 0
 			end
 		end
 		if start_time ~= 0 and end_time ~= 0 then
