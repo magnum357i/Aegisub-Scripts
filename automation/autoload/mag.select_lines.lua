@@ -1,7 +1,7 @@
-	script_name       = "Select Lines"
-	script_desription = "Her türlü yolla satır seçme işlemi yapar."
-	script_version    = "1.5.2"
-	script_author     = "Magnum357"
+	script_name        = "Select Lines"
+	script_description = "Her türlü yolla satır seçme işlemi yapar."
+	script_version     = "1.5.2"
+	script_author      = "Magnum357"
 
 	mag_import, mag = pcall(require,"mag")
 

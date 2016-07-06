@@ -1,26 +1,20 @@
-	script_name        = "K Char"
-	script_description = "Seçilmiş satır grubundaki her cümlenin her karakterinin başına {\\k} koyar."
+	script_name        = "Copy Dialogue"
+	script_description = "Seçilmiş satırların metinlerini salt halinde panoya kopyalar."
 	script_version     = "1"
 	script_author      = "Magnum357"
 
 	mag_import, mag = pcall(require,"mag")
 
 	function add_macro(subs,sel)
-	local c = "{\\k}"
 	local line
+	local result = ""
+	local line_break = ""
 	for si, li in ipairs(sel) do
 	line = subs[li]
-	local result  = ""
-	local in_tags = false
-		for char in unicode.chars(line.text) do
-		if char == "{" then in_tags = true end
-		if char == "}" then in_tags = false end
-		if in_tags == false and char ~= "}" and mag.match(char,"%s") == nil then char = c..char end
-		result = result..char
-		end
-	line.text = result
-	subs[li]  = line
+	result = result..line_break..mag.space_trim(mag.full_strip(line.text))
+	line_break = "\n"
 	end
+	mag.cset(result)
 	end
 	
 	if mag_import then mag.register(false,add_macro) else function mag()

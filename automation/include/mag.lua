@@ -1,9 +1,10 @@
 ﻿	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.1.4"
+	module_version = "1.1.1.5"
 	module_author = "Magnum357"
 
-	unicode = require 'aegisub.unicode'
+	unicode   = require 'aegisub.unicode'
+	clipboard = require 'aegisub.clipboard'
 	include("karaskel.lua")
 
 	local mag = {}
@@ -611,6 +612,9 @@
 	return 0
 	end
 	end
+
+	mag.cget = clipboard.get
+	mag.cset = clipboard.set
 
 	mag.s       = tostring
 	mag.n       = tonumber

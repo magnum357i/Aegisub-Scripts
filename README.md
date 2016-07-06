@@ -10,6 +10,7 @@
  * [**Karaoke Cleaner**](#karaoke-cleaner)
  * [**Line Source Duplicate**](#line-source-duplicate)
  * [**Basic Turning**](#basic-turning)
+ * [**Copy Dialogue**](#copy-dialogue)
  * [**Copy Paste Line**](#copy-paste-line)
  * [**K Char**](#k-char)
  * [**Line Breaker Checker**](#line-breaker-checker)
@@ -130,6 +131,9 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 <br>ÖRNEK BİR CÜMLE.
 
 **Bu modlardan aynı anda sadece birini kullanın.**
+
+### [Copy Dialogue](automation/autoload/mag.copy_dialogue.lua)
+Seçilen satırların metinlerini salt haliyle panoya kopyalar.
 
 ### [Copy Paste Line](automation/autoload/mag.copy_paste_line.lua)
 Bir satır grubuna ait herhangi bir bilgiyi kopyalar ve bunu başka bir satır grubuna yapıştırabilir.

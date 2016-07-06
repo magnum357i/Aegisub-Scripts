@@ -1,7 +1,7 @@
-	script_name       = "Manual Hardsub Timer"
-	script_desription = "Manuel olarak hardsub alt yazıya zamanlama yapmaya yarar."
-	script_version    = "1.0.2"
-	script_author     = "Magnum357"
+	script_name        = "Manual Hardsub Timer"
+	script_description = "Manuel olarak hardsub alt yazıya zamanlama yapmaya yarar."
+	script_version     = "1.0.2"
+	script_author      = "Magnum357"
 
 	mag_import, mag = pcall(require,"mag")
 
@@ -45,7 +45,7 @@
 	end
 	end
 	
-	if mag_import then mag.register(script_name,timing) else function mag()
+	if mag_import then mag.register(false,timing) else function mag()
 	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})
 	if k == "Evet" then os.execute("start https://github.com/magnum357i/Magnum-s-Aegisub-Scripts") end end
 	aegisub.register_macro(script_name,script_desription,mag) end
