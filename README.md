@@ -133,7 +133,7 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 **Bu modlardan aynı anda sadece birini kullanın.**
 
 ### [Copy Dialogue](automation/autoload/mag.copy_dialogue.lua)
-Seçilen satırların metinlerini salt haliyle panoya kopyalar.
+Alt yazıdaki metinleri panoya veya oluşturduğu metin dosyasına kopyalar.
 
 ### [Copy Paste Line](automation/autoload/mag.copy_paste_line.lua)
 Bir satır grubuna ait herhangi bir bilgiyi kopyalar ve bunu başka bir satır grubuna yapıştırabilir.
