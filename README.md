@@ -10,6 +10,7 @@
  * [**Karaoke Cleaner**](#karaoke-cleaner)
  * [**Line Source Duplicate**](#line-source-duplicate)
  * [**Basic Turning**](#basic-turning)
+ * [**Break Line**](#break-line)
  * [**Copy Dialogue**](#copy-dialogue)
  * [**Copy Paste Line**](#copy-paste-line)
  * [**K Char**](#k-char)
@@ -132,6 +133,14 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 
 **Bu modlardan aynı anda sadece birini kullanın.**
 
+### [Break Line](automation/autoload/mag.break_line.lua)
+Satır bölme yapılmamış satırları böler.
+* **Karakter sınırı:** Varsayılan değeri 44'tir. Varsayılan değer üzerinden konuşacak olursak 44 ve üstü karakterde devreye girecektir.
+* **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin. Sadece kullanılan stiller listelenir. Stil isimlerinin başındaki ilk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır.
+* **Yorum satırlarını geç:** Yorum satırı yapılmış satırlara işlem yapmaz.
+* **Konuşma çizgilerinden böl:** İster karakter sınırını aşan ister de aşmayan iki adet konuşma çizgisi bulunan satırlarda ikinci konuşma çizgisinin başından böler.
+* **Dengeli böl:** Üst ve alt satırın en az farka sahip olduğu yerden böler.
+
 ### [Copy Dialogue](automation/autoload/mag.copy_dialogue.lua)
 Alt yazıdaki metinleri panoya veya oluşturduğu metin dosyasına kopyalar.
 
@@ -144,7 +153,7 @@ Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
 ### [Line Breaker Checker](automation/autoload/mag.line_breaker_checker.lua)
 Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni böl!**, karakter sınırı aşan ama satır bölme yapıldığı halde karakter sınırını aşan satırlara da **Beni düzgün böl!** şeklinde `Effect` kutucuğuna not düşer.
 
-* **Karakter Sınırı:** Varsayılan değeri 45'tir. Varsayılan değer üzerinden konuşacak olursak 45 ve üstü karakterde devreye girecektir.
+* **Karakter sınırı:** Varsayılan değeri 44'tir. Varsayılan değer üzerinden konuşacak olursak 44 ve üstü karakterde devreye girecektir.
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin. Sadece kullanılan stiller listelenir. Stil isimlerinin başındaki ilk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır.
 * **Yorum satırlarını geç:** Yorum satırı yapılmış satırları işleme almaz.
 

@@ -65,7 +65,7 @@
 	function create_config(subs)
 	local dialog_config =
 	{{class = "label",                                                     x = 0, y = 0, width = 1, height = 1, label = "Karakter sınırı:"}
-	,{class = "intedit",  name = "u_max_char",      value = 45,            x = 1, y = 0, width = 1, height = 1}
+	,{class = "intedit",  name = "u_max_char",      value = 44,            x = 1, y = 0, width = 1, height = 1}
 	,{class = "label",                                                     x = 0, y = 1, width = 1, height = 1, label = mag.wall(" ",18).."Stil:"}
 	,{class = "dropdown", name = "u_style_name",    value = "Tüm stiller", x = 1, y = 1, width = 1, height = 1, items = {"Tüm stiller"}, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
 	,{class = "checkbox", name = "u_comment_lines", value = true,          x = 1, y = 2, width = 1, height = 1, label = "Yorum satırlarını geç."}
