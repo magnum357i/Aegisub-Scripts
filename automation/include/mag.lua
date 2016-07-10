@@ -1,6 +1,6 @@
 ﻿	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.1.5.1"
+	module_version = "1.1.1.5.2"
 	module_author = "Magnum357"
 
 	unicode   = require 'aegisub.unicode'
@@ -91,7 +91,7 @@
 
 	--remove_dot_text = mag.removedot("Bu bir deneme.")
 	-->>Bu bir deneme
-	function mag.removedot(str) return mag.gsub(str,"[^ÂâA-Za-zşŞçÇıİğĞüÜöÖ]+", "") end
+	function mag.removedot(str) return mag.gsub(str,"[^ÂâA-Za-zşŞçÇıİğĞüÜöÖ0-9]+", "") end
 
 	--mag.wall(" ",5)
 	-->>5x" "

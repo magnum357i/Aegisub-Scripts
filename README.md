@@ -135,11 +135,12 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 
 ### [Break Line](automation/autoload/mag.break_line.lua)
 Satır bölme yapılmamış satırları böler.
-* **Karakter sınırı:** Varsayılan değeri 44'tir. Varsayılan değer üzerinden konuşacak olursak 44 ve üstü karakterde devreye girecektir.
+* **Karakter sınırı:** Varsayılan değeri 44'tir. Varsayılan değer üzerinden konuşacak olursak 44 ve üstü karakterde devreye girecektir. Bu değer sadece sembolüktür. **\\N** karakterinin koyulması için yapılan hesaplamaya bir etkisi yoktur. **\\N** koyulacak satırları tespit etmeye etkisi vardır. En az **35**, en fazla **50** değeri girilebilir.
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin. Sadece kullanılan stiller listelenir. Stil isimlerinin başındaki ilk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır.
 * **Yorum satırlarını geç:** Yorum satırı yapılmış satırlara işlem yapmaz.
-* **Konuşma çizgilerinden böl:** İster karakter sınırını aşan ister de aşmayan iki adet konuşma çizgisi bulunan satırlarda ikinci konuşma çizgisinin başından böler.
+* **Konuşma çizgilerinden böl:** Karakter sınırının altında veya üstünde olan ikili veya tekli konuşma satırlarını konuşma çizgisinden böler.
 * **Dengeli böl:** Üst ve alt satırın en az farka sahip olduğu yerden böler.
+* **İki cümleli satırların ikinci cümlesinden böl:** Karakter sınırına girilen değerin yarısıyle onun altında kalan karakter sayısına sahip iki cümleli satırların ikinci cümlesinden böler.
 
 ### [Copy Dialogue](automation/autoload/mag.copy_dialogue.lua)
 Alt yazıdaki metinleri panoya veya oluşturduğu metin dosyasına kopyalar.
