@@ -1,6 +1,6 @@
-﻿	module_name = "Mag"
+	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.1.5.2"
+	module_version = "1.1.1.5.3"
 	module_author = "Magnum357"
 
 	unicode   = require 'aegisub.unicode'
@@ -72,7 +72,7 @@
 
 	--strip_text = mag.tag_strip("{\bord2}Bu bir {deneme}deneme.")
 	-->>Bu bir {deneme}deneme.
-	function mag.tag_strip(str) return mag.gsub(str,"{\\.-}", "") end
+	function mag.tag_strip(str) return mag.gsub(str,"{.-\\.-}", "") end
 
 	--strip_text = mag.comment_strip("{\bord2}Bu bir {deneme}deneme.")
 	-->>{\bord2}Bu bir deneme.
