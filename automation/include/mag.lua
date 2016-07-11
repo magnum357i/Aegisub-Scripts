@@ -1,6 +1,6 @@
 ﻿	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.1.5.2"
+	module_version = "1.1.1.5.5"
 	module_author = "Magnum357"
 
 	unicode   = require 'aegisub.unicode'
@@ -72,7 +72,7 @@
 
 	--strip_text = mag.tag_strip("{\bord2}Bu bir {deneme}deneme.")
 	-->>Bu bir {deneme}deneme.
-	function mag.tag_strip(str) return mag.gsub(str,"{\\.-}", "") end
+	function mag.tag_strip(str) return mag.gsub(str,"{.-\\.-}", "") end
 
 	--strip_text = mag.comment_strip("{\bord2}Bu bir {deneme}deneme.")
 	-->>{\bord2}Bu bir deneme.
@@ -611,6 +611,32 @@
 	else
 	return 0
 	end
+	end
+
+	--mag.time_format(51150)
+	-->>0:00:51.15
+	--mag.time_format(3676150)
+	-->>1:01:16.15
+	function mag.time_format(time)
+	time = mag.s(mag.sub(time,1,-2))
+	local hour, min, sec, ms = "0", "00", "00", "00"
+	if mag.len(time) <= 2 then
+	hour, min, sec, ms = hour, min, sec, time
+	time = mag.format("%s:%s:%s.%s",hour,min,sec,ms)
+	else
+	sec, ms = mag.match(time,"(%d+)(%d%d)")
+	min = mag.floor(sec / 60)
+		if mag.n(sec) >= 60 then
+		sec = sec - min * 60
+		end
+		if mag.n(min) >= 60 then
+		hour = mag.floor(min / 60)
+		min = min - hour * 60
+		end
+	hour, min, sec, ms = hour, mag.zero(10,min), mag.zero(10,sec), ms
+	time = mag.format("%s:%s:%s.%s",hour,min,sec,ms)
+	end
+	return time
 	end
 
 	--number = mag.positive(50)

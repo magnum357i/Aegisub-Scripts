@@ -1,6 +1,6 @@
 	script_name        = "Copy Dialogue"
 	script_description = "Alt yazıdaki metinleri panoya veya oluşturduğu metin dosyasına kopyalar."
-	script_version     = "1.1"
+	script_version     = "1.2.4"
 	script_author      = "Magnum357"
 
 	mag_import, mag = pcall(require,"mag")
@@ -9,85 +9,99 @@
 	local count        = 0
 	local line_break   = ""
 	local result       = ""
-	local number       = ""
-	local strip_line   = config["u_strip_line"]
-	local line_number  = config["u_line_number"]
 	local apply_lines  = mag.unstyles(config["u_apply_lines"])
-	local comment_line = config["u_comment_lines"]
-	local line, comment1, comment2, text
 	if apply_lines == "Seçili satırlar" then
 		for _, li in pairs(sel) do
-		line       = subs[li]
-		comment1 = 1
-		comment2 = 1
-			if comment_line then
-			comment1 = line.comment
-			comment2 = false
-			end
+		local line     = subs[li]
+		local comment1 = 1
+		local comment2 = 1
+		if config.u_comment_lines then comment1, comment2 = line.comment, false end
 			if comment1 == comment2 then
 			count = count + 1
-			if line_number then number = mag.format("[%s] ",count) end
-				if strip_line then
+			local time = ""
+			if config.u_line_timing then time = mag.format("%s(%s) / %s(%s)",mag.time_format(line.start_time),aegisub.frame_from_ms(line.start_time),mag.time_format(line.end_time),aegisub.frame_from_ms(line.end_time)) end
+			local number = ""
+				if config.u_line_number then
+					if config.u_line_timing then
+					time = mag.format(" - %s",time)
+					end
+				number = mag.format("[%s%s] ",count,time)
+				end
+			local text
+				if config.u_strip_line then
 				text = mag.space_trim(mag.full_strip(line.text))
 				else
 				text = line.text
 				end
-			result     = result..line_break..number..text
+			if config.u_line_number then time = "" elseif config.u_line_timing then time = mag.format("[%s] ",time) end
+			result     = result..line_break..number..time..text
 			line_break = "\n"
 			end
 		end
-	return result
 	else
-	local style1, style2
 		for i = 1, #subs do
-		line = subs[i]
+		local line = subs[i]
 			if line.class == "dialogue" then
-			style1 = line.style
-			style2 = apply_lines
-			comment1 = 1
-			comment2 = 1
-				if apply_lines == "Tüm stiller" then
-				style1 = 1
-				style2 = 1
-				end
-				if comment_line then
-				comment1 = line.comment
-				comment2 = false
-				end
+			local style1 = line.style
+			local style2 = apply_lines
+			local comment1 = 1
+			local comment2 = 1
+			if apply_lines == "Tüm stiller" then style1, style2 = 1, 1 end
+			if config.u_comment_lines then comment1, comment2 = line.comment, false	end
 				if style1 == style2 and comment1 == comment2 then
 				count = count + 1
-				if line_number then number = mag.format("[%s] ",count) end
-					if strip_line then
+				local time = ""
+				if config.u_line_timing then time = mag.format("%s(%s) / %s(%s)",mag.time_format(line.start_time),aegisub.frame_from_ms(line.start_time),mag.time_format(line.end_time),aegisub.frame_from_ms(line.end_time)) end
+				local number = ""
+				if config.u_line_number then
+					if config.u_line_timing then
+					time = mag.format(" - %s",time)
+					end
+				number = mag.format("[%s%s] ",count,time)
+				end
+				local text
+					if config.u_strip_line then
 					text = mag.space_trim(mag.full_strip(line.text))
 					else
 					text = line.text
 					end
-				result     = result..line_break..number..text
+				if config.u_line_number then time = "" elseif config.u_line_timing then time = mag.format("[%s] ",time) end
+				result     = result..line_break..number..time..text
 				line_break = "\n"
 				end
 			end
 		end
+	end
 	return result
 	end
-	end
 
-	function gui(subs)
-	local dialog_config =
-	{{class = "label",                                                         x = 0, y = 0, width = 1, height = 1, label = "Şundan:"}
-	,{class = "dropdown", name = "u_apply_lines",   value = "Seçili satırlar", x = 1, y = 0, width = 1, height = 1, items = {"Seçili satırlar","Tüm stiller"}, hint = "Sadece kullanılan stiller listelenir."}
-	,{class = "label",                                                         x = 0, y = 1, width = 1, height = 1, label = mag.wall(" ",4).."Şuna:"}
-	,{class = "dropdown", name = "u_copy",          value = "Pano",            x = 1, y = 1, width = 1, height = 1, items = {"Pano","Metin dosyası"}}
-	,{class = "checkbox", name = "u_comment_lines", value = true,              x = 1, y = 2, width = 1, height = 1, label = "Yorum satırlarını geç."}
-	,{class = "checkbox", name = "u_strip_line",    value = true,              x = 1, y = 3, width = 1, height = 1, label = "Satırın salt halini al."}
-	,{class = "checkbox", name = "u_line_number",   value = false,             x = 1, y = 4, width = 1, height = 1, label = "Satır sayılarını ekle."}
-	}
-	mag.styles_insert(subs,dialog_config,2,"comment","")
-	return dialog_config
-	end
+	c_apply_lines   = "Seçili satırlar"
+	c_copy          = "Pano"
+	c_comment_lines = true
+	c_strip_line    = true
+	c_line_timing   = true
+	c_line_number   = false
 
 	function add_macro(subs,sel)
-	local ok, config = mag.dlg(gui(subs),{"Kopyala","Kapat"})
+	local gui =
+	{{class = "label",                                                       x = 0, y = 0, width = 1, height = 1, label = "Şundan:"}
+	,{class = "dropdown", name = "u_apply_lines",   value = c_apply_lines,   x = 1, y = 0, width = 1, height = 1, items = {"Seçili satırlar","Tüm stiller"}, hint = "Sadece kullanılan stiller listelenir."}
+	,{class = "label",                                                       x = 0, y = 1, width = 1, height = 1, label = mag.wall(" ",4).."Şuna:"}
+	,{class = "dropdown", name = "u_copy",          value = c_copy,          x = 1, y = 1, width = 1, height = 1, items = {"Pano","Metin dosyası"}}
+	,{class = "checkbox", name = "u_comment_lines", value = c_comment_lines, x = 1, y = 2, width = 1, height = 1, label = "Yorum satırlarını geç."}
+	,{class = "checkbox", name = "u_strip_line",    value = c_strip_line,    x = 1, y = 3, width = 1, height = 1, label = "Satırı temizle.", hint = "Satırdan etiket, satır bölme gibi şeyleri temizleyip metni salt halinde kopyalar."}
+	,{class = "checkbox", name = "u_line_timing",   value = c_line_timing,   x = 1, y = 4, width = 1, height = 1, label = "Zamanları ekle."}
+	,{class = "checkbox", name = "u_line_number",   value = c_line_number,   x = 1, y = 5, width = 1, height = 1, label = "Satır numarası ekle."}
+	}
+	mag.styles_insert(subs,gui,2,"comment","")
+	local ok, config = mag.dlg(gui,{"Kopyala","Kapat"})
 	if ok == "Kopyala" then
+	c_apply_lines   = config.u_apply_lines
+	c_copy          = config.u_copy
+	c_comment_lines = config.u_comment_lines
+	c_strip_line    = config.u_strip_line
+	c_line_timing   = config.u_line_timing
+	c_line_number   = config.u_line_number
 		if config.u_copy == "Pano" then
 		mag.cset(copy(subs,sel,config))
 		elseif config.u_copy == "Metin dosyası" then
@@ -97,7 +111,7 @@
 			file:write(copy(subs,sel,config))
 			file:close()
 			end
-		end	
+		end
 	end
 	end
 	
