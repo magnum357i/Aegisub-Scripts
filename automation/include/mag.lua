@@ -1,10 +1,6 @@
-	module_name = "Mag"
+﻿	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-<<<<<<< HEAD
 	module_version = "1.1.1.5.5"
-=======
-	module_version = "1.1.1.5.3"
->>>>>>> origin/master
 	module_author = "Magnum357"
 
 	unicode   = require 'aegisub.unicode'
