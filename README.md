@@ -13,6 +13,7 @@
  * [**Break Line**](#break-line)
  * [**Copy Dialogue**](#copy-dialogue)
  * [**Copy Paste Line**](#copy-paste-line)
+ * [**Italic Maker**](#italic-maker)
  * [**K Char**](#k-char)
  * [**Line Breaker Checker**](#line-breaker-checker)
  * [**Manual Hardsub Timer**](#manual-hardsub-timer)
@@ -147,6 +148,9 @@ Alt yazıdaki metinleri panoya veya oluşturduğu metin dosyasına kopyalar.
 
 ### [Copy Paste Line](automation/autoload/mag.copy_paste_line.lua)
 Bir satır grubuna ait herhangi bir bilgiyi kopyalar ve bunu başka bir satır grubuna yapıştırabilir.
+
+### [Italic Maker](automation/autoload/mag.italic_maker.lua)
+Seçili satırların başına italik yapma, sonuna italik yapmama etiketi koyar.
 
 ### [K Char](automation/autoload/mag.k_char.lua)
 Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
