@@ -1,6 +1,6 @@
 ﻿	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.1.5.5"
+	module_version = "1.1.1.6"
 	module_author = "Magnum357"
 
 	unicode   = require 'aegisub.unicode'
@@ -9,7 +9,8 @@
 
 	local mag = {}
 
-	--mag.progress("İşleminiz yapılıyor",i,7,true)
+	--mag.progress("İşleminiz yapılıyor",i,7,true,5000)
+	--mag.progress("İşleminiz yapılıyor",i,7,false)
 	function mag.progress(str,i,max,delay,delay_value)
 	aegisub.progress.title(mag.format("%s %s%%",script_name,mag.percent(max,i,true)))
 	aegisub.progress.task(mag.format("(%s/%s) %s",max,i,str))
@@ -245,6 +246,16 @@
 	else calc = 0 end
 	if digit_mode == true then calc = mag.gsub(calc,"%.%d+","") end
 	return mag.s(calc)
+	end
+
+	--sel = mag.sel_index(subs,sel)
+	-->>24,25,26,30
+	function mag.sel_index(subs,sel)
+	local index = {}
+	for _, li in pairs(sel) do
+	table.insert(index,li)
+	end
+	return index
 	end
 
 	--first_text_index = mag.first_index(subs)
