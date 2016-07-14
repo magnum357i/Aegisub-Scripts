@@ -140,6 +140,7 @@ Satır bölme yapılmamış satırları böler.
 * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin. Sadece kullanılan stiller listelenir. Stil isimlerinin başındaki ilk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır.
 * **Yorum satırlarını geç:** Yorum satırı yapılmış satırlara işlem yapmaz.
 * **Konuşma çizgilerinden böl:** Karakter sınırının altında veya üstünde olan ikili veya tekli konuşma satırlarını konuşma çizgisinden böler.
+* **Boşlukları sil:** Karakter sınırı alanından bağımsız olarak satır bölme karakterinin yanındaki boşluk alanı siler.
 * **Dengeli böl:** Üst ve alt satırın en az farka sahip olduğu yerden böler.
 * **İki cümleli satırların ikinci cümlesinden böl:** Karakter sınırına girilen değerin yarısıyle onun altında kalan karakter sayısına sahip iki cümleli satırların ikinci cümlesinden böler.
 

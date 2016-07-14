@@ -1,7 +1,7 @@
 	script_name        = "Break Line"
 	script_description = "Satırlara bölme karakteri ekler."
 	script_author      = "Magnum357"
-	script_version     = "1.1.2"
+	script_version     = "1.1.4"
 
 	mag_import, mag = pcall(require,"mag")
 
@@ -105,7 +105,10 @@
 						until false
 					local ldiff
 						for j = 1, table.getn(last_diff) - 1 do
-						if last_diff[j] < last_diff[j + 1] then ldiff = j break end
+							if last_diff[j] < last_diff[j + 1] then
+							ldiff = j
+							break
+							end
 						end
 					ptext = ""
 					ntext = ""
@@ -119,7 +122,13 @@
 					end
 				line.text = ptext.."\\N"..ntext
 				end
-				if pcs then subs[i] = line end
+					if mag.match(line.text,"%s+\\N") and config.u_break_space  then
+					pcs = true
+					line.text = mag.gsub(line.text,"%s+(\\N)","%1")
+					end
+					if pcs then
+					subs[i] = line
+					end
 			end
 		end
 	end
@@ -128,24 +137,37 @@
 
 	function len(str) return mag.len(mag.removedot(mag.full_strip(str))) end
 
-	function gui(subs)
-	local dialog_config =
-	{{class = "label",                                                                        x = 0, y = 0, width = 1, height = 1, label = "Karakter sınırı:"}
-	,{class = "intedit",  name = "u_max_char",     value = 44,            min = 35, max = 50, x = 1, y = 0, width = 1, height = 1, hint = "Bu değer sadece sembolüktür. \\N karakterinin koyulması için yapılan hesaplamaya bir etkisi yoktur. \\N koyulacak satırları tespit etmeye etkisi vardır."}
-	,{class = "label",                                                                        x = 0, y = 1, width = 1, height = 1, label = mag.wall(" ",18).."Stil:"}
-	,{class = "dropdown", name = "u_style_name",   value = "Tüm stiller",                     x = 1, y = 1, width = 1, height = 1, items = {"Tüm stiller"}, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
-	,{class = "checkbox", name = "u_comment_line",                                            x = 1, y = 2, width = 1, height = 1, label = "Yorum satırlarını geç."}
-	,{class = "checkbox", name = "u_talking",      value = true,                              x = 1, y = 3, width = 1, height = 1, label = "Konuşma çizgilerini çizgiden böl.", hint = "Karakter sınırının altında veya üstünde olan ikili veya tekli konuşma satırlarını konuşma çizgisinden böler."}
-	,{class = "checkbox", name = "u_balance",                                                 x = 1, y = 4, width = 1, height = 1, label = "Dengeli böl."}
-	,{class = "checkbox", name = "u_sentence",                                                x = 1, y = 5, width = 1, height = 1, label = "İki cümleli satırların ikinci cümlesinden böl.", hint = "Karakter sınırına girilen değerin yarısıyle onun altında kalan karakter sayısına sahip iki cümleli satırların ikinci cümlesinden böler."}
-	}
-	mag.styles_insert(subs,dialog_config,4,"comment","")
-	return dialog_config
-	end
+	c_max_char     = 44
+	c_style_name   = "Tüm stiller" 
+	c_comment_line = false
+	c_talking      = true
+	c_break_space  = true
+	c_balance      = false
+	c_sentence     = false
 
 	function add_macro(subs)
-	local ok, config = mag.dlg(gui(subs),{"Böl","Kapat"})
+	local gui =
+	{{class = "label",                                                                         x = 0, y = 0, width = 1, height = 1, label = "Karakter sınırı:"}
+	,{class = "intedit",  name = "u_max_char",     value = c_max_char,     min = 35, max = 50, x = 1, y = 0, width = 1, height = 1, hint = "Bu değer sadece sembolüktür. \\N karakterinin koyulması için yapılan hesaplamaya bir etkisi yoktur. \\N koyulacak satırları tespit etmeye etkisi vardır."}
+	,{class = "label",                                                                         x = 0, y = 1, width = 1, height = 1, label = mag.wall(" ",18).."Stil:"}
+	,{class = "dropdown", name = "u_style_name",   value = c_style_name,                       x = 1, y = 1, width = 1, height = 1, items = {"Tüm stiller"}, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
+	,{class = "checkbox", name = "u_comment_line", value = c_comment_line,                     x = 1, y = 2, width = 1, height = 1, label = "Yorum satırlarını geç."}
+	,{class = "checkbox", name = "u_talking",      value = c_talking,                          x = 1, y = 3, width = 1, height = 1, label = "Konuşma çizgilerini çizgiden böl.", hint = "Karakter sınırının altında veya üstünde olan ikili veya tekli konuşma satırlarını konuşma çizgisinden böler."}
+	,{class = "checkbox", name = "u_break_space",  value = c_break_space,                      x = 1, y = 4, width = 1, height = 1, label = "Boşlukları sil.", hint = "Karakter sınırı alanından bağımsız olarak satır bölme karakterinin yanındaki boşluk alanı siler."}
+	,{class = "checkbox", name = "u_balance",      value = c_balance,                          x = 1, y = 5, width = 1, height = 1, label = "Dengeli böl."}
+	,{class = "checkbox", name = "u_sentence",     value = c_sentence,                         x = 1, y = 6, width = 1, height = 1, label = "İki cümleli satırların ikinci cümlesinden böl.", hint = "Karakter sınırına girilen değerin yarısıyle onun altında kalan karakter sayısına sahip iki cümleli satırların ikinci cümlesinden böler."}
+	}
+	mag.styles_insert(subs,gui,4,"comment","")
+	local ok, config = mag.dlg(gui,{"Böl","Kapat"})
 	if ok == mag.ascii("Böl") then
+	if config.u_style_name == "" then config.u_style_name = "Tüm stiller" end
+	c_max_char     = config.u_max_char
+	c_style_name   = config.u_style_name
+	c_comment_line = config.u_comment_line
+	c_talking      = config.u_talking
+	c_break_space  = config.u_break_space
+	c_balance      = config.u_balance
+	c_sentence     = config.u_sentence
 	line_breaker(subs,sel,config)
 	aegisub.set_undo_point(script_name)
 	end
