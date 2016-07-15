@@ -15,7 +15,6 @@
  * [**Copy Paste Line**](#copy-paste-line)
  * [**Italic Maker**](#italic-maker)
  * [**K Char**](#k-char)
- * [**Line Breaker Checker**](#line-breaker-checker)
  * [**Manual Hardsub Timer**](#manual-hardsub-timer)
  * [**Select Lines**](#select-lines)
  * [**Shaper**](#shaper)
@@ -135,14 +134,25 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 **Bu modlardan aynı anda sadece birini kullanın.**
 
 ### [Break Line](automation/autoload/mag.break_line.lua)
-Satır bölme yapılmamış satırları böler.
-* **Karakter sınırı:** Varsayılan değeri 44'tir. Varsayılan değer üzerinden konuşacak olursak 44 ve üstü karakterde devreye girecektir. Bu değer sadece sembolüktür. **\\N** karakterinin koyulması için yapılan hesaplamaya bir etkisi yoktur. **\\N** koyulacak satırları tespit etmeye etkisi vardır. En az **35**, en fazla **50** değeri girilebilir.
-* **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin. Sadece kullanılan stiller listelenir. Stil isimlerinin başındaki ilk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır.
-* **Yorum satırlarını geç:** Yorum satırı yapılmış satırlara işlem yapmaz.
-* **Konuşma çizgilerinden böl:** Karakter sınırının altında veya üstünde olan ikili veya tekli konuşma satırlarını konuşma çizgisinden böler.
-* **Boşlukları sil:** Karakter sınırı alanından bağımsız olarak satır bölme karakterinin yanındaki boşluk alanı siler.
-* **Dengeli böl:** Üst ve alt satırın en az farka sahip olduğu yerden böler.
-* **İki cümleli satırların ikinci cümlesinden böl:** Karakter sınırına girilen değerin yarısıyle onun altında kalan karakter sayısına sahip iki cümleli satırların ikinci cümlesinden böler.
+* **Böl:** Satır bölme yapılmamış satırları böler.
+  * **Karakter sınırı:** Varsayılan değeri 44'tir. Varsayılan değer üzerinden konuşacak olursak 44 ve üstü karakterde devreye girecektir. Bu değer sadece sembolüktür. **\\N** karakterinin koyulması için yapılan hesaplamaya bir etkisi yoktur. **\\N** koyulacak satırları tespit etmeye etkisi vardır. En az **35**, en fazla **50** değeri girilebilir.
+  * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin. Sadece kullanılan stiller listelenir. Stil isimlerinin başındaki ilk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır.
+  * **Yorum satırlarını geç:** Yorum satırı yapılmış satırlara işlem yapmaz.
+  * **Konuşma çizgilerinden böl:** Karakter sınırının altında veya üstünde olan ikili veya tekli konuşma satırlarını konuşma çizgisinden böler.
+  * **Boşlukları sil:** Karakter sınırı alanından bağımsız olarak satır bölme karakterinin yanındaki boşluk alanı siler.
+  * **Dengeli böl:** Üst ve alt satırın en az farka sahip olduğu yerden böler.
+  * **İki cümleli satırların ikinci cümlesinden böl:** Karakter sınırına girilen değerin yarısıyle onun altında kalan karakter sayısına sahip iki cümleli satırların ikinci cümlesinden böler.
+* **Kontrol et:** Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni böl!**, karakter sınırı aşan ama satır bölme yapıldığı halde karakter sınırını aşan satırlara da **Beni düzgün böl!** şeklinde `Effect` kutucuğuna not düşer.
+  * **Karakter sınırı:** Varsayılan değeri 44'tir. Varsayılan değer üzerinden konuşacak olursak 44 ve üstü karakterde devreye girecektir.
+  * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin. Sadece kullanılan stiller listelenir. Stil isimlerinin başındaki ilk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır.
+  * **Yorum satırlarını geç:** Yorum satırı yapılmış satırları işleme almaz.
+* **Kaldır:** Satır bölme karakterlerini kaldırır. Yanında boşluk varsa direkt silerken yoksa boşlukla yer değiştirir.
+  * **Karakter sınırı:** Varsayılan değeri 44'tir. Varsayılan değer üzerinden konuşacak olursak 44 ve üstü karakterde devreye girecektir.
+  * **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin. Sadece kullanılan stiller listelenir. Stil isimlerinin başındaki ilk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır.
+  * **Yorum satırlarını geç:** Yorum satırı yapılmış satırları işleme almaz.
+
+###### Notlar
+Herhangi bir arayüzde yaptığınız ayar diğer bir arayüzde de bulunuyorsa son girdiğiniz değeri hatırlar.
 
 ### [Copy Dialogue](automation/autoload/mag.copy_dialogue.lua)
 Alt yazıdaki metinleri panoya veya oluşturduğu metin dosyasına kopyalar.
@@ -155,13 +165,6 @@ Seçili satırların başına italik yapma, sonuna italik yapmama etiketi koyar.
 
 ### [K Char](automation/autoload/mag.k_char.lua)
 Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
-
-### [Line Breaker Checker](automation/autoload/mag.line_breaker_checker.lua)
-Karakter sınırını aşan ve satır bölme yapılmamış satırlara **Beni böl!**, karakter sınırı aşan ama satır bölme yapıldığı halde karakter sınırını aşan satırlara da **Beni düzgün böl!** şeklinde `Effect` kutucuğuna not düşer.
-
-* **Karakter sınırı:** Varsayılan değeri 44'tir. Varsayılan değer üzerinden konuşacak olursak 44 ve üstü karakterde devreye girecektir.
-* **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin. Sadece kullanılan stiller listelenir. Stil isimlerinin başındaki ilk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır.
-* **Yorum satırlarını geç:** Yorum satırı yapılmış satırları işleme almaz.
 
 ### [Manual Hardsub Timer](automation/autoload/mag.manual_hardsub_timer.lua)
 Manuel olarak hardsub videoya zamanlama yapmanızı sağlar. Herhangi bir hardsub satırın önce başladığı ve sonra da bittiği karede lua dosyasını çalıştırın. Geçerli satırın bir altına o karelerin süreye dönüşmüş haliyle yeni bir satır oluşturacaktır.
