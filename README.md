@@ -181,6 +181,7 @@ Birçok ayarda satır seçme işlemi yapar.
 * **Stil:** O an bulunduğunuz, metin kutusunda içeriğini gördüğünüz satırın stiline göre işlem yaparsınız.
   * **İlk:** Stilin ilk satırına atlarsınız.
   * **Son:** Stilin son satırına atlarsınız.
+  * **Kalıp:** Geçerli satırın sonrasındaki satırların ve ondan öncesindeki satırların stili geçerli satırınkiyle farklı olana kadar seçim yapar.
   * **Tüm:** Stilin tüm satırlarını seçersiniz.
 * **Satır:** Satırlara göre işlem yaparsınız.
   * **İlk:** İlk satıra atlarsınız.
