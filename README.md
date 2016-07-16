@@ -6,7 +6,7 @@
 3. [**MAKROLAR**](#makrolar)
  * [**Delete Lines**](#delete-lines)
  * [**Fix Timing**](#fix-timing)
- * [**Fixing Turkish Chars**](#fixing-turkish-chars)
+ * [**Fix Turkish Chars**](#fix-turkish-chars)
  * [**Karaoke Cleaner**](#karaoke-cleaner)
  * [**Line Source Duplicate**](#line-source-duplicate)
  * [**Basic Turning**](#basic-turning)
@@ -49,7 +49,7 @@ Stile ya da aktöre göre satır silme işlemi yapar.
 ### [Fix Timing](automation/autoload/fix_timing.lua)
 Ön izlemede görünmeyen satırları düzeltir.
  
-### [Fixing Turkish Chars](automation/autoload/fixing_turkish chars.lua)
+### [Fix Turkish Chars](automation/autoload/fix_turkish chars.lua)
 Bozuk Türkçe karakterleri düzeltir.
 
 ### [Karaoke Cleaner](automation/autoload/karaoke_cleaner.lua)
@@ -191,6 +191,9 @@ Birçok ayarda satır seçme işlemi yapar.
 * **Süre:** Sürelere göre işlem yaparsınız.
   * **Aralık:** Girilen iki farklı sürenin veya kare değerinin olduğu aralığı seçersiniz.
   * **Atlama:** Girdiğiniz süreye ya da kare değerine atlarsınız.
+* **Seçim:** Seçime ekleme ya da eksiltme yaparsınız.
+  * **Önceki:** Mevcut seçimin ilk satırın bir üstündeki satırı seçersiniz.
+  * **Sonraki:** Mevcut seçimin en son satırın bir altındaki satırı seçersiniz.
 * **Seçimin tersi:** Seçiminiz dışında kalan satırları seçersiniz.
 
 ### [Shaper](automation/autoload/mag.shaper.lua)
