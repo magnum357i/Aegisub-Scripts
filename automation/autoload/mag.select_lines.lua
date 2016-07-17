@@ -1,6 +1,6 @@
 	script_name        = "Select Lines"
 	script_description = "Her türlü yolla satır seçme işlemi yapar."
-	script_version     = "1.5.5"
+	script_version     = "1.5.6"
 	script_author      = "Magnum357"
 
 	mag_import, mag = pcall(require,"mag")
@@ -164,10 +164,12 @@
 	end
 
 	function times_from_to(subs,sel,act)
+	if not aegisub.frame_from_ms(0) then
+	mag.log(1,"Bir hata oluştu. Video yükleyerek tekrar deneyiniz.")
+	else
 	local count        = 0
 	local time_pattern = "%d+:%d+:%d+%.%d+"
 	local index        = {}
-	local line
 	local dlg =
 	{{class = "label",                                              x = 0, y = 0, width = 1, height = 1, label = "Başlangıç:"}
 	,{class = "edit",     name = "time1",     value = "0:00:00.00", x = 1, y = 0, width = 1, height = 1, hint  = "Kare değeri de girebilirsiniz. \"0\" veya \"0:00:00.00\" değeri ilk süreye karşılık gelir."}
@@ -177,44 +179,66 @@
 	,{class = "checkbox", name = "act_end",                         x = 2, y = 1, width = 1, height = 1, label = "Geçerli satırınkini al.", hint = "Geçerli satırın bitiş süresini kullanır."}
 	}
 	local ok, config = mag.dlg(dlg,{"Seç","Kapat"})
-	if ok == mag.ascii("Seç") then
+		if ok == mag.ascii("Seç") then
 		config.time1 = mag.space_trim(config.time1)
 		config.time2 = mag.space_trim(config.time2)
-		if not mag.match(config.time1,time_pattern) and mag.n(config.time1) == nil then
-		mag.log(1,"Başlangıç süresine geçersiz bir değer girildi.")
-		elseif not mag.match(config.time2,time_pattern) and mag.n(config.time2) == nil then
-		mag.log(1,"Bitiş süresine geçersiz bir değer girildi.")
-		else
-		if mag.n(config.time1) == nil then config.time1 = mag.time_strip(config.time1) else config.time1 = aegisub.ms_from_frame(config.time1) end
-		if mag.n(config.time2) == nil then config.time2 = mag.time_strip(config.time2) else config.time2 = aegisub.ms_from_frame(config.time2) end
-		if config.time1 < 0 then config.time1 = 0 end
-		if config.time2 < 0 then config.time2 = 0 end
-		if config.time1 > config.time2 and config.time2 ~= 0 then
-		mag.log(2,"Başlangıç süresi bitiş süresinden daha büyük.")
-		else
-		if config.act_start then config.time1 = subs[act].start_time end
-		if config.act_end then config.time2 = subs[act].end_time end
-			for i = 1, #subs do
-			line = subs[i]
-				if line.class == "dialogue" then
-				if config.time2 == 0 then line.end_time = 0 end
-					if line.start_time >= config.time1 and line.end_time <= config.time2 then
-					table.insert(index,i)
-					count = count + 1
+			if not mag.match(config.time1,time_pattern) and mag.n(config.time1) == nil then
+			mag.log(1,"Başlangıç süresine geçersiz bir değer girildi.")
+			elseif not mag.match(config.time2,time_pattern) and mag.n(config.time2) == nil then
+			mag.log(1,"Bitiş süresine geçersiz bir değer girildi.")
+			else
+				if mag.n(config.time1) == nil then
+				config.time1 = mag.time_strip(config.time1)
+				else
+				config.time1 = aegisub.ms_from_frame(config.time1)
+				end
+				if mag.n(config.time2) == nil then
+				config.time2 = mag.time_strip(config.time2)
+				else
+				config.time2 = aegisub.ms_from_frame(config.time2)
+				end
+				if config.time1 < 0 then
+				config.time1 = 0
+				end
+				if config.time2 < 0 then
+				config.time2 = 0
+				end
+				if config.time1 > config.time2 and config.time2 ~= 0 then
+				mag.log(2,"Başlangıç süresi bitiş süresinden daha büyük.")
+				else
+					if config.act_start then
+					config.time1 = subs[act].start_time
+					end
+					if config.act_end then
+					config.time2 = subs[act].end_time
+					end
+					for i = 1, #subs do
+					local line = subs[i]
+						if line.class == "dialogue" then
+							if config.time2 == 0 then
+							line.end_time = 0
+							end
+							if line.start_time >= config.time1 and line.end_time <= config.time2 then
+							table.insert(index,i)
+							count = count + 1
+							end
+						end
 					end
 				end
 			end
-		end
-		end
-		if count > 0 then
-		return index
-		else
-		mag.log(2,"Belirtilen süreler arasında hiçbir satır bulunamadı.")
+			if count > 0 then
+			return index
+			else
+			mag.log(2,"Belirtilen süreler arasında hiçbir satır bulunamadı.")
+			end
 		end
 	end
 	end
 
 	function line_time_jumping(subs)
+	if not aegisub.frame_from_ms(0) then
+	mag.log(1,"Bir hata oluştu. Video yükleyerek tekrar deneyiniz.")
+	else
 	local time_pattern = "%d+:%d+:%d+%.%d+"
 	local index        = ""
 	local dlg =
@@ -222,21 +246,35 @@
 	,{class = "edit", name = "time", value = "0:00:00.00", x = 1, y = 0, width = 1, height = 1, hint  = "Kare değeri de girebilirsiniz. Baştan itibaren belirtilen süreye ya da ondan sonraki en yakın süreye atlar."}
 	}
 	local ok, config = mag.dlg(dlg,{"Atla","Kapat"})
-	if ok == mag.ascii("Atla") then
-		config.time1 = mag.space_trim(config.time)
-		if not mag.match(config.time,time_pattern) and mag.n(config.time) == nil then
-		mag.log(1,"Atlanacak süreye geçersiz bir değer girildi.")
-		else
-		if mag.n(config.time) == nil then config.time = mag.time_strip(config.time) else config.time = aegisub.ms_from_frame(config.time) end
-		if config.time < 0 then config.time = 0 end
-			for i = 1, #subs do
-			local line = subs[i]
-				if line.class == "dialogue" then
-				if line.start_time >= config.time then index = i break end
+		if ok == mag.ascii("Atla") then
+			config.time1 = mag.space_trim(config.time)
+			if not mag.match(config.time,time_pattern) and mag.n(config.time) == nil then
+			mag.log(1,"Atlanacak süreye geçersiz bir değer girildi.")
+			else
+				if mag.n(config.time) == nil then
+				config.time = mag.time_strip(config.time)
+				else
+				config.time = aegisub.ms_from_frame(config.time)
+				end
+				if config.time < 0 then
+				config.time = 0
+				end
+				for i = 1, #subs do
+				local line = subs[i]
+					if line.class == "dialogue" then
+						if line.start_time >= config.time then
+						index = i
+						break
+						end
+					end
 				end
 			end
+			if index ~= "" then
+			return {index}
+			else
+			mag.log(2,"Girilen süre veya üstünde bir süreye sahip bir satır yok.")
+			end
 		end
-	if index ~= "" then return {index} else mag.log(2,"Girilen süre veya üstünde bir süreye sahip bir satır yok.") end
 	end
 	end
 

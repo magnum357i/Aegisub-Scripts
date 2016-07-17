@@ -5,14 +5,14 @@
  * [**Mag**](#mag)
 3. [**MAKROLAR**](#makrolar)
  * [**Delete Lines**](#delete-lines)
- * [**Fix Timing**](#fix-timing)
- * [**Fix Turkish Chars**](#fix-turkish-chars)
  * [**Karaoke Cleaner**](#karaoke-cleaner)
  * [**Line Source Duplicate**](#line-source-duplicate)
  * [**Basic Turning**](#basic-turning)
  * [**Break Line**](#break-line)
  * [**Copy Dialogue**](#copy-dialogue)
  * [**Copy Paste Line**](#copy-paste-line)
+ * [**Fix Timing**](#fix-timing)
+ * [**Fix Turkish Chars**](#fix-turkish-chars)
  * [**Italic Maker**](#italic-maker)
  * [**K Char**](#k-char)
  * [**Manual Hardsub Timer**](#manual-hardsub-timer)
@@ -45,12 +45,6 @@ Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir d
 
 ### [Delete Lines](automation/autoload/delete_lines.lua)
 Stile ya da aktöre göre satır silme işlemi yapar.
-
-### [Fix Timing](automation/autoload/fix_timing.lua)
-Ön izlemede görünmeyen satırları düzeltir.
- 
-### [Fix Turkish Chars](automation/autoload/fix_turkish chars.lua)
-Bozuk Türkçe karakterleri düzeltir.
 
 ### [Karaoke Cleaner](automation/autoload/karaoke_cleaner.lua)
 Özetlersek şablon efeğinin oluşturduğu şeyleri siler. Ayrıntıya girersek de şunları yapıyor:
@@ -159,6 +153,12 @@ Alt yazıdaki metinleri panoya veya oluşturduğu metin dosyasına kopyalar.
 
 ### [Copy Paste Line](automation/autoload/mag.copy_paste_line.lua)
 Bir satır grubuna ait herhangi bir bilgiyi kopyalar ve bunu başka bir satır grubuna yapıştırabilir.
+
+### [Fix Timing](automation/autoload/mag.fix_timing.lua)
+Satır sürelerini kare sürelerine göre zamanlayarak ön izlemede görünmeyen satırların görünmesini sağlar.
+ 
+### [Fix Turkish Chars](automation/autoload/mag.fix_turkish_chars.lua)
+Bozuk Türkçe karakterleri düzeltir.
 
 ### [Italic Maker](automation/autoload/mag.italic_maker.lua)
 Seçili satırların başına italik yapma, sonuna italik yapmama etiketi koyar.
