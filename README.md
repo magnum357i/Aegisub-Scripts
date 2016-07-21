@@ -13,6 +13,7 @@
  * [**Copy Paste Line**](#copy-paste-line)
  * [**Fix Timing**](#fix-timing)
  * [**Fix Turkish Chars**](#fix-turkish-chars)
+ * [**Grid**](#grid)
  * [**Italic Maker**](#italic-maker)
  * [**K Char**](#k-char)
  * [**Manual Hardsub Timer**](#manual-hardsub-timer)
@@ -159,6 +160,18 @@ Satır sürelerini kare sürelerine göre zamanlayarak ön izlemede görünmeyen
  
 ### [Fix Turkish Chars](automation/autoload/mag.fix_turkish_chars.lua)
 Bozuk Türkçe karakterleri düzeltir.
+
+### [Grid](automation/autoload/mag.grid.lua)
+Aktif satırın içeriğine ızgara çizimi yapar.
+* **Sayı:** Dikey veya yatay ızgara çizgisi adeti.
+* **Aralık:** Her ızgara çizgisi arasındaki piksel cinsinden boşluk.
+* **Piksel:** Her ızgara çizgisinin kalınlığı.
+* **Etiketler:** Varsayılan etiketler. Izgara satırının başına bu etiketleri koyar.
+* **Renk:** Izgara çizgilerinin rengi.
+* **Biçim**
+  * **Tam:** Hem dikey hem de yatay ızgara çizgileri koyar.
+  * **Sadece dikey:** Sadece dikey ızgara çizgileri koyar.
+  * **Sadece yatay:** Sadece yatay ızgara çizgileri koyar.
 
 ### [Italic Maker](automation/autoload/mag.italic_maker.lua)
 Seçili satırların başına italik yapma, sonuna italik yapmama etiketi koyar.
