@@ -5,7 +5,6 @@
  * [**Mag**](#mag)
 3. [**MAKROLAR**](#makrolar)
  * [**Delete Lines**](#delete-lines)
- * [**Karaoke Cleaner**](#karaoke-cleaner)
  * [**Line Source Duplicate**](#line-source-duplicate)
  * [**Basic Turning**](#basic-turning)
  * [**Break Line**](#break-line)
@@ -16,6 +15,7 @@
  * [**Grid**](#grid)
  * [**Italic Maker**](#italic-maker)
  * [**K Char**](#k-char)
+ * [**Karaoke Cleaner**](#karaoke-cleaner)
  * [**Manual Hardsub Timer**](#manual-hardsub-timer)
  * [**Select Lines**](#select-lines)
  * [**Shaper**](#shaper)
@@ -46,13 +46,6 @@ Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir d
 
 ### [Delete Lines](automation/autoload/delete_lines.lua)
 Stile ya da aktöre göre satır silme işlemi yapar.
-
-### [Karaoke Cleaner](automation/autoload/karaoke_cleaner.lua)
-Özetlersek şablon efeğinin oluşturduğu şeyleri siler. Ayrıntıya girersek de şunları yapıyor:
-* Şablonların oluşturduğu satırları siler.
-* Şablon efeklerinin olduğu satırların sürelerini sıfırlar.
-* Şablonun uygulandığı satırları görünür yapar.
-* Şablon uygulandığında oluşan furigana stillerini siler.
 
 ### [Line Source Duplicate](automation/autoload/line_source_duplicate.lua)
 Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir.
@@ -178,6 +171,13 @@ Seçili satırların başına italik yapma, sonuna italik yapmama etiketi koyar.
 
 ### [K Char](automation/autoload/mag.k_char.lua)
 Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
+
+### [Karaoke Cleaner](automation/autoload/mag.karaoke_cleaner.lua)
+Özetlersek şablon efeğinin oluşturduğu şeyleri siler. Ayrıntıya girersek de şunları yapıyor:
+* Şablonların oluşturduğu satırları siler.
+* Şablon efeklerinin olduğu satırların sürelerini sıfırlar.
+* Şablonun uygulandığı satırları görünür yapar.
+* Şablon uygulandığında oluşan furigana stillerini siler.
 
 ### [Manual Hardsub Timer](automation/autoload/mag.manual_hardsub_timer.lua)
 Manuel olarak hardsub videoya zamanlama yapmanızı sağlar. Herhangi bir hardsub satırın önce başladığı ve sonra da bittiği karede lua dosyasını çalıştırın. Geçerli satırın bir altına o karelerin süreye dönüşmüş haliyle yeni bir satır oluşturacaktır.
