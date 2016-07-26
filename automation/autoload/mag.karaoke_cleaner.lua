@@ -5,15 +5,15 @@
 
 	mag_import, mag = pcall(require,"mag")
 
-	c_delete_fx        = true
-	c_delete_furigana  = true
-	c_strip_apply      = true
-	c_reset_template   = true
+	c_delete_fx       = true
+	c_delete_furigana = true
+	c_strip_apply     = true
+	c_reset_template  = true
 
 	function add_macro(subs)
 	local gui =
 	{
-	 {class = "checkbox", name = "u_delete_fx",       value = c_delete_fx,       x = 0, y = 0, width = 1, height = 1, label = "Oluşturulan satırları sil.", hint = "Effect kutucuğunda fx yazan satırları siler."}
+	 {class = "checkbox", name = "u_delete_fx",       value = c_delete_fx,       x = 0, y = 0, width = 1, height = 1, label = "Oluşturulan satırları sil."}
 	,{class = "checkbox", name = "u_delete_furigana", value = c_delete_furigana, x = 0, y = 1, width = 1, height = 1, label = "Furigana stillerini sil."}
 	,{class = "checkbox", name = "u_strip_apply",     value = c_strip_apply,     x = 0, y = 2, width = 1, height = 1, label = "Uygulanan satırları önceki haline çevir."}
 	,{class = "checkbox", name = "u_reset_template" , value = c_reset_template,  x = 0, y = 3, width = 1, height = 1, label = "Şablon satırlarının sürelerini sıfırla."}
@@ -72,4 +72,4 @@
 	if mag_import then mag.register(false,add_macro) else function mag()
 	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})
 	if k == "Evet" then os.execute("start https://github.com/magnum357i/Magnum-s-Aegisub-Scripts") end end
-	aegisub.register_macro("M357/"..""..script_name,script_desription,mag) end
+	aegisub.register_macro(script_name,script_desription,mag) end
