@@ -1,6 +1,6 @@
 ﻿	module_name = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.1.6"
+	module_version = "1.1.1.7"
 	module_author = "Magnum357"
 
 	unicode   = require 'aegisub.unicode'
@@ -73,11 +73,11 @@
 
 	--strip_text = mag.tag_strip("{\bord2}Bu bir {deneme}deneme.")
 	-->>Bu bir {deneme}deneme.
-	function mag.tag_strip(str) return mag.gsub(str,"{.-\\.-}", "") end
+	function mag.tag_strip(str) return mag.gsub(str,"{[^{]-\\[^}]-}", "") end
 
 	--strip_text = mag.comment_strip("{\bord2}Bu bir {deneme}deneme.")
 	-->>{\bord2}Bu bir deneme.
-	function mag.comment_strip(str) return mag.gsub(str,"{[^\\]+}", "") end
+	function mag.comment_strip(str) return mag.gsub(str,"{[^\\]-}", "") end
 
 	--full_strip_text = mag.full_strip("{\bord2}Bu\hbir\hdeneme.")
 	-->>Bu bir deneme.
@@ -102,7 +102,7 @@
 	-->>Default
 	--stil = mag.unstyles("(5+0) Default")
 	-->>Default
-	function mag.unstyles(style) return mag.gsub(style,"%(%d+%+?%d-%)%s","") end
+	function mag.unstyles(style) return mag.gsub(style,"(.*)(%s%(%d+%+?%d-%))","%1") end
 
 	--total_line = mag.total_full(subs)
 	function mag.total_full(subs)
@@ -146,7 +146,7 @@
 		local total, total2 = mag.total(subs,subs[i].name,mode,value)
 			if total > 0 or total2 > 0 then
 			if mode == "default" then n = n + 1 styles[n] = mag.format("(%d) %s",total,subs[i].name) end
-			if mode == "comment" or mode == "effect" then n = n + 1 styles[n] = mag.format("(%d+%d) %s",total,total2,subs[i].name) end
+			if mode == "comment" or mode == "effect" then n = n + 1 styles[n] = mag.format("%s (%d+%d)",subs[i].name,total,total2) end
 			end
 		end
 	end
@@ -659,9 +659,58 @@
 	return int
 	end
 
-	mag.cget = clipboard.get
-	mag.cset = clipboard.set
+	--total_sel = sel_total_format(subs,sel,"Seçili satırlar")
+	-->>(174) Seçili satırlar
+	function sel_total_format(subs,sel,mode,text) 
+	local n, m = 0, 0
+	for _, li in pairs(sel) do
+	local line = subs[li]
+		if not line.comment then
+		n = n + 1
+		else
+		m = m + 1
+		end
+	end
+	local result = ""
+	if mode == "default" then
+	result = mag.format("%s (%s)",text,n+m)
+	elseif mode == "comment" then
+	result = mag.format("%s (%s+%s)",text,n,m)
+	end
+	return result
+	end
 
+	--total_subs = subs_total_format(subs,sel,"Tüm stiller")
+	-->>(174) Tüm stiller
+	function subs_total_format(subs,sel,mode,text)
+	local n, m = 0, 0
+	for i = 1, #subs do
+	local line = subs[i]
+		if line.class == "dialogue" then
+			if not line.comment then
+			n = n + 1
+			else
+			m = m + 1
+			end
+		end
+	end
+	local result = ""
+	if mode == "default" then
+	result = mag.format("%s (%s)",text,n+m)
+	elseif mode == "comment" then
+	result = mag.format("%s (%s+%s)",text,n,m)
+	end
+	return result
+	end
+
+	function mag.log_view(value,job)
+	if value then mag.log("[%s] %s",{"YAPILDI",job}) end
+	end
+
+	mag.remove  = table.remove
+	mag.insert  = table.insert
+	mag.cget    = clipboard.get
+	mag.cset    = clipboard.set
 	mag.s       = tostring
 	mag.n       = tonumber
 	mag.floor   = math.floor

@@ -10,12 +10,9 @@
  * [**Break Line**](#break-line)
  * [**Copy Dialogue**](#copy-dialogue)
  * [**Copy Paste Line**](#copy-paste-line)
- * [**Fix Timing**](#fix-timing)
- * [**Fix Turkish Chars**](#fix-turkish-chars)
  * [**Grid**](#grid)
  * [**Italic Maker**](#italic-maker)
  * [**K Char**](#k-char)
- * [**Karaoke Cleaner**](#karaoke-cleaner)
  * [**Manual Hardsub Timer**](#manual-hardsub-timer)
  * [**Select Lines**](#select-lines)
  * [**Shaper**](#shaper)
@@ -148,12 +145,6 @@ Alt yazıdaki metinleri panoya veya oluşturduğu metin dosyasına kopyalar.
 ### [Copy Paste Line](automation/autoload/mag.copy_paste_line.lua)
 Bir satır grubuna ait herhangi bir bilgiyi kopyalar ve bunu başka bir satır grubuna yapıştırabilir.
 
-### [Fix Timing](automation/autoload/mag.fix_timing.lua)
-Satır sürelerini kare sürelerine göre zamanlayarak ön izlemede görünmeyen satırların görünmesini sağlar.
- 
-### [Fix Turkish Chars](automation/autoload/mag.fix_turkish_chars.lua)
-Bozuk Türkçe karakterleri düzeltir.
-
 ### [Grid](automation/autoload/mag.grid.lua)
 Aktif satırın içeriğine ızgara çizimi yapar.
 * **Sayı:** Dikey veya yatay ızgara çizgisi adeti.
@@ -171,13 +162,6 @@ Seçili satırların başına italik yapma, sonuna italik yapmama etiketi koyar.
 
 ### [K Char](automation/autoload/mag.k_char.lua)
 Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
-
-### [Karaoke Cleaner](automation/autoload/mag.karaoke_cleaner.lua)
-Özetlersek şablon efeğinin oluşturduğu şeyleri siler. Ayrıntıya girersek de şunları yapıyor:
-* Şablonların oluşturduğu satırları siler.
-* Şablon efeklerinin olduğu satırların sürelerini sıfırlar.
-* Şablonun uygulandığı satırları görünür yapar.
-* Şablon uygulandığında oluşan furigana stillerini siler.
 
 ### [Manual Hardsub Timer](automation/autoload/mag.manual_hardsub_timer.lua)
 Manuel olarak hardsub videoya zamanlama yapmanızı sağlar. Herhangi bir hardsub satırın önce başladığı ve sonra da bittiği karede lua dosyasını çalıştırın. Geçerli satırın bir altına o karelerin süreye dönüşmüş haliyle yeni bir satır oluşturacaktır.
@@ -221,22 +205,30 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
 
 ### [Strip Line](automation/autoload/mag.strip_line.lua)
 * **Satır Özellikleri:** Bu seçeneğin seçilmesi halinde bir aşağısında detaylı olarak sunulan özelliklerin hepsini uygular. Hepsini değil de bazılarını uygulamak için bu satırın başındaki işareti kaldırın ve aşağısındakilerden tercih yapın.
-  * **Layer:** Ön izlemede hangi satırın daha üst planda olacağı bilgisini siler.
-  * **Actor:** Satırın aktör bilgisini siler.
-  * **Effect:** Satırın farklı lua dosyaları tarafından efekt kutucuğuna yazılmış bilgiyi siler.
-  * **Left Margin:** Satırın özel olarak girimiş soldan kaç piksel boşluk bırakılacağı bilgisini siler.
-  * **Right Margin:** Satırın özel olarak girimiş sağdan kaç piksel boşluk bırakılacağı bilgisini siler.
-  * **Vertical Margin:** Satırın özel olarak girimiş aşağıdan -bazı durumlarda üstten- kaç piksel boşluk bırakılacağı bilgisini siler.
+  * **Layer:** Ön izlemede hangi satırın daha üst planda olacağı bilgisini temizler.
+  * **Actor:** Satırın aktör bilgisini temizler.
+  * **Effect:** Satırın farklı lua dosyaları tarafından efekt kutucuğuna yazılmış bilgiyi temizler.
+  * **Left Margin:** Satırın özel olarak girimiş soldan kaç piksel boşluk bırakılacağı bilgisini temizler.
+  * **Right Margin:** Satırın özel olarak girimiş sağdan kaç piksel boşluk bırakılacağı bilgisini temizler.
+  * **Vertical Margin:** Satırın özel olarak girimiş aşağıdan -bazı durumlarda üstten- kaç piksel boşluk bırakılacağı bilgisini temizler.
   * **Text:** Bu seçeneğin seçilmesi halinde bir aşağısında detaylı olarak sunulan özelliklerin hepsini uygular. Hepsini değil de bazılarını uygulamak için bu satırın başındaki işareti kaldırın ve aşağısındakilerden tercih yapın.
     * **Etiketler:** Satırdaki etiketleri temizler.
     * **Özel karakterler:** Satırdaki \N, \h veya \n gibi karakterlerini temizler. Bu karakterlerin etrafında boşluk varsa direkt temizlerken boşluk yoksa boşlukla yer değiştirir.
     * **Yorum parantezleri:** Satırdaki etiket içermeyen yorum parantezlerini temizler.
     * **Tekrar eden boşluklar:** İki veya daha fazla kendini tekrar eden boşlukları tek boşluğa indirir.
-    * **Baştaki ve sondaki boşluklar:** Satırın başındaki ve sonundaki boşlukları siler.
+    * **Baştaki ve sondaki boşluklar:** Satırın başındaki ve sonundaki boşlukları temizler.
 * **Ekstra Ayarlar:** Bu seçeneğin seçilmesi halinde bir aşağısında detaylı olarak sunulan özelliklerin hepsini uygular. Hepsini değil de bazılarını uygulamak için bu satırın başındaki işareti kaldırın ve aşağısındakilerden tercih yapın.
-  * **Boş satırlarını sil:** Metni olmayan satırları siler.
-  * **Yorum satırlarını sil:** Yorum yapılmış satırları siler.
-  * **Sıralı satırları sil:** Aynı metne sahip satırların en sondaki satırındaki bitiş süresini ilk baştaki satırın bitiş süresine taşır ve ilk baştaki hariç diğer tüm tekrar satırlarını siler.
+  * **Boş satırlarını temizle:** Metni olmayan satırları temizler.
+  * **Yorum satırlarını temizle:** Yorum yapılmış satırları temizler.
+  * **Sıralı satırları temizle:** Aynı metne sahip satırların en sondaki satırındaki bitiş süresini ilk baştaki satırın bitiş süresine taşır ve ilk baştaki hariç diğer tüm tekrar satırları temizler.
+  * **Satır bölme boşluklarını temizle:** Satır bölme karakterinin sağ ve sol tarafındaki boşlukları temizler.
+  * **Türkçe karakterleri düzelt:** Bozuk Türkçe karakterleri düzeltir.
+  * **Satırları kare sürelerine göre zamanla:** Satırları kare sürelerine göre zamanlayarak ön izlemede görünmeyen satırlar görünür hale gelir.
+* **Karaoke:** Bu seçeneğin seçilmesi halinde bir aşağısında detaylı olarak sunulan özelliklerin hepsini uygular. Hepsini değil de bazılarını uygulamak için bu satırın başındaki işareti kaldırın ve aşağısındakilerden tercih yapın.
+  * **Oluşturulan karaoke satırlarını temizle:** Karaoke şablonları tarafından oluşturulan satırları temizler. Daha da açarsak `Effect` kutucuğunda `fx` kelimesi geçen satırları temizler.
+  * **Furigana stilleri temizle:** Karaoke şablonlarını uyguladıktan sonra oluşan **furigana** stillerini temizler.
+  * **Karaoke satırlarını sıfırla:** Karaoke satırlarını şablon efektleri uygulanmadan önceki haline getirir.
+  * **Şablon satırlarının sürelerini sıfırla:** Şablon satırlarının sürelerini sıfırlar. Daha da açarsak `Effect` kutucuğunda **template** ya da **code** kelimeleri geçen satırların sürelerini sıfırlar.
 
 ### [Sub Menu Maker](automation/autoload/mag.sub_menu_maker_r1.lua)
 Automation menüsünde listelenen lua isimlerini gruplar. Bu gruplamayı girdiğiniz dosya adına göre yapıyor.
