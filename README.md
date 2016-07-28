@@ -204,6 +204,8 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
  Bu seçiliyken videonun çözünürlük değerine göre boyutlandırma yapar.
 
 ### [Strip Line](automation/autoload/mag.strip_line.lua)
+
+#### NORMAL SEÇENEKLER
 * **Satır Özellikleri:** Bu seçeneğin seçilmesi halinde bir aşağısında detaylı olarak sunulan özelliklerin hepsini uygular. Hepsini değil de bazılarını uygulamak için bu satırın başındaki işareti kaldırın ve aşağısındakilerden tercih yapın.
   * **Layer:** Ön izlemede hangi satırın daha üst planda olacağı bilgisini temizler.
   * **Actor:** Satırın aktör bilgisini temizler.
@@ -217,6 +219,8 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
     * **Yorum parantezleri:** Satırdaki etiket içermeyen yorum parantezlerini temizler.
     * **Tekrar eden boşluklar:** İki veya daha fazla kendini tekrar eden boşlukları tek boşluğa indirir.
     * **Baştaki ve sondaki boşluklar:** Satırın başındaki ve sonundaki boşlukları temizler.
+
+#### GELİŞMİŞ SEÇENEKLER
 * **Ekstra Ayarlar:** Bu seçeneğin seçilmesi halinde bir aşağısında detaylı olarak sunulan özelliklerin hepsini uygular. Hepsini değil de bazılarını uygulamak için bu satırın başındaki işareti kaldırın ve aşağısındakilerden tercih yapın.
   * **Boş satırlarını temizle:** Metni olmayan satırları temizler.
   * **Yorum satırlarını temizle:** Yorum yapılmış satırları temizler.
@@ -225,7 +229,7 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
   * **Türkçe karakterleri düzelt:** Bozuk Türkçe karakterleri düzeltir.
   * **Satırları kare sürelerine göre zamanla:** Satırları kare sürelerine göre zamanlayarak ön izlemede görünmeyen satırlar görünür hale gelir.
 * **Karaoke:** Bu seçeneğin seçilmesi halinde bir aşağısında detaylı olarak sunulan özelliklerin hepsini uygular. Hepsini değil de bazılarını uygulamak için bu satırın başındaki işareti kaldırın ve aşağısındakilerden tercih yapın.
-  * **Oluşturulan karaoke satırlarını temizle:** Karaoke şablonları tarafından oluşturulan satırları temizler. Daha da açarsak `Effect` kutucuğunda `fx` kelimesi geçen satırları temizler.
+  * **Oluşturulan karaoke satırlarını temizle:** Karaoke şablonları tarafından oluşturulan satırları temizler. Daha da açarsak `Effect` kutucuğunda **fx** kelimesi geçen satırları temizler.
   * **Furigana stilleri temizle:** Karaoke şablonlarını uyguladıktan sonra oluşan **furigana** stillerini temizler.
   * **Karaoke satırlarını sıfırla:** Karaoke satırlarını şablon efektleri uygulanmadan önceki haline getirir.
   * **Şablon satırlarının sürelerini sıfırla:** Şablon satırlarının sürelerini sıfırlar. Daha da açarsak `Effect` kutucuğunda **template** ya da **code** kelimeleri geçen satırların sürelerini sıfırlar.

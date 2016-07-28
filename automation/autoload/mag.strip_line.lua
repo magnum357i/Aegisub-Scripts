@@ -1,7 +1,7 @@
 ﻿	script_name        = "Strip Line"
 	script_description = "Satırları düzenler, temizler."
 	script_author      = "Magnum357"
-	script_version     = "1.4"
+	script_version     = "1.4.2"
 
 	mag_import, mag = pcall(require,"mag")
 
@@ -208,27 +208,29 @@
 			end
 		end
 	end
-	mag.log_view(log["layer"],                "Layer temizlemek")
-	mag.log_view(log["actor"],                "Actor temizlemek")
-	mag.log_view(log["effect"],               "Effect temizlemek")
-	mag.log_view(log["margin_left"],          "Margin Left temizlemek")
-	mag.log_view(log["margin_right"],         "Margin Right temizlemek")
-	mag.log_view(log["margin_vertical"],      "Margin Vertical temizlemek")
-	mag.log_view(log["text_tag"],             "Etiketleri temizlemek")
-	mag.log_view(log["text_special"],         "Özel karakterleri temizlemek")
-	mag.log_view(log["text_comment"],         "Yorum parantezlerini temizlemek")
-	mag.log_view(log["text_double_space"],    "Tekrar eden boşlukları temizlemek")
-	mag.log_view(log["text_space_trim"],      "Baştaki ve sondaki boşlukları temizlemek")
-	mag.log_view(log["empty_line"],           "Boş satırları temizlemek")
-	mag.log_view(log["comment_line"],         "Yorum satırlarını temizlemek")
-	mag.log_view(log["one_line"],             "Sıralı satırları bütünlemek")
-	mag.log_view(log["line_break_space"],     "Satır bölme boşluklarını temizlemek")
-	mag.log_view(log["turkish_char"],         "Türkçe karakterleri düzeltmek")
-	mag.log_view(log["fix_timing"],           "Satırları kare sürelerine göre zamanlamak.")
-	mag.log_view(log["delete_fx"],            "Oluşturulan karaoke satırlarını silmek")
-	mag.log_view(log["furigana_style"],       "Furigana stillerini silmek")
-	mag.log_view(log["strip_template_apply"], "Karaoke satırlarını sıfırlamak")
-	mag.log_view(log["reset_template"],       "Şablon satırlarının sürelerini sıfırla")
+		if c_log_view then
+		mag.log_view(log["layer"],                "Layer temizlemek")
+		mag.log_view(log["actor"],                "Actor temizlemek")
+		mag.log_view(log["effect"],               "Effect temizlemek")
+		mag.log_view(log["margin_left"],          "Margin Left temizlemek")
+		mag.log_view(log["margin_right"],         "Margin Right temizlemek")
+		mag.log_view(log["margin_vertical"],      "Margin Vertical temizlemek")
+		mag.log_view(log["text_tag"],             "Etiketleri temizlemek")
+		mag.log_view(log["text_special"],         "Özel karakterleri temizlemek")
+		mag.log_view(log["text_comment"],         "Yorum parantezlerini temizlemek")
+		mag.log_view(log["text_double_space"],    "Tekrar eden boşlukları temizlemek")
+		mag.log_view(log["text_space_trim"],      "Baştaki ve sondaki boşlukları temizlemek")
+		mag.log_view(log["empty_line"],           "Boş satırları temizlemek")
+		mag.log_view(log["comment_line"],         "Yorum satırlarını temizlemek")
+		mag.log_view(log["one_line"],             "Sıralı satırları bütünlemek")
+		mag.log_view(log["line_break_space"],     "Satır bölme boşluklarını temizlemek")
+		mag.log_view(log["turkish_char"],         "Türkçe karakterleri düzeltmek")
+		mag.log_view(log["fix_timing"],           "Satırları kare sürelerine göre zamanlamak.")
+		mag.log_view(log["delete_fx"],            "Oluşturulan karaoke satırlarını silmek")
+		mag.log_view(log["furigana_style"],       "Furigana stillerini silmek")
+		mag.log_view(log["strip_template_apply"], "Karaoke satırlarını sıfırlamak")
+		mag.log_view(log["reset_template"],       "Şablon satırlarının sürelerini sıfırla")
+		end
 	end
 
 	c_line_property        = false
@@ -257,52 +259,70 @@
 	c_strip_template_apply = false
 	c_reset_template       = false
 	c_comment_lines        = false
+	c_log_view             = false
+	c_button               = nil
 
 	function add_macro(subs,sel)
+	local buttons           = {"Uygula","Gelişmiş seçenekler","Normal seçenekler","Kapat"}
+	if c_button == nil then c_button = buttons[3] end
 	local sel_total_format  = sel_total_format(subs,sel,"comment","Seçili satırlar")
 	local subs_total_format = subs_total_format(subs,sel,"comment","Tüm stiller")
 	local apply_items       = {"Seç",sel_total_format,subs_total_format}
-	local ok, config
-	local z = false
+	local z                 = false
+	local gui               = {}
+	local ok, config, butts	
 	repeat
-	local gui =
-	{{class = "checkbox", name = "u_line_property",        value = c_line_property,        x = 0, y = 0,  width = 3, height = 1, label = "[Satır Özellikleri]",                    hint = "Aşağıdaki ayarların hepsini seçmek için bu satırın başındaki kutucuğu işaretleyin."}
-	,{class = "label",                                                                     x = 0, y = 1,  width = 1, height = 1, label = mag.wall(" ",5)}
-	,{class = "checkbox", name = "u_layer",                value = c_layer,                x = 1, y = 1,  width = 2, height = 1, label = "Layer"}
-	,{class = "checkbox", name = "u_actor",                value = c_actor,                x = 1, y = 2,  width = 2, height = 1, label = "Actor"}
-	,{class = "checkbox", name = "u_effect",               value = c_effect,               x = 1, y = 3,  width = 2, height = 1, label = "Effect"}
-	,{class = "checkbox", name = "u_left_margin",          value = c_left_margin,          x = 1, y = 4,  width = 2, height = 1, label = "Left Margin"}
-	,{class = "checkbox", name = "u_right_margin",         value = c_right_margin,         x = 1, y = 5,  width = 2, height = 1, label = "Right Margin"}
-	,{class = "checkbox", name = "u_vertical_margin",      value = c_vertical_margin,      x = 1, y = 6,  width = 2, height = 1, label = "Vertical Margin"}
-	,{class = "checkbox", name = "u_text",                 value = c_text,                 x = 1, y = 7,  width = 2, height = 1, label = "Text",                                   hint = "Aşağıdaki ayarların hepsini seçmek için bu satırın başındaki kutucuğu işaretleyin."}
-	,{class = "label",                                                                     x = 1, y = 8,  width = 1, height = 1, label = mag.wall(" ",5)}
-	,{class = "checkbox", name = "u_text_tag",             value = c_text_tag,             x = 2, y = 8,  width = 1, height = 1, label = "Etiketler"}
-	,{class = "checkbox", name = "u_text_special",         value = c_text_special,         x = 2, y = 9,  width = 1, height = 1, label = "Özel karakterler",                       hint = "\\N, \\n, \\h"}
-	,{class = "checkbox", name = "u_text_comment",         value = c_text_comment,         x = 2, y = 10, width = 1, height = 1, label = "Yorum parantezleri"}
-	,{class = "checkbox", name = "u_text_double_space",    value = c_text_double_space,    x = 2, y = 11, width = 1, height = 1, label = "Tekrar eden boşluklar"}
-	,{class = "checkbox", name = "u_text_space_trim",      value = c_text_space_trim,      x = 2, y = 12, width = 1, height = 1, label = "Baştaki ve sondaki boşluklar"}
-	,{class = "checkbox", name = "u_extra_options",        value = c_extra_options,        x = 3, y = 0,  width = 3, height = 1, label = "[Ekstra Ayarlar]",                       hint = "Aşağıdaki ayarların hepsini seçmek için bu satırın başındaki kutucuğu işaretleyin."}
-	,{class = "label",                                                                     x = 3, y = 1,  width = 1, height = 1, label = mag.wall(" ",5)}
-	,{class = "checkbox", name = "u_empty_text",           value = c_empty_text,           x = 4, y = 1,  width = 1, height = 1, label = "Boş satırları temizle."}
-	,{class = "checkbox", name = "u_comment_line",         value = c_comment_line,         x = 4, y = 2,  width = 1, height = 1, label = "Yorum satırlarını temizle."}
-	,{class = "checkbox", name = "u_one_line",             value = c_one_line,             x = 4, y = 3,  width = 1, height = 1, label = "Sıralı satırları bütünle.",              hint = "Aynı içeriğe sahip ve alt alta sıralanmış satırları bütünler."}
-	,{class = "checkbox", name = "u_line_break_space",     value = c_line_break_space,     x = 4, y = 4,  width = 1, height = 1, label = "Satır bölme boşluklarını temizle.",      hint = "Satır bölme karakterinin sağ ve sol tarafındaki boşlukları temizler."}
-	,{class = "checkbox", name = "u_turkish_char",         value = c_turkish_char,         x = 4, y = 5,  width = 1, height = 1, label = "Türkçe karakterleri düzelt."}
-	,{class = "checkbox", name = "u_fix_timing",           value = c_fix_timing,           x = 4, y = 6,  width = 1, height = 1, label = "Satırları kare sürelerine göre zamanla."}
-	,{class = "checkbox", name = "u_karaoke_options",      value = c_karaoke_options,      x = 3, y = 7,  width = 3, height = 1, label = "[Karaoke]",                              hint = "Aşağıdaki ayarların hepsini seçmek için bu satırın başındaki kutucuğu işaretleyin."}
-	,{class = "checkbox", name = "u_delete_fx",            value = c_delete_fx,            x = 4, y = 8,  width = 1, height = 1, label = "Oluşturulan karaoke satırlarını temizle."}
-	,{class = "checkbox", name = "u_furigana_style",       value = c_furigana_style,       x = 4, y = 9,  width = 1, height = 1, label = "Furigana stillerini temizle."}
-	,{class = "checkbox", name = "u_strip_template_apply", value = c_strip_template_apply, x = 4, y = 10, width = 1, height = 1, label = "Karaoke satırlarını sıfırla."}
-	,{class = "checkbox", name = "u_reset_template",       value = c_reset_template,       x = 4, y = 11, width = 1, height = 1, label = "Şablon satırlarının sürelerini sıfırla."}
-	,{class = "label",                                                                     x = 0, y = 13, width = 5, height = 1, label = "[Uygulanacak Satırlar]"}
-	,{class = "dropdown", name = "u_apply_lines",          value = "Seç",                  x = 0, y = 14, width = 5, height = 1, items = apply_items,                              hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
-	,{class = "checkbox", name = "u_comment_lines",        value = c_comment_lines,        x = 0, y = 15, width = 5, height = 1, label = "Yorum satırlarını geç."}
-	}
+	butts   = {buttons[1],buttons[2],buttons[4]}
+	gui[1]  = {class = "checkbox", name = "u_line_property",        value = c_line_property,        x = 0, y = 0,  width = 3, height = 1, label = "[Satır Özellikleri]",                    hint = "Aşağıdaki ayarların hepsini seçmek için bu satırın başındaki kutucuğu işaretleyin."}
+	gui[2]  = {class = "label",                                                                     x = 0, y = 1,  width = 1, height = 1, label = mag.wall(" ",5)}
+	gui[3]  = {class = "checkbox", name = "u_layer",                value = c_layer,                x = 1, y = 1,  width = 2, height = 1, label = "Layer"}
+	gui[4]  = {class = "checkbox", name = "u_actor",                value = c_actor,                x = 1, y = 2,  width = 2, height = 1, label = "Actor"}
+	gui[5]  = {class = "checkbox", name = "u_effect",               value = c_effect,               x = 1, y = 3,  width = 2, height = 1, label = "Effect"}
+	gui[6]  = {class = "checkbox", name = "u_left_margin",          value = c_left_margin,          x = 1, y = 4,  width = 2, height = 1, label = "Left Margin"}
+	gui[7]  = {class = "checkbox", name = "u_right_margin",         value = c_right_margin,         x = 1, y = 5,  width = 2, height = 1, label = "Right Margin"}
+	gui[8]  = {class = "checkbox", name = "u_vertical_margin",      value = c_vertical_margin,      x = 1, y = 6,  width = 2, height = 1, label = "Vertical Margin"}
+	gui[9]  = {class = "checkbox", name = "u_text",                 value = c_text,                 x = 1, y = 7,  width = 2, height = 1, label = "Text",                                   hint = "Aşağıdaki ayarların hepsini seçmek için bu satırın başındaki kutucuğu işaretleyin."}
+	gui[10] = {class = "label",                                                                     x = 1, y = 8,  width = 1, height = 1, label = mag.wall(" ",5)}
+	gui[11] = {class = "checkbox", name = "u_text_tag",             value = c_text_tag,             x = 2, y = 8,  width = 1, height = 1, label = "Etiketler"}
+	gui[12] = {class = "checkbox", name = "u_text_special",         value = c_text_special,         x = 2, y = 9,  width = 1, height = 1, label = "Özel karakterler",                       hint = "\\N, \\n, \\h"}
+	gui[13] = {class = "checkbox", name = "u_text_comment",         value = c_text_comment,         x = 2, y = 10, width = 1, height = 1, label = "Yorum parantezleri"}
+	gui[14] = {class = "checkbox", name = "u_text_double_space",    value = c_text_double_space,    x = 2, y = 11, width = 1, height = 1, label = "Tekrar eden boşluklar"}
+	gui[15] = {class = "checkbox", name = "u_text_space_trim",      value = c_text_space_trim,      x = 2, y = 12, width = 1, height = 1, label = "Baştaki ve sondaki boşluklar"}
+	gui[16] = {class = "label",                                                                     x = 0, y = 13, width = 8, height = 1, label = "[Uygulanacak Satırlar]"}
+	gui[17] = {class = "dropdown", name = "u_apply_lines",          value = "Seç",                  x = 0, y = 14, width = 8, height = 1, items = apply_items,                              hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
+	gui[18] = {class = "checkbox", name = "u_comment_lines",        value = c_comment_lines,        x = 0, y = 15, width = 8, height = 1, label = "Yorum satırlarını geç."}
+	gui[19] = {class = "checkbox", name = "u_log_view",             value = c_log_view,             x = 0, y = 16, width = 8, height = 1, label = "Olay kaydını göster."}
+	if c_button == buttons[3] then
+		for g = 20, #gui do
+		gui[g] = nil
+		end
+	elseif c_button == buttons[2] then
+	butts   = {buttons[1],buttons[3],buttons[4]}
+	gui[16] = {class = "label",                                                                     x = 0, y = 13, width = 5, height = 1, label = "[Uygulanacak Satırlar]"}
+	gui[17] = {class = "dropdown", name = "u_apply_lines",          value = "Seç",                  x = 0, y = 14, width = 5, height = 1, items = apply_items,                              hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
+	gui[18] = {class = "checkbox", name = "u_comment_lines",        value = c_comment_lines,        x = 0, y = 15, width = 5, height = 1, label = "Yorum satırlarını geç."}
+	gui[19] = {class = "checkbox", name = "u_log_view",             value = c_log_view,             x = 0, y = 16, width = 5, height = 1, label = "Olay kaydını göster."}	
+	gui[20] = {class = "checkbox", name = "u_extra_options",        value = c_extra_options,        x = 3, y = 0,  width = 3, height = 1, label = "[Ekstra Ayarlar]",                       hint = "Aşağıdaki ayarların hepsini seçmek için bu satırın başındaki kutucuğu işaretleyin."}
+	gui[21] = {class = "label",                                                                     x = 3, y = 1,  width = 1, height = 1, label = mag.wall(" ",5)}
+	gui[22] = {class = "checkbox", name = "u_empty_text",           value = c_empty_text,           x = 4, y = 1,  width = 1, height = 1, label = "Boş satırları temizle."}
+	gui[23] = {class = "checkbox", name = "u_comment_line",         value = c_comment_line,         x = 4, y = 2,  width = 1, height = 1, label = "Yorum satırlarını temizle."}
+	gui[24] = {class = "checkbox", name = "u_one_line",             value = c_one_line,             x = 4, y = 3,  width = 1, height = 1, label = "Sıralı satırları bütünle.",              hint = "Aynı içeriğe sahip ve alt alta sıralanmış satırları bütünler."}
+	gui[25] = {class = "checkbox", name = "u_line_break_space",     value = c_line_break_space,     x = 4, y = 4,  width = 1, height = 1, label = "Satır bölme boşluklarını temizle.",      hint = "Satır bölme karakterinin sağ ve sol tarafındaki boşlukları temizler."}
+	gui[26] = {class = "checkbox", name = "u_turkish_char",         value = c_turkish_char,         x = 4, y = 5,  width = 1, height = 1, label = "Türkçe karakterleri düzelt."}
+	gui[27] = {class = "checkbox", name = "u_fix_timing",           value = c_fix_timing,           x = 4, y = 6,  width = 1, height = 1, label = "Satırları kare sürelerine göre zamanla."}
+	gui[28] = {class = "checkbox", name = "u_karaoke_options",      value = c_karaoke_options,      x = 3, y = 7,  width = 3, height = 1, label = "[Karaoke]",                              hint = "Aşağıdaki ayarların hepsini seçmek için bu satırın başındaki kutucuğu işaretleyin."}
+	gui[29] = {class = "checkbox", name = "u_delete_fx",            value = c_delete_fx,            x = 4, y = 8,  width = 1, height = 1, label = "Oluşturulan karaoke satırlarını temizle."}
+	gui[30] = {class = "checkbox", name = "u_furigana_style",       value = c_furigana_style,       x = 4, y = 9,  width = 1, height = 1, label = "Furigana stillerini temizle."}
+	gui[31] = {class = "checkbox", name = "u_strip_template_apply", value = c_strip_template_apply, x = 4, y = 10, width = 1, height = 1, label = "Karaoke satırlarını sıfırla."}
+	gui[32] = {class = "checkbox", name = "u_reset_template",       value = c_reset_template,       x = 4, y = 11, width = 1, height = 1, label = "Şablon satırlarının sürelerini sıfırla."}
+	end
 	if not z then
 	z = true
-	mag.styles_insert(subs,gui,30,"comment","")
+	mag.styles_insert(subs,gui,17,"comment","")
 	end
-	ok, config             = mag.dlg(gui,{"Uygula","Kapat"})
+	ok, config = mag.dlg(gui,butts)
+	if ok == mag.ascii(buttons[2]) then c_button = buttons[2] end
+	if ok == mag.ascii(buttons[3]) then c_button = buttons[3] end
 	c_line_property        = config.u_line_property
 	c_layer                = config.u_layer
 	c_actor                = config.u_actor
@@ -315,8 +335,9 @@
 	c_text_special         = config.u_text_special
 	c_text_comment         = config.u_text_comment
 	c_text_double_space    = config.u_text_double_space
-	c_extra_options        = config.u_extra_options
 	c_text_space_trim      = config.u_text_space_trim
+	if c_button == buttons[2] then
+	c_extra_options        = config.u_extra_options
 	c_empty_text           = config.u_empty_text
 	c_comment_line         = config.u_comment_line
 	c_one_line             = config.u_one_line
@@ -328,8 +349,10 @@
 	c_furigana_style       = config.u_furigana_style
 	c_strip_template_apply = config.u_strip_template_apply
 	c_reset_template       = config.u_reset_template
+	end
 	c_comment_lines        = config.u_comment_lines
-	until ok == "Kapat" or config.u_apply_lines ~= "Seç"
+	c_log_view             = config.u_log_view
+	until ok == "Kapat" or config.u_apply_lines ~= "Seç" and ok == "Uygula" or ok == "Uygula"
 	if ok == "Uygula" then
 		if	not c_line_property
 		and not c_layer
