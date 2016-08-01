@@ -35,10 +35,22 @@
 
 Bu sayfayı açmamdaki amaç kendi yazdığım lua dosyalarının sürüm takibi ve indirme bağlantısı sunmak. Bu dosyalar sadece Aegisub üzerinde çalışır. Lua isimlerini ve içerdiği kodları(değişkenleri) İngilizce yaparken arayüz ve iletileri Türkçe yapmayı tercih ediyorum.
 
+###### KURULUM
+* **Modül dosyası:** **mag.lua** dosyasını **aegisub/automationa/include/** dizinine atın.
+* **Lua dosyaları:** Kullanmak istediğiniz lua dosyalarını **aegisub/automationa/autoload/** dizinine atın.
+
+###### DESTEK VERİLEN SÜRÜM
+Tüm lua dosyalarımı stabil olan en güncel Aegisub sürümü **3.2.2** sürümü üzerinden yazdım. Önceki **3.x.x** sürümlerinde de sorun yaşamayabilirsiniz fakat **2.x.x** sürümlerinde kesin sorunlar yaşaybilirsiniz. Daha güncel bir sürüm çıkarsa ve uyumsuzluk sorunu olursa düzenleyebilirim. Her zaman en güncel stabil sürüme destek vereceğim.
+
+###### KISAYOL ATAMAK
+Lua dosyalarını **Automation** alt menüsünden seçmek yerine klavyeden bir kısayol atabilirsiniz.
+* **View/Options/Interface/Hotkeys** kısmını açın.
+* **Defualt** içinde bir kısayol atayın. Aegisub programının hangi bölümünde olursanız olun kısayola bastığınızda lua çalışacaktır/açılacaktır.
+
 ### MODÜL
 
 ### [Mag](automation/include/mag.lua)
-Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında **mag.** ön eki varsa bu modülü kullanıyor demektir. Bu modülü **automation/include/** dizinine atınız.
+Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında **mag.** ön eki varsa bu modülü kullanıyor demektir.
 
 ### MAKROLAR
 
