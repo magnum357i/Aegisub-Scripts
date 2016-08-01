@@ -1,6 +1,6 @@
 	script_name        = "List Comments"
 	script_description = "Listelediği yorum parantezlerine atlar."
-	script_version     = "1.0"
+	script_version     = "1.0.1"
 	script_author      = "Magnum357"
 
 	mag_import, mag = pcall(require,"mag")
@@ -9,7 +9,8 @@
 	c_max_char = 60
 
 	function list_comments(subs)
-	local count = 0
+	local first_index              = mag.first_index(subs) - 1
+	local count                    = 0
 	local line_index, line_comment = {}, {}
 	for i = 1, #subs do
 	local line = subs[i]
@@ -19,7 +20,7 @@
 			count = count + 1
 			local comment_text = mag.match(line.text,"{([^\\]-)}")
 			mag.insert(line_index,i)
-			mag.insert(line_comment,mag.format("(%s) %s",count,mag.text_limit(comment_text,c_max_char,true)))
+			mag.insert(line_comment,mag.format("(%s) %s - %s",count,i - first_index,mag.text_limit(comment_text,c_max_char,true)))
 			end
 		end
 	end
