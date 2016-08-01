@@ -13,6 +13,7 @@
  * [**Grid**](#grid)
  * [**Italic Maker**](#italic-maker)
  * [**K Char**](#k-char)
+ * [**List Comments**](#list-comments)
  * [**Manual Hardsub Timer**](#manual-hardsub-timer)
  * [**Select Lines**](#select-lines)
  * [**Shaper**](#shaper)
@@ -162,6 +163,9 @@ Seçili satırların başına italik yapma, sonuna italik yapmama etiketi koyar.
 
 ### [K Char](automation/autoload/mag.k_char.lua)
 Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
+
+### [List Comments](automation/autoload/mag.list_comments.lua)
+İçinde etiket olmayan yorum parantezlerini listeler ve aralarında geçiş yapılmasını sağlar.
 
 ### [Manual Hardsub Timer](automation/autoload/mag.manual_hardsub_timer.lua)
 Manuel olarak hardsub videoya zamanlama yapmanızı sağlar. Herhangi bir hardsub satırın önce başladığı ve sonra da bittiği karede lua dosyasını çalıştırın. Geçerli satırın bir altına o karelerin süreye dönüşmüş haliyle yeni bir satır oluşturacaktır.
