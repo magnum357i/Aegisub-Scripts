@@ -43,7 +43,7 @@ Bu sayfayı açmamdaki amaç kendi yazdığım lua dosyalarının sürüm takibi
 * **Lua dosyaları:** Kullanmak istediğiniz lua dosyalarını **aegisub/automationa/autoload/** dizinine atın.
 
 #### Destek Verilen Sürüm
-Tüm lua dosyalarımı stabil olan en güncel Aegisub sürümü **3.2.2** sürümü üzerinden yazdım. Önceki **3.x.x** sürümlerinde de sorun yaşamayabilirsiniz fakat **2.x.x** sürümlerinde kesin sorunlar yaşaybilirsiniz. Daha güncel bir sürüm çıkarsa ve uyumsuzluk sorunu olursa düzenleyebilirim. Her zaman en güncel stabil sürüme destek vereceğim.
+Tüm lua dosyalarımı stabil olan en güncel Aegisub sürümü **3.2.2** sürümü üzerinden yazdım. Önceki **3.x.x** sürümlerinde de sorun yaşamayabilirsiniz fakat **2.x.x** sürümlerinde kesin sorunlar yaşayabilirsiniz. Daha güncel bir sürüm çıkarsa ve uyumsuzluk sorunu olursa düzenleyebilirim. Her zaman en güncel stabil sürüme destek vereceğim.
 
 #### Kısayol Atamak
 Lua dosyalarını **Automation** alt menüsünden seçmeyip daha hızlı kullanmak için klavyeden bir kısayol atabilirsiniz.
@@ -52,7 +52,7 @@ Lua dosyalarını **Automation** alt menüsünden seçmeyip daha hızlı kullanm
 
 ## MODÜL
 
-## [Mag](automation/include/mag.lua)
+### [Mag](automation/included/mag.lua)
 Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında **mag.** ön eki varsa bu modülü kullanıyor demektir. Modülü kurmamanız durumunda bu lua dosyalarını kullanamazsınız.
 
 ## MAKROLAR
@@ -287,7 +287,7 @@ Karaktere göre metni böler.
 ### [Typewritter Maker](automation/autoload/mag.typewritter.lua)
 Satıra daktilo tarzı bir efekt uygular.
 
-### ASS
+## ASS
 ### [Autotags](ass/autotagsv4.ass)
 İki etiket arasında sonsuz dönüşüm yapar.
 
