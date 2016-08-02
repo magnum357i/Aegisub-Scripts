@@ -1,58 +1,61 @@
 İÇİNDEKİLER
 ===========
-1. [**TANITIM**](#tanitim)
-2. [**MODÜL**](#modÜl)
- * [**Mag**](#mag)
-3. [**MAKROLAR**](#makrolar)
- * [**Delete Lines**](#delete-lines)
- * [**Line Source Duplicate**](#line-source-duplicate)
- * [**Basic Turning**](#basic-turning)
- * [**Break Line**](#break-line)
- * [**Copy Dialogue**](#copy-dialogue)
- * [**Copy Paste Line**](#copy-paste-line)
- * [**Grid**](#grid)
- * [**Italic Maker**](#italic-maker)
- * [**K Char**](#k-char)
- * [**List Comments**](#list-comments)
- * [**Manual Hardsub Timer**](#manual-hardsub-timer)
- * [**Select Lines**](#select-lines)
- * [**Shaper**](#shaper)
- * [**Strip Line**](#strip-line)
- * [**Sub Menu Maker**](#sub-menu-maker)
- * [**Text Align**](#text-align)
- * [**Trans State A1**](#trans-state-a1)
- * [**Typewritter Maker**](#typewritter-maker)
-4. [**ASS**](#ass)
- * [**Autotags**](#autotags)
- * [**Color Fade**](#color-fade)
- * [**Rainbow**](#rainbow)
- * [**Rand Color**](#rand-color)
- * [**Shaper**](#shaper-1)
- * [**T_Calc**](#t_calc)
- * [**Vertical Kanji**](#vertical-kanji)
+- [**(A) TANITIM**](#tanitim)
+  - [**(1) Kurulum**](#kurulum)
+  - [**(2) Destek Verilen Sürüm**](#destek-verilen-s%C3%BCr%C3%BCm)
+  - [**(3) Kısayol Atamak**](#k%C4%B1sayol-atamak)
+- [**(B) MODÜL**](#modÜl)
+  - [**(1) Mag**](#mag)
+- [**(C) MAKROLAR**](#makrolar)
+  - [**(1) Delete Lines**](#delete-lines)
+  - [**(2) Line Source Duplicate**](#line-source-duplicate)
+  - [**(3) Basic Turning**](#basic-turning)
+  - [**(4) Break Line**](#break-line)
+  - [**(5) Copy Dialogue**](#copy-dialogue)
+  - [**(6) Copy Paste Line**](#copy-paste-line)
+  - [**(7) Grid**](#grid)
+  - [**(8) Italic Maker**](#italic-maker)
+  - [**(9) K Char**](#k-char)
+  - [**(10) List Comments**](#list-comments)
+  - [**(11) Manual Hardsub Timer**](#manual-hardsub-timer)
+  - [**(12) Select Lines**](#select-lines)
+  - [**(13) Shaper**](#shaper)
+  - [**(14) Strip Line**](#strip-line)
+  - [**(15) Sub Menu Maker**](#sub-menu-maker)
+  - [**(16) Text Align**](#text-align)
+  - [**(17) Trans State A1**](#trans-state-a1)
+  - [**(18) Typewritter Maker**](#typewritter-maker)
+- [**(D) ASS**](#ass)
+ * [**(1) Autotags**](#autotags)
+ * [**(2) Color Fade**](#color-fade)
+ * [**(3) Rainbow**](#rainbow)
+ * [**(4) Rand Color**](#rand-color)
+ * [**(5) Shaper**](#shaper-1)
+ * [**(6) T_Calc**](#t_calc)
+ * [**(7) Vertical Kanji**](#vertical-kanji)
 
-### TANITIM
+## TANITIM
 
 Bu sayfayı açmamdaki amaç kendi yazdığım lua dosyalarının sürüm takibi ve indirme bağlantısı sunmak. Bu dosyalar sadece Aegisub üzerinde çalışır. Lua isimlerini ve içerdiği kodları(değişkenleri) İngilizce yaparken arayüz ve iletileri Türkçe yapmayı tercih ediyorum.
 
-###### KURULUM
+#### Kurulum
 * **Modül dosyası:** **mag.lua** dosyasını **aegisub/automationa/include/** dizinine atın.
 * **Lua dosyaları:** Kullanmak istediğiniz lua dosyalarını **aegisub/automationa/autoload/** dizinine atın.
 
-###### DESTEK VERİLEN SÜRÜM
+#### Destek Verilen Sürüm
 Tüm lua dosyalarımı stabil olan en güncel Aegisub sürümü **3.2.2** sürümü üzerinden yazdım. Önceki **3.x.x** sürümlerinde de sorun yaşamayabilirsiniz fakat **2.x.x** sürümlerinde kesin sorunlar yaşaybilirsiniz. Daha güncel bir sürüm çıkarsa ve uyumsuzluk sorunu olursa düzenleyebilirim. Her zaman en güncel stabil sürüme destek vereceğim.
 
-###### KISAYOL ATAMAK
-Lua dosyalarını **Automation** alt menüsünden seçmek yerine klavyeden bir kısayol atabilirsiniz.
+#### Kısayol Atamak
+Lua dosyalarını **Automation** alt menüsünden seçmeyip daha hızlı kullanmak için klavyeden bir kısayol atabilirsiniz.
 * **View/Options/Interface/Hotkeys** kısmını açın.
-* **Defualt** içinde bir kısayol atayın. Aegisub programının hangi bölümünde olursanız olun kısayola bastığınızda lua çalışacaktır/açılacaktır.
+* **Defualt** içinde bir kısayol atayın. Aegisub programının hangi bölümünde olursanız olun kısayola bastığınızda lua çalışacaktır.
 
-### MODÜL
+## MODÜL
 
-### [Mag](automation/include/mag.lua)
-Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında **mag.** ön eki varsa bu modülü kullanıyor demektir.
+## [Mag](automation/include/mag.lua)
+Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında **mag.** ön eki varsa bu modülü kullanıyor demektir. Modülü kurmamanız durumunda bu lua dosyalarını kullanamazsınız.
 
-### MAKROLAR
+## MAKROLAR
 
 ### [Delete Lines](automation/autoload/delete_lines.lua)
 Stile ya da aktöre göre satır silme işlemi yapar.
