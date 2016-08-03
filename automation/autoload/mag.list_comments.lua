@@ -1,6 +1,6 @@
 	script_name        = "List Comments"
 	script_description = "Listelediği yorum parantezlerine atlar."
-	script_version     = "1.0.1"
+	script_version     = "1.0.6"
 	script_author      = "Magnum357"
 
 	mag_import, mag = pcall(require,"mag")
@@ -17,10 +17,13 @@
 		if line.class == "dialogue" then
 		local cbc = mag.ccount(line.text,"{[^\\]-}")
 			if cbc == 1 then
-			count = count + 1
 			local comment_text = mag.match(line.text,"{([^\\]-)}")
-			mag.insert(line_index,i)
-			mag.insert(line_comment,mag.format("(%s) %s - %s",count,i - first_index,mag.text_limit(comment_text,c_max_char,true)))
+			comment_text = mag.space_trim(comment_text)
+				if mag.gsub(comment_text,"%s+","") ~= "" then
+				count = count + 1
+				mag.insert(line_index,i)
+				mag.insert(line_comment,mag.format("(%s) %s -> %s",count,i - first_index,mag.text_limit(comment_text,c_max_char,true)))
+				end
 			end
 		end
 	end
@@ -57,7 +60,7 @@
 	{
 	 {class = "label",                                               x = 0, y = 0, width = 1, height = 1, label = "Yorum parantezleri:"}
 	,{class = "dropdown", name = "u_comment_bracket", value = "Seç", x = 1, y = 0, width = 1, height = 1, items = cline_page}
-	,{class = "label",                                               x = 0, y = 1, width = 1, height = 1, label = mag.format("%s - %s / %s",p_index,p_count,p)}
+	,{class = "label",                                               x = 0, y = 1, width = 1, height = 1, label = mag.format("[%s / %s (%s)] - %s / %s",p_index,c_page,c_max_char,p_count,p)}
 	}
 	end
 	ok, config = mag.dlg(gui,buttons)
@@ -86,9 +89,9 @@
 	end
 	
 	if mag_import then
-	mag.register(script_name.."/Aç",jumping_comments)
-	mag.register(script_name.."/Ayarlar",config_comments)
+	mag.register(script_name.."/Aç",      jumping_comments)
+	mag.register(script_name.."/Ayarlar", config_comments)
 	else function mag()
 	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})
 	if k == "Evet" then os.execute("start https://github.com/magnum357i/Magnum-s-Aegisub-Scripts") end end
-	aegisub.register_macro("M357/"..""..script_name,script_desription,mag) end
+	aegisub.register_macro(script_name,script_desription,mag) end
