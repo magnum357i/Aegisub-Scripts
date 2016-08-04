@@ -39,8 +39,8 @@
 Bu sayfayı açmamdaki amaç kendi yazdığım lua dosyalarının sürüm takibi ve indirme bağlantısı sunmak. Bu dosyalar sadece Aegisub üzerinde çalışır. Lua isimlerini ve içerdiği kodları(değişkenleri) İngilizce yaparken arayüz ve iletileri Türkçe yapmayı tercih ediyorum.
 
 #### Kurulum
-* **Modül dosyası:** **mag.lua** dosyasını **aegisub/automationa/include/** dizinine atın.
-* **Lua dosyaları:** Kullanmak istediğiniz lua dosyalarını **aegisub/automationa/autoload/** dizinine atın.
+* **Modül dosyası:** **mag.lua** dosyasını **aegisub/automation/include/** dizinine atın.
+* **Lua dosyaları:** Kullanmak istediğiniz lua dosyalarını **aegisub/automation/autoload/** dizinine atın.
 
 #### Destek Verilen Sürüm
 Tüm lua dosyalarımı stabil olan en güncel Aegisub sürümü **3.2.2** sürümü üzerinden yazdım. Önceki **3.x.x** sürümlerinde de sorun yaşamayabilirsiniz fakat **2.x.x** sürümlerinde kesin sorunlar yaşayabilirsiniz. Daha güncel bir sürüm çıkarsa ve uyumsuzluk sorunu olursa düzenleyebilirim. Her zaman en güncel stabil sürüme destek vereceğim.
