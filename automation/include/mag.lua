@@ -1,7 +1,7 @@
-﻿	module_name = "Mag"
+﻿	module_name       = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version = "1.1.1.7"
-	module_author = "Magnum357"
+	module_version    = "1.1.1.8"
+	module_author     = "Magnum357"
 
 	unicode   = require 'aegisub.unicode'
 	clipboard = require 'aegisub.clipboard'
@@ -522,6 +522,8 @@
 
 	--txt_lmt = mag.text_limit("Bu bir deneme.",5)
 	-->>Bu bi
+	--txt_lmt = mag.text_limit("Bu bir deneme.",5,true)
+	-->>Bu bi...
 	function mag.text_limit(text,limit,dot)
 	local dots = ""
 	if dot == true and limit < mag.len(text) then dots = "..." end
@@ -703,9 +705,26 @@
 	return result
 	end
 
+	--line_break = true
+	--mag.log_view(line,"Satır bölme kontrol edildi.")
+	-->>[YAPILDI] Satır bölme kontrol edildi.
 	function mag.log_view(value,job)
 	if value then mag.log("[%s] %s",{"YAPILDI",job}) end
 	end
+
+	--pcs = true
+	--mag.log_error(line,"Hiçbir işlem yapılmadı.")
+	-->>[UYARI] Hiçbir işlem yapılmadı.
+	function mag.log_error(value,error)
+	if not value then mag.log("%s\n%s",{"UYARI!",error}) end
+	end
+
+	--frame_time = mag.frame_time(45641)
+	-->>45637
+	function mag.frame_time(time) return aegisub.ms_from_frame(aegisub.frame_from_ms(time)) end
+
+	--mag.undo_point()
+	function mag.undo_point() aegisub.set_undo_point("\""..script_name.."\"") end
 
 	mag.remove  = table.remove
 	mag.insert  = table.insert

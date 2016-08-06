@@ -4,6 +4,8 @@
   - [**(1) Kurulum**](#kurulum)
   - [**(2) Destek Verilen Sürüm**](#destek-verilen-s%C3%BCr%C3%BCm)
   - [**(3) Kısayol Atamak**](#k%C4%B1sayol-atamak)
+  - [**(4) Güncelleyici veya İndirici**](#g%C3%BCncelleyici-veya-%C4%B0ndirici)
+  - [**(5) Arayüz Tercihleri**](#aray%C3%BCz-tercihleri)
 - [**(B) MODÜL**](#modÜl)
   - [**(1) Mag**](#mag)
 - [**(C) MAKROLAR**](#makrolar)
@@ -49,6 +51,14 @@ Tüm lua dosyalarımı stabil olan en güncel Aegisub sürümü **3.2.2** sürü
 Lua dosyalarını **Automation** alt menüsünden seçmeyip daha hızlı kullanmak için klavyeden bir kısayol atabilirsiniz.
 * **View/Options/Interface/Hotkeys** kısmını açın.
 * **Defualt** içinde bir kısayol atayın. Aegisub programının hangi bölümünde olursanız olun kısayola bastığınızda lua çalışacaktır.
+
+#### Güncelleyici veya İndirici
+Sürekli yeni özellikler veya hata düzeltmeleri ekliyorum. Bunun için bir sürüm güncelleyici yapılabilir fakat bu yerel imkanlarla mümkün değil. Çok fazla yan dosya gerekli. Hatta farklı bir depo açmam bile gerekebilir. İndirmede de aynı sorunlar var. Bu yüzden şimdilik gerek duymuyorum. 
+
+Talep olursa belki yabancıların yazdığı Dependecy Control lua dosyasına ekleyebilirim benimkileri. Şimdilik modül uyumsuzluklarında hata vermesin diye bir lua dosyasına sürüm atlatırken bir yandan da bir kontrolör ekliyorum.
+
+#### Arayüz Tercihleri
+Arayüzlü lua dosyalarında yapılan değişiklikler bir sonraki açılışta hatırlanır fakat alt yazı dosyasını kapayıp açınca veya başka bir alt yazı dosyasında lua dosyasını çalıştırdığınızda varsayılan tercihlere döner. Bunun için bir config dosyası oluşturulması gerekmektedir. Şu anlık böyle bir planım olmadığı için tercihleri geçici hafızada tutmaya devam edeceğim.
 
 ## MODÜL
 
@@ -280,9 +290,20 @@ Karaktere göre metni böler.
 ### [Trans State A1](automation/autoload/mag.trans_state_a1.lua)
 `Effect` kutucuğuna yüzdeler yazar.
 
-* **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
-* **Yüzde küsuratını ekle:** Yüzdenin iki basamaklı küsuratını ekler. Seçilmemesi durumunda yüzdeyi küsuratsız ekler.
-* **Satır sayılarını ekle:** Toplam satır bölü o anki satır şeklinde bulduğu yüzdeyi ondan önce ekler. Seçilmemesi durumunda sadece yüzdeyi ekler.
+#### HESAPLA
+* **Yorum satırlarını geç:** Yorum satırı yapılmış satırlara işlem yapmaz.
+* **Boş satırları geç:** Etiketler, özel karakterler(\N, \n, \h) ve boşluklar kaldırıldığında geride hiçbir içerik kalmayan satırları hesaplamaya dahil etmez.
+* **Küsurat: n.n%:** Yüzdenin küsuratını ekler.
+* **Satır sayıları: n / n:** Hangi satır sayısını hangi toplam satır sayısına böldüğünü yazar.
+
+#### HESAPLA
+`Effect` kutucuğunda yüzde(%) ile biten sayılar varsa o kutuyu temizler.
+
+---
+
+* **Uygulanan satırlar:** Tüm stillere veya ayrı ayrı stillere uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansıamaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştır.
 
 ### [Typewritter Maker](automation/autoload/mag.typewritter.lua)
 Satıra daktilo tarzı bir efekt uygular.
