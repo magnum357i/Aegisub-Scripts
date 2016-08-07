@@ -53,17 +53,15 @@ Lua dosyalarını **Automation** alt menüsünden seçmeyip daha hızlı kullanm
 * **Defualt** içinde bir kısayol atayın. Aegisub programının hangi bölümünde olursanız olun kısayola bastığınızda lua çalışacaktır.
 
 #### Güncelleyici veya İndirici
-Sürekli yeni özellikler veya hata düzeltmeleri ekliyorum. Bunun için bir sürüm güncelleyici yapılabilir fakat bu yerel imkanlarla mümkün değil. Çok fazla yan dosya gerekli. Hatta farklı bir depo açmam bile gerekebilir. İndirmede de aynı sorunlar var. Bu yüzden şimdilik gerek duymuyorum. 
-
-Talep olursa belki yabancıların yazdığı Dependecy Control lua dosyasına ekleyebilirim benimkileri. Şimdilik modül uyumsuzluklarında hata vermesin diye bir lua dosyasına sürüm atlatırken bir yandan da bir kontrolör ekliyorum.
+Kullanılan durumlarda çıkan hata veya eksikliklerden sürekli sürüm atlatıyorum. Eksiklikleri ekleyeceğim bir lua olmadığında ve o işi yapan başka bir lua dosyası yoksa yeni bir lua dosyası yazıyorum. İndirilen lua dosyaları için sürüm güncelleyici veya yeni lua dosyaları için bir indirici yapılabilir fakat bu yerel imkanlarla mümkün değil. Çok fazla yan dosya gerekli. Hatta farklı bir depo açmam bile gerekebilir. Bu yüzden şimdilik gerek duymuyorum.
 
 #### Arayüz Tercihleri
-Arayüzlü lua dosyalarında yapılan değişiklikler bir sonraki açılışta hatırlanır fakat alt yazı dosyasını kapayıp açınca veya başka bir alt yazı dosyasında lua dosyasını çalıştırdığınızda varsayılan tercihlere döner. Bunun için bir config dosyası oluşturulması gerekmektedir. Şu anlık böyle bir planım olmadığı için tercihleri geçici hafızada tutmaya devam edeceğim.
+Arayüzlü lua dosyalarında yapılan değişiklikler alt yazı dosyasını kapatmadığınız sürece bir sonraki açılışta hatırlanır fakat alt yazı dosyasını kapayıp açınca veya başka bir alt yazı dosyasında lua dosyasını çalıştırdığınızda varsayılan tercihlere döner. Bunun için bir config dosyası oluşturulması gerekmektedir. Şu anlık böyle bir planım olmadığı için tercihleri geçici hafızada tutmaya devam edeceğim.
 
 ## MODÜL
 
 ### [Mag](automation/included/mag.lua)
-Devamlı kullandığım fonksiyonları her defasında yazmamayım diye tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında **mag.** ön eki varsa bu modülü kullanıyor demektir. Modülü kurmamanız durumunda bu lua dosyalarını kullanamazsınız.
+Devamlı kullandığım fonksiyonları her defasında yazmamak için tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında **mag.** ön eki varsa bu modülü kullanıyor demektir. Modülü kurmamanız durumunda bu lua dosyalarını kullanamazsınız.
 
 ## MAKROLAR
 
@@ -296,14 +294,14 @@ Karaktere göre metni böler.
 * **Küsurat: n.n%:** Yüzdenin küsuratını ekler.
 * **Satır sayıları: n / n:** Hangi satır sayısını hangi toplam satır sayısına böldüğünü yazar.
 
-#### HESAPLA
+#### KALDIR
 `Effect` kutucuğunda yüzde(%) ile biten sayılar varsa o kutuyu temizler.
 
 ---
 
 * **Uygulanan satırlar:** Tüm stillere veya ayrı ayrı stillere uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansıamaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştır.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Typewritter Maker](automation/autoload/mag.typewritter.lua)
 Satıra daktilo tarzı bir efekt uygular.
