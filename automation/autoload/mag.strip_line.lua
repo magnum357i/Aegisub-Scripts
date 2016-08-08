@@ -1,9 +1,39 @@
 ﻿	script_name        = "Strip Line"
 	script_description = "Satırları düzenler, temizler."
 	script_author      = "Magnum357"
-	script_version     = "1.4.2"
+	script_version     = "1.4.3"
+	script_mag_version = "1.1.1.8"
 
 	mag_import, mag = pcall(require,"mag")
+
+	c_line_property        = false
+	c_layer                = false
+	c_actor                = false
+	c_effect               = false
+	c_left_margin          = false
+	c_right_margin         = false
+	c_vertical_margin      = false
+	c_text                 = true
+	c_text_tag             = false
+	c_text_special         = false
+	c_text_comment         = false
+	c_text_double_space    = false
+	c_extra_options        = false
+	c_text_space_trim      = false
+	c_empty_text           = false
+	c_comment_line         = false
+	c_one_line             = false
+	c_line_break_space     = false
+	c_turkish_char         = false
+	c_fix_timing           = false
+	c_karaoke_options      = false
+	c_delete_fx            = false
+	c_furigana_style       = false
+	c_strip_template_apply = false
+	c_reset_template       = false
+	c_comment_lines        = false
+	c_log_view             = false
+	c_button               = nil
 
 	function strip_line(subs,sel,config)
 	local log          = {}
@@ -233,35 +263,6 @@
 		end
 	end
 
-	c_line_property        = false
-	c_layer                = false
-	c_actor                = false
-	c_effect               = false
-	c_left_margin          = false
-	c_right_margin         = false
-	c_vertical_margin      = false
-	c_text                 = true
-	c_text_tag             = false
-	c_text_special         = false
-	c_text_comment         = false
-	c_text_double_space    = false
-	c_extra_options        = false
-	c_text_space_trim      = false
-	c_empty_text           = false
-	c_comment_line         = false
-	c_one_line             = false
-	c_line_break_space     = false
-	c_turkish_char         = false
-	c_fix_timing           = false
-	c_karaoke_options      = false
-	c_delete_fx            = false
-	c_furigana_style       = false
-	c_strip_template_apply = false
-	c_reset_template       = false
-	c_comment_lines        = false
-	c_log_view             = false
-	c_button               = nil
-
 	function add_macro(subs,sel)
 	local buttons           = {"Uygula","Gelişmiş seçenekler","Normal seçenekler","Kapat"}
 	if c_button == nil then c_button = buttons[3] end
@@ -270,7 +271,7 @@
 	local apply_items       = {"Seç",sel_total_format,subs_total_format}
 	local z                 = false
 	local gui               = {}
-	local ok, config, butts	
+	local ok, config, butts
 	repeat
 	butts   = {buttons[1],buttons[2],buttons[4]}
 	gui[1]  = {class = "checkbox", name = "u_line_property",        value = c_line_property,        x = 0, y = 0,  width = 3, height = 1, label = "[Satır Özellikleri]",                    hint = "Aşağıdaki ayarların hepsini seçmek için bu satırın başındaki kutucuğu işaretleyin."}
@@ -292,34 +293,34 @@
 	gui[17] = {class = "dropdown", name = "u_apply_lines",          value = "Seç",                  x = 0, y = 14, width = 8, height = 1, items = apply_items,                              hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
 	gui[18] = {class = "checkbox", name = "u_comment_lines",        value = c_comment_lines,        x = 0, y = 15, width = 8, height = 1, label = "Yorum satırlarını geç."}
 	gui[19] = {class = "checkbox", name = "u_log_view",             value = c_log_view,             x = 0, y = 16, width = 8, height = 1, label = "Olay kaydını göster."}
-	if c_button == buttons[3] then
-		for g = 20, #gui do
-		gui[g] = nil
+		if c_button == buttons[3] then
+			for g = 20, #gui do
+			gui[g] = nil
+			end
+		elseif c_button == buttons[2] then
+		butts   = {buttons[1],buttons[3],buttons[4]}
+		gui[16] = {class = "label",                                                                     x = 0, y = 13, width = 5, height = 1, label = "[Uygulanacak Satırlar]"}
+		gui[17] = {class = "dropdown", name = "u_apply_lines",          value = "Seç",                  x = 0, y = 14, width = 5, height = 1, items = apply_items,                              hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
+		gui[18] = {class = "checkbox", name = "u_comment_lines",        value = c_comment_lines,        x = 0, y = 15, width = 5, height = 1, label = "Yorum satırlarını geç."}
+		gui[19] = {class = "checkbox", name = "u_log_view",             value = c_log_view,             x = 0, y = 16, width = 5, height = 1, label = "Olay kaydını göster."}	
+		gui[20] = {class = "checkbox", name = "u_extra_options",        value = c_extra_options,        x = 3, y = 0,  width = 3, height = 1, label = "[Ekstra Ayarlar]",                       hint = "Aşağıdaki ayarların hepsini seçmek için bu satırın başındaki kutucuğu işaretleyin."}
+		gui[21] = {class = "label",                                                                     x = 3, y = 1,  width = 1, height = 1, label = mag.wall(" ",5)}
+		gui[22] = {class = "checkbox", name = "u_empty_text",           value = c_empty_text,           x = 4, y = 1,  width = 1, height = 1, label = "Boş satırları temizle."}
+		gui[23] = {class = "checkbox", name = "u_comment_line",         value = c_comment_line,         x = 4, y = 2,  width = 1, height = 1, label = "Yorum satırlarını temizle."}
+		gui[24] = {class = "checkbox", name = "u_one_line",             value = c_one_line,             x = 4, y = 3,  width = 1, height = 1, label = "Sıralı satırları bütünle.",              hint = "Aynı içeriğe sahip ve alt alta sıralanmış satırları bütünler."}
+		gui[25] = {class = "checkbox", name = "u_line_break_space",     value = c_line_break_space,     x = 4, y = 4,  width = 1, height = 1, label = "Satır bölme boşluklarını temizle.",      hint = "Satır bölme karakterinin sağ ve sol tarafındaki boşlukları temizler."}
+		gui[26] = {class = "checkbox", name = "u_turkish_char",         value = c_turkish_char,         x = 4, y = 5,  width = 1, height = 1, label = "Türkçe karakterleri düzelt."}
+		gui[27] = {class = "checkbox", name = "u_fix_timing",           value = c_fix_timing,           x = 4, y = 6,  width = 1, height = 1, label = "Satırları kare sürelerine göre zamanla."}
+		gui[28] = {class = "checkbox", name = "u_karaoke_options",      value = c_karaoke_options,      x = 3, y = 7,  width = 3, height = 1, label = "[Karaoke]",                              hint = "Aşağıdaki ayarların hepsini seçmek için bu satırın başındaki kutucuğu işaretleyin."}
+		gui[29] = {class = "checkbox", name = "u_delete_fx",            value = c_delete_fx,            x = 4, y = 8,  width = 1, height = 1, label = "Oluşturulan karaoke satırlarını temizle."}
+		gui[30] = {class = "checkbox", name = "u_furigana_style",       value = c_furigana_style,       x = 4, y = 9,  width = 1, height = 1, label = "Furigana stillerini temizle."}
+		gui[31] = {class = "checkbox", name = "u_strip_template_apply", value = c_strip_template_apply, x = 4, y = 10, width = 1, height = 1, label = "Karaoke satırlarını sıfırla."}
+		gui[32] = {class = "checkbox", name = "u_reset_template",       value = c_reset_template,       x = 4, y = 11, width = 1, height = 1, label = "Şablon satırlarının sürelerini sıfırla."}
 		end
-	elseif c_button == buttons[2] then
-	butts   = {buttons[1],buttons[3],buttons[4]}
-	gui[16] = {class = "label",                                                                     x = 0, y = 13, width = 5, height = 1, label = "[Uygulanacak Satırlar]"}
-	gui[17] = {class = "dropdown", name = "u_apply_lines",          value = "Seç",                  x = 0, y = 14, width = 5, height = 1, items = apply_items,                              hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
-	gui[18] = {class = "checkbox", name = "u_comment_lines",        value = c_comment_lines,        x = 0, y = 15, width = 5, height = 1, label = "Yorum satırlarını geç."}
-	gui[19] = {class = "checkbox", name = "u_log_view",             value = c_log_view,             x = 0, y = 16, width = 5, height = 1, label = "Olay kaydını göster."}	
-	gui[20] = {class = "checkbox", name = "u_extra_options",        value = c_extra_options,        x = 3, y = 0,  width = 3, height = 1, label = "[Ekstra Ayarlar]",                       hint = "Aşağıdaki ayarların hepsini seçmek için bu satırın başındaki kutucuğu işaretleyin."}
-	gui[21] = {class = "label",                                                                     x = 3, y = 1,  width = 1, height = 1, label = mag.wall(" ",5)}
-	gui[22] = {class = "checkbox", name = "u_empty_text",           value = c_empty_text,           x = 4, y = 1,  width = 1, height = 1, label = "Boş satırları temizle."}
-	gui[23] = {class = "checkbox", name = "u_comment_line",         value = c_comment_line,         x = 4, y = 2,  width = 1, height = 1, label = "Yorum satırlarını temizle."}
-	gui[24] = {class = "checkbox", name = "u_one_line",             value = c_one_line,             x = 4, y = 3,  width = 1, height = 1, label = "Sıralı satırları bütünle.",              hint = "Aynı içeriğe sahip ve alt alta sıralanmış satırları bütünler."}
-	gui[25] = {class = "checkbox", name = "u_line_break_space",     value = c_line_break_space,     x = 4, y = 4,  width = 1, height = 1, label = "Satır bölme boşluklarını temizle.",      hint = "Satır bölme karakterinin sağ ve sol tarafındaki boşlukları temizler."}
-	gui[26] = {class = "checkbox", name = "u_turkish_char",         value = c_turkish_char,         x = 4, y = 5,  width = 1, height = 1, label = "Türkçe karakterleri düzelt."}
-	gui[27] = {class = "checkbox", name = "u_fix_timing",           value = c_fix_timing,           x = 4, y = 6,  width = 1, height = 1, label = "Satırları kare sürelerine göre zamanla."}
-	gui[28] = {class = "checkbox", name = "u_karaoke_options",      value = c_karaoke_options,      x = 3, y = 7,  width = 3, height = 1, label = "[Karaoke]",                              hint = "Aşağıdaki ayarların hepsini seçmek için bu satırın başındaki kutucuğu işaretleyin."}
-	gui[29] = {class = "checkbox", name = "u_delete_fx",            value = c_delete_fx,            x = 4, y = 8,  width = 1, height = 1, label = "Oluşturulan karaoke satırlarını temizle."}
-	gui[30] = {class = "checkbox", name = "u_furigana_style",       value = c_furigana_style,       x = 4, y = 9,  width = 1, height = 1, label = "Furigana stillerini temizle."}
-	gui[31] = {class = "checkbox", name = "u_strip_template_apply", value = c_strip_template_apply, x = 4, y = 10, width = 1, height = 1, label = "Karaoke satırlarını sıfırla."}
-	gui[32] = {class = "checkbox", name = "u_reset_template",       value = c_reset_template,       x = 4, y = 11, width = 1, height = 1, label = "Şablon satırlarının sürelerini sıfırla."}
-	end
-	if not z then
-	z = true
-	mag.styles_insert(subs,gui,17,"comment","")
-	end
+		if not z then
+		z = true
+		mag.styles_insert(subs,gui,17,"comment","")
+		end
 	ok, config = mag.dlg(gui,butts)
 	if ok == mag.ascii(buttons[2]) then c_button = buttons[2] end
 	if ok == mag.ascii(buttons[3]) then c_button = buttons[3] end
@@ -336,23 +337,23 @@
 	c_text_comment         = config.u_text_comment
 	c_text_double_space    = config.u_text_double_space
 	c_text_space_trim      = config.u_text_space_trim
-	if c_button == buttons[2] then
-	c_extra_options        = config.u_extra_options
-	c_empty_text           = config.u_empty_text
-	c_comment_line         = config.u_comment_line
-	c_one_line             = config.u_one_line
-	c_line_break_space     = config.u_line_break_space
-	c_turkish_char         = config.u_turkish_char
-	c_fix_timing           = config.u_fix_timing
-	c_karaoke_options      = config.u_karaoke_options
-	c_delete_fx            = config.u_delete_fx
-	c_furigana_style       = config.u_furigana_style
-	c_strip_template_apply = config.u_strip_template_apply
-	c_reset_template       = config.u_reset_template
-	end
+		if c_button == buttons[2] then
+		c_extra_options        = config.u_extra_options
+		c_empty_text           = config.u_empty_text
+		c_comment_line         = config.u_comment_line
+		c_one_line             = config.u_one_line
+		c_line_break_space     = config.u_line_break_space
+		c_turkish_char         = config.u_turkish_char
+		c_fix_timing           = config.u_fix_timing
+		c_karaoke_options      = config.u_karaoke_options
+		c_delete_fx            = config.u_delete_fx
+		c_furigana_style       = config.u_furigana_style
+		c_strip_template_apply = config.u_strip_template_apply
+		c_reset_template       = config.u_reset_template
+		end
 	c_comment_lines        = config.u_comment_lines
 	c_log_view             = config.u_log_view
-	until ok == "Kapat" or config.u_apply_lines ~= "Seç" and ok == "Uygula" or ok == "Uygula"
+	until ok == "Kapat" or config.u_apply_lines ~= "Seç" and ok == "Uygula"
 	if ok == "Uygula" then
 		if	not c_line_property
 		and not c_layer
@@ -383,12 +384,33 @@
 		mag.log(2,"Hiçbir tercih yapmadınız.")
 		else
 		strip_line(subs,sel,config)
-		aegisub.set_undo_point(script_name)
+		mag.undo_point()
 		end
 	end
 	end
 
-	if mag_import then mag.register(false,add_macro) else function mag()
-	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})
-	if k == "Evet" then os.execute("start https://github.com/magnum357i/Magnum-s-Aegisub-Scripts") end end
-	aegisub.register_macro(script_name,script_desription,mag) end
+	function last_options(subs,sel)
+	local config         = {}
+	config.u_apply_lines = "Seçili satırlar"
+	strip_line(subs,sel,config)
+	mag.undo_point()
+	end
+
+	if mag_import then
+	mag_update_link           = "https://github.com/magnum357i/Magnum-s-Aegisub-Scripts"
+	mag_version_check         = false
+		if not mag_version_check then
+		mag_version           = mag.match(io.open(aegisub.decode_path("?data\\automation\\include\\mag.lua")):read("*all"),"module_version%s-=%s\"([^\"]+)\"")
+			if mag_version and mag_version:gsub("%.","") < script_mag_version:gsub("%.","") then
+			function mag_check() local k = aegisub.dialog.display({{class = "label", label = "Mag modülünün kurulu sürümü bu lua dosyası ile uyumsuz.\nEn az "..script_mag_version.." veya en güncel modül sürümünü indirmeniz gerekiyor.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end
+			aegisub.register_macro(script_name,script_desription,mag_check)
+			else
+			mag_version_check = true
+			mag.register(script_name.."/Aç",            add_macro)
+			mag.register(script_name.."/Son tercihler", last_options)
+			end
+		end
+	else
+	function mag_module() local k = aegisub.dialog.display({{class = "label", label = "Mag modülü bulunamadı.\nBu lua dosyasını kullanmak için Mag modülünü indirip kurmanız gerelidir.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end
+	aegisub.register_macro(script_name,script_desription,mag_module)
+	end

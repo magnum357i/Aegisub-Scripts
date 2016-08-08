@@ -232,7 +232,7 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
 
 ### [Strip Line](automation/autoload/mag.strip_line.lua)
 
-#### NORMAL SEÇENEKLER
+#### AÇ/NORMAL SEÇENEKLER
 * **Satır Özellikleri:** Bu seçeneğin seçilmesi halinde bir aşağısında detaylı olarak sunulan özelliklerin hepsini uygular. Hepsini değil de bazılarını uygulamak için bu satırın başındaki işareti kaldırın ve aşağısındakilerden tercih yapın.
   * **Layer:** Ön izlemede hangi satırın daha üst planda olacağı bilgisini temizler.
   * **Actor:** Satırın aktör bilgisini temizler.
@@ -247,7 +247,7 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
     * **Tekrar eden boşluklar:** İki veya daha fazla kendini tekrar eden boşlukları tek boşluğa indirir.
     * **Baştaki ve sondaki boşluklar:** Satırın başındaki ve sonundaki boşlukları temizler.
 
-#### GELİŞMİŞ SEÇENEKLER
+#### AÇ/GELİŞMİŞ SEÇENEKLER
 * **Ekstra Ayarlar:** Bu seçeneğin seçilmesi halinde bir aşağısında detaylı olarak sunulan özelliklerin hepsini uygular. Hepsini değil de bazılarını uygulamak için bu satırın başındaki işareti kaldırın ve aşağısındakilerden tercih yapın.
   * **Boş satırlarını temizle:** Metni olmayan satırları temizler.
   * **Yorum satırlarını temizle:** Yorum yapılmış satırları temizler.
@@ -260,6 +260,15 @@ Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua d
   * **Furigana stilleri temizle:** Karaoke şablonlarını uyguladıktan sonra oluşan **furigana** stillerini temizler.
   * **Karaoke satırlarını sıfırla:** Karaoke satırlarını şablon efektleri uygulanmadan önceki haline getirir.
   * **Şablon satırlarının sürelerini sıfırla:** Şablon satırlarının sürelerini sıfırlar. Daha da açarsak `Effect` kutucuğunda **template** ya da **code** kelimeleri geçen satırların sürelerini sıfırlar.
+
+#### SON TERCİHLER
+Arayüz kısmında yaptığınız son tercihleri seçilen satırlara uygular.
+
+---
+
+* **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Sub Menu Maker](automation/autoload/mag.sub_menu_maker_r1.lua)
 Automation menüsünde listelenen lua isimlerini gruplar. Bu gruplamayı girdiğiniz dosya adına göre yapıyor.
