@@ -15,10 +15,10 @@
   - [**(4) Break Line**](#break-line)
   - [**(5) Copy Dialogue**](#copy-dialogue)
   - [**(6) Copy Paste Line**](#copy-paste-line)
-  - [**(7) Grid**](#grid)
-  - [**(8) Italic Maker**](#italic-maker)
-  - [**(9) K Char**](#k-char)
-  - [**(10) List Comments**](#list-comments)
+  - [**(7) Finder**](#finder)
+  - [**(8) Grid**](#grid)
+  - [**(9) Italic Maker**](#italic-maker)
+  - [**(10) K Char**](#k-char)
   - [**(11) Manual Hardsub Timer**](#manual-hardsub-timer)
   - [**(12) Select Lines**](#select-lines)
   - [**(13) Shaper**](#shaper)
@@ -60,7 +60,7 @@ Arayüzlü lua dosyalarında yapılan değişiklikler alt yazı dosyasını kapa
 
 ## MODÜL
 
-### [Mag](automation/included/mag.lua)
+### [Mag](automation/include/mag.lua)
 Devamlı kullandığım fonksiyonları her defasında yazmamak için tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında **mag.** ön eki varsa bu modülü kullanıyor demektir. Modülü kurmamanız durumunda bu lua dosyalarını kullanamazsınız.
 
 ## MAKROLAR
@@ -166,6 +166,25 @@ Herhangi bir arayüzde yaptığınız ayar diğer bir arayüzde de bulunuyorsa s
 ### [Copy Dialogue](automation/autoload/mag.copy_dialogue.lua)
 Alt yazıdaki metinleri panoya veya oluşturduğu metin dosyasına kopyalar.
 
+### [Finder](automation/autoload/mag.finder.lua)
+Yorum parantezlerine veya girilen kelimeye göre listeleme yapar. Listeledikleri arasında geçiş de yapabilir.
+
+####AÇ/YORUM PARATEZLERİ
+İçinde etiket bulunmayan yorum parantezlerini listeler.
+
+####AÇ/KELİMELER
+Girilen kelimenin olduğu satırları listeler.
+
+* **Yorum satırlarını geç:** Yorum satırı yapılmış satırları geçer.
+* **Büyük-küçük kelimeleri ara:** Aranan kelimede küçük-büyük harf ayrımına dikkat etmez.
+* **Regex komutlarını aktif et:** Regex komutlarını aktif eder.
+* **Yorum parantezlerini arama:** Yorum parantezlerini aramaz.
+
+---
+
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+
 ### [Copy Paste Line](automation/autoload/mag.copy_paste_line.lua)
 Bir satır grubuna ait herhangi bir bilgiyi kopyalar ve bunu başka bir satır grubuna yapıştırabilir.
 
@@ -186,9 +205,6 @@ Seçili satırların başına italik yapma, sonuna italik yapmama etiketi koyar.
 
 ### [K Char](automation/autoload/mag.k_char.lua)
 Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
-
-### [List Comments](automation/autoload/mag.list_comments.lua)
-İçinde etiket olmayan yorum parantezlerini listeler ve aralarında geçiş yapılmasını sağlar.
 
 ### [Manual Hardsub Timer](automation/autoload/mag.manual_hardsub_timer.lua)
 Manuel olarak hardsub videoya zamanlama yapmanızı sağlar. Herhangi bir hardsub satırın önce başladığı ve sonra da bittiği karede lua dosyasını çalıştırın. Geçerli satırın bir altına o karelerin süreye dönüşmüş haliyle yeni bir satır oluşturacaktır.
