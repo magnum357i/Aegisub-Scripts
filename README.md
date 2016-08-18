@@ -237,14 +237,10 @@ Birçok ayarda satır seçme işlemi yapar.
 * **Seçimin tersi:** Seçiminiz dışında kalan satırları seçersiniz.
 
 ### [Shaper](automation/autoload/mag.shaper.lua)
-Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. Lua dosyası halinde.
+Alt yazı veya video çözünürlüğüne göre resim için şekil çizer.
 
-* **Resmin dizini ve adı:** Resmin adıyla beraber bulunduğu dizini yazın. Uzantıyı girmenize gerek yok.
-* **Çözünürlük şuna göre**<br>
- * **?script**<br>
- Bu seçiliyken alt yazının çözünürlük değerine göre boyutlandırma yapar.
- * **?video**<br>
- Bu seçiliyken videonun çözünürlük değerine göre boyutlandırma yapar.
+###### Notlar
+Harici bir modül gerektirir. Sizi yönlendirdiği sayfadan ImageSıze lua dosyasını ve ImageSize klasörünün içindekileri **automation/include/** dizinine atarak kurabilirsiniz.
 
 ### [Strip Line](automation/autoload/mag.strip_line.lua)
 
