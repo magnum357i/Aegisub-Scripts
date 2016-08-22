@@ -19,12 +19,12 @@
   - [**(8) Grid**](#grid)
   - [**(9) Italic Maker**](#italic-maker)
   - [**(10) K Char**](#k-char)
-  - [**(11) Manual Hardsub Timer**](#manual-hardsub-timer)
-  - [**(12) Select Lines**](#select-lines)
-  - [**(13) Shaper**](#shaper)
-  - [**(14) Strip Line**](#strip-line)
-  - [**(15) Sub Menu Maker**](#sub-menu-maker)
-  - [**(16) Text Align**](#text-align)
+  - [**(11) Select Lines**](#select-lines)
+  - [**(12) Shaper**](#shaper)
+  - [**(13) Strip Line**](#strip-line)
+  - [**(14) Sub Menu Maker**](#sub-menu-maker)
+  - [**(15) Text Align**](#text-align)
+  - [**(16) Timer**](#timer)
   - [**(17) Trans State A1**](#trans-state-a1)
   - [**(18) Typewritter Maker**](#typewritter-maker)
 - [**(D) ASS**](#ass)
@@ -182,7 +182,7 @@ Girilen kelimenin olduğu satırları listeler.
 
 ---
 
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz.
 * **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Copy Paste Line](automation/autoload/mag.copy_paste_line.lua)
@@ -205,9 +205,6 @@ Seçili satırların başına italik yapma, sonuna italik yapmama etiketi koyar.
 
 ### [K Char](automation/autoload/mag.k_char.lua)
 Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
-
-### [Manual Hardsub Timer](automation/autoload/mag.manual_hardsub_timer.lua)
-Manuel olarak hardsub videoya zamanlama yapmanızı sağlar. Herhangi bir hardsub satırın önce başladığı ve sonra da bittiği karede lua dosyasını çalıştırın. Geçerli satırın bir altına o karelerin süreye dönüşmüş haliyle yeni bir satır oluşturacaktır.
 
 ### [Select Lines](automation/autoload/mag.select_lines.lua)
 Birçok ayarda satır seçme işlemi yapar.
@@ -305,6 +302,10 @@ Karaktere göre metni böler.
 * **Karakter sınırı:** Bir satırda kaç karakter olacağına karar verirsiniz.
 * **Hizalama:** Hangi tarafa hizalanacağına karar verirsiniz.
 * **Arayüzdeki tercihleri hatırla:** Arayüzdeki tercihleri geçici hafızasında tutar.
+
+### [Timer](automation/autoload/mag.timer.lua)
+* **Hardsub:** Dahili/gömülü alt yazının başında ve sonunda Hardsub modunun çalıştırılması sonucu yeni bir satır oluşturur.
+* **Karaoke:** Aktif satırın bitiş süresini başlangıç süresi alarak 30 saniyelik yeni bir satır oluşturur.
 
 ### [Trans State A1](automation/autoload/mag.trans_state_a1.lua)
 `Effect` kutucuğuna yüzdeler yazar.
