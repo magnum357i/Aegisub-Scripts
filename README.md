@@ -18,7 +18,7 @@
   - [**(7) Finder**](#finder)
   - [**(8) Grid**](#grid)
   - [**(9) K Char**](#k-char)
-  - [**(10) Italic Maker**](#line-format)
+  - [**(10) Line Format**](#line-format)
   - [**(11) Select Lines**](#select-lines)
   - [**(12) Shaper**](#shaper)
   - [**(13) Strip Line**](#strip-line)
