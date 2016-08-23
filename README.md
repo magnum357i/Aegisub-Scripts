@@ -17,8 +17,8 @@
   - [**(6) Copy Paste Line**](#copy-paste-line)
   - [**(7) Finder**](#finder)
   - [**(8) Grid**](#grid)
-  - [**(9) Italic Maker**](#italic-maker)
-  - [**(10) K Char**](#k-char)
+  - [**(9) K Char**](#k-char)
+  - [**(10) Italic Maker**](#line-format)
   - [**(11) Select Lines**](#select-lines)
   - [**(12) Shaper**](#shaper)
   - [**(13) Strip Line**](#strip-line)
@@ -200,11 +200,31 @@ Aktif satırın içeriğine ızgara çizimi yapar.
   * **Sadece dikey:** Sadece dikey ızgara çizgileri koyar.
   * **Sadece yatay:** Sadece yatay ızgara çizgileri koyar.
 
-### [Italic Maker](automation/autoload/mag.italic_maker.lua)
-Seçili satırların başına italik yapma, sonuna italik yapmama etiketi koyar.
-
 ### [K Char](automation/autoload/mag.k_char.lua)
 Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
+
+### [Line Format](automation/autoload/mag.line_format.lua)
+* **Eğik:** Satıra eğik yapma etiketi ekler.
+* **Hizalama**
+  * **1:** Konum değiştirme etiketi yoksa satırı, varsa odak noktasını alt-sol köşeye sabitler.
+  * **2:** Konum değiştirme etiketi yoksa satırı, varsa odak noktasını alt-orta köşeye sabitler.
+  * **3:** Konum değiştirme etiketi yoksa satırı, varsa odak noktasını alt-sağ köşeye sabitler.
+  * **4:** Konum değiştirme etiketi yoksa satırı, varsa odak noktasını orta-sol köşeye sabitler.
+  * **5:** Konum değiştirme etiketi yoksa satırı, varsa odak noktasını orta-orta köşeye sabitler.
+  * **6:** Konum değiştirme etiketi yoksa satırı, varsa odak noktasını orta-sağ köşeye sabitler.
+  * **7:** Konum değiştirme etiketi yoksa satırı, varsa odak noktasını üst-sol köşeye sabitler.
+  * **8:** Konum değiştirme etiketi yoksa satırı, varsa odak noktasını üst-orta köşeye sabitler.
+  * **9:** Konum değiştirme etiketi yoksa satırı, varsa odak noktasını üst-sağ köşeye sabitler.
+* **Şeffaflık geçişi:**
+  * **Basit:** Satıra şeffaflık geçişi etiketi ekler.
+  * **Ayrıntılı:** Satıra ayrıntılı şeffaflık geçişi etiketi ekler.
+  * **Ayarlar:** Basit veya ayrıntılı şeffaflık geçişi için varsayılan değerleri değiştirmenizi sağlar.
+
+---
+
+* **Uygulanan satırlar:** Seçili satırlara uygular.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Select Lines](automation/autoload/mag.select_lines.lua)
 Birçok ayarda satır seçme işlemi yapar.
