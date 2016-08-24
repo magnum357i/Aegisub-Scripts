@@ -166,6 +166,17 @@ Herhangi bir arayüzde yaptığınız ayar diğer bir arayüzde de bulunuyorsa s
 ### [Copy Dialogue](automation/autoload/mag.copy_dialogue.lua)
 Alt yazıdaki metinleri panoya veya oluşturduğu metin dosyasına kopyalar.
 
+* **Normal:** 82. satırdaki örnek bir cümle.
+* **Zamanları ekle:** [0:06:15.25(8997) / 0:06:16.66(9031)] Ne yapsam acaba?
+* **Satır numarası ekle:** [82 - 0:06:15.25(8997) / 0:06:16.66(9031)] 82. satırdaki örnek bir cümle.
+* **Satırları say:** [1 / 82 - 0:06:15.25(8997) / 0:06:16.66(9031)] 82. satırdaki örnek bir cümle.
+
+---
+
+* **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+
 ### [Finder](automation/autoload/mag.finder.lua)
 Yorum parantezlerine veya girilen kelimeye göre listeleme yapar. Listeledikleri arasında geçiş de yapabilir.
 
