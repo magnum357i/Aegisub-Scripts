@@ -13,7 +13,7 @@
   - [**(2) Line Source Duplicate**](#line-source-duplicate)
   - [**(3) Basic Turning**](#basic-turning)
   - [**(4) Break Line**](#break-line)
-  - [**(5) Case Conversion**](#case_conversion)
+  - [**(5) Case Conversion**](#case-conversion)
   - [**(6) Copy Dialogue**](#copy-dialogue)
   - [**(7) Copy Paste Line**](#copy-paste-line)
   - [**(8) Finder**](#finder)
@@ -173,6 +173,12 @@ Harflerle ilgili işlemler yapar.
 * **K / B**: Kelimelerin baş harflerini büyük yapar.
 * **K / BT**: Kelimelerin baş harflerini büyük yapar. (Bağlaçlara duyarlı.)
 
+---
+
+* **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+
 ### [Copy Dialogue](automation/autoload/mag.copy_dialogue.lua)
 Alt yazıdaki metinleri panoya veya oluşturduğu metin dosyasına kopyalar.
 
@@ -287,9 +293,9 @@ Harici bir modül gerektirir. Sizi yönlendirdiği sayfadan ImageSıze lua dosya
   * **Layer:** Ön izlemede hangi satırın daha üst planda olacağı bilgisini temizler.
   * **Actor:** Satırın aktör bilgisini temizler.
   * **Effect:** Satırın farklı lua dosyaları tarafından efekt kutucuğuna yazılmış bilgiyi temizler.
-  * **Left Margin:** Satırın özel olarak girimiş soldan kaç piksel boşluk bırakılacağı bilgisini temizler.
-  * **Right Margin:** Satırın özel olarak girimiş sağdan kaç piksel boşluk bırakılacağı bilgisini temizler.
-  * **Vertical Margin:** Satırın özel olarak girimiş aşağıdan -bazı durumlarda üstten- kaç piksel boşluk bırakılacağı bilgisini temizler.
+  * **Left Margin:** Satırın özel olarak girilmiş soldan kaç piksel boşluk bırakılacağı bilgisini temizler.
+  * **Right Margin:** Satırın özel olarak girilmiş sağdan kaç piksel boşluk bırakılacağı bilgisini temizler.
+  * **Vertical Margin:** Satırın özel olarak girilmiş aşağıdan -bazı durumlarda üstten- kaç piksel boşluk bırakılacağı bilgisini temizler.
   * **Text:** Bu seçeneğin seçilmesi halinde bir aşağısında detaylı olarak sunulan özelliklerin hepsini uygular. Hepsini değil de bazılarını uygulamak için bu satırın başındaki işareti kaldırın ve aşağısındakilerden tercih yapın.
     * **Etiketler:** Satırdaki etiketleri temizler.
     * **Özel karakterler:** Satırdaki \N, \h veya \n gibi karakterlerini temizler. Bu karakterlerin etrafında boşluk varsa direkt temizlerken boşluk yoksa boşlukla yer değiştirir.
