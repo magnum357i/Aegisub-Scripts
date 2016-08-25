@@ -85,7 +85,7 @@
 	ok, config = mag.dlg(gui,buttons)
 	if ok == mag.ascii("Önceki") then p = p - 1 end
 	if ok == "Sonraki"           then p = p + 1 end
-	until ok == "Atla" and config.u_comment_bracket ~= "Seç" or ok == "Kapat"
+	until ok == "Atla" and config.u_comment_bracket ~= "Seç" or ok == "Kapat" or aegisub.cancel()
 	if ok == "Atla" then
 	local row = mag.n(mag.match(config.u_comment_bracket,"%((%d+)%)"))
 	return ci[row]

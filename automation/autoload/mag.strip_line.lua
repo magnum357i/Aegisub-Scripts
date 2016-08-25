@@ -353,7 +353,7 @@
 		end
 	c_comment_lines        = config.u_comment_lines
 	c_log_view             = config.u_log_view
-	until ok == "Kapat" or config.u_apply_lines ~= "Seç" and ok == "Uygula"
+	until ok == "Kapat" or config.u_apply_lines ~= "Seç" and ok == "Uygula" or aegisub.cancel()
 	if ok == "Uygula" then
 		if	not c_line_property
 		and not c_layer

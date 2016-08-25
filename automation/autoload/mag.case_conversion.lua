@@ -204,8 +204,7 @@
 	ok, config = mag.dlg(gui,c_buttons)
 	c_comment_lines = config.u_comment_lines
 	c_reset_chars   = config.u_reset_chars
-	mag.remove(gui,2)
-	until ok == "Kapat" or ok ~= c_buttons[6] and config.u_apply_lines ~= "Seç"
+	until ok == "Kapat" or ok ~= c_buttons[6] and config.u_apply_lines ~= "Seç" or aegisub.cancel()
 	if ok ~= c_buttons[6] then
 	case_conversion(subs,sel,ok,config)
 	end
