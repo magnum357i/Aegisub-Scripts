@@ -13,20 +13,21 @@
   - [**(2) Line Source Duplicate**](#line-source-duplicate)
   - [**(3) Basic Turning**](#basic-turning)
   - [**(4) Break Line**](#break-line)
-  - [**(5) Copy Dialogue**](#copy-dialogue)
-  - [**(6) Copy Paste Line**](#copy-paste-line)
-  - [**(7) Finder**](#finder)
-  - [**(8) Grid**](#grid)
-  - [**(9) K Char**](#k-char)
-  - [**(10) Line Format**](#line-format)
-  - [**(11) Select Lines**](#select-lines)
-  - [**(12) Shaper**](#shaper)
-  - [**(13) Strip Line**](#strip-line)
-  - [**(14) Sub Menu Maker**](#sub-menu-maker)
-  - [**(15) Text Align**](#text-align)
-  - [**(16) Timer**](#timer)
-  - [**(17) Trans State A1**](#trans-state-a1)
-  - [**(18) Typewritter Maker**](#typewritter-maker)
+  - [**(5) Case Conversion**](#case_conversion)
+  - [**(6) Copy Dialogue**](#copy-dialogue)
+  - [**(7) Copy Paste Line**](#copy-paste-line)
+  - [**(8) Finder**](#finder)
+  - [**(9) Grid**](#grid)
+  - [**(10) K Char**](#k-char)
+  - [**(11) Line Format**](#line-format)
+  - [**(12) Select Lines**](#select-lines)
+  - [**(13) Shaper**](#shaper)
+  - [**(14) Strip Line**](#strip-line)
+  - [**(15) Sub Menu Maker**](#sub-menu-maker)
+  - [**(16) Text Align**](#text-align)
+  - [**(17) Timer**](#timer)
+  - [**(18) Trans State A1**](#trans-state-a1)
+  - [**(19) Typewritter Maker**](#typewritter-maker)
 - [**(D) ASS**](#ass)
  * [**(1) Autotags**](#autotags)
  * [**(2) Color Fade**](#color-fade)
@@ -162,6 +163,15 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 
 ###### Notlar
 Herhangi bir arayüzde yaptığınız ayar diğer bir arayüzde de bulunuyorsa son girdiğiniz değeri hatırlar.
+
+### [Case Conversion](automation/autoload/mag.case_conversion.lua)
+Harflerle ilgili işlemler yapar.
+
+* **C / B**: Cümlelerin tüm harflerini büyük yapar.
+* **C / K**: Cümlelerin tüm harflerini küçük yapar.
+* **C / İ**": Cümlelerin ilk harflerini büyük yapar.
+* **K / B**: Kelimelerin baş harflerini büyük yapar.
+* **K / BT**: Kelimelerin baş harflerini büyük yapar. (Bağlaçlara duyarlı.)
 
 ### [Copy Dialogue](automation/autoload/mag.copy_dialogue.lua)
 Alt yazıdaki metinleri panoya veya oluşturduğu metin dosyasına kopyalar.
