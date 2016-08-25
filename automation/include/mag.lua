@@ -1,6 +1,6 @@
 ﻿	module_name       = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version    = "1.1.1.8"
+	module_version    = "1.1.1.9"
 	module_author     = "Magnum357"
 
 	unicode   = require 'aegisub.unicode'
@@ -725,6 +725,10 @@
 
 	--mag.undo_point()
 	function mag.undo_point() aegisub.set_undo_point("\""..script_name.."\"") end
+
+	--mag.html_to_ass(#000000)
+	-->>&H000000&
+	function mag.html_to_ass(color) return ass_color(extract_color(color)) end
 
 	mag.remove  = table.remove
 	mag.insert  = table.insert
