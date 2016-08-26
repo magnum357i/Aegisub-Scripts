@@ -406,9 +406,11 @@
 			aegisub.register_macro(script_name,script_desription,mag_check)
 			else
 			mag_version_check = true
-			mag.register(script_name.."/Aç",            add_macro)
-			mag.register(script_name.."/Son tercihler", last_options)
 			end
+		end
+		if mag_version_check then
+		mag.register(script_name.."/Aç",            add_macro)
+		mag.register(script_name.."/Son tercihler", last_options)
 		end
 	else
 	function mag_module() local k = aegisub.dialog.display({{class = "label", label = "Mag modülü bulunamadı.\nBu lua dosyasını kullanmak için Mag modülünü indirip kurmanız gerelidir.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end

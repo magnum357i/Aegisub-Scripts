@@ -2,7 +2,7 @@
 	script_description = "Çevirinin yüzde kaçında olduğunuzu gösterir."
 	script_author      = "Magnum357"
 	script_version     = "1.7"
-	script_mag_version = "1.1.1.8"
+	script_mag_version = "1.1.1.9"
 
 	mag_import, mag = pcall(require,"mag")
 
@@ -177,9 +177,11 @@
 			aegisub.register_macro(script_name,script_desription,mag_check)
 			else
 			mag_version_check = true
-			mag.register(script_name.."/Hesapla", add_calc)
-			mag.register(script_name.."/Kaldır",  remove_calc)
 			end
+		end
+		if mag_version_check then
+		mag.register(script_name.."/Hesapla", add_calc)
+		mag.register(script_name.."/Kaldır",  remove_calc)
 		end
 	else
 	function mag_module() local k = aegisub.dialog.display({{class = "label", label = "Mag modülü bulunamadı.\nBu lua dosyasını kullanmak için Mag modülünü indirip kurmanız gerelidir.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end

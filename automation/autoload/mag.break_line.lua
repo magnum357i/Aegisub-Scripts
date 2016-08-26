@@ -2,6 +2,7 @@
 	script_description = "Satırlara bölme karakteri ekleyebilir, bunları silebilir veya satırın karakter sayısını kontrol edebilir."
 	script_author      = "Magnum357"
 	script_version     = "1.2.1"
+	script_mag_version = "1.1.1.9"
 
 	mag_import, mag = pcall(require,"mag")
 
@@ -353,10 +354,23 @@
 	end
 
 	if mag_import then
-	mag.register(script_name.."/Böl",        line_breaker_gui)
-	mag.register(script_name.."/Kontrol et", line_breaker_check_gui)
-	mag.register(script_name.."/Kaldır",     remove_line_breaker_gui)
-	else function mag()
-	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})
-	if k == "Evet" then os.execute("start https://github.com/magnum357i/Magnum-s-Aegisub-Scripts") end end
-	aegisub.register_macro(script_name,script_desription,mag) end
+	mag_update_link           = "https://github.com/magnum357i/Magnum-s-Aegisub-Scripts"
+	mag_version_check         = false
+		if not mag_version_check then
+		mag_version           = mag.match(io.open(aegisub.decode_path("?data\\automation\\include\\mag.lua")):read("*all"),"module_version%s-=%s\"([^\"]+)\"")
+			if mag_version and mag_version:gsub("%.","") < script_mag_version:gsub("%.","") then
+			function mag_check() local k = aegisub.dialog.display({{class = "label", label = "Mag modülünün kurulu sürümü bu lua dosyası ile uyumsuz.\nEn az "..script_mag_version.." veya en güncel modül sürümünü indirmeniz gerekiyor.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end
+			aegisub.register_macro(script_name,script_desription,mag_check)
+			else
+			mag_version_check = true
+			end
+		end
+		if mag_version_check then
+		mag.register(script_name.."/Böl",        line_breaker_gui)
+		mag.register(script_name.."/Kontrol et", line_breaker_check_gui)
+		mag.register(script_name.."/Kaldır",     remove_line_breaker_gui)
+		end
+	else
+	function mag_module() local k = aegisub.dialog.display({{class = "label", label = "Mag modülü bulunamadı.\nBu lua dosyasını kullanmak için Mag modülünü indirip kurmanız gerelidir.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end
+	aegisub.register_macro(script_name,script_desription,mag_module)
+	end

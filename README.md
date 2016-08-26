@@ -69,6 +69,11 @@ Devamlı kullandığım fonksiyonları her defasında yazmamak için tek bir dos
 ### [Delete Lines](automation/autoload/delete_lines.lua)
 Stile ya da aktöre göre satır silme işlemi yapar.
 
+---
+
+* **Uygulanan satırlar:** Tek tek stillere veya aktörlere uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
+* **Modül:** Bu dosya modül kullanmıyor.
+
 ### [Line Source Duplicate](automation/autoload/line_source_duplicate.lua)
 Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir.
 
@@ -93,6 +98,12 @@ Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir
 
 ###### Notlar
 Oluşturduğu girdilere müdahalede bulunmayınız.
+
+---
+
+* **Uygulanan satırlar:** Tüm stillere veya ayrı ayrı stillere uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Bu dosya modül kullanmıyor.
 
 ### [Basic Turning](automation/autoload/mag.basic_turning.lua)
 Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra sadece işaretleri yazmak yetmez, o satırı seçmelisiniz de.
@@ -143,6 +154,12 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 
 **Bu modlardan aynı anda sadece birini kullanın.**
 
+---
+
+* **Uygulanan satırlar:** Seçili satırlara uygular.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+
 ### [Break Line](automation/autoload/mag.break_line.lua)
 * **Böl:** Satır bölme yapılmamış satırları böler.
   * **Karakter sınırı:** Varsayılan değeri 44'tir. Varsayılan değer üzerinden konuşacak olursak 44 ve üstü karakterde devreye girecektir. Bu değer sadece sembolüktür. **\\N** karakterinin koyulması için yapılan hesaplamaya bir etkisi yoktur. **\\N** koyulacak satırları tespit etmeye etkisi vardır. En az **35**, en fazla **50** değeri girilebilir.
@@ -163,6 +180,12 @@ Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra
 
 ###### Notlar
 Herhangi bir arayüzde yaptığınız ayar diğer bir arayüzde de bulunuyorsa son girdiğiniz değeri hatırlar.
+
+---
+
+* **Uygulanan satırlar:** Tüm stillere veya ayrı ayrı stillere uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Case Conversion](automation/autoload/mag.case_conversion.lua)
 Harflerle ilgili işlemler yapar.
@@ -215,6 +238,12 @@ Girilen kelimenin olduğu satırları listeler.
 ### [Copy Paste Line](automation/autoload/mag.copy_paste_line.lua)
 Bir satır grubuna ait herhangi bir bilgiyi kopyalar ve bunu başka bir satır grubuna yapıştırabilir.
 
+---
+
+* **Uygulanan satırlar:** Seçili satırlara uygular.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+
 ### [Grid](automation/autoload/mag.grid.lua)
 Aktif satırın içeriğine ızgara çizimi yapar.
 * **Sayı:** Dikey veya yatay ızgara çizgisi adeti.
@@ -227,8 +256,20 @@ Aktif satırın içeriğine ızgara çizimi yapar.
   * **Sadece dikey:** Sadece dikey ızgara çizgileri koyar.
   * **Sadece yatay:** Sadece yatay ızgara çizgileri koyar.
 
+---
+
+* **Uygulanan satırlar:** Aktif satırın içeriğini değiştirir. Aktif satır, metin düzenleme kutusunda gördüğünüz satırdır.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+
 ### [K Char](automation/autoload/mag.k_char.lua)
 Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
+
+---
+
+* **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Line Format](automation/autoload/mag.line_format.lua)
 * **Eğik:** Satıra eğik yapma etiketi ekler.
@@ -280,11 +321,22 @@ Birçok ayarda satır seçme işlemi yapar.
   * **Sonraki:** Mevcut seçimin en son satırın bir altındaki satırı seçersiniz.
 * **Seçimin tersi:** Seçiminiz dışında kalan satırları seçersiniz.
 
+---
+
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+
 ### [Shaper](automation/autoload/mag.shaper.lua)
 Alt yazı veya video çözünürlüğüne göre resim için şekil çizer.
 
 ###### Notlar
-Harici bir modül gerektirir. Sizi yönlendirdiği sayfadan ImageSıze lua dosyasını ve ImageSize klasörünün içindekileri **automation/include/** dizinine atarak kurabilirsiniz.
+Harici bir modül gerektirir. Sizi yönlendirdiği sayfadan ImageSıze lua dosyasını ve ImageSize klasörünü **automation/include/** dizinine atarak kurabilirsiniz.
+
+---
+
+* **Uygulanan satırlar:** Aktif satırın içeriğini değiştirir. Aktif satır, metin düzenleme kutusunda gördüğünüz satırdır.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Strip Line](automation/autoload/mag.strip_line.lua)
 
@@ -342,6 +394,10 @@ Automation menüsünde listelenen lua isimlerini gruplar. Bu gruplamayı girdiğ
 * **Ad:** Seçilen dosyanın programda görünen yani **Automation Manager** penceresinde görünen ismi.
 * **Dosya adı:** Seçilen dosyanın adı.
 
+---
+
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Text Align](automation/autoload/mag.text_align.lua)
 Karaktere göre metni böler.
@@ -350,9 +406,21 @@ Karaktere göre metni böler.
 * **Hizalama:** Hangi tarafa hizalanacağına karar verirsiniz.
 * **Arayüzdeki tercihleri hatırla:** Arayüzdeki tercihleri geçici hafızasında tutar.
 
+---
+
+* **Uygulanan satırlar:** Seçili satırlara uygular.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+
 ### [Timer](automation/autoload/mag.timer.lua)
 * **Hardsub:** Dahili/gömülü alt yazının başında ve sonunda Hardsub modunun çalıştırılması sonucu yeni bir satır oluşturur.
 * **Karaoke:** Aktif satırın bitiş süresini başlangıç süresi alarak 30 saniyelik yeni bir satır oluşturur.
+
+---
+
+* **Uygulanan satırlar:** Aktif satıra göre işlem yapar. Aktif satır, metin düzenleme kutusunda gördüğünüz satırdır.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Trans State A1](automation/autoload/mag.trans_state_a1.lua)
 `Effect` kutucuğuna yüzdeler yazar.
@@ -374,6 +442,12 @@ Karaktere göre metni böler.
 
 ### [Typewritter Maker](automation/autoload/mag.typewritter.lua)
 Satıra daktilo tarzı bir efekt uygular.
+
+---
+
+* **Uygulanan satırlar:** Seçili satırlara uygular.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ## ASS
 ### [Autotags](ass/autotagsv4.ass)

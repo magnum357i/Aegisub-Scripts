@@ -1,7 +1,8 @@
-	script_name = "Copy - Paste Line"
+	script_name        = "Copy - Paste Line"
 	script_description = "Seçilen satırların her özelliğini kopyalar ve kopyaladığı bilgileri başka seçili satırlara yapıştırabilir."
-	script_author = "Magnum357"
-	script_version = "2.3.1"
+	script_author      = "Magnum357"
+	script_version     = "2.3.1"
+	script_mag_version = "1.1.1.9"
 
 	mag_import, mag = pcall(require,"mag")
 
@@ -148,7 +149,22 @@
 	end
 	end
 
-	if mag_import then mag.register(false,gui) else function mag()
-	local k = aegisub.dialog.display({{class = "label", label="Mag modülü bulunamadı. \nBu lua dosyasını kullanmak için Mag modülünü İndirmek ister misiniz?"}},{"Evet","Kapat"})
-	if k == "Evet" then os.execute("start https://github.com/magnum357i/Magnum-s-Aegisub-Scripts") end end
-	aegisub.register_macro(script_name,script_desription,mag) end
+	if mag_import then
+	mag_update_link           = "https://github.com/magnum357i/Magnum-s-Aegisub-Scripts"
+	mag_version_check         = false
+		if not mag_version_check then
+		mag_version           = mag.match(io.open(aegisub.decode_path("?data\\automation\\include\\mag.lua")):read("*all"),"module_version%s-=%s\"([^\"]+)\"")
+			if mag_version and mag_version:gsub("%.","") < script_mag_version:gsub("%.","") then
+			function mag_check() local k = aegisub.dialog.display({{class = "label", label = "Mag modülünün kurulu sürümü bu lua dosyası ile uyumsuz.\nEn az "..script_mag_version.." veya en güncel modül sürümünü indirmeniz gerekiyor.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end
+			aegisub.register_macro(script_name,script_desription,mag_check)
+			else
+			mag_version_check = true
+			end
+		end
+		if mag_version_check then
+		mag.register(false,gui)
+		end
+	else
+	function mag_module() local k = aegisub.dialog.display({{class = "label", label = "Mag modülü bulunamadı.\nBu lua dosyasını kullanmak için Mag modülünü indirip kurmanız gerelidir.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end
+	aegisub.register_macro(script_name,script_desription,mag_module)
+	end

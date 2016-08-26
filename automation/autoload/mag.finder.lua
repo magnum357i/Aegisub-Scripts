@@ -2,7 +2,7 @@
 	script_description = "Yorum parantezlerine veya girilen kelimeye göre listeleme yapar. Listeledikleri arasında geçiş de yapabilir."
 	script_version     = "1.1"
 	script_author      = "Magnum357"
-	script_mag_version = "1.1.1.8"
+	script_mag_version = "1.1.1.9"
 
 	mag_import, mag = pcall(require,"mag")
 
@@ -145,7 +145,7 @@
 		end
 	end
 	end
-	
+
 	if mag_import then
 	mag_update_link           = "https://github.com/magnum357i/Magnum-s-Aegisub-Scripts"
 	mag_version_check         = false
@@ -156,9 +156,11 @@
 			aegisub.register_macro(script_name,script_desription,mag_check)
 			else
 			mag_version_check = true
-			mag.register(script_name.."/Aç",      finder)
-			mag.register(script_name.."/Ayarlar", config)
 			end
+		end
+		if mag_version_check then
+		mag.register(script_name.."/Aç",      finder)
+		mag.register(script_name.."/Ayarlar", config)
 		end
 	else
 	function mag_module() local k = aegisub.dialog.display({{class = "label", label = "Mag modülü bulunamadı.\nBu lua dosyasını kullanmak için Mag modülünü indirip kurmanız gerelidir.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end
