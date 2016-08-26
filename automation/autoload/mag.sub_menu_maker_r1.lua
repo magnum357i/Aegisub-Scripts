@@ -76,7 +76,7 @@
 	file_path    = config.u_file_path
 	file_type    = config.u_file_type
 	delete_group = config.u_delete_group
-	until ok == mag.ascii("Gruplamaya geç") and config.u_file_name ~= "" or ok == "Kapat" or aegisub.cancel()
+	until ok == mag.ascii("Gruplamaya geç") and config.u_file_name ~= "" or ok == "Kapat"
 	if ok == mag.ascii("Gruplamaya geç") then
 	local f_names  = {}
 	local d        = 0
@@ -145,7 +145,7 @@
 	mag.log(2,"Belirtilen lua dosyası veya dosyaları ile işlem yapılamıyor.")
 	end
 	end
-	until ok == "Kapat" or ok == "Grupla" or aegisub.cancel()
+	until ok == "Kapat" or ok == "Grupla"
 	end
 
 	function r(str) return mag.gsub(str,"\".+\"%.%.\"\"%.%.","") end
