@@ -1,11 +1,13 @@
 İÇİNDEKİLER
 ===========
 - [**(A) TANITIM**](#tanitim)
-  - [**(1) Kurulum**](#kurulum)
-  - [**(2) Destek Verilen Sürüm**](#destek-verilen-s%C3%BCr%C3%BCm)
-  - [**(3) Kısayol Atamak**](#k%C4%B1sayol-atamak)
-  - [**(4) Güncelleyici veya İndirici**](#g%C3%BCncelleyici-veya-%C4%B0ndirici)
-  - [**(5) Arayüz Tercihleri**](#aray%C3%BCz-tercihleri)
+  - [**(1) Lua dosyası nedir?**](#lua-dosyas%C4%B1-nedir)
+  - [**(2) Kurulum**](#kurulum)
+  - [**(3) Kullanım**](#kullan%C4%B1m)
+  - [**(4) Destek Verilen Sürüm**](#destek-verilen-s%C3%BCr%C3%BCm)
+  - [**(5) Kısayol Atamak**](#k%C4%B1sayol-atamak)
+  - [**(6) Güncelleyici veya İndirici**](#g%C3%BCncelleyici-veya-%C4%B0ndirici)
+  - [**(7) Arayüz Tercihleri**](#aray%C3%BCz-tercihleri)
 - [**(B) MODÜL**](#modÜl)
   - [**(1) Mag**](#mag)
 - [**(C) MAKROLAR**](#makrolar)
@@ -41,9 +43,15 @@
 
 Bu sayfayı açmamdaki amaç kendi yazdığım lua dosyalarının sürüm takibi ve indirme bağlantısı sunmak. Bu dosyalar sadece Aegisub üzerinde çalışır. Lua isimlerini ve içerdiği kodları(değişkenleri) İngilizce yaparken arayüz ve iletileri Türkçe yapmayı tercih ediyorum.
 
+#### Lua Dosyası Nedir?
+Lua dosyası veya eklentisi **Aegisub** programına yeni özellikler katmak için kullanılır. Bu yeni özellikler ile yapılacak iş mümkün kıldırabilir veya zamandan tasarruf ettirebilir.
+
 #### Kurulum
-* **Modül dosyası:** **mag.lua** dosyasını **aegisub/automation/include/** dizinine atın.
-* **Lua dosyaları:** Kullanmak istediğiniz lua dosyalarını **aegisub/automation/autoload/** dizinine atın.
+* **Modül dosyası:** **mag.lua** dosyasını **aegisub/automation/include/** dizinine atın. Program kapalıysa açarak, değilse **Automation/Automation.../Rescan Autoload Dir** butonuna basarak lua dosyasını aktifleştirebilirsiniz.
+* **Lua dosyaları:** Kullanmak istediğiniz lua dosyalarını **aegisub/automation/autoload/** dizinine atın. Program kapalıysa açarak, değilse **Automation/Automation.../Rescan Autoload Dir** butonuna basarak lua dosyasını aktifleştirebilirsiniz.
+
+#### Kullanım
+Kullanmak istediğiniz lua dosyasını doğru yere attıysanız **Automation** alt menüsüne ismi gelmelidir. O isme tıklayarak ilgili luayı kullanabilirsiniz. Kullanım amacına göre bazı lua dosyaları size bir arayüz sunarken bazıları da sunmaz.
 
 #### Destek Verilen Sürüm
 Tüm lua dosyalarımı stabil olan en güncel Aegisub sürümü **3.2.2** sürümü üzerinden yazdım. Önceki **3.x.x** sürümlerinde de sorun yaşamayabilirsiniz fakat **2.x.x** sürümlerinde kesin sorunlar yaşayabilirsiniz. Daha güncel bir sürüm çıkarsa ve uyumsuzluk sorunu olursa düzenleyebilirim. Her zaman en güncel stabil sürüme destek vereceğim.
