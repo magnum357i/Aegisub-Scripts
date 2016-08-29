@@ -29,7 +29,7 @@
   - [**(16) Text Align**](#text-align)
   - [**(17) Timer**](#timer)
   - [**(18) Trans State A1**](#trans-state-a1)
-  - [**(19) Typewritter Maker**](#typewritter-maker)
+  - [**(19) Typewritter**](#typewritter)
 - [**(D) ASS**](#ass)
  * [**(1) Autotags**](#autotags)
  * [**(2) Color Fade**](#color-fade)
@@ -198,11 +198,11 @@ Herhangi bir arayüzde yaptığınız ayar diğer bir arayüzde de bulunuyorsa s
 ### [Case Conversion](automation/autoload/mag.case_conversion.lua)
 Harflerle ilgili işlemler yapar.
 
-* **C / B**: Cümlelerin tüm harflerini büyük yapar.
-* **C / K**: Cümlelerin tüm harflerini küçük yapar.
-* **C / İ**": Cümlelerin ilk harflerini büyük yapar.
-* **K / B**: Kelimelerin baş harflerini büyük yapar.
-* **K / BT**: Kelimelerin baş harflerini büyük yapar. (Bağlaçlara duyarlı.)
+* **C/B**: 'C'ümlelerin tüm harflerini 'B'üyük yapar.
+* **C/K**: 'C'ümlelerin tüm harflerini 'K'üçük yapar.
+* **C/İ**": 'C'ümlelerin ilk harflerini 'B'üyük yapar.
+* **K/İ**: 'K'elimelerin 'İ'lk harflerini büyük yapar.
+* **K/İT**: 'K'elimelerin 'İ'lk harflerini büyük yapar. ('T'ürkçedeki bağlaçlara duyarlı.)
 
 ---
 
@@ -448,7 +448,7 @@ Karaktere göre metni böler.
 * **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
 * **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
-### [Typewritter Maker](automation/autoload/mag.typewritter.lua)
+### [Typewritter](automation/autoload/mag.typewritter.lua)
 Satıra daktilo tarzı bir efekt uygular.
 
 ---
