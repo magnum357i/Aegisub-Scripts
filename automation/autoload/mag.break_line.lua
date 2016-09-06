@@ -1,120 +1,10 @@
 	script_name        = "Break Line"
 	script_description = "Satırlara bölme karakteri ekleyebilir, bunları silebilir veya satırın karakter sayısını kontrol edebilir."
 	script_author      = "Magnum357"
-	script_version     = "1.2.1"
+	script_version     = "1.2.2"
 	script_mag_version = "1.1.1.9"
 
 	mag_import, mag = pcall(require,"mag")
-
-	function remove_line_breaker(subs,sel,config)
-	local style_name = mag.unstyles(config.u_style_name)
-	local max_char   = config.u_max_char
-	local c          = 0
-	local pcs        = false
-	local total_line
-	if style_name == "Tüm stiller" then
-		if config.u_comment_lines then
-		total_line = mag.total_comment_full(subs)
-		else
-		total_line = mag.total_full(subs)
-		end
-	else
-		if config.u_comment_lines then
-		total_line = mag.total(subs,style_name,"comment")
-		else
-		total_line = mag.total(subs,style_name,"default")
-		end
-	end
-	for i = 1, #subs do
-	local line     = subs[i]
-	local text     = subs[i].text
-	local comment1 = subs[i].comment
-	local comment2 = false
-	local style1   = style_name
-	local style2   = line.style
-	if not config.u_comment_lines then comment1 = 1 comment2 = 1 end
-	if style_name == "Tüm stiller" then style1 = 1 style2 = 1 end
-		if subs[i].class == "dialogue" and comment1 == comment2 and style1 == style2 then
-			c = c + 1
-			mag.progress("Satır bölmeleri aranıyor...",c,total_line,true,300)
-			if mag.match(line.text,"\\N") then
-			pcs = true
-			line.text = remove_breaker(line.text)
-			end
-			if pcs then
-			subs[i] = line
-			end
-		end
-	end
-	if not pcs then mag.log(2,"Hiçbir işlem yapılmadı.") end
-	end
-
-	function line_breaker_check(subs,sel,config)
-	local style_name = mag.unstyles(config.u_style_name)
-	local max_char   = config.u_max_char
-	local msg1       = "Beni böl!"
-	local msg2       = "Beni düzgün böl!"
-	local c          = 0
-	local pcs        = false
-	local total_line
-	if style_name == "Tüm stiller" then
-		if config.u_comment_lines then
-		total_line = mag.total_comment_full(subs)
-		else
-		total_line = mag.total_full(subs)
-		end
-	else
-		if config.u_comment_lines then
-		total_line = mag.total(subs,style_name,"comment")
-		else
-		total_line = mag.total(subs,style_name,"default")
-		end
-	end
-	for i = 1, #subs do
-	local line     = subs[i]
-	local text     = subs[i].text
-	local comment1 = subs[i].comment
-	local comment2 = false
-	local style1   = style_name
-	local style2   = line.style
-	if not config.u_comment_lines then comment1 = 1 comment2 = 1 end
-	if style_name == "Tüm stiller" then style1 = 1 style2 = 1 end
-		if subs[i].class == "dialogue" and comment1 == comment2 and style1 == style2 then
-		c = c + 1
-		mag.progress("Satır uzunlukları kontrol ediliyor...",c,total_line,true,300)
-			if mag.match(line.effect,"%(%d+%) "..msg1) or mag.match(line.effect,"%(%d+%) "..msg2) then
-			pcs         = true
-			line.effect = ""
-			end
-		local line_break = mag.match(line.text,"\\N")
-		local text, len  = text_len(line.text)
-			if len >= max_char and not line_break then
-			pcs         = true
-			line.effect = mag.format("(%s) %s",len,msg1)
-			elseif line_break then
-			local split_count, split_text = mag.splitter(true,line.text,"\\N")
-			local break_part              = {}
-			local strip_char
-				for j = 1, split_count do
-					strip_char = strip_len(split_text[j])
-					if strip_char >= max_char then
-					table.insert(break_part,strip_char)
-					end
-				end
-				if break_part[1] then
-				pcs         = true
-				table.sort(break_part)
-				break_part  = mag.reverse_short_array(break_part)
-				line.effect = mag.format("(%s) %s",break_part[1],msg2)
-				end
-			end
-			if pcs then
-			subs[i] = line
-			end
-		end
-	end
-	if not pcs then mag.log(2,"Hiçbir işlem yapılmadı.") end
-	end
 
 	function line_breaker(subs,sel,config)
 	local pcs        = false
@@ -366,9 +256,7 @@
 			end
 		end
 		if mag_version_check then
-		mag.register(script_name.."/Böl",        line_breaker_gui)
-		mag.register(script_name.."/Kontrol et", line_breaker_check_gui)
-		mag.register(script_name.."/Kaldır",     remove_line_breaker_gui)
+		mag.register(false,line_breaker_gui)
 		end
 	else
 	function mag_module() local k = aegisub.dialog.display({{class = "label", label = "Mag modülü bulunamadı.\nBu lua dosyasını kullanmak için Mag modülünü indirip kurmanız gerelidir.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end
