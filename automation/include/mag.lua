@@ -1,6 +1,6 @@
-﻿	module_name       = "Mag"
+	module_name       = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version    = "1.1.1.9"
+	module_version    = "1.1.2.0"
 	module_author     = "Magnum357"
 
 	unicode   = require 'aegisub.unicode'
@@ -92,7 +92,7 @@
 
 	--remove_dot_text = mag.removedot("Bu bir deneme.")
 	-->>Bu bir deneme
-	function mag.removedot(str) return mag.gsub(str,"[^ÂâA-Za-zşŞçÇıİğĞüÜöÖ0-9]+", "") end
+	function mag.removedot(str) return mag.gsub(str,"[^ÂâÎîÊêÔôÛûA-Za-zşŞçÇıİğĞüÜöÖ0-9]+", "") end
 
 	--mag.wall(" ",5)
 	-->>5x" "
@@ -635,7 +635,7 @@
 	local hour, min, sec, ms = "0", "00", "00", "00"
 	if mag.len(time) <= 2 then
 	hour, min, sec, ms = hour, min, sec, time
-	time = mag.format("%s:%s:%s.%s",hour,min,sec,ms)
+	time = mag.format("%s:%s:%s.%s",hour,mag.zero(10,min),mag.zero(10,sec),mag.zero(10,ms))
 	else
 	sec, ms = mag.match(time,"(%d+)(%d%d)")
 	min = mag.floor(sec / 60)
@@ -646,7 +646,7 @@
 		hour = mag.floor(min / 60)
 		min = min - hour * 60
 		end
-	hour, min, sec, ms = hour, mag.zero(10,min), mag.zero(10,sec), ms
+	hour, min, sec, ms = hour, mag.zero(10,min), mag.zero(10,sec), mag.zero(10,ms)
 	time = mag.format("%s:%s:%s.%s",hour,min,sec,ms)
 	end
 	return time
@@ -713,10 +713,10 @@
 	end
 
 	--pcs = true
-	--mag.log_error(line,"Hiçbir işlem yapılmadı.")
+	--mag.log_error(pcs,"Hiçbir işlem yapılmadı.")
 	-->>[UYARI] Hiçbir işlem yapılmadı.
 	function mag.log_error(value,error)
-	if not value then mag.log("%s\n%s",{"UYARI!",error}) end
+	if not value then mag.log(2,error) end
 	end
 
 	--frame_time = mag.frame_time(45641)
