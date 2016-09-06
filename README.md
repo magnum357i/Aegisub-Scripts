@@ -5,9 +5,10 @@
   - [**(2) Kurulum**](#kurulum)
   - [**(3) Kullanım**](#kullan%C4%B1m)
   - [**(4) Destek Verilen Sürüm**](#destek-verilen-s%C3%BCr%C3%BCm)
-  - [**(5) Kısayol Atamak**](#k%C4%B1sayol-atamak)
-  - [**(6) Güncelleyici veya İndirici**](#g%C3%BCncelleyici-veya-%C4%B0ndirici)
-  - [**(7) Arayüz Tercihleri**](#aray%C3%BCz-tercihleri)
+  - [**(5) Karakter Desteği**](#karakter-deste%C4%9Fi)
+  - [**(6) Kısayol Atamak**](#k%C4%B1sayol-atamak)
+  - [**(7) Güncelleyici veya İndirici**](#g%C3%BCncelleyici-veya-%C4%B0ndirici)
+  - [**(8) Arayüz Tercihleri**](#aray%C3%BCz-tercihleri)
 - [**(B) MODÜL**](#modÜl)
   - [**(1) Mag**](#mag)
 - [**(C) MAKROLAR**](#makrolar)
@@ -16,20 +17,21 @@
   - [**(3) Basic Turning**](#basic-turning)
   - [**(4) Break Line**](#break-line)
   - [**(5) Case Conversion**](#case-conversion)
-  - [**(6) Copy Dialogue**](#copy-dialogue)
-  - [**(7) Copy Paste Line**](#copy-paste-line)
-  - [**(8) Finder**](#finder)
-  - [**(9) Grid**](#grid)
-  - [**(10) K Char**](#k-char)
-  - [**(11) Line Format**](#line-format)
-  - [**(12) Select Lines**](#select-lines)
-  - [**(13) Shaper**](#shaper)
-  - [**(14) Strip Line**](#strip-line)
-  - [**(15) Sub Menu Maker**](#sub-menu-maker)
-  - [**(16) Text Align**](#text-align)
-  - [**(17) Timer**](#timer)
-  - [**(18) Trans State A1**](#trans-state-a1)
-  - [**(19) Typewritter**](#typewritter)
+  - [**(6) Checker**](#checker)
+  - [**(7) Copy Dialogue**](#copy-dialogue)
+  - [**(8) Copy Paste Line**](#copy-paste-line)
+  - [**(9) Finder**](#finder)
+  - [**(10) Grid**](#grid)
+  - [**(11) K Char**](#k-char)
+  - [**(12) Line Format**](#line-format)
+  - [**(13) Select Lines**](#select-lines)
+  - [**(14) Shaper**](#shaper)
+  - [**(15) Strip Line**](#strip-line)
+  - [**(16) Sub Menu Maker**](#sub-menu-maker)
+  - [**(17) Text Align**](#text-align)
+  - [**(18) Timer**](#timer)
+  - [**(19) Trans State A1**](#trans-state-a1)
+  - [**(20) Typewritter**](#typewritter)
 - [**(D) ASS**](#ass)
  * [**(1) Autotags**](#autotags)
  * [**(2) Color Fade**](#color-fade)
@@ -55,6 +57,13 @@ Kullanmak istediğiniz lua dosyasını doğru yere attıysanız **Automation** a
 
 #### Destek Verilen Sürüm
 Tüm lua dosyalarımı stabil olan en güncel Aegisub sürümü **3.2.2** sürümü üzerinden yazdım. Önceki **3.x.x** sürümlerinde de sorun yaşamayabilirsiniz fakat **2.x.x** sürümlerinde kesin sorunlar yaşayabilirsiniz. Daha güncel bir sürüm çıkarsa ve uyumsuzluk sorunu olursa düzenleyebilirim. Her zaman en güncel stabil sürüme destek vereceğim.
+
+#### Karakter Desteği
+A'dan Z'ye tüm Türkçe karakterlere destek verilmektedir. Buna ek olarak şunlara da destek verilir:
+
+Sesli harflerin uzun söylenişi: Â, Ê, Î, Ô, Û.
+
+Yarı sesli harflerin söylenişi: Ă, Ĕ, Ĭ, Ŏ, Ŭ.
 
 #### Kısayol Atamak
 Lua dosyalarını **Automation** alt menüsünden seçmeyip daha hızlı kullanmak için klavyeden bir kısayol atabilirsiniz.
@@ -203,6 +212,28 @@ Harflerle ilgili işlemler yapar.
 * **C/İ**": 'C'ümlelerin ilk harflerini 'B'üyük yapar.
 * **K/İ**: 'K'elimelerin 'İ'lk harflerini büyük yapar.
 * **K/İT**: 'K'elimelerin 'İ'lk harflerini büyük yapar. ('T'ürkçedeki bağlaçlara duyarlı.)
+
+---
+
+* **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+
+### [Checker](automation/autoload/mag.checker.lua)
+Alt yazıdaki satırların teknik sorunlarını kontrol edip Effect kutucuğuna simgesel bir not düşer.
+
+* **[Z]aman**
+  * **(1 = zaman alanındaki ilk iki seçenek)[1 - nn:nn:nn.nn]:** **Şundan az** alanı seçiliyse uygulanan satırın süresi **Şundan az** alanına girilen süreden az ise farkı hesaplayarak yazar.
+  * **(1 = zaman alanındaki ilk iki seçenek)[1 - nn:nn:nn.nn]:** **Şundan fazla** alanı seçiliyse uygulanan satırın süresi **Şundan fazla** alanına girilen süreden fazla ise farkı hesaplayarak yazar.
+  * **(2 = zaman alanındaki üçüncü seçenek)[2 - nn:nn:nn.nn]:** **Sonraki satır şundan az** alanı seçiliyse uygulanan satırın bitiş zamanı ile sonraki satırın başlangıç zamanı arasındaki fark **Sonraki satır şundan az** alanına girilen süreden az ise farkı hesaplayarak yazar.
+* **[K]arakter**
+  * **[n] **Sınır:** alanı seçiliyse uygulanan satırın karakter sayısı bu alana girilen sayıdan fazla ise karakter sayısını yazar.
+  * **(N = satır bölme)[nN]:** **Satır bölme arası** alanı seçiliyse uygulanan satırın satır bölündükten sonra oluşan en büyük karakter sayısını hesaplayıp bu alana girilen sayıdan fazla ise hesapladığı karakter sayısını yazar.
+* **[B]oşluk**
+  * **[n>n]:** *Birden fazla boşluk* alanı seçiliyse uygulanan satırda yanyana birden fazla boşluk varsa baştan başlayarak sayarak kaçıncı boşluk alanında kaç adet boşluk olduğunu yazar.
+  * **(S = satır)[ S ], [ S], [S ]:** **Satırdan önce ve sonra** alanı seçiliyse uygulanan satırdaki satırın öncesinde veya sonrasında boşluk varsa onu yazar.
+  * **[ \N ], [ \N], [\N ]:** **Satır bölmeden önce ve sonra** alanı seçiliyse uygulanan satırdaki satır bölme karakterinin öncesinde ve sonrasında boşluk varsa onu yazar.
+  * **[ ,], [ !], [ ?], [ :], [ ;], [ ' ], [ '], [' ], [" ], [ "], [... ], [ ...]:** **Noktalama işaretlerinden önce ve sonra** alanı seçiliyse uygulanan satırdaki noktalama işaretlerinin öncesinde ve sonrasında boşluk varsa onu yazar.
 
 ---
 
