@@ -223,17 +223,17 @@ Harflerle ilgili işlemler yapar.
 Alt yazıdaki satırların teknik sorunlarını kontrol edip Effect kutucuğuna simgesel bir not düşer.
 
 * **[Z]aman**
-  * **(1 = zaman alanındaki ilk iki seçenek)[1 - nn:nn:nn.nn]:** **Şundan az** alanı seçiliyse uygulanan satırın süresi **Şundan az** alanına girilen süreden az ise farkı hesaplayarak yazar.
-  * **(1 = zaman alanındaki ilk iki seçenek)[1 - nn:nn:nn.nn]:** **Şundan fazla** alanı seçiliyse uygulanan satırın süresi **Şundan fazla** alanına girilen süreden fazla ise farkı hesaplayarak yazar.
-  * **(2 = zaman alanındaki üçüncü seçenek)[2 - nn:nn:nn.nn]:** **Sonraki satır şundan az** alanı seçiliyse uygulanan satırın bitiş zamanı ile sonraki satırın başlangıç zamanı arasındaki fark **Sonraki satır şundan az** alanına girilen süreden az ise farkı hesaplayarak yazar.
+  * **(1 = zaman alanındaki ilk iki seçenek)[1 - nn:nn:nn.nn-]:** **Şundan az** alanı seçiliyse uygulanan satırın süresi **Şundan az** alanına girilen süreden az ise farkı hesaplayarak yazar.
+  * **(1 = zaman alanındaki ilk iki seçenek)[1 - nn:nn:nn.nn+]:** **Şundan fazla** alanı seçiliyse uygulanan satırın süresi **Şundan fazla** alanına girilen süreden fazla ise farkı hesaplayarak yazar.
+  * **(2 = zaman alanındaki üçüncü seçenek)[2 - nn:nn:nn.nn+]:** **Sonraki satır şundan az** alanı seçiliyse uygulanan satırın bitiş zamanı ile sonraki satırın başlangıç zamanı arasındaki fark **Sonraki satır şundan az** alanına girilen süreden az ise farkı hesaplayarak yazar.
 * **[K]arakter**
   * **[n] **Sınır:** alanı seçiliyse uygulanan satırın karakter sayısı bu alana girilen sayıdan fazla ise karakter sayısını yazar.
   * **(N = satır bölme)[nN]:** **Satır bölme arası** alanı seçiliyse uygulanan satırın satır bölündükten sonra oluşan en büyük karakter sayısını hesaplayıp bu alana girilen sayıdan fazla ise hesapladığı karakter sayısını yazar.
 * **[B]oşluk**
-  * **[n>n]:** *Birden fazla boşluk* alanı seçiliyse uygulanan satırda yanyana birden fazla boşluk varsa baştan başlayarak sayarak kaçıncı boşluk alanında kaç adet boşluk olduğunu yazar.
+  * **[n>n+]:** *Birden fazla boşluk* alanı seçiliyse uygulanan satırda yanyana birden fazla boşluk varsa baştan başlayarak sayarak kaçıncı boşluk alanında kaç adet boşluk olduğunu yazar.
   * **(S = satır)[ S ], [ S], [S ]:** **Satırdan önce ve sonra** alanı seçiliyse uygulanan satırdaki satırın öncesinde veya sonrasında boşluk varsa onu yazar.
   * **[ \N ], [ \N], [\N ]:** **Satır bölmeden önce ve sonra** alanı seçiliyse uygulanan satırdaki satır bölme karakterinin öncesinde ve sonrasında boşluk varsa onu yazar.
-  * **[ ,], [ !], [ ?], [ :], [ ;], [ ' ], [ '], [' ], [" ], [ "], [... ], [ ...]:** **Noktalama işaretlerinden önce ve sonra** alanı seçiliyse uygulanan satırdaki noktalama işaretlerinin öncesinde ve sonrasında boşluk varsa onu yazar.
+  * **[ .], [ ,], [ !], [ ?], [ :], [ ;], [ ' ], [ '], [' ], [" ], [ "], [... ], [ ...]:** **Noktalama işaretlerinden önce ve sonra** alanı seçiliyse uygulanan satırdaki noktalama işaretlerinin öncesinde ve sonrasında boşluk varsa onu yazar.
 
 ---
 

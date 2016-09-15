@@ -1,8 +1,8 @@
 	script_name        = "Checker"
 	script_description = "Satırlardaki sorunları kontrol eder."
-	script_version     = "0.7"
+	script_version     = "0.8.1"
 	script_author      = "Magnum357"
-	script_mag_version = "1.1.2.0"
+	script_mag_version = "1.1.2.1"
 
 	mag_import, mag = pcall(require,"mag")
 
@@ -30,7 +30,6 @@
 	local pcs         = false
 	local pcs2        = false
 	local apply_lines = mag.unstyles(config.u_apply_lines)
-	local first_index = mag.first_index(subs) - 1
 	local i_last
 	if apply_lines == "Seçili satırlar" then
 	local sel = mag.sel_index(subs,sel)
@@ -70,7 +69,7 @@
 				end
 				if c_time or c_time_next_min then
 				dur = 0
-					if k ~= i_last then
+					if k ~= #subs then
 					local next_line = subs[k + 1]
 						if next_line.start_time > line.end_time then
 						dur = next_line.start_time - line.end_time
@@ -107,8 +106,8 @@
 					end
 					if break_part[1] then
 					table.sort(break_part)
-					break_part  = mag.reverse_short_array(break_part)
-					check       = split2(check,mag.format("[%sN]",break_part[1]))
+					break_part = mag.reverse_short_array(break_part)
+					check      = split2(check,mag.format("[%sN]",break_part[1]))
 					end
 				end
 			end
@@ -116,21 +115,19 @@
 		result = split(check,result)
 		check  = ""
 			if c_space or c_space_double or c_space_break_line or c_space_line then
-			local strip_line   = ""
-			strip_line         = line.text
-			strip_line         = mag.strip(strip_line)
-			strip_line         = mag.special_strip(strip_line)
-			local strip_line_2 = ""
-			strip_line_2       = line.text
-			strip_line_2       = mag.strip(strip_line_2)
+			local strip_tag             = line.text
+			strip_tag                   = mag.strip(strip_tag)
+			local strip_tag_and_special = strip_tag
+			strip_tag_and_special       = mag.gsub(strip_tag_and_special,"\\[nN]","")
+			strip_tag_and_special       = mag.gsub(strip_tag_and_special,"\\h"," ")
 				if c_space or c_space_double then
-				local space_count = mag.ccount(strip_line,"%s")
+				local space_count = mag.ccount(strip_tag_and_special,"%s")
 				local sp          = {}
 				local plus        = ""
 				local sp_plus     = ""
 				local sp_check    = false
 				local sc          = 0
-				local sp_temp     = strip_line
+				local sp_temp     = strip_tag_and_special
 					if space_count > 0 then
 						for s = 1, space_count do
 							if mag.match(sp_temp,"%s+") then
@@ -142,8 +139,8 @@
 						sc = sc + 1
 							if sp[s2] > 1 then
 							sp_check = true
-							sp_plus = mag.format("%s%s%s>%s",sp_plus,plus,sc,sp[s2])
-							plus    = "+"
+							sp_plus = mag.format("%s%s%s>%s+",sp_plus,plus,sc,sp[s2] - 1)
+							plus    = ", "
 							end
 						end
 						if sp_check then
@@ -152,47 +149,51 @@
 					end
 				end
 				if c_space or c_space_break_line then
-					if mag.match(strip_line_2,"%s\\N%s") then
+					if mag.match(strip_tag,"%s\\N%s") then
 					check = split2(check,mag.format("[ %s ]","\\N"))
-					elseif mag.match(strip_line_2,"%s\\N") then
+					elseif mag.match(strip_tag,"%s\\N") then
 					check = split2(check,mag.format("[ %s]","\\N"))
-					elseif mag.match(strip_line_2,"\\N%s") then
+					elseif mag.match(strip_tag,"\\N%s") then
 					check = split2(check,mag.format("[%s ]","\\N"))
 					end
 				end
 				if c_space or c_space_line then
-					if mag.find(strip_line,"%s") == 1 and mag.find(mag.reverse(strip_line),"%s") == 1 then
+					if mag.find(strip_tag_and_special,"%s") == 1 and mag.find(mag.reverse(strip_tag_and_special),"%s") == 1 then
 					check = split2(check,mag.format("[ %s ]","S"))
-					elseif mag.find(strip_line,"%s") == 1 then
+					elseif mag.find(strip_tag_and_special,"%s") == 1 then
 					check = split2(check,mag.format("[ %s]","S"))
-					elseif mag.find(mag.reverse(strip_line),"%s") == 1 then
+					elseif mag.find(mag.reverse(strip_tag_and_special),"%s") == 1 then
 					check = split2(check,mag.format("[%s ]","S"))
 					end
 				end
 				if c_space or c_space_dots then
-					if mag.find(strip_line,"%s,") then
+					if mag.find(strip_tag_and_special,"["..mag.trc.."]%s+%.") then
+					check = split2(check,mag.format("[%s]"," ."))
+					end
+					if mag.find(strip_tag_and_special,"%s,") then
 					check = split2(check,mag.format("[%s]"," ,"))
 					end
-					if mag.find(strip_line,"%s!") then
+					if mag.find(strip_tag_and_special,"%s!") then
 					check = split2(check,mag.format("[%s]"," !"))
 					end
-					if mag.find(strip_line,"%s%?") then
+					if mag.find(strip_tag_and_special,"%s%?") then
 					check = split2(check,mag.format("[%s]"," ?"))
 					end
-					if mag.find(strip_line,"%s:") then
+					if mag.find(strip_tag_and_special,"%s:") then
 					check = split2(check,mag.format("[%s]"," :"))
 					end
-					if mag.find(strip_line,"%s;") then
+					if mag.find(strip_tag_and_special,"%s;") then
 					check = split2(check,mag.format("[%s]"," ;"))
 					end
-					if mag.find(strip_line,"%s'%s") then
+					if mag.find(strip_tag_and_special,"%s'%s") then
 					check = split2(check,mag.format("[%s]"," ' "))
-					elseif mag.find(strip_line,"%s'") then
+					elseif mag.find(strip_tag_and_special,"%s'") then
 					check = split2(check,mag.format("[%s]"," '"))
-					elseif mag.find(strip_line,"'%s") then
+					elseif mag.find(strip_tag_and_special,"'%s") then
 					check = split2(check,mag.format("[%s]","' "))
 					end
-				local qtext = mag.match(strip_line,"\".+\"")
+				local qtext = ""
+				qtext       = mag.match(strip_tag_and_special,"\".-\"")
 					if qtext then
 						if mag.match(qtext,"\" ") then
 						check = split2(check,mag.format("[%s ]","\" "))
@@ -201,7 +202,7 @@
 						check = split2(check,mag.format("[ %s]"," \""))
 						end
 					end
-				qtext = mag.space_trim(strip_line)
+				qtext = mag.space_trim(strip_tag_and_special)
 					if mag.find(qtext,"%.%.%.%s") == 1 then
 					check = split2(check,mag.format("[%s]","... "))
 					end
@@ -210,9 +211,9 @@
 					end
 				end
 			end
-		check  = put_title("B: ",check)
-		result = split(check,result)
-		check  = ""
+		check       = put_title("B: ",check)
+		result      = split(check,result)
+		check       = ""
 		result      = p(result)
 		result      = put_title(mag.format("%s ",c_main_msg),mag.format("%s",result))
 		if result ~= "" then pcs = true end
@@ -352,6 +353,11 @@
 	return t
 	end
 
+	function check_macro(subs,sel)
+	local fe, fee = pcall(add_macro,subs,sel)
+	mag.funce(fe,fee)
+	end
+
 	if mag_import then
 	mag_update_link           = "https://github.com/magnum357i/Magnum-s-Aegisub-Scripts"
 	mag_version_check         = false
@@ -365,7 +371,7 @@
 			end
 		end
 		if mag_version_check then
-		mag.register(false,add_macro)
+		mag.register(false,check_macro)
 		end
 	else
 	function mag_module() local k = aegisub.dialog.display({{class = "label", label = "Mag modülü bulunamadı.\nBu lua dosyasını kullanmak için Mag modülünü indirip kurmanız gerelidir.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end

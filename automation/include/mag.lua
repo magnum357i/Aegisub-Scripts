@@ -1,6 +1,6 @@
-	module_name       = "Mag"
+﻿	module_name       = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version    = "1.1.2.0"
+	module_version    = "1.1.2.1"
 	module_author     = "Magnum357"
 
 	unicode   = require 'aegisub.unicode'
@@ -8,6 +8,8 @@
 	include("karaskel.lua")
 
 	local mag = {}
+
+	mag.trc = "ÂâÎîÊêÔôÛûA-Za-zşŞçÇıİğĞüÜöÖ0-9"
 
 	--mag.progress("İşleminiz yapılıyor",i,7,true,5000)
 	--mag.progress("İşleminiz yapılıyor",i,7,false)
@@ -25,7 +27,7 @@
 	st = st .. i
 	end
 	return st
-	end	
+	end
 
 	--mag.prog("İşleminiz yapılıyor...")
 	function mag.prog(str)
@@ -92,7 +94,7 @@
 
 	--remove_dot_text = mag.removedot("Bu bir deneme.")
 	-->>Bu bir deneme
-	function mag.removedot(str) return mag.gsub(str,"[^ÂâÎîÊêÔôÛûA-Za-zşŞçÇıİğĞüÜöÖ0-9]+", "") end
+	function mag.removedot(str) return mag.gsub(str,"[^"..mag.trc.."]+", "") end
 
 	--mag.wall(" ",5)
 	-->>5x" "
@@ -729,6 +731,17 @@
 	--mag.html_to_ass(#000000)
 	-->>&H000000&
 	function mag.html_to_ass(color) return ass_color(extract_color(color)) end
+
+	--fe, fee = pcall(function,function_parameter1,function_parameter2,function_parameter3,...)
+	--mag.funce(fe,fee)
+	function mag.funce(fe,fee)
+	if not fe then
+	local err = mag.gsub(fee,"%[.-%]:","")
+	err = mag.gsub(err,":%s",". satırda \"",1)
+	err = mag.format("%s\" hatasıyla karşılaşıldı",err)
+	mag.log(1,mag.format("%s: %s.","Bilinmeyen bir hata oluştu",err))
+	end
+	end
 
 	mag.remove  = table.remove
 	mag.insert  = table.insert
