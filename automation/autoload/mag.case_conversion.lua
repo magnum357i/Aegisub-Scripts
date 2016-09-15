@@ -1,8 +1,8 @@
 	script_name        = "Case Conversion"
 	script_description = "Harflerle ilgili işlemler yapar."
-	script_version     = "0.8.4"
+	script_version     = "0.8.6"
 	script_author      = "Magnum357"
-	script_mag_version = "1.1.1.9"
+	script_mag_version = "1.1.2.1"
 
 	mag_import, mag = pcall(require,"mag")
 
@@ -11,7 +11,7 @@
 	c_comment_lines = true
 	c_reset_chars   = true
 	c_buttons       = {"C/B","C/K","C/İ","K/İ","K/İT","Kapat"}
-	c_chars         = "a-zA-ZçÇşŞıIiİüÜöÖ"
+	c_chars         = mag.trc
 	c_conjunction   = {"ama","fakat","için","ile","ve","veya","de","da",
 	                   "sanki","yani","hem","ya","ancak","bile","gerek",
 	                   "hatta","hem","ise","ki","yine","yoksa","zira",
@@ -251,6 +251,11 @@
 	end
 	end
 
+	function check_macro(subs,sel)
+	local fe, fee = pcall(add_macro,subs,sel)
+	mag.funce(fe,fee)
+	end
+
 	if mag_import then
 	mag_update_link           = "https://github.com/magnum357i/Magnum-s-Aegisub-Scripts"
 	mag_version_check         = false
@@ -264,7 +269,7 @@
 			end
 		end
 		if mag_version_check then
-		mag.register(script_name,add_macro)
+		mag.register(false,check_macro)
 		end
 	else
 	function mag_module() local k = aegisub.dialog.display({{class = "label", label = "Mag modülü bulunamadı.\nBu lua dosyasını kullanmak için Mag modülünü indirip kurmanız gerelidir.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end
