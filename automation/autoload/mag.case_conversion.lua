@@ -1,6 +1,6 @@
 	script_name        = "Case Conversion"
 	script_description = "Harflerle ilgili işlemler yapar."
-	script_version     = "0.8.6"
+	script_version     = "0.8.8"
 	script_author      = "Magnum357"
 	script_mag_version = "1.1.2.1"
 
@@ -21,7 +21,6 @@
 
 	function case_conversion(subs,sel,ok,config)
 	local apply_lines = mag.unstyles(config.u_apply_lines)
-	local first_index = mag.first_index(subs) - 1
 	local i_last
 	if apply_lines == "Seçili satırlar" then
 	local sel = mag.sel_index(subs,sel)
@@ -200,12 +199,16 @@
 
 	function eng_upper(text)
 	text = mag.gsub(text,"i","I")
+	text = mag.gsub(text,"ö","O")
+	text = mag.gsub(text,"ü","U")
 	text = mag.up(text)
 	return text
 	end
 
 	function eng_lower(text)
 	text = mag.gsub(text,"I","i")
+	text = mag.gsub(text,"O","ö")
+	text = mag.gsub(text,"U","ü")
 	text = mag.low(text)
 	return text
 	end
