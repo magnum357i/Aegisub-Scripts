@@ -199,16 +199,16 @@
 
 	function eng_upper(text)
 	text = mag.gsub(text,"i","I")
-	text = mag.gsub(text,"ö","O")
-	text = mag.gsub(text,"ü","U")
+	text = mag.gsub(text,"o","O")
+	text = mag.gsub(text,"u","U")
 	text = mag.up(text)
 	return text
 	end
 
 	function eng_lower(text)
 	text = mag.gsub(text,"I","i")
-	text = mag.gsub(text,"O","ö")
-	text = mag.gsub(text,"U","ü")
+	text = mag.gsub(text,"O","o")
+	text = mag.gsub(text,"U","u")
 	text = mag.low(text)
 	return text
 	end
