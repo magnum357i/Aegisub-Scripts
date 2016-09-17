@@ -13,17 +13,17 @@
   - [**(1) Mag**](#mag)
 - [**(C) MAKROLAR**](#makrolar)
   - [**(1) Delete Lines**](#delete-lines)
-  - [**(2) Line Source Duplicate**](#line-source-duplicate)
-  - [**(3) Basic Turning**](#basic-turning)
-  - [**(4) Break Line**](#break-line)
-  - [**(5) Case Conversion**](#case-conversion)
-  - [**(6) Checker**](#checker)
-  - [**(7) Copy Dialogue**](#copy-dialogue)
-  - [**(8) Copy Paste Line**](#copy-paste-line)
-  - [**(9) Finder**](#finder)
-  - [**(10) Grid**](#grid)
-  - [**(11) K Char**](#k-char)
-  - [**(12) Line Format**](#line-format)
+  - [**(2) Basic Turning**](#basic-turning)
+  - [**(3) Break Line**](#break-line)
+  - [**(4) Case Conversion**](#case-conversion)
+  - [**(5) Checker**](#checker)
+  - [**(6) Copy Dialogue**](#copy-dialogue)
+  - [**(7) Copy Paste Line**](#copy-paste-line)
+  - [**(8) Finder**](#finder)
+  - [**(9) Grid**](#grid)
+  - [**(10) K Char**](#k-char)
+  - [**(11) Line Format**](#line-format)
+  - [**(12) Line Source Duplicate**](#line-source-duplicate)
   - [**(13) Select Lines**](#select-lines)
   - [**(14) Shaper**](#shaper)
   - [**(15) Strip Line**](#strip-line)
@@ -89,37 +89,6 @@ Stile ya da aktöre göre satır silme işlemi yapar.
 ---
 
 * **Uygulanan satırlar:** Tek tek stillere veya aktörlere uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Modül:** Bu dosya modül kullanmıyor.
-
-### [Line Source Duplicate](automation/autoload/line_source_duplicate.lua)
-Kaynak metni çoğaltır. Çoğaltarak oluşturduğu girdileri de temizleyebilir.
-
-* **Stil:** Hangi stile göre işlem yapmasını istediğinizi seçin.
-* **Mod** 
- * **[M1A] Satır içinde yorum parantezleri**<br>
- Metin. {Metin.}
- * **[M1B] Satır içinde sadece yorum parantezleri**<br>
- {Metin.}
- * **[M2A] Satırdan sonra satır**<br>
- (1. satır) Metin.<br>
- (2. satır) Metin.
- * **[M2B] Satırdan sonra yorum satırı**<br>
- (1. satır) Metin.<br>
- (Yorum satırı olarak 2. satır) Metin.
- * **[M3A] Stilden sonra satır**<br>
- (1. satır) Metin.<br>
- (Stilin son satırından sonra 2. satır) Metin.
- * **[M3B] Stilden sonra yorum satırı**<br>
- (1. satır) Metin.*<br>
- (Stilin son satırından sonra yorum satırı olarak 2. satır) Metin.
-
-###### Notlar
-Oluşturduğu girdilere müdahalede bulunmayınız.
-
----
-
-* **Uygulanan satırlar:** Tüm stillere veya ayrı ayrı stillere uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
 * **Modül:** Bu dosya modül kullanmıyor.
 
 ### [Basic Turning](automation/autoload/mag.basic_turning.lua)
@@ -332,6 +301,15 @@ Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
 * **Uygulanan satırlar:** Seçili satırlara uygular.
 * **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz.
 * **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+
+### [Line Source Duplicate](automation/autoload/line_source_duplicate.lua)
+Kaynak metni çoğaltarak kaynak metinle beraber çeviri imkanı sunar.
+
+---
+
+* **Uygulanan satırlar:** Tüm stillere veya ayrı ayrı stillere uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
+* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Modül:** Bu dosya modül kullanmıyor.
 
 ### [Select Lines](automation/autoload/mag.select_lines.lua)
 Birçok ayarda satır seçme işlemi yapar.
