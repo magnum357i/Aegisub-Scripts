@@ -1,170 +1,218 @@
 	script_name        = "Translate State A1"
-	script_description = "Çevirinin yüzde kaçında olduğunuzu gösterir."
+	script_description = "Çeviriyi yüzdeler ve yüzdeye göre bölme yapar."
 	script_author      = "Magnum357"
-	script_version     = "1.7"
-	script_mag_version = "1.1.1.9"
+	script_version     = "2.0"
+	script_mag_version = "1.1.2.1"
 
 	mag_import, mag = pcall(require,"mag")
 
-	c_comment_mode = false
+	c_titles       = ""
+	c_comment_mode = true
 	c_empty_mode   = true
 	c_percent_mode = true
 	c_number_mode  = true
+	c_buttons      = {"Hesapla","Kapat"}
+	c_buttons1     = {"Kaldır","Kapat"}
 
 	function trans_state_a1(subs,sel,config)
-	local pcs          = false
-	local style_name   = mag.unstyles(config.u_style_name)
-	local comment_mode = config.u_comment_mode
-	local empty_mode   = config.u_empty_mode
-	local percent_mode = config.u_percent_mode
-	local number_mode  = config.u_number_mode
-	local n, m         = 0, 0
-	local zero, total_line, percent
-	local style1, style2, comment1, comment2
-	if percent_mode then
-	zero         = "11111"
-	percent_mode = false
+	local index       = {}
+	local tlines      = 0
+	local apply_lines = mag.unstyles(config.u_apply_lines)
+	local i_last
+	if apply_lines == "Seçili satırlar" then
+	local sel = mag.sel_index(subs,sel)
+	i_last    = table.getn(sel)
 	else
-	zero         = "11"
-	percent_mode = true
+	i_last    = #subs
 	end
-	if style_name == "Tüm stiller" then
-		if comment_mode then
-		total_line = mag.total_comment_full(subs)
-		else
-		total_line = mag.total_full(subs)
-		end
-	else
-		if comment_mode then
-		total_line = mag.total(subs,style_name,"comment")
-		else
-		total_line = mag.total(subs,style_name,"default")
-		end
-	end
-	if empty_mode then
-		for i = 1, #subs do
-		local line = subs[i]
-			if line.class == "dialogue" then
-				if style_name == "Tüm stiller" then
-				style1, style2 = 1, 1
-				else
-				style1, style2 = line.style, style_name
+	for i = 1, i_last do
+	local k
+	if apply_lines == "Seçili satırlar" then k = sel[i] else k = i end
+	local line     = subs[k]
+	local style1   = 1
+	local style2   = 1
+	local comment1 = 1
+	local comment2 = 1
+	if c_comment_mode then comment1, comment2 = line.comment, false end
+	if apply_lines ~= "Tüm stiller" then if apply_lines ~= "Seçili satırlar" then style1, style2 = line.style, apply_lines end end
+		if comment1 == comment2 and style1 == style2 and line.class == "dialogue" then
+			if c_empty_mode then
+				if mag.full_strip(mag.gsub(line.text,"%s-","")) ~= "" then
+				tlines = tlines + 1
+				mag.insert(index,k)
 				end
-				if comment_mode then
-				comment1, comment2 = line.comment, false
-				else
-				comment1, comment2 = 1, 1
-				end
-				if style1 == style2 and comment1 == comment2 then
-					if empty_mode then
-						if mag.full_strip(mag.gsub(line.text,"%s-","")) == "" then
-						m = m + 1
-						end
-					end
-				end
-			end
-		end
-	total_line = total_line - m
-	end
-	for i = 1, #subs do
-	local line = subs[i]
-		if line.class == "dialogue" then
-			if style_name == "Tüm stiller" then
-			style1, style2 = 1, 1
 			else
-			style1, style2 = line.style, style_name
+			tlines = tlines + 1
+			mag.insert(index,k)
 			end
-			if comment_mode then
-			comment1, comment2 = line.comment, false
-			else
-			comment1, comment2 = 1, 1
+		end
+	end
+	if index[1] ~= 1 then
+	local zero = "11"
+		if c_percent_mode then
+		zero = "11111"
+		end
+	local n = 0
+		for i = 1, #index do
+		line = subs[index[i]]
+		n = n + 1
+		local result  = ""
+		result        = mag.format("(%%%s)",mag.zero(zero,mag.percent(tlines,n,tf_and_ft(c_percent_mode))))
+			if c_number_mode then
+			result = split(" ",result,mag.format("%s / %s",tlines,mag.zero(tlines,n)))
 			end
-			if style1 == style2 and comment1 == comment2 then
-			local empty = false
-				if empty_mode then
-					if mag.full_strip(mag.gsub(line.text,"%s-","")) == "" then
-					empty = true
-					end
+			if result ~= "" then
+			line.effect    = result
+			subs[index[i]] = line
+			end
+		end
+	local title = {}
+		if mag.gsub(c_titles,"%s+","") ~= "" then
+		_, title = mag.vars(c_titles)
+		end
+		if title[1] ~= nil and #title < tlines then
+		local spc   = mag.floor(tlines / #title)
+		local lo    = tlines - mag.floor(tlines / spc) * mag.floor(tlines / #title)
+		local parts = {}
+		local m     = 0
+			for i = 1, #title do
+			mag.insert(parts,spc)
+			end
+		local lnc = 0
+			for j = 1, lo do
+			lnc = lnc + 1
+			parts[lnc] = parts[lnc] + 1
+				if parts[lnc + 1] == nil then
+				lnc = 0
 				end
-				if not empty then
-				pcs          = true
-				local result = ""
-				n            = n + 1
-					if number_mode then
-					result = result..mag.format("%s / %s ",total_line,mag.zero(total_line,n))
-					end
-					if result == "" then
-					result = mag.format("%s%%",mag.zero(zero,mag.percent(total_line,n,percent_mode)))
-					else
-					result = result..mag.format("(%s%%)",mag.zero(zero,mag.percent(total_line,n,percent_mode)))
-					end
-				line.effect = result
-				subs[i]     = line
+			end
+		local p = 1
+			for u = 1, #index do
+			line          = subs[index[u]]
+			m             = m + 1
+			local result2 = ""
+			result2       = mag.format("(%%%s)",mag.zero(zero,mag.percent(parts[p],m,tf_and_ft(c_percent_mode))))
+				if c_number_mode then
+				result2 = split(" ",result2,mag.format("%s / %s",parts[p],mag.zero(parts[p],m)))
+				end
+			result2 = split(" ",result2,mag.format("[%s]",title[p]))
+				if parts[p] == m then
+				p = p + 1
+				m = 0
+				end
+				if result2 ~= "" then
+				line.effect    = mag.format("%s - > %s",line.effect,result2)
+				subs[index[u]] = line
 				end
 			end
 		end
 	end
-	mag.log_error(pcs,"Hiçbir işlem yapılmadı.")
 	end
 
 	function no_trans_state_a1(subs,sel,config)
-	local pcs        = false
-	local style_name = mag.unstyles(config.u_style_name)
-	local style1, style2
-	for i = 1, #subs do
-	local line = subs[i]
-		if line.class == "dialogue" then
-			if style_name == "Tüm stiller" then
-			style1, style2 = 1, 1
-			else
-			style1, style2 = line.style, style_name
-			end
-			if style1 == style2 then
-				if mag.match(line.effect,"%d+%%") then
-				pcs         = true
-				line.effect = ""
-				subs[i]     = line
-				end
+	local apply_lines = mag.unstyles(config.u_apply_lines)
+	local i_last
+	if apply_lines == "Seçili satırlar" then
+	local sel = mag.sel_index(subs,sel)
+	i_last    = table.getn(sel)
+	else
+	i_last    = #subs
+	end
+	for i = 1, i_last do
+	local k
+	if apply_lines == "Seçili satırlar" then k = sel[i] else k = i end
+	local line     = subs[k]
+	local style1   = 1
+	local style2   = 1
+	local comment1 = 1
+	local comment2 = 1
+	if c_comment_mode then comment1, comment2 = line.comment, false end
+	if apply_lines ~= "Tüm stiller" then if apply_lines ~= "Seçili satırlar" then style1, style2 = line.style, apply_lines end end
+		if comment1 == comment2 and style1 == style2 and line.class == "dialogue" then
+			if mag.match(line.effect,"%%%d+") then
+			line.effect = ""
+			subs[k]     = line
 			end
 		end
 	end
-	mag.log_error(pcs,"Hiçbir işlem yapılmadı.")
 	end
 
-	function add_calc(subs)
-	local gui =
+	function split(split,value,new_value)
+	local r = value
+	if new_value ~= "" then
+	r = value..split..new_value
+	end
+	return r
+	end
+
+	function tf_and_ft(value)
+	if value == true then return false end
+	if value == false then return true end
+	end
+
+	function add_calc(subs,sel)
+	local sel_total_format  = sel_total_format(subs,sel,"comment","Seçili satırlar")
+	local subs_total_format = subs_total_format(subs,sel,"comment","Tüm stiller")
+	local apply_items       = {"Seç",sel_total_format,subs_total_format}
+	local z                 = false
+	local ok, config, gui
+	repeat
+	gui =
 	{
-	 {class = "label",                                                     x = 0, y = 0, width = 1,  height = 1, label = "Stil:"}
-	,{class = "dropdown", name = "u_style_name",   value = "Tüm stiller",  x = 1, y = 0, width = 1,  height = 1, items = {"Tüm stiller"}, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
-	,{class = "checkbox", name = "u_comment_mode", value = c_comment_mode, x = 1, y = 1, width = 1,  height = 1, label = "Yorum satırlarını geç."}
-	,{class = "checkbox", name = "u_empty_mode",   value = c_empty_mode,   x = 1, y = 2, width = 1,  height = 1, label = "Boş satırları geç."}
-	,{class = "checkbox", name = "u_percent_mode", value = c_percent_mode, x = 1, y = 3, width = 1,  height = 1, label = "Küsurat: n.n%"}
-	,{class = "checkbox", name = "u_number_mode",  value = c_number_mode,  x = 1, y = 4, width = 1,  height = 1, label = "Satır sayıları: n / n"}
+	 {class = "label",                                                     x = 0, y = 0, width = 1,  height = 1, label = mag.wall(" ",30).."Böl:"}
+	,{class = "edit",     name = "u_titles",       value = c_titles,       x = 1, y = 0, width = 20, height = 1, hint = "Bu bölüme arasına virgül koyarak girdiğiniz her kelime kadar genel yüzdeyi böler: bölme1,bölme2,bölme3,...\n\n Bu bölümü doldurmanız gerekmemektedir."}
+	,{class = "label",                                                     x = 0, y = 1, width = 1,  height = 1, label = "Uygulanacak satırlar:"}
+	,{class = "dropdown", name = "u_apply_lines",  value = "Seç",          x = 1, y = 1, width = 20, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
+	,{class = "checkbox", name = "u_comment_mode", value = c_comment_mode, x = 1, y = 2, width = 20, height = 1, label = "Yorum satırlarını geç."}
+	,{class = "checkbox", name = "u_empty_mode",   value = c_empty_mode,   x = 1, y = 3, width = 20, height = 1, label = "Boş satırları geç."}
+	,{class = "checkbox", name = "u_percent_mode", value = c_percent_mode, x = 1, y = 4, width = 20, height = 1, label = "Küsurat: n.n%"}
+	,{class = "checkbox", name = "u_number_mode",  value = c_number_mode,  x = 1, y = 5, width = 20, height = 1, label = "Satır sayıları: n / n"}
 	}
-	mag.styles_insert(subs,gui,2,"comment","")
-	local ok, config = mag.dlg(gui,{"Hesapla","Kapat"})
-	if ok == "Hesapla" then
+		if not z then
+		z = true
+		mag.styles_insert(subs,gui,4,"comment","")
+		end
+	ok, config = mag.dlg(gui,c_buttons)
+	c_titles       = config.u_titles
 	c_comment_mode = config.u_comment_mode
 	c_empty_mode   = config.u_empty_mode
 	c_percent_mode = config.u_percent_mode
 	c_number_mode  = config.u_number_mode
+	until ok == c_buttons[1] and config.u_apply_lines ~= "Seç" or ok == c_buttons[2]
+	if ok == c_buttons[1] then
 	trans_state_a1(subs,sel,config)
 	mag.undo_point()
 	end
 	end
 
-	function remove_calc(subs)
-	local gui =
+	function remove_calc(subs,sel)
+	local sel_total_format  = sel_total_format(subs,sel,"comment","Seçili satırlar")
+	local subs_total_format = subs_total_format(subs,sel,"comment","Tüm stiller")
+	local apply_items       = {"Seç",sel_total_format,subs_total_format}
+	local ok, config, gui
+	gui =
 	{
-	 {class = "label",                                                  x = 0, y = 0, width = 1,  height = 1, label = "Stil:"}
-	,{class = "dropdown", name = "u_style_name", value = "Tüm stiller", x = 1, y = 0, width = 1,  height = 1, items = {"Tüm stiller"}, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
+	 {class = "label",                                                     x = 0, y = 0, width = 1,  height = 1, label = "Uygulanacak satırlar:"}
+	,{class = "dropdown", name = "u_apply_lines",  value = "Seç",          x = 1, y = 0, width = 10, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
+	,{class = "checkbox", name = "u_comment_mode", value = c_comment_mode, x = 1, y = 1, width = 10, height = 1, label = "Yorum satırlarını geç."}
 	}
 	mag.styles_insert(subs,gui,2,"comment","")
-	local ok, config = mag.dlg(gui,{"Kaldır","Kapat"})
-	if ok == mag.ascii("Kaldır") then
+	ok, config = mag.dlg(gui,c_buttons1)
+	c_comment_mode = config.u_comment_mode
+	if ok == c_buttons1[1] then
 	no_trans_state_a1(subs,sel,config)
 	mag.undo_point()
 	end
+	end
+
+	function check_macro(subs,sel)
+	local fe, fee = pcall(add_calc,subs,sel)
+	mag.funce(fe,fee)
+	end
+
+	function check_macro1(subs,sel)
+	local fe, fee = pcall(remove_calc,subs,sel)
+	mag.funce(fe,fee)
 	end
 
 	if mag_import then
@@ -177,11 +225,9 @@
 			aegisub.register_macro(script_name,script_desription,mag_check)
 			else
 			mag_version_check = true
+			mag.register(script_name.."/Hesapla", check_macro)
+			mag.register(script_name.."/Kaldır",  check_macro1)
 			end
-		end
-		if mag_version_check then
-		mag.register(script_name.."/Hesapla", add_calc)
-		mag.register(script_name.."/Kaldır",  remove_calc)
 		end
 	else
 	function mag_module() local k = aegisub.dialog.display({{class = "label", label = "Mag modülü bulunamadı.\nBu lua dosyasını kullanmak için Mag modülünü indirip kurmanız gerelidir.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end

@@ -302,7 +302,7 @@ Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
 * **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz.
 * **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
-### [Line Source Duplicate](automation/autoload/line_source_duplicate.lua)
+### [Line Source Duplicate](automation/autoload/mag.line_source_duplicate.lua)
 Kaynak metni çoğaltarak kaynak metinle beraber çeviri imkanı sunar.
 
 ---
@@ -440,7 +440,7 @@ Karaktere göre metni böler.
 * **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Trans State A1](automation/autoload/mag.trans_state_a1.lua)
-`Effect` kutucuğuna yüzdeler yazar.
+Çeviriyi yüzdeleyip yüzdelediği satırlar içinde girilen kelimeler kadar bölme yapabilir. Bölme işlemindeki fazlalıklar birer birer diğer paylara dağıtararak eşitlenir. Bunları `Effect` kutucuğuna yazar.
 
 #### HESAPLA
 * **Yorum satırlarını geç:** Yorum satırı yapılmış satırlara işlem yapmaz.
