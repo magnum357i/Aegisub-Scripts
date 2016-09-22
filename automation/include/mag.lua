@@ -1,6 +1,6 @@
 ﻿	module_name       = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version    = "1.1.2.1"
+	module_version    = "1.1.2.4"
 	module_author     = "Magnum357"
 
 	unicode   = require 'aegisub.unicode'
@@ -157,6 +157,41 @@
 
 	--mag.styles_insert(subs,dlg_array,3,[default,comment,effect],[effect -> Mac])
 	function mag.styles_insert(subs,var,id,mode,value) for _, style in ipairs(mag.styles(subs,mode,value)) do table.insert(var[id].items,style) end end
+
+	--apply_items = mag.apply_items(subs,sel,"comment","")
+	function mag.apply_items(subs,sel,mode,value)
+	local sel_total_format  = sel_total_format(subs,sel,mode,"Seçili satırlar")
+	local subs_total_format = subs_total_format(subs,sel,mode,"Tüm stiller")
+	local apply             = {"Seç",sel_total_format,subs_total_format}
+	local styles            = mag.styles(subs,mode,value)
+	for _, style in ipairs(styles) do
+	mag.insert(apply,style)
+	end
+	return apply
+	end
+
+	--search_items = mag.search_apply_items(apply_items,"Song (50+80)")
+	-->>Song(40+48)
+	function mag.search_apply_items(apply,search)
+	local i = "Seç"
+	for _, item in ipairs(apply) do
+		if mag.unstyles(item) == mag.unstyles(search) then
+		i = item
+		end
+	end
+	return i
+	end
+
+	--search_item = mag.search_item(items,i,"deneme")
+	function mag.search_item(items,i,default)
+	local result = default
+	for _, item in ipairs(items) do
+		if item == i then
+		result = item
+		end
+	end
+	return result
+	end
 
 	--mag.dlg(gui_array,{"Tamam","Kapat"})
 	function mag.dlg(var,buttons)
@@ -740,6 +775,45 @@
 	err = mag.gsub(err,":%s",". satırda \"",1)
 	err = mag.format("%s\" hatasıyla karşılaşıldı",err)
 	mag.log(1,mag.format("%s: %s.","Bilinmeyen bir hata oluştu",err))
+	end
+	end
+
+	local config_file = aegisub.decode_path("?user".."\\".."["..script_author.."]"..script_name..".cfg")
+
+	--c = {}
+	--c.value1 = false
+	--cval = mag.set_config(c)
+	function mag.set_config(c)
+	local file = io.open(config_file,"w")
+	if file then
+	local cvals = ""
+		for config, value in pairs(c) do
+		cvals = cvals..mag.format("%s=%s\n",config,value)
+		end
+	file:write(cvals)
+	file:close()
+	else
+	mag.log(1,"Ayar dosyası oluşturulamadı.")
+	end
+	end
+
+	--c = {}
+	--c.value1 = false
+	--cval = mag.get_config(c)
+	function mag.get_config(c)
+	local file = io.open(config_file)
+	if file then
+	local cfgs = file:read("*all")
+	file:close()
+		for config, value in pairs(c) do
+		local v = mag.match(cfgs,config.."=(.-)\n")
+			if mag.s(v) == "true" then
+			v = true
+			end
+			if v ~= nil then
+			c[config] = v
+			end
+		end
 	end
 	end
 

@@ -59,11 +59,7 @@ Kullanmak istediğiniz lua dosyasını doğru yere attıysanız **Automation** a
 Tüm lua dosyalarımı stabil olan en güncel Aegisub sürümü **3.2.2** sürümü üzerinden yazdım. Önceki **3.x.x** sürümlerinde de sorun yaşamayabilirsiniz fakat **2.x.x** sürümlerinde kesin sorunlar yaşayabilirsiniz. Daha güncel bir sürüm çıkarsa ve uyumsuzluk sorunu olursa düzenleyebilirim. Her zaman en güncel stabil sürüme destek vereceğim.
 
 #### Karakter Desteği
-A'dan Z'ye tüm Türkçe karakterlere destek verilmektedir. Buna ek olarak şunlara da destek verilir:
-
-Sesli harflerin uzun söylenişi: Â, Ê, Î, Ô, Û.
-
-Yarı sesli harflerin söylenişi: Ă, Ĕ, Ĭ, Ŏ, Ŭ.
+A'dan Z'ye tüm Türkçe karakterlere, sesli harflerin uzun söylenişlerine(Â, Ê, Î, Ô, Û), yarı sesli harflerin söylenişlerine(Ă, Ĕ, Ĭ, Ŏ, Ŭ) destek verilir.
 
 #### Kısayol Atamak
 Lua dosyalarını **Automation** alt menüsünden seçmeyip daha hızlı kullanmak için klavyeden bir kısayol atabilirsiniz.
@@ -74,7 +70,12 @@ Lua dosyalarını **Automation** alt menüsünden seçmeyip daha hızlı kullanm
 Kullanılan durumlarda çıkan hata veya eksikliklerden sürekli sürüm atlatıyorum. Eksiklikleri ekleyeceğim bir lua olmadığında ve o işi yapan başka bir lua dosyası yoksa yeni bir lua dosyası yazıyorum. İndirilen lua dosyaları için sürüm güncelleyici veya yeni lua dosyaları için bir indirici yapılabilir fakat bu yerel imkanlarla mümkün değil. Çok fazla yan dosya gerekli. Hatta farklı bir depo açmam bile gerekebilir. Bu yüzden şimdilik gerek duymuyorum.
 
 #### Arayüz Tercihleri
-Arayüzlü lua dosyalarında yapılan değişiklikler alt yazı dosyasını kapatmadığınız sürece bir sonraki açılışta hatırlanır fakat alt yazı dosyasını kapayıp açınca veya başka bir alt yazı dosyasında lua dosyasını çalıştırdığınızda varsayılan tercihlere döner. Bunun için bir config dosyası oluşturulması gerekmektedir. Şu anlık böyle bir planım olmadığı için tercihleri geçici hafızada tutmaya devam edeceğim.
+~~Arayüzlü lua dosyalarında yapılan değişiklikler alt yazı dosyasını kapatmadığınız sürece bir sonraki açılışta hatırlanır fakat alt yazı dosyasını kapayıp açınca veya başka bir alt yazı dosyasında lua dosyasını çalıştırdığınızda varsayılan tercihlere döner. Bunun için bir config dosyası oluşturulması gerekmektedir. Şu anlık böyle bir planım olmadığı için tercihleri geçici hafızada tutmaya devam edeceğim.~~
+
+**Yeni özellik:**
+Tercihler, arayüz kapatıldığında harici bir dosyaya kaydedilir. Bu dosya **%appdata%/aegisub/** dizininde oluşturulmaktadır. Taşınabilir Aegisub sürümlerinde aegisub.exe dosyasının olduğu yerdedir.
+
+Bu yapı ile tercihleriniz her koşulda hatırlanır. Test edilmek amacıyla şimdilik sadece **Checker** lua dosyasında vardır. Test süresi sonrası her lua dosyasına eklenecektir.
 
 ## MODÜL
 
@@ -207,7 +208,7 @@ Alt yazıdaki satırların teknik sorunlarını kontrol edip Effect kutucuğuna 
 ---
 
 * **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
 * **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Copy Dialogue](automation/autoload/mag.copy_dialogue.lua)
