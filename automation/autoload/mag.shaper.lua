@@ -1,7 +1,7 @@
 	script_name        = "Shaper"
 	script_description = "Resim, şerit ve ızgara ekler. Bir VSFilterMOD etiketini kullanarak resim ekler."
 	script_author      = "Magnum357"
-	script_version     = "1.4.3"
+	script_version     = "1.4.4"
 	script_mag_version = "1.1.2.5"
 
 	mag_import, mag             = pcall(require,"mag")
@@ -9,9 +9,9 @@
 
 	include_path      = aegisub.decode_path("?data\\automation\\include\\")
 	c_buttons         = {"Resim","Şerit","Izgara","Kapat"}
-	c_buttons1        = {"Uygula","Dosya seç","Panodan al","Kapat"}
-	c_buttons2        = {"Çizdir","Kapat"}
-	c_buttons3        = {"Oluştur","Kapat"}
+	c_buttons1        = {"Uygula","Dosya seç","Panodan al","Geri","Kapat"}
+	c_buttons2        = {"Çizdir","Geri","Kapat"}
+	c_buttons3        = {"Oluştur","Geri","Kapat"}
 	c_image_message   = "\"Dosya seçilmedi.\""
 	c                 = {}
 	c.image_path      = c_image_message
@@ -33,19 +33,20 @@
 	function add_macro(subs,sel,act)
 	mag.get_config(c)
 	local pcs = false
-	local gui, ok, config
-	gui = {{class = "label", x = 0, y = 0, width = 1, height = 1, label = "Devam etmek için aşağıdaki seçeneklerden birini seçiniz."}}
-	ok  = mag.dlg(gui,c_buttons)
-	if ok == c_buttons[1] then
-	shaper_image(subs,sel,act)
-	mag.undo_point()
-	end
-	if ok == c_buttons[2] then
-	shaper_lane(subs,sel,act)
-	mag.undo_point()
-	end
-	if ok == c_buttons[3] then
-	shaper_grid(subs,sel,act)
+	repeat
+	local gui = {{class = "label", x = 0, y = 0, width = 1, height = 1, label = "Devam etmek için aşağıdaki seçeneklerden birini seçiniz."}}
+	local ok  = mag.dlg(gui,c_buttons)
+		if ok == c_buttons[1] then
+		pcs, ok = shaper_image(subs,sel,act)
+		end
+		if ok == c_buttons[2] then
+		pcs, ok = shaper_lane(subs,sel,act)
+		end
+		if ok == c_buttons[3] then
+		pcs, ok = shaper_grid(subs,sel,act)
+		end
+	until pcs == true or ok == c_buttons[4]
+	if pcs then
 	mag.undo_point()
 	end
 	mag.set_config(c)
@@ -53,6 +54,7 @@
 
 	function shaper_image(subs,sel,act)
 	local pcs = false
+	local ok, config
 	if not imagesize_import then
 	mag.log(1,"ImageSize modül dosyası bulunamadı. Şu bağlantıdan indirebilirsiniz:\nhttps://github.com/ScottPhillips/Corona-SDK-Lua-Image-Size/tree/master/imagesize\n\nYönlendirilen sayfadan \"imagesize.lua\" dosyası ve \"imagesize\" klasörünü automation/include/ dizinine atmanız gerekiyor. \"imagesize/format\" dosyası içinden sadece \"png.lua\" dosyasına ihtiyaç vardır.")
 	elseif not io.open(include_path.."imagesize\\util.lua") then
@@ -64,12 +66,12 @@
 		repeat
 		gui =
 		{
-		 {class = "label",                                                           x = 0, y = 0, width = 21, height = 1, label = mag.format("[%s / %s]",mag.up(script_name),mag.up("resim"))}
-			,{class = "label",                                                           x = 0, y = 1, width = 1,  height = 1, label = mag.wall(" ",5).."Dizin:"}
-		,{class = "label",                                                           x = 1, y = 1, width = 20, height = 1, label = c.image_path}
+		 {class = "label",                                                           x = 0, y = 0, width = 30, height = 1, label = mag.format("[%s / %s]",mag.up(script_name),mag.up("resim"))}
+		,{class = "label",                                                           x = 0, y = 1, width = 1,  height = 1, label = mag.wall(" ",5).."Dizin:"}
+		,{class = "label",                                                           x = 1, y = 1, width = 29, height = 1, label = c.image_path}
 		,{class = "label",                                                           x = 0, y = 2, width = 1,  height = 1, label = "Etiketler:"}
-		,{class = "edit",     name = "u_image_tags",      value = c.image_tags,      x = 1, y = 2, width = 20, height = 1, hint = "$shape = çizim\n$image = resim"}
-		,{class = "checkbox", name = "u_image_only_path", value = c.image_only_path, x = 1, y = 3, width = 20, height = 1, label = "Sadece resim yolunu değiştir.", hint = "Sadece varolan img etiketini değiştir."}
+		,{class = "edit",     name = "u_image_tags",      value = c.image_tags,      x = 1, y = 2, width = 29, height = 1, hint = "$shape = çizim\n$image = resim"}
+		,{class = "checkbox", name = "u_image_only_path", value = c.image_only_path, x = 1, y = 3, width = 29, height = 1, label = "Sadece resim yolunu değiştir.", hint = "Sadece varolan img etiketini değiştir."}
 		}
 		ok, config        = mag.dlg(gui,c_buttons1)
 		c.image_tags      = config.u_image_tags
@@ -89,7 +91,7 @@
 			file = mag.format("\"%s\"",file)
 			end
 		c.image_path = file
-		until ok == mag.ascii(c_buttons1[1]) and c.image_path ~= c_image_message or ok == c_buttons1[4]
+		until ok == mag.ascii(c_buttons1[1]) and c.image_path ~= c_image_message or ok == c_buttons[4] or ok == c_buttons1[4]
 		if ok == c_buttons1[1] then
 		local file_temp = mag.gsub(c.image_path,"\"","")
 			if io.open(file_temp) then
@@ -128,6 +130,7 @@
 			end
 		end
 	end
+	return pcs, ok
 	end
 
 	function shaper_lane(subs,sel,act)
@@ -173,25 +176,26 @@
 			subs[act] = line
 			end
 		end
+	return pcs, ok
 	end
 
 	function shaper_grid(subs,sel,act)
 	local pcs = false
 	local gui =
 	{
-	 {class  = "label",                                                            x = 0, y = 0, width = 2, height = 1, label = mag.format("[%s / %s]",mag.up(script_name),mag.up("ızgara"))}
+	 {class = "label",                                                            x = 0, y = 0, width = 5, height = 1, label = mag.format("[%s / %s]",mag.up(script_name),mag.up("ızgara"))}
 	,{class = "label",                                                            x = 0, y = 1, width = 1, height = 1, label = mag.wall(" ",7).."Sayı:"}
-	,{class = "intedit",  name = "u_grid_number", value = c.grid_number, min = 2, x = 1, y = 1, width = 1, height = 1}
+	,{class = "intedit",  name = "u_grid_number", value = c.grid_number, min = 2, x = 1, y = 1, width = 4, height = 1}
 	,{class = "label",                                                            x = 0, y = 2, width = 1, height = 1, label = mag.wall(" ",4).."Aralık:"}
-	,{class = "intedit",  name = "u_grid_space",  value = c.grid_space,  min = 1, x = 1, y = 2, width = 1, height = 1}
+	,{class = "intedit",  name = "u_grid_space",  value = c.grid_space,  min = 1, x = 1, y = 2, width = 4, height = 1}
 	,{class = "label",                                                            x = 0, y = 3, width = 1, height = 1, label = mag.wall(" ",4).."Piksel:"}
-	,{class = "intedit",  name = "u_grid_thick",  value = c.grid_thick,  min = 1, x = 1, y = 3, width = 1, height = 1}
+	,{class = "intedit",  name = "u_grid_thick",  value = c.grid_thick,  min = 1, x = 1, y = 3, width = 4, height = 1}
 	,{class = "label",                                                            x = 0, y = 4, width = 1, height = 1, label = "Etiketler:"}
-	,{class = "edit",     name = "u_grid_tags",   value = c.grid_tags,            x = 1, y = 4, width = 1, height = 1}
+	,{class = "edit",     name = "u_grid_tags",   value = c.grid_tags,            x = 1, y = 4, width = 4, height = 1}
 	,{class = "label",                                                            x = 0, y = 5, width = 1, height = 1, label = mag.wall(" ",5).."Renk:"}
-	,{class = "color",    name = "u_grid_color",  value = c.grid_color,           x = 1, y = 5, width = 1, height = 1}
+	,{class = "color",    name = "u_grid_color",  value = c.grid_color,           x = 1, y = 5, width = 4, height = 1}
 	,{class = "label",                                                            x = 0, y = 6, width = 1, height = 1, label = mag.wall(" ",4).."Biçim:"}
-	,{class = "dropdown", name = "u_grid_type",   value = c.grid_type,            x = 1, y = 6, width = 1, height = 1, items = c_grid_type}
+	,{class = "dropdown", name = "u_grid_type",   value = c.grid_type,            x = 1, y = 6, width = 4, height = 1, items = c_grid_type}
 	}
 	local ok, config = mag.dlg(gui,c_buttons3)
 	c.grid_number    = config.u_grid_number
@@ -249,6 +253,7 @@
 		line.text     = mag.format("{\\c%s%s}%s",mag.html_to_ass(c.grid_color),c.grid_tags,shape)
 		subs[act]     = line
 		end
+	return pcs, ok
 	end
 
 	function check_macro(subs,sel,act)
