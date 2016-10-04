@@ -1,16 +1,18 @@
 	script_name        = "Translate State A1"
 	script_description = "Çeviriyi yüzdeler ve yüzdeye göre bölme yapar."
 	script_author      = "Magnum357"
-	script_version     = "2.0"
-	script_mag_version = "1.1.2.1"
+	script_version     = "2.1"
+	script_mag_version = "1.1.2.4"
 
 	mag_import, mag = pcall(require,"mag")
 
-	c_titles       = ""
-	c_comment_mode = true
-	c_empty_mode   = true
-	c_percent_mode = true
-	c_number_mode  = true
+	c              = {}
+	c.titles       = ""
+	c.comment_mode = true
+	c.empty_mode   = true
+	c.percent_mode = true
+	c.number_mode  = true
+	c.apply        = "Seç"
 	c_buttons      = {"Hesapla","Kapat"}
 	c_buttons1     = {"Kaldır","Kapat"}
 
@@ -33,10 +35,10 @@
 	local style2   = 1
 	local comment1 = 1
 	local comment2 = 1
-	if c_comment_mode then comment1, comment2 = line.comment, false end
+	if c.comment_mode then comment1, comment2 = line.comment, false end
 	if apply_lines ~= "Tüm stiller" then if apply_lines ~= "Seçili satırlar" then style1, style2 = line.style, apply_lines end end
 		if comment1 == comment2 and style1 == style2 and line.class == "dialogue" then
-			if c_empty_mode then
+			if c.empty_mode then
 				if mag.full_strip(mag.gsub(line.text,"%s-","")) ~= "" then
 				tlines = tlines + 1
 				mag.insert(index,k)
@@ -49,7 +51,7 @@
 	end
 	if index[1] ~= 1 then
 	local zero = "11"
-		if c_percent_mode then
+		if c.percent_mode then
 		zero = "11111"
 		end
 	local n = 0
@@ -57,8 +59,8 @@
 		line = subs[index[i]]
 		n = n + 1
 		local result  = ""
-		result        = mag.format("(%%%s)",mag.zero(zero,mag.percent(tlines,n,tf_and_ft(c_percent_mode))))
-			if c_number_mode then
+		result        = mag.format("(%%%s)",mag.zero(zero,mag.percent(tlines,n,tf_and_ft(c.percent_mode))))
+			if c.number_mode then
 			result = split(" ",result,mag.format("%s / %s",tlines,mag.zero(tlines,n)))
 			end
 			if result ~= "" then
@@ -67,8 +69,8 @@
 			end
 		end
 	local title = {}
-		if mag.gsub(c_titles,"%s+","") ~= "" then
-		_, title = mag.vars(c_titles)
+		if mag.gsub(c.titles,"%s+","") ~= "" then
+		_, title = mag.vars(c.titles)
 		end
 		if title[1] ~= nil and #title < tlines then
 		local spc   = mag.floor(tlines / #title)
@@ -91,8 +93,8 @@
 			line          = subs[index[u]]
 			m             = m + 1
 			local result2 = ""
-			result2       = mag.format("(%%%s)",mag.zero(zero,mag.percent(parts[p],m,tf_and_ft(c_percent_mode))))
-				if c_number_mode then
+			result2       = mag.format("(%%%s)",mag.zero(zero,mag.percent(parts[p],m,tf_and_ft(c.percent_mode))))
+				if c.number_mode then
 				result2 = split(" ",result2,mag.format("%s / %s",parts[p],mag.zero(parts[p],m)))
 				end
 			result2 = split(" ",result2,mag.format("[%s]",title[p]))
@@ -126,7 +128,7 @@
 	local style2   = 1
 	local comment1 = 1
 	local comment2 = 1
-	if c_comment_mode then comment1, comment2 = line.comment, false end
+	if c.comment_mode then comment1, comment2 = line.comment, false end
 	if apply_lines ~= "Tüm stiller" then if apply_lines ~= "Seçili satırlar" then style1, style2 = line.style, apply_lines end end
 		if comment1 == comment2 and style1 == style2 and line.class == "dialogue" then
 			if mag.match(line.effect,"%%%d+") then
@@ -151,58 +153,58 @@
 	end
 
 	function add_calc(subs,sel)
-	local sel_total_format  = sel_total_format(subs,sel,"comment","Seçili satırlar")
-	local subs_total_format = subs_total_format(subs,sel,"comment","Tüm stiller")
-	local apply_items       = {"Seç",sel_total_format,subs_total_format}
-	local z                 = false
+	mag.get_config(c)
+	local apply_items = mag.apply_items(subs,sel,"comment","")
+	c.apply           = mag.search_apply_items(apply_items,c.apply)
 	local ok, config, gui
 	repeat
 	gui =
 	{
 	 {class = "label",                                                     x = 0, y = 0, width = 1,  height = 1, label = mag.wall(" ",30).."Böl:"}
-	,{class = "edit",     name = "u_titles",       value = c_titles,       x = 1, y = 0, width = 20, height = 1, hint = "Bu bölüme arasına virgül koyarak girdiğiniz her kelime kadar genel yüzdeyi böler: bölme1,bölme2,bölme3,...\n\n Bu bölümü doldurmanız gerekmemektedir."}
+	,{class = "edit",     name = "u_titles",       value = c.titles,       x = 1, y = 0, width = 20, height = 1, hint = "Bu bölüme arasına virgül koyarak girdiğiniz her kelime kadar genel yüzdeyi böler: bölme1,bölme2,bölme3,...\n\n Bu bölümü doldurmanız gerekmemektedir."}
 	,{class = "label",                                                     x = 0, y = 1, width = 1,  height = 1, label = "Uygulanacak satırlar:"}
-	,{class = "dropdown", name = "u_apply_lines",  value = "Seç",          x = 1, y = 1, width = 20, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
-	,{class = "checkbox", name = "u_comment_mode", value = c_comment_mode, x = 1, y = 2, width = 20, height = 1, label = "Yorum satırlarını geç."}
-	,{class = "checkbox", name = "u_empty_mode",   value = c_empty_mode,   x = 1, y = 3, width = 20, height = 1, label = "Boş satırları geç."}
-	,{class = "checkbox", name = "u_percent_mode", value = c_percent_mode, x = 1, y = 4, width = 20, height = 1, label = "Küsurat: n.n%"}
-	,{class = "checkbox", name = "u_number_mode",  value = c_number_mode,  x = 1, y = 5, width = 20, height = 1, label = "Satır sayıları: n / n"}
+	,{class = "dropdown", name = "u_apply_lines",  value = c.apply,        x = 1, y = 1, width = 20, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
+	,{class = "checkbox", name = "u_comment_mode", value = c.comment_mode, x = 1, y = 2, width = 20, height = 1, label = "Yorum satırlarını geç."}
+	,{class = "checkbox", name = "u_empty_mode",   value = c.empty_mode,   x = 1, y = 3, width = 20, height = 1, label = "Boş satırları geç."}
+	,{class = "checkbox", name = "u_percent_mode", value = c.percent_mode, x = 1, y = 4, width = 20, height = 1, label = "Küsurat: n.n%"}
+	,{class = "checkbox", name = "u_number_mode",  value = c.number_mode,  x = 1, y = 5, width = 20, height = 1, label = "Satır sayıları: n / n"}
 	}
-		if not z then
-		z = true
-		mag.styles_insert(subs,gui,4,"comment","")
-		end
-	ok, config = mag.dlg(gui,c_buttons)
-	c_titles       = config.u_titles
-	c_comment_mode = config.u_comment_mode
-	c_empty_mode   = config.u_empty_mode
-	c_percent_mode = config.u_percent_mode
-	c_number_mode  = config.u_number_mode
-	until ok == c_buttons[1] and config.u_apply_lines ~= "Seç" or ok == c_buttons[2]
+	ok, config     = mag.dlg(gui,c_buttons)
+	c.titles       = config.u_titles
+	c.comment_mode = config.u_comment_mode
+	c.empty_mode   = config.u_empty_mode
+	c.percent_mode = config.u_percent_mode
+	c.apply        = config.u_apply_lines
+	c.number_mode  = config.u_number_mode
+	until ok == c_buttons[1] and c.apply ~= "Seç" or ok == c_buttons[2]
 	if ok == c_buttons[1] then
 	trans_state_a1(subs,sel,config)
 	mag.undo_point()
 	end
+	mag.set_config(c)
 	end
 
 	function remove_calc(subs,sel)
-	local sel_total_format  = sel_total_format(subs,sel,"comment","Seçili satırlar")
-	local subs_total_format = subs_total_format(subs,sel,"comment","Tüm stiller")
-	local apply_items       = {"Seç",sel_total_format,subs_total_format}
+	mag.get_config(c)
+	local apply_items = mag.apply_items(subs,sel,"comment","")
+	c.apply           = mag.search_apply_items(apply_items,c.apply)
 	local ok, config, gui
+	repeat
 	gui =
 	{
 	 {class = "label",                                                     x = 0, y = 0, width = 1,  height = 1, label = "Uygulanacak satırlar:"}
-	,{class = "dropdown", name = "u_apply_lines",  value = "Seç",          x = 1, y = 0, width = 10, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
-	,{class = "checkbox", name = "u_comment_mode", value = c_comment_mode, x = 1, y = 1, width = 10, height = 1, label = "Yorum satırlarını geç."}
+	,{class = "dropdown", name = "u_apply_lines",  value = c.apply,        x = 1, y = 0, width = 10, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
+	,{class = "checkbox", name = "u_comment_mode", value = c.comment_mode, x = 1, y = 1, width = 10, height = 1, label = "Yorum satırlarını geç."}
 	}
-	mag.styles_insert(subs,gui,2,"comment","")
-	ok, config = mag.dlg(gui,c_buttons1)
-	c_comment_mode = config.u_comment_mode
+	ok, config     = mag.dlg(gui,c_buttons1)
+	c.apply        = config.u_apply_lines
+	c.comment_mode = config.u_comment_mode
+	until ok == c_buttons1[1] and config.u_apply_lines ~= "Seç" or ok == c_buttons[2]
 	if ok == c_buttons1[1] then
 	no_trans_state_a1(subs,sel,config)
 	mag.undo_point()
 	end
+	mag.set_config(c)
 	end
 
 	function check_macro(subs,sel)

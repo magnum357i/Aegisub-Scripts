@@ -1,6 +1,6 @@
 ﻿	module_name       = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version    = "1.1.2.4"
+	module_version    = "1.1.2.5"
 	module_author     = "Magnum357"
 
 	unicode   = require 'aegisub.unicode'
@@ -786,11 +786,22 @@
 	function mag.set_config(c)
 	local file = io.open(config_file,"w")
 	if file then
-	local cvals = ""
+	local cvals  = {}
 		for config, value in pairs(c) do
-		cvals = cvals..mag.format("%s=%s\n",config,value)
+		mag.insert(cvals,mag.format("%s=%s",config,value))
 		end
-	file:write(cvals)
+	mag.sort(cvals)
+	local header = mag.format("[%s]",script_name)
+	local cval   = ""
+		for i = 1, #cvals + 1 do
+			if i == 1 then
+			cval = header
+			else
+			cval = cval.."\n"..cvals[i - 1]
+			end
+		end
+	cval = cval.."\n"..header
+	file:write(cval)
 	file:close()
 	else
 	mag.log(1,"Ayar dosyası oluşturulamadı.")
@@ -803,10 +814,10 @@
 	function mag.get_config(c)
 	local file = io.open(config_file)
 	if file then
-	local cfgs = file:read("*all")
+	local configs = file:read("*all")
 	file:close()
 		for config, value in pairs(c) do
-		local v = mag.match(cfgs,config.."=(.-)\n")
+		local v = mag.match(configs,"\n"..config.."=(.-)\n")
 			if mag.s(v) == "true" then
 			v = true
 			end
@@ -817,30 +828,49 @@
 	end
 	end
 
-	mag.remove  = table.remove
-	mag.insert  = table.insert
-	mag.cget    = clipboard.get
-	mag.cset    = clipboard.set
-	mag.s       = tostring
-	mag.n       = tonumber
-	mag.floor   = math.floor
-	mag.ceil    = math.ceil
-	mag.rand    = math.random
-	mag.char    = string.char
-	mag.find    = string.find
-	mag.format  = string.format
-	mag.gmatch  = string.gmatch
-	mag.gsub    = string.gsub
-	mag.length  = string.len
-	mag.match   = string.match
-	mag.rep     = string.rep
-	mag.reverse = string.reverse
-	mag.sub     = string.sub
-	mag.upper   = string.upper
-	mag.lower   = string.lower
-	mag.up      = unicode.to_upper_case
-	mag.low     = unicode.to_lower_case
-	mag.len     = unicode.len
-	mag.rmacro  = aegisub.register_macro
+	--mag.is_video()
+	-->>true
+	-->>false
+	function mag.is_video()
+	local v = true
+	if mag.ms_from_f(0) == nil then v = false end
+	return v
+	end
+
+	mag.ms_from_f = aegisub.ms_from_frame
+	mag.f_from_ms = aegisub.frame_from_ms
+	mag.concat    = table.concat
+	mag.sort      = table.sort
+	mag.remove    = table.remove
+	mag.insert    = table.insert
+	mag.cget      = clipboard.get
+	mag.cset      = clipboard.set
+	mag.s         = tostring
+	mag.n         = tonumber
+	mag.floor     = math.floor
+	mag.ceil      = math.ceil
+	mag.rand      = math.random
+	mag.char      = string.char
+	mag.find      = string.find
+	mag.format    = string.format
+	mag.gmatch    = string.gmatch
+	mag.gsub      = string.gsub
+	mag.length    = string.len
+	mag.match     = string.match
+	mag.rep       = string.rep
+	mag.reverse   = string.reverse
+	mag.sub       = string.sub
+	mag.upper     = string.upper
+	mag.lower     = string.lower
+	mag.up        = unicode.to_upper_case
+	mag.low       = unicode.to_lower_case
+	mag.len       = unicode.len
+	mag.rmacro    = aegisub.register_macro
+
+	mag.message               = {}
+	mag.message["no_file"]    = "Belirtilen dosya bulunamadı."
+	mag.message["is_video"]   = "Aegisub üzerinde bir video açmadan bu işlemi yapamazsınız."
+	mag.message["error"]      = "Bir hata çıktı."
+	mag.message["no_process"] = "Hiçbir işlem yapılmadı."
 
 	return mag

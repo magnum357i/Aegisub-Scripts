@@ -2,10 +2,12 @@
 	script_description = "Satırlardaki sorunları kontrol eder."
 	script_version     = "0.8.3"
 	script_author      = "Magnum357"
-	script_mag_version = "1.1.2.4"
+	script_mag_version = "1.1.2.5"
 
 	mag_import, mag = pcall(require,"mag")
 
+	c_main_msg            = mag.format("[%s]",script_name)
+	c_buttons             = {"Kontrol et","Kapat"}
 	c                     = {}
 	c.time                = true
 	c.time_min            = false
@@ -26,8 +28,6 @@
 	c.space_dots          = false
 	c.apply               = "Seç"
 	c.comment_lines       = true
-	c_main_msg            = mag.format("[%s]",script_name)
-	c_buttons             = {"Kontrol et","Kapat"}
 
 	function checker(subs,sel,config)
 	local pcs         = false
@@ -223,7 +223,7 @@
 		subs[k]     = line
 		end
 	end
-	mag.log_error(pcs,"Hiçbir işlem yapılmadı.")
+	mag.log_error(pcs,mag.message["no_process"])
 	end
 
 	function vars(str)
@@ -302,7 +302,7 @@
 	,{class = "dropdown", name = "u_apply_lines",         value = c.apply,                                x = 0, y = 13, width = 3, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir."}
 	,{class = "checkbox", name = "u_comment_lines",       value = c.comment_lines,                        x = 0, y = 14, width = 3, height = 1, label = "Yorum satırlarını geç."}
 	}
-	ok, config = mag.dlg(gui,c_buttons)
+	ok, config            = mag.dlg(gui,c_buttons)
 	c.time                = config.u_time
 	c.time_min            = config.u_time_min
 	c.time_min_value      = config.u_time_min_value

@@ -1,15 +1,12 @@
 	script_name        = "Case Conversion"
 	script_description = "Harflerle ilgili işlemler yapar."
-	script_version     = "0.8.8"
+	script_version     = "0.8.9"
 	script_author      = "Magnum357"
-	script_mag_version = "1.1.2.1"
+	script_mag_version = "1.1.2.5"
 
 	mag_import, mag = pcall(require,"mag")
 
 	c_lang_values   = {"tr","eng"}
-	c_lang          = c_lang_values[1]
-	c_comment_lines = true
-	c_reset_chars   = true
 	c_buttons       = {"C/B","C/K","C/İ","K/İ","K/İT","Kapat"}
 	c_chars         = mag.trc
 	c_conjunction   = {"ama","fakat","için","ile","ve","veya","de","da",
@@ -18,6 +15,11 @@
 	                   "yalnız","veyahut","oysa","oysaki","öyleyse","lakin"
 	                   ,"lâkin","ya","nitekim","çünkü","bari","eğer","keza"
 	                   ,"şayet"}
+	c               = {}
+	c.lang          = c_lang_values[1]
+	c.comment_lines = true
+	c.reset_chars   = true
+	c.apply         = "Seç"
 
 	function case_conversion(subs,sel,ok,config)
 	local apply_lines = mag.unstyles(config.u_apply_lines)
@@ -36,10 +38,10 @@
 	local style2   = 1
 	local comment1 = 1
 	local comment2 = 1
-	if c_comment_lines then comment1, comment2 = line.comment, false end
+	if c.comment_lines then comment1, comment2 = line.comment, false end
 	if apply_lines ~= "Tüm stiller" then if apply_lines ~= "Seçili satırlar" then style1, style2 = line.style, apply_lines end end
 		if comment1 == comment2 and style1 == style2 and line.class == "dialogue" then
-			if c_reset_chars and c_buttons[2] ~= ok then
+			if c.reset_chars and c_buttons[2] ~= ok then
 			line.text = ck(line.text)
 			end
 			if c_buttons[1] == ok then
@@ -70,9 +72,9 @@
 	if char == "{" then in_tag = true end
 	if char == "}" then in_tag = false end
 		if char:match("["..c_chars.."]") and not in_tag and not in_special then
-			if c_lang == c_lang_values[1] then
+			if c.lang == c_lang_values[1] then
 			char = mag.up(char)
-			elseif c_lang == c_lang_values[2] then
+			elseif c.lang == c_lang_values[2] then
 			char = eng_upper(char)
 			end
 		end
@@ -91,9 +93,9 @@
 	if char == "{" then in_tag = true end
 	if char == "}" then in_tag = false end
 		if char:match("["..c_chars.."]") and not in_tag and not in_special then
-			if c_lang == c_lang_values[1] then
+			if c.lang == c_lang_values[1] then
 			char = mag.low(char)
-			elseif c_lang == c_lang_values[2] then
+			elseif c.lang == c_lang_values[2] then
 			char = eng_lower(char)
 			end
 		end
@@ -121,9 +123,9 @@
 		if mag.match(char,"["..dot.."]") then in_dot = true end
 		if mag.match(char,"%s") and in_dot then in_space = true end
 			if mag.match(char,"["..c_chars.."]") and in_space then
-				if c_lang == c_lang_values[1] then
+				if c.lang == c_lang_values[1] then
 				char = mag.up(char)
-				elseif c_lang == c_lang_values[2] then
+				elseif c.lang == c_lang_values[2] then
 				char = eng_upper(char)
 				end
 			in_dot, in_space = false, false
@@ -150,9 +152,9 @@
 	if char == "}" then in_tag = false end
 		if not in_tag then
 			if char:match("["..c_chars.."]") and in_space and not in_special then
-				if c_lang == c_lang_values[1] then
+				if c.lang == c_lang_values[1] then
 				char = mag.up(char)
-				elseif c_lang == c_lang_values[2] then
+				elseif c.lang == c_lang_values[2] then
 				char = eng_upper(char)
 				end
 			in_space = false
@@ -214,44 +216,41 @@
 	end
 
 	function add_macro(subs,sel)
-	local sel_total_format  = sel_total_format(subs,sel,"comment","Seçili satırlar")
-	local subs_total_format = subs_total_format(subs,sel,"comment","Tüm stiller")
-	local apply_items       = {"Seç",sel_total_format,subs_total_format}
-	local z                 = false
-	local exp_n             = 45
-	exp_n                   = mag.floor(exp_n / 5)
-	local exp1              = mag.format("%s\"%s\": %s",mag.wall(" ",exp_n * 0),"C/B","'C'ümlelerin tüm harflerini 'B'üyük yapar.")
-	local exp2              = mag.format("%s\"%s\": %s",mag.wall(" ",exp_n * 1),"C/K","'C'ümlelerin tüm harflerini 'K'üçük yapar.")
-	local exp3              = mag.format("%s\"%s\": %s",mag.wall(" ",exp_n * 2),"C/İ","'C'ümlelerin ilk harflerini 'B'üyük yapar.")
-	local exp4              = mag.format("%s\"%s\": %s",mag.wall(" ",exp_n * 3),"K/İ","'K'elimelerin 'İ'lk harflerini büyük yapar.")
-	local exp5              = mag.format("%s\"%s\": %s",mag.wall(" ",exp_n * 4),"K/İT","'K'elimelerin 'İ'lk harflerini büyük yapar. ('T'ürkçedeki bağlaçlara duyarlı.)")
+	mag.get_config(c)
+	local apply_items = mag.apply_items(subs,sel,"comment","")
+	c.apply           = mag.search_apply_items(apply_items,c.apply)
+	local exp_n       = 45
+	exp_n             = mag.floor(exp_n / 5)
+	local exp1        = mag.format("%s\"%s\": %s",mag.wall(" ",exp_n * 0),"C/B","'C'ümlelerin tüm harflerini 'B'üyük yapar.")
+	local exp2        = mag.format("%s\"%s\": %s",mag.wall(" ",exp_n * 1),"C/K","'C'ümlelerin tüm harflerini 'K'üçük yapar.")
+	local exp3        = mag.format("%s\"%s\": %s",mag.wall(" ",exp_n * 2),"C/İ","'C'ümlelerin ilk harflerini 'B'üyük yapar.")
+	local exp4        = mag.format("%s\"%s\": %s",mag.wall(" ",exp_n * 3),"K/İ","'K'elimelerin 'İ'lk harflerini büyük yapar.")
+	local exp5        = mag.format("%s\"%s\": %s",mag.wall(" ",exp_n * 4),"K/İT","'K'elimelerin 'İ'lk harflerini büyük yapar. ('T'ürkçedeki bağlaçlara duyarlı.)")
 	local ok, config, gui
 	repeat
 	gui =
 	{
-	 {class = "dropdown", name = "u_lang",          value = c_lang,          x = 2, y = 0, width = 1, height = 1, items = c_lang_values, hint = "\"eng\" modunda I > i ve i > I olurken \"tr\" modunda i > İ ve ı > I olur."}
+	 {class = "dropdown", name = "u_lang",          value = c.lang,          x = 2, y = 0, width = 1, height = 1, items = c_lang_values, hint = "\"eng\" modunda I > i ve i > I olurken \"tr\" modunda i > İ ve ı > I olur."}
 	,{class = "label",                                                       x = 0, y = 0, width = 2, height = 1, label = exp1}
 	,{class = "label",                                                       x = 0, y = 1, width = 2, height = 1, label = exp2}
 	,{class = "label",                                                       x = 0, y = 2, width = 2, height = 1, label = exp3}
 	,{class = "label",                                                       x = 0, y = 3, width = 2, height = 1, label = exp4}
 	,{class = "label",                                                       x = 0, y = 4, width = 2, height = 1, label = exp5}
 	,{class = "label",                                                       x = 0, y = 5, width = 1, height = 1, label = "Uygulanacak satırlar:"}
-	,{class = "dropdown", name = "u_apply_lines",   value = "Seç",           x = 1, y = 5, width = 1, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
-	,{class = "checkbox", name = "u_comment_lines", value = c_comment_lines, x = 1, y = 6, width = 1, height = 1, label = "Yorum satırlarını geç."}
-	,{class = "checkbox", name = "u_reset_chars",   value = c_reset_chars,   x = 1, y = 7, width = 1, height = 1, label = "Harfleri sıfırla.", hint = "Seçtiğiniz modu uygulamadan önce tüm harfleri küçük harf yaparak uygulanacak modu tek seferde yapabilirsiniz."}
+	,{class = "dropdown", name = "u_apply_lines",   value = c.apply,         x = 1, y = 5, width = 1, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
+	,{class = "checkbox", name = "u_comment_lines", value = c.comment_lines, x = 1, y = 6, width = 1, height = 1, label = "Yorum satırlarını geç."}
+	,{class = "checkbox", name = "u_reset_chars",   value = c.reset_chars,   x = 1, y = 7, width = 1, height = 1, label = "Harfleri sıfırla.", hint = "Seçtiğiniz modu uygulamadan önce tüm harfleri küçük harf yaparak uygulanacak modu tek seferde yapabilirsiniz."}
 	}
-		if not z then
-		z = true
-		mag.styles_insert(subs,gui,8,"comment","")
-		end
-	ok, config = mag.dlg(gui,c_buttons)
-	c_lang          = config.u_lang
-	c_comment_lines = config.u_comment_lines
-	c_reset_chars   = config.u_reset_chars
+	ok, config      = mag.dlg(gui,c_buttons)
+	c.lang          = config.u_lang
+	c.comment_lines = config.u_comment_lines
+	c.reset_chars   = config.u_reset_chars
+	c.apply         = config.u_apply_lines
 	until ok == c_buttons[6] or ok ~= c_buttons[6] and config.u_apply_lines ~= "Seç"
 	if ok ~= c_buttons[6] then
 	case_conversion(subs,sel,ok,config)
 	end
+	mag.set_config(c)
 	end
 
 	function check_macro(subs,sel)

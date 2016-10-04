@@ -1,19 +1,21 @@
 	script_name        = "Line Source Duplicate"
 	script_description = "Kaynak metni çoğaltarak kaynak metinle beraber çeviri imkanı sunar."
 	script_author      = "Magnum357"
-	script_version     = "3.0"
-	script_mag_version = "1.1.2.1"
+	script_version     = "3.1"
+	script_mag_version = "1.1.2.5"
 	
 	mag_import, mag = pcall(require,"mag")
 	
 	c_r_msg1        = "[LineSDup]"
 	c_r_msg2        = "[#LineSDup]"
-	c_mods          = "Seç"
-	c_comment_lines = false
-	c_mod2          = false
 	c_mod_names     = {"Seç","[A1] Yorum parantezleri > Satır sonu","[B1] Yeni satır > Sonraki satır","[B2] Yeni satır > Son satırdan sonra"}
 	c_buttons       = {"Çoğalt","Kapat"}
 	c_buttons1      = {"Kaldır","Kapat"}
+	c               = {}
+	c.mods          = "Seç"
+	c.apply         = "Seç"
+	c.comment_lines = false
+	c.mod2          = false
 
 	function line_source_duplicate(subs,sel,config)
 	local index       = {}
@@ -33,19 +35,19 @@
 	local style2   = 1
 	local comment1 = 1
 	local comment2 = 1
-	if c_comment_lines then comment1, comment2 = line.comment, false end
+	if c.comment_lines then comment1, comment2 = line.comment, false end
 	if apply_lines ~= "Tüm stiller" then if apply_lines ~= "Seçili satırlar" then style1, style2 = line.style, apply_lines end end
 		if comment1 == comment2 and style1 == style2 and line.class == "dialogue" then
 		local strip_line = strip(line.text)
-			if c_mod_names[2] == c_mods then
+			if c_mod_names[2] == c.mods then
 			line.effect = c_r_msg1
-				if not c_mod2 then
+				if not c.mod2 then
 				line.text = mag.format("%s{%s}",line.text,strip_line)
 				else
 				line.text = mag.format("{%s}",strip_line)
 				end
 			end
-			if c_mod_names[3] == c_mods or c_mod_names[4] == c_mods then
+			if c_mod_names[3] == c.mods or c_mod_names[4] == c.mods then
 			mag.insert(index,k)
 			end
 		subs[k] = line
@@ -54,26 +56,26 @@
 	if index[1] ~= nil then
 	local j = 0
 	local line2, text2, l
-		if c_mod_names[3] == c_mods then
+		if c_mod_names[3] == c.mods then
 			for i = 1, #index do
 			line2    = subs[index[i] + j]
 			text2    = strip(line2.text)
 			l        = table.copy(line2)
 			l.effect = c_r_msg2
-				if not c_mod2 then
+				if not c.mod2 then
 				l.comment = true
 				end
 			subs.insert((index[i] + 1) + j,l)
 			j = j + 1
 			end
-		elseif c_mod_names[4] == c_mods then
+		elseif c_mod_names[4] == c.mods then
 		local last_item_style_index = last_item_for_style(subs,apply_lines)
 			for i = 1, #index do
 			line2    = subs[index[i]]
 			text2    = strip(line2.text)
 			l        = table.copy(line2)
 			l.effect = c_r_msg2
-				if not c_mod2 then
+				if not c.mod2 then
 				l.comment = true
 				end
 			subs.insert(last_item_style_index + 1 + j,l)
@@ -102,7 +104,7 @@
 	local style2   = 1
 	local comment1 = 1
 	local comment2 = 1
-	if c_comment_lines then comment1, comment2 = line.comment, false end
+	if c.comment_lines then comment1, comment2 = line.comment, false end
 	if apply_lines ~= "Tüm stiller" then if apply_lines ~= "Seçili satırlar" then style1, style2 = line.style, apply_lines end end
 		if comment1 == comment2 and style1 == style2 and line.class == "dialogue" then
 			if line.effect == c_r_msg1 then
@@ -134,7 +136,7 @@
 			end
 		end
 	end
-	mag.log_error(pcs,"Hiçbir işlem yapılmadı.")
+	mag.log_error(pcs,mag.message["no_process"])
 	end
 
 	function last_item_for_style(subs,style_name)
@@ -160,60 +162,58 @@
 	end
 
 	function add_macro(subs,sel)
-	local sel_total_format  = sel_total_format(subs,sel,"comment","Seçili satırlar")
-	local subs_total_format = subs_total_format(subs,sel,"comment","Tüm stiller")
-	local apply_items       = {"Seç",sel_total_format,subs_total_format}
-	local z                 = false
+	mag.get_config(c)
+	local apply_items = mag.apply_items(subs,sel,"comment","")
+	c.apply           = mag.search_apply_items(apply_items,c.apply)
 	local ok, config, gui
 	repeat
 	gui =
 	{
 	 {class = "label",                                                       x = 0, y = 0, width = 1, height = 1, label = mag.wall(" ",27).."Mod:"}
-	,{class = "dropdown", name = "u_mods",          value = c_mods,          x = 1, y = 0, width = 1, height = 1, items = c_mod_names}
+	,{class = "dropdown", name = "u_mods",          value = c.mods,          x = 1, y = 0, width = 1, height = 1, items = c_mod_names}
 	,{class = "label",                                                       x = 0, y = 1, width = 1, height = 1, label = "Uygulanacak satırlar:"}
-	,{class = "dropdown", name = "u_apply_lines",   value = "Seç",           x = 1, y = 1, width = 1, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
-	,{class = "checkbox", name = "u_comment_lines", value = c_comment_lines, x = 1, y = 2, width = 1, height = 1, label = "Yorum satırlarını geç."}
-	,{class = "checkbox", name = "u_mod2",          value = c_mod2,          x = 1, y = 3, width = 1, height = 1, label = "Modları değiştir.", hint = "A modunda sadece yorum parantezi kullanır.\nB modlarında yorum satırı yerine normal satır yapar."}
+	,{class = "dropdown", name = "u_apply_lines",   value = c.apply,         x = 1, y = 1, width = 1, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
+	,{class = "checkbox", name = "u_comment_lines", value = c.comment_lines, x = 1, y = 2, width = 1, height = 1, label = "Yorum satırlarını geç."}
+	,{class = "checkbox", name = "u_mod2",          value = c.mod2,          x = 1, y = 3, width = 1, height = 1, label = "Modları değiştir.", hint = "A modunda sadece yorum parantezi kullanır.\nB modlarında yorum satırı yerine normal satır yapar."}
 	}
-		if not z then
-		z = true
-		mag.styles_insert(subs,gui,4,"comment","")
-		end
-	ok, config = mag.dlg(gui,c_buttons)
-	c_mods          = config.u_mods
-	c_comment_lines = config.u_comment_lines
-	c_mod2          = config.u_mod2
+	ok, config      = mag.dlg(gui,c_buttons)
+	c.mods          = config.u_mods
+	c.comment_lines = config.u_comment_lines
+	c.mod2          = config.u_mod2
+	c.apply         = config.u_apply_lines
 	until ok == c_buttons[1] and config.u_mods ~= "Seç" and config.u_apply_lines ~= "Seç" or ok == c_buttons[2]
 	if ok == c_buttons[1] then
 	line_source_duplicate(subs,sel,config)
 	mag.undo_point()
 	end
+	mag.set_config(c)
 	end
 
 	function add_macro1(subs,sel)
-	local sel_total_format  = sel_total_format(subs,sel,"comment","Seçili satırlar")
-	local subs_total_format = subs_total_format(subs,sel,"comment","Tüm stiller")
-	local apply_items       = {"Seç",sel_total_format,subs_total_format}
-	local z                 = false
+	mag.get_config(c)
+	local apply_items = mag.apply_items(subs,sel,"comment","")
+	c.apply           = mag.search_apply_items(apply_items,c.apply)
 	local ok, config, gui
 	repeat
 	gui =
 	{
 	 {class = "label",                                                       x = 0, y = 0, width = 1, height = 1, label = "Uygulanacak satırlar:"}
-	,{class = "dropdown", name = "u_apply_lines",   value = "Seç",           x = 1, y = 0, width = 1, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
-	--,{class = "checkbox", name = "u_comment_lines", value = c_comment_lines, x = 1, y = 1, width = 1, height = 1, label = "Yorum satırlarını geç."}
+	,{class = "dropdown", name = "u_apply_lines",   value = c.apply,         x = 1, y = 0, width = 1, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir. İlk sayı yorum satırı yapılmamış iken ikinci sayı yapılmış satırların sayısıdır."}
+	--,{class = "checkbox", name = "u_comment_lines", value = c.comment_lines, x = 1, y = 1, width = 1, height = 1, label = "Yorum satırlarını geç."}
 	}
 		if not z then
 		z = true
 		mag.styles_insert(subs,gui,2,"comment","")
 		end
 	ok, config = mag.dlg(gui,c_buttons1)
-	--c_comment_lines = config.u_comment_lines
+	c.apply    = config.u_apply_lines
+	--c.comment_lines = config.u_comment_lines
 	until ok == c_buttons1[1] and config.u_apply_lines ~= "Seç" or ok == c_buttons1[2]
 	if ok == c_buttons1[1] then
 	remove_line_source_duplicate(subs,sel,config)
 	mag.undo_point()
 	end
+	mag.set_config(c)
 	end
 
 	function check_macro(subs,sel)
