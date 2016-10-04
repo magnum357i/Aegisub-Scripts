@@ -18,20 +18,18 @@
   - [**(4) Case Conversion**](#case-conversion)
   - [**(5) Checker**](#checker)
   - [**(6) Copy Dialogue**](#copy-dialogue)
-  - [**(7) Copy Paste Line**](#copy-paste-line)
-  - [**(8) Finder**](#finder)
-  - [**(9) Grid**](#grid)
-  - [**(10) K Char**](#k-char)
-  - [**(11) Line Format**](#line-format)
-  - [**(12) Line Source Duplicate**](#line-source-duplicate)
-  - [**(13) Select Lines**](#select-lines)
-  - [**(14) Shaper**](#shaper)
-  - [**(15) Strip Line**](#strip-line)
-  - [**(16) Sub Menu Maker**](#sub-menu-maker)
-  - [**(17) Text Align**](#text-align)
-  - [**(18) Timer**](#timer)
-  - [**(19) Trans State A1**](#trans-state-a1)
-  - [**(20) Typewritter**](#typewritter)
+  - [**(7) Finder**](#finder)
+  - [**(8) K Char**](#k-char)
+  - [**(9) Line Format**](#line-format)
+  - [**(10) Line Source Duplicate**](#line-source-duplicate)
+  - [**(11) Select Lines**](#select-lines)
+  - [**(12) Shaper**](#shaper)
+  - [**(13) Strip Line**](#strip-line)
+  - [**(14) Sub Menu Maker**](#sub-menu-maker)
+  - [**(15) Text Align**](#text-align)
+  - [**(16) Timer**](#timer)
+  - [**(17) Trans State A1**](#trans-state-a1)
+  - [**(18) Typewritter**](#typewritter)
 - [**(D) ASS**](#ass)
  * [**(1) Autotags**](#autotags)
  * [**(2) Color Fade**](#color-fade)
@@ -75,7 +73,7 @@ Kullanılan durumlarda çıkan hata veya eksikliklerden sürekli sürüm atlatı
 **Yeni özellik:**
 Tercihler, arayüz kapatıldığında harici bir dosyaya kaydedilir. Bu dosya **%appdata%/aegisub/** dizininde oluşturulmaktadır. Taşınabilir Aegisub sürümlerinde aegisub.exe dosyasının olduğu yerdedir.
 
-Bu yapı ile tercihleriniz her koşulda hatırlanır. Test edilmek amacıyla şimdilik sadece **Checker** lua dosyasında vardır. Test süresi sonrası her lua dosyasına eklenecektir.
+Bu yapı ile tercihleriniz her koşulda hatırlanır.
 
 ## MODÜL
 
@@ -186,7 +184,7 @@ Harflerle ilgili işlemler yapar.
 ---
 
 * **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
 * **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Checker](automation/autoload/mag.checker.lua)
@@ -222,7 +220,7 @@ Alt yazıdaki metinleri panoya veya oluşturduğu metin dosyasına kopyalar.
 ---
 
 * **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
 * **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Finder](automation/autoload/mag.finder.lua)
@@ -242,33 +240,6 @@ Girilen kelimenin olduğu satırları listeler.
 ---
 
 * **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
-
-### [Copy Paste Line](automation/autoload/mag.copy_paste_line.lua)
-Bir satır grubuna ait herhangi bir bilgiyi kopyalar ve bunu başka bir satır grubuna yapıştırabilir.
-
----
-
-* **Uygulanan satırlar:** Seçili satırlara uygular.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
-
-### [Grid](automation/autoload/mag.grid.lua)
-Aktif satırın içeriğine ızgara çizimi yapar.
-* **Sayı:** Dikey veya yatay ızgara çizgisi adeti.
-* **Aralık:** Her ızgara çizgisi arasındaki piksel cinsinden boşluk.
-* **Piksel:** Her ızgara çizgisinin kalınlığı.
-* **Etiketler:** Varsayılan etiketler. Izgara satırının başına bu etiketleri koyar.
-* **Renk:** Izgara çizgilerinin rengi.
-* **Biçim**
-  * **Tam:** Hem dikey hem de yatay ızgara çizgileri koyar.
-  * **Sadece dikey:** Sadece dikey ızgara çizgileri koyar.
-  * **Sadece yatay:** Sadece yatay ızgara çizgileri koyar.
-
----
-
-* **Uygulanan satırlar:** Aktif satırın içeriğini değiştirir. Aktif satır, metin düzenleme kutusunda gördüğünüz satırdır.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
 * **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [K Char](automation/autoload/mag.k_char.lua)
@@ -309,7 +280,7 @@ Kaynak metni çoğaltarak kaynak metinle beraber çeviri imkanı sunar.
 ---
 
 * **Uygulanan satırlar:** Tüm stillere veya ayrı ayrı stillere uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
 * **Modül:** Bu dosya modül kullanmıyor.
 
 ### [Select Lines](automation/autoload/mag.select_lines.lua)
@@ -345,15 +316,15 @@ Birçok ayarda satır seçme işlemi yapar.
 * **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Shaper](automation/autoload/mag.shaper.lua)
-Alt yazı veya video çözünürlüğüne göre resim için şekil çizer.
+Resim, şerit ve ızgara ekler. Bir VSFilterMOD etiketini kullanarak resim ekler.
 
 ###### Notlar
-Harici bir modül gerektirir. Sizi yönlendirdiği sayfadan ImageSıze lua dosyasını ve ImageSize klasörünü **automation/include/** dizinine atarak kurabilirsiniz.
+Resmin çözünürlüğünü algılamak için harici bir modüle ihtiyaç duyar. Sizi yönlendirdiği sayfadan ImageSıze lua dosyasını ve ImageSize klasörünü **automation/include/** dizinine atarak kurabilirsiniz.
 
 ---
 
 * **Uygulanan satırlar:** Aktif satırın içeriğini değiştirir. Aktif satır, metin düzenleme kutusunda gördüğünüz satırdır.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
 * **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Strip Line](automation/autoload/mag.strip_line.lua)
@@ -393,7 +364,7 @@ Arayüz kısmında yaptığınız son tercihleri seçilen satırlara uygular.
 ---
 
 * **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
 * **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Sub Menu Maker](automation/autoload/mag.sub_menu_maker_r1.lua)
@@ -455,7 +426,7 @@ Karaktere göre metni böler.
 ---
 
 * **Uygulanan satırlar:** Tüm stillere veya ayrı ayrı stillere uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
+* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
 * **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [Typewritter](automation/autoload/mag.typewritter.lua)
