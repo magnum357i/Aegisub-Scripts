@@ -1,8 +1,8 @@
 	script_name        = "Checker"
 	script_description = "Satırlardaki sorunları kontrol eder."
-	script_version     = "0.8.3"
+	script_version     = "0.8.5"
 	script_author      = "Magnum357"
-	script_mag_version = "1.1.2.5"
+	script_mag_version = "1.1.2.6"
 
 	mag_import, mag = pcall(require,"mag")
 
@@ -16,6 +16,9 @@
 	c.time_max_value      = "0:00:06.00"
 	c.time_next_min       = false
 	c.time_next_min_value = "0:00:00.06"
+	c.time_cps            = false
+	c.time_cps_value      = 25
+	c.time_overlap        = false
 	c.char                = true
 	c.char_max            = false
 	c.char_max_value      = 44
@@ -28,10 +31,13 @@
 	c.space_dots          = false
 	c.apply               = "Seç"
 	c.comment_lines       = true
+	c.empty_lines         = true
 
 	function checker(subs,sel,config)
-	local pcs         = false
-	local apply_lines = mag.unstyles(config.u_apply_lines)
+	local lines            = {}
+	local pcs              = false
+	local first_text_index = mag.first_index(subs) + 1
+	local apply_lines      = mag.unstyles(config.u_apply_lines)
 	local i_last
 	if apply_lines == "Seçili satırlar" then
 	local sel = mag.sel_index(subs,sel)
@@ -42,81 +48,141 @@
 	for i = 1, i_last do
 	local k
 	if apply_lines == "Seçili satırlar" then k = sel[i] else k = i end
-	local line     = subs[k]
+	local l        = subs[k]
 	local style1   = 1
 	local style2   = 1
 	local comment1 = 1
 	local comment2 = 1
-	if c.comment_lines then comment1, comment2 = line.comment, false end
-	if apply_lines ~= "Tüm stiller" then if apply_lines ~= "Seçili satırlar" then style1, style2 = line.style, apply_lines end end
-		if comment1 == comment2 and style1 == style2 and line.class == "dialogue" then
-		local dur
-		local check = ""
-		local result = ""
-			if c.time or c.time_min or c.time_max then
-				if line.end_time > line.start_time then
-				dur = line.end_time - line.start_time
-				else
-				dur = 0
+	local line_ok  = true
+	if c.comment_lines then comment1, comment2 = l.comment, false end
+	if apply_lines ~= "Tüm stiller" then if apply_lines ~= "Seçili satırlar" then style1, style2 = l.style, apply_lines end end
+		if comment1 == comment2 and style1 == style2 and l.class == "dialogue" then
+			if c.empty_lines and mag.is_empty_line(l.text) then
+			line_ok = false
+			end
+			if line_ok then
+			local index = mag.s(l.start_time)
+			l.effect    = k
+			mag.insert(lines,l)
+			end
+		end
+	end
+	if c.time or c.time_next_min or c.time_overlap then
+		for k = 1, #lines do
+		local scs = false
+			for m = 1, #lines - 1 do
+			local current_start_time = lines[m].start_time
+			local next_start_time    = lines[m + 1].start_time
+				if current_start_time > next_start_time then
+				scs             = true
+				local temp_line = lines[m + 1]
+				lines[m + 1]    = lines[m]
+				lines[m]        = temp_line
+				elseif scs then
+				break
 				end
-				if c.time or c.time_min then
-					if dur < mag.time_strip(c.time_min_value) then
-					check = split2(check,mag.format("[1 - %s-]",mag.time_format(mag.time_strip(c.time_min_value) - dur)))
+			end
+		end
+	end
+	for j = 1, #lines do
+	local line   = lines[j]
+	local check  = ""
+	local result = ""
+	local empty  = mag.is_empty_line(line.text)
+	local dur
+		if c.time or c.time_min or c.time_max or c.time_next_min or c.time_cps or c.time_overlap then
+			if line.end_time > line.start_time then
+			dur = line.end_time - line.start_time
+			else
+			dur = 0
+			end
+			if c.time or c.time_min then
+				if dur < mag.time_strip(c.time_min_value) then
+				check = split2(check,mag.format("[1 - %s-]",mag.time_format(mag.time_strip(c.time_min_value) - dur)))
+				end
+			end
+			if c.time or c.time_max then
+				if dur > mag.time_strip(c.time_max_value) then
+				check = split2(check,mag.format("[1 - %s+]",mag.time_format(dur - mag.time_strip(c.time_max_value))))
+				end
+			end
+			if c.time or c.time_next_min then
+				if lines[j + 1] ~= nil then
+				local next_line = lines[j + 1]
+					if next_line.start_time > line.end_time then
+					local dur2 = next_line.start_time - line.end_time
+						if dur2 < mag.time_strip(c.time_next_min_value) then
+						check = split2(check,mag.format("[2 - %s-]",mag.time_format(mag.time_strip(c.time_next_min_value) - dur2)))
+						end
 					end
 				end
-				if c.time or c.time_max then
-					if dur > mag.time_strip(c.time_max_value) then
-					check = split2(check,mag.format("[1 - %s+]",mag.time_format(dur - mag.time_strip(c.time_max_value))))
+			end
+			if c.time or c.time_cps or c.time_overlap then
+				if dur > 0 then
+					if c.time or c.time_cps then
+					local text_len = line.text
+					text_len       = mag.full_strip(line.text)
+					text_len       = mag.removedot(text_len)
+					text_len       = mag.n(mag.len(text_len))
+					local cps      = text_len / dur
+					cps            = mag.floor(cps * 1000)
+						if mag.n(c.time_cps_value) <= cps then
+						check = split2(check,mag.format("[3 - %s]",cps))
+						end
 					end
-				end
-				if c.time or c.time_next_min then
-				dur = 0
-					if k ~= #subs then
-					local next_line = subs[k + 1]
-						if next_line.start_time > line.end_time then
-						dur = next_line.start_time - line.end_time
-							if dur < mag.time_strip(c.time_next_min_value) then
-							check = split2(check,mag.format("[2 - %s-]",mag.time_format(mag.time_strip(c.time_next_min_value) - dur)))
+					if c.time or c.time_overlap then
+					local overlap_count = 0
+						for y = j, #lines do
+						local overlap_line = lines[y]
+						if overlap_line.start_time >= line.end_time then break end
+							if overlap_line.start_time >= line.start_time and overlap_line.end_time >= line.start_time then
+							overlap_count = overlap_count + 1
 							end
 						end
-					end
-				end
-			end
-		check  = put_title("Z: ",check)
-		result = split(check,result)
-		check  = ""
-			if c.char or c.char_max or c.char_range then
-				if not mag.match(mag.strip(line.text),"\\N") then
-				local strip_line = line.text
-				strip_line       = mag.full_strip(line.text)
-				strip_line       = mag.removedot(strip_line)
-					if mag.n(mag.len(strip_line)) >= mag.n(c.char_max_value) then
-					check = split2(check,mag.format("[%s]",mag.len(strip_line)))
-					end
-				else
-				local strip_line              = mag.strip(line.text)
-				local split_count, split_text = mag.splitter(true,strip_line,"\\N")
-				local break_part              = {}
-				local strip_char
-					for j = 1, split_count do
-					strip_char = split_text[j]
-					strip_char = mag.special_strip(strip_char)
-					strip_char = mag.removedot(strip_char)
-						if mag.n(mag.len(strip_char)) >= mag.n(c.char_range_value) then
-						mag.insert(break_part,mag.len(strip_char))
+					overlap_count = overlap_count - 1
+						if overlap_count > 0 then
+						check = split2(check,mag.format("[4 - %s]",overlap_count))
 						end
 					end
-					if break_part[1] then
-					table.sort(break_part)
-					break_part = mag.reverse_short_array(break_part)
-					check      = split2(check,mag.format("[%sN]",break_part[1]))
-					end
 				end
 			end
-		check  = put_title("K: ",check)
-		result = split(check,result)
-		check  = ""
-			if c.space or c.space_double or c.space_break_line or c.space_line then
+		end
+	check  = put_title("Z: ",check)
+	result = split(check,result)
+	check  = ""
+		if c.char or c.char_max or c.char_range then
+			if not mag.match(mag.strip(line.text),"\\N") then
+			local strip_line = line.text
+			strip_line       = mag.full_strip(line.text)
+			strip_line       = mag.removedot(strip_line)
+				if mag.n(mag.len(strip_line)) >= mag.n(c.char_max_value) then
+				check = split2(check,mag.format("[%s]",mag.len(strip_line)))
+				end
+			else
+			local strip_line              = mag.strip(line.text)
+			local split_count, split_text = mag.splitter(true,strip_line,"\\N")
+			local break_part              = {}
+			local strip_char
+				for j = 1, split_count do
+				strip_char = split_text[j]
+				strip_char = mag.special_strip(strip_char)
+				strip_char = mag.removedot(strip_char)
+					if mag.n(mag.len(strip_char)) >= mag.n(c.char_range_value) then
+					mag.insert(break_part,mag.len(strip_char))
+					end
+				end
+				if break_part[1] then
+				mag.sort(break_part)
+				break_part = mag.reverse_short_array(break_part)
+				check      = split2(check,mag.format("[%sN]",break_part[1]))
+				end
+			end
+		end
+	check  = put_title("K: ",check)
+	result = split(check,result)
+	check  = ""
+		if c.space or c.space_double or c.space_break_line or c.space_line or c.space_dots then
+			if empty == false then
 			local strip_tag             = line.text
 			strip_tag                   = mag.strip(strip_tag)
 			local strip_tag_and_special = strip_tag
@@ -134,7 +200,7 @@
 						for s = 1, space_count do
 							if mag.match(sp_temp,"%s+") then
 							mag.insert(sp,mag.len(mag.match(sp_temp,"%s+")))
-							end
+						end
 						sp_temp = mag.gsub(sp_temp,"%s+","",1)
 						end
 						for s2 = 1, #sp do
@@ -171,7 +237,7 @@
 				if c.space or c.space_dots then
 					if mag.find(strip_tag_and_special,"["..mag.trc.."]%s+%.") then
 					check = split2(check,mag.format("[%s]"," ."))
-					end
+				end
 					if mag.find(strip_tag_and_special,"%s,") then
 					check = split2(check,mag.format("[%s]"," ,"))
 					end
@@ -213,15 +279,16 @@
 					end
 				end
 			end
-		check       = put_title("B: ",check)
-		result      = split(check,result)
-		check       = ""
-		result      = p(result)
-		result      = put_title(mag.format("%s ",c_main_msg),mag.format("%s",result))
-		if result ~= "" then pcs = true end
-		line.effect = result
-		subs[k]     = line
 		end
+	check       = put_title("B: ",check)
+	result      = split(check,result)
+	check       = ""
+	result      = p(result)
+	result      = put_title(mag.format("%s ",c_main_msg),mag.format("%s",result))
+	if result ~= "" then pcs = true end
+	local line2  = subs[line.effect]
+	line2.effect = result
+	subs[line.effect] = line2
 	end
 	mag.log_error(pcs,mag.message["no_process"])
 	end
@@ -274,33 +341,37 @@
 
 	function add_macro(subs,sel)
 	mag.get_config(c)
-	local apply_items       = mag.apply_items(subs,sel,"comment","")
-	c.apply                 = mag.search_apply_items(apply_items,c.apply)
+	local apply_items = mag.apply_items(subs,sel,"comment","")
+	c.apply           = mag.search_apply_items(apply_items,c.apply)
 	local gui, ok, config
 	repeat
 	gui =
 	{
-	 {class = "checkbox", name = "u_time",                value = c.time,                                 x = 0, y = 0,  width = 3, height = 1, label = "[(Z) - ZAMAN]"}
-	,{class = "label",                                                                                    x = 0, y = 1,  width = 1, height = 1, label = mag.wall(" ",4)}
-	,{class = "checkbox", name = "u_time_min",            value = c.time_min,                             x = 1, y = 1,  width = 1, height = 1, label = "Şundan az:"}
-	,{class = "edit",     name = "u_time_min_value",      value = c.time_min_value,                       x = 2, y = 1,  width = 1, height = 1}
-	,{class = "checkbox", name = "u_time_max",            value = c.time_max,                             x = 1, y = 2,  width = 1, height = 1, label = "Şundan fazla:"}
-	,{class = "edit",     name = "u_time_max_value",      value = c.time_max_value,                       x = 2, y = 2,  width = 1, height = 1}
-	,{class = "checkbox", name = "u_time_next_min",       value = c.time_next_min,                        x = 1, y = 3,  width = 1, height = 1, label = "Sonraki satır şundan az:"}
-	,{class = "edit",     name = "u_time_next_min_value", value = c.time_next_min_value,                  x = 2, y = 3,  width = 1, height = 1}
-	,{class = "checkbox", name = "u_char",                value = c.char,                                 x = 0, y = 4,  width = 3, height = 1, label = "[(K) - KARAKTER]"}
-	,{class = "checkbox", name = "u_char_max",            value = c.char_max,                             x = 1, y = 5,  width = 1, height = 1, label = "Sınır:", hint = "Satır bölme yapılmamış satırların karakter sayısını ölçer."}
-	,{class = "edit",     name = "u_char_max_value",      value = c.char_max_value,   min = 35, max = 50, x = 2, y = 5,  width = 1, height = 1}
-	,{class = "checkbox", name = "u_char_range",          value = c.char_range,                           x = 1, y = 6,  width = 1, height = 1, label = "Satır bölme arası:", hint = "Satır bölme yapılmış satırların en fazla olan karakter sayısını ölçer."}
-	,{class = "edit",     name = "u_char_range_value",    value = c.char_range_value, min = 35, max = 50, x = 2, y = 6,  width = 1, height = 1}
-	,{class = "checkbox", name = "u_space",               value = c.space,                                x = 0, y = 7,  width = 3, height = 1, label = "[(B) - BOŞLUK]"}
-	,{class = "checkbox", name = "u_space_double",        value = c.space_double,                         x = 1, y = 8,  width = 2, height = 1, label = "Birden fazla."}
-	,{class = "checkbox", name = "u_space_line",          value = c.space_line,                           x = 1, y = 9,  width = 2, height = 1, label = "Satırdan önce ve sonra."}
-	,{class = "checkbox", name = "u_space_break_line",    value = c.space_break_line,                     x = 1, y = 10, width = 2, height = 1, label = "Satır bölmeden önce ve sonra."}
-	,{class = "checkbox", name = "u_space_dots",          value = c.space_dots,                           x = 1, y = 11, width = 2, height = 1, label = "Noktralama işaretlerinden önce ve sonra."}
-	,{class = "label",                                                                                    x = 0, y = 12, width = 3, height = 1, label = "[UYGULANACAK SATIRLAR]"}
-	,{class = "dropdown", name = "u_apply_lines",         value = c.apply,                                x = 0, y = 13, width = 3, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir."}
-	,{class = "checkbox", name = "u_comment_lines",       value = c.comment_lines,                        x = 0, y = 14, width = 3, height = 1, label = "Yorum satırlarını geç."}
+	 {class = "checkbox", name = "u_time",                value = c.time,                                    x = 0, y = 0,  width = 3, height = 1, label = "[( Z ) - ZAMAN]"}
+	,{class = "label",                                                                                       x = 0, y = 1,  width = 1, height = 1, label = mag.wall(" ",4)}
+	,{class = "checkbox", name = "u_time_min",            value = c.time_min,                                x = 1, y = 1,  width = 1, height = 1, label = "Şundan az:"}
+	,{class = "edit",     name = "u_time_min_value",      value = c.time_min_value,                          x = 2, y = 1,  width = 1, height = 1}
+	,{class = "checkbox", name = "u_time_max",            value = c.time_max,                                x = 1, y = 2,  width = 1, height = 1, label = "Şundan fazla:"}
+	,{class = "edit",     name = "u_time_max_value",      value = c.time_max_value,                          x = 2, y = 2,  width = 1, height = 1}
+	,{class = "checkbox", name = "u_time_next_min",       value = c.time_next_min,                           x = 1, y = 3,  width = 1, height = 1, label = "Sonraki satır şundan az:"}
+	,{class = "edit",     name = "u_time_next_min_value", value = c.time_next_min_value,                     x = 2, y = 3,  width = 1, height = 1}
+	,{class = "checkbox", name = "u_time_cps",            value = c.time_cps,                                x = 1, y = 4,  width = 1, height = 1, label = "Saniyedeki karakter sayısı:"}
+	,{class = "intedit",  name = "u_time_cps_value",      value = c.time_cps_value,      min = 15, max = 70, x = 2, y = 4,  width = 1, height = 1}
+	,{class = "checkbox", name = "u_time_overlap",        value = c.time_overlap,                            x = 1, y = 5,  width = 1, height = 1, label = "Üst üste binen satırlar."}
+	,{class = "checkbox", name = "u_char",                value = c.char,                                    x = 0, y = 6,  width = 3, height = 1, label = "[( K ) - KARAKTER]"}
+	,{class = "checkbox", name = "u_char_max",            value = c.char_max,                                x = 1, y = 7,  width = 1, height = 1, label = "Sınır:", hint = "Satır bölme yapılmamış satırların karakter sayısını ölçer."}
+	,{class = "intedit",  name = "u_char_max_value",      value = c.char_max_value,      min = 35, max = 55, x = 2, y = 7,  width = 1, height = 1}
+	,{class = "checkbox", name = "u_char_range",          value = c.char_range,                              x = 1, y = 8,  width = 1, height = 1, label = "Satır bölme arası:", hint = "Satır bölme yapılmış satırların en fazla olan karakter sayısını ölçer."}
+	,{class = "intedit",  name = "u_char_range_value",    value = c.char_range_value,    min = 35, max = 55, x = 2, y = 8,  width = 1, height = 1}
+	,{class = "checkbox", name = "u_space",               value = c.space,                                   x = 0, y = 9,  width = 3, height = 1, label = "[( B ) - BOŞLUK]"}
+	,{class = "checkbox", name = "u_space_double",        value = c.space_double,                            x = 1, y = 10, width = 2, height = 1, label = "Birden fazla."}
+	,{class = "checkbox", name = "u_space_line",          value = c.space_line,                              x = 1, y = 11, width = 2, height = 1, label = "Satırdan önce ve sonra."}
+	,{class = "checkbox", name = "u_space_break_line",    value = c.space_break_line,                        x = 1, y = 12, width = 2, height = 1, label = "Satır bölmeden önce ve sonra."}
+	,{class = "checkbox", name = "u_space_dots",          value = c.space_dots,                              x = 1, y = 13, width = 2, height = 1, label = "Noktralama işaretlerinden önce ve sonra."}
+	,{class = "label",                                                                                       x = 0, y = 14, width = 3, height = 1, label = "[UYGULANACAK SATIRLAR]"}
+	,{class = "dropdown", name = "u_apply_lines",         value = c.apply,                                   x = 0, y = 15, width = 3, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir."}
+	,{class = "checkbox", name = "u_comment_lines",       value = c.comment_lines,                           x = 0, y = 16, width = 3, height = 1, label = "Yorum satırlarını geç."}
+	,{class = "checkbox", name = "u_empty_lines",         value = c.empty_lines,                             x = 0, y = 17, width = 3, height = 1, label = "Boş satırları geç."}
 	}
 	ok, config            = mag.dlg(gui,c_buttons)
 	c.time                = config.u_time
@@ -310,6 +381,9 @@
 	c.time_max_value      = config.u_time_max_value
 	c.time_next_min       = config.u_time_next_min
 	c.time_next_min_value = config.u_time_next_min_value
+	c.time_cps            = config.u_time_cps
+	c.time_cps_value      = config.u_time_cps_value
+	c.time_overlap        = config.u_time_overlap
 	c.char                = config.u_char
 	c.char_max            = config.u_char_max
 	c.char_max_value      = config.u_char_max_value
@@ -322,6 +396,7 @@
 	c.space_dots          = config.u_space_dots
 	c.apply               = config.u_apply_lines
 	c.comment_lines       = config.u_comment_lines
+	c.empty_lines         = config.u_empty_lines
 	until config.u_apply_lines ~= "Seç" and ok == c_buttons[1] or ok == c_buttons[2]
 	if ok == c_buttons[1] then
 	t_check = false

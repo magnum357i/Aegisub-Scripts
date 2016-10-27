@@ -1,6 +1,6 @@
 ﻿	module_name       = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version    = "1.1.2.5"
+	module_version    = "1.1.2.6"
 	module_author     = "Magnum357"
 
 	unicode   = require 'aegisub.unicode'
@@ -804,7 +804,7 @@
 	file:write(cval)
 	file:close()
 	else
-	mag.log(1,"Ayar dosyası oluşturulamadı.")
+	mag.log(1,mag.message["error_config_file"])
 	end
 	end
 
@@ -837,6 +837,38 @@
 	return v
 	end
 
+	--mag.is_empty_line(line.text)
+	-->>true
+	-->>false
+	function mag.is_empty_line(line)
+	local ok = true
+	local l = line
+	l = mag.full_strip(l)
+	l = mag.gsub(l,"%s+","")
+	if mag.len(l) > 0 then ok = false end
+	return ok
+	end
+
+	--numbers = {"5","8","7","2","4"}
+	--mag.bubble_sort(array)
+	-->>2
+	-->>4
+	-->>5
+	-->>7
+	-->>8
+	function mag.bubble_sort(array)
+	local sort = array
+	for i = 1, #sort do
+		for j = 1, #sort - 1 do
+			if mag.n(sort[j]) > mag.n(sort[j + 1]) then
+			local sort_temp = sort[j + 1]
+			sort[j + 1] = sort[j]
+			sort[j] = sort_temp
+			end
+		end
+	end
+	end
+
 	mag.ms_from_f = aegisub.ms_from_frame
 	mag.f_from_ms = aegisub.frame_from_ms
 	mag.concat    = table.concat
@@ -867,10 +899,13 @@
 	mag.len       = unicode.len
 	mag.rmacro    = aegisub.register_macro
 
-	mag.message               = {}
-	mag.message["no_file"]    = "Belirtilen dosya bulunamadı."
-	mag.message["is_video"]   = "Aegisub üzerinde bir video açmadan bu işlemi yapamazsınız."
-	mag.message["error"]      = "Bir hata çıktı."
-	mag.message["no_process"] = "Hiçbir işlem yapılmadı."
+	mag.message                      = {}
+	mag.message["no_file"]           = "Belirtilen dosya bulunamadı."
+	mag.message["is_video"]          = "Aegisub üzerinde bir video açmadan bu işlemi yapamazsınız."
+	mag.message["error"]             = "Bir hata çıktı."
+	mag.message["no_process"]        = "Hiçbir işlem yapılmadı."
+	mag.message["no_option"]         = "Hiçbir tercih yapmadınız."
+	mag.message["select_save_place"] = "Kaydedilecek yeri seçin."
+	mag.message["error_config_file"] = "Ayar dosyası oluşturulamadı."
 
 	return mag
