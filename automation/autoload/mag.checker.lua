@@ -1,6 +1,6 @@
 	script_name        = "Checker"
 	script_description = "Satırlardaki sorunları kontrol eder."
-	script_version     = "0.8.5"
+	script_version     = "0.8.8"
 	script_author      = "Magnum357"
 	script_mag_version = "1.1.2.6"
 
@@ -8,6 +8,7 @@
 
 	c_main_msg            = mag.format("[%s]",script_name)
 	c_buttons             = {"Kontrol et","Kapat"}
+	c_buttons1            = {"Oku","Kapat"}
 	c                     = {}
 	c.time                = true
 	c.time_min            = false
@@ -61,8 +62,7 @@
 			line_ok = false
 			end
 			if line_ok then
-			local index = mag.s(l.start_time)
-			l.effect    = k
+			l.effect = k
 			mag.insert(lines,l)
 			end
 		end
@@ -85,6 +85,7 @@
 		end
 	end
 	for j = 1, #lines do
+	mag.progress("Satırlar kontrol ediliyor...",j,#lines,false)
 	local line   = lines[j]
 	local check  = ""
 	local result = ""
@@ -98,12 +99,12 @@
 			end
 			if c.time or c.time_min then
 				if dur < mag.time_strip(c.time_min_value) then
-				check = split2(check,mag.format("[1 - %s-]",mag.time_format(mag.time_strip(c.time_min_value) - dur)))
+				check = split2(check,mag.format("[S - %s-]",mag.time_format(mag.time_strip(c.time_min_value) - dur)))
 				end
 			end
 			if c.time or c.time_max then
 				if dur > mag.time_strip(c.time_max_value) then
-				check = split2(check,mag.format("[1 - %s+]",mag.time_format(dur - mag.time_strip(c.time_max_value))))
+				check = split2(check,mag.format("[S - %s+]",mag.time_format(dur - mag.time_strip(c.time_max_value))))
 				end
 			end
 			if c.time or c.time_next_min then
@@ -112,7 +113,7 @@
 					if next_line.start_time > line.end_time then
 					local dur2 = next_line.start_time - line.end_time
 						if dur2 < mag.time_strip(c.time_next_min_value) then
-						check = split2(check,mag.format("[2 - %s-]",mag.time_format(mag.time_strip(c.time_next_min_value) - dur2)))
+						check = split2(check,mag.format("[SS - %s-]",mag.time_format(mag.time_strip(c.time_next_min_value) - dur2)))
 						end
 					end
 				end
@@ -127,7 +128,7 @@
 					local cps      = text_len / dur
 					cps            = mag.floor(cps * 1000)
 						if mag.n(c.time_cps_value) <= cps then
-						check = split2(check,mag.format("[3 - %s]",cps))
+						check = split2(check,mag.format("[K -> %s]",cps))
 						end
 					end
 					if c.time or c.time_overlap then
@@ -141,7 +142,7 @@
 						end
 					overlap_count = overlap_count - 1
 						if overlap_count > 0 then
-						check = split2(check,mag.format("[4 - %s]",overlap_count))
+						check = split2(check,mag.format("[S -> %s]",overlap_count))
 						end
 					end
 				end
@@ -188,6 +189,7 @@
 			local strip_tag_and_special = strip_tag
 			strip_tag_and_special       = mag.gsub(strip_tag_and_special,"\\[nN]","")
 			strip_tag_and_special       = mag.gsub(strip_tag_and_special,"\\h"," ")
+			local qtext                 = ""
 				if c.space or c.space_double then
 				local space_count = mag.ccount(strip_tag_and_special,"%s")
 				local sp          = {}
@@ -260,22 +262,39 @@
 					elseif mag.find(strip_tag_and_special,"'%s") then
 					check = split2(check,mag.format("[%s]","' "))
 					end
-				local qtext = ""
-				qtext       = mag.match(strip_tag_and_special,"\".-\"")
+				qtext = mag.match(strip_tag_and_special,"\".-\"")
 					if qtext then
-						if mag.match(qtext,"\" ") then
-						check = split2(check,mag.format("[%s ]","\" "))
-						end
-						if mag.match(qtext," \"") then
-						check = split2(check,mag.format("[ %s]"," \""))
+						if mag.match(qtext,"\"%s") and mag.match(qtext,"%s\"") then
+						check = split2(check,mag.format("[%s]"," \" "))
+						elseif mag.match(qtext,"\"%s") then
+						check = split2(check,mag.format("[%s]","\" "))
+						elseif mag.match(qtext,"%s\"") then
+						check = split2(check,mag.format("[%s]"," \""))
 						end
 					end
-				qtext = mag.space_trim(strip_tag_and_special)
-					if mag.find(qtext,"%.%.%.%s") == 1 then
+					if mag.find(strip_tag_and_special,"%s-%.%.%.%s") == 1 then
 					check = split2(check,mag.format("[%s]","... "))
 					end
-					if mag.find(mag.reverse(qtext),"%.%.%.%s") == 1 then
+					if mag.find(mag.reverse(strip_tag_and_special),"%s-%.%.%.%s") == 1 then
 					check = split2(check,mag.format("[%s]"," ..."))
+					end
+					if mag.match(strip_tag_and_special,"[^%s],[^%s]") then
+					check = split2(check,mag.format("[%s]",", *"))
+					end
+					if mag.match(strip_tag_and_special,"[^%s]:[^%s]") then
+					check = split2(check,mag.format("[%s]",": *"))
+					end
+					if mag.match(strip_tag_and_special,"[^%s];[^%s]") then
+					check = split2(check,mag.format("[%s]","; *"))
+					end
+					if mag.match(strip_tag_and_special,"[^%s]%?[^%s]") then
+					check = split2(check,mag.format("[%s]","? *"))
+					end
+					if mag.match(strip_tag_and_special,"[^%s]%![^%s]") then
+					check = split2(check,mag.format("[%s]","! *"))
+					end
+					if mag.match(strip_tag_and_special,"[^%s%.]%.[^%s]") then
+					check = split2(check,mag.format("[%s]",". *"))
 					end
 				end
 			end
@@ -427,8 +446,185 @@
 	return t
 	end
 
+	function add_macro1(subs,sel)
+	mag.get_config(c)
+	local pcs         = false
+	local apply_items = mag.apply_items(subs,sel,"comment","")
+	c.apply           = mag.search_apply_items(apply_items,c.apply)
+	local gui, ok, config
+	repeat
+	gui =
+	{
+	 {class = "label",                                                       x = 0, y = 0, width = 1, height = 1, label = "Okunacak satırlar:"}
+	,{class = "dropdown", name = "u_apply_lines",   value = c.apply,         x = 1, y = 0, width = 1, height = 1, items = apply_items, hint = "Sadece kullanılan stiller listelenir."}
+	,{class = "checkbox", name = "u_comment_lines", value = c.comment_lines, x = 1, y = 1, width = 1, height = 1, label = "Yorum satırlarını geç."}
+	,{class = "checkbox", name = "u_empty_lines",   value = c.empty_lines,   x = 1, y = 2, width = 1, height = 1, label = "Boş satırları geç."}
+	}
+	ok, config      = mag.dlg(gui,c_buttons1)
+	c.apply         = config.u_apply_lines
+	c.comment_lines = config.u_comment_lines
+	c.empty_lines   = config.u_empty_lines
+	until c.apply ~= "Seç" or ok == c_buttons1[2]
+	if ok == c_buttons1[1] then
+	local lines       = {}
+	local apply_lines = mag.unstyles(config.u_apply_lines)
+	local i_last
+	if apply_lines == "Seçili satırlar" then
+	local sel = mag.sel_index(subs,sel)
+	i_last    = table.getn(sel)
+	else
+	i_last    = #subs
+	end
+	for i = 1, i_last do
+	local k
+	if apply_lines == "Seçili satırlar" then k = sel[i] else k = i end
+	local l        = subs[k]
+	local style1   = 1
+	local style2   = 1
+	local comment1 = 1
+	local comment2 = 1
+	local line_ok  = true
+	if c.comment_lines then comment1, comment2 = l.comment, false end
+	if apply_lines ~= "Tüm stiller" then if apply_lines ~= "Seçili satırlar" then style1, style2 = l.style, apply_lines end end
+		if comment1 == comment2 and style1 == style2 and l.class == "dialogue" then
+			if c.empty_lines and mag.is_empty_line(l.text) then
+			line_ok = false
+			end
+			if line_ok then
+			mag.insert(lines,l)
+			end
+		end
+	end
+	local log = {}
+	for j = 1, 31 do log[j] = 0 end
+	for i = 1, #lines do
+	local line = lines[i]
+		if mag.match(line.effect,"%[S%s%-%s%d%:%d%d%:%d%d%.%d%d%-%]")  then log[1]  = log[1]  + 1 end
+		if mag.match(line.effect,"%[S%s%-%s%d%:%d%d%:%d%d%.%d%d%+%]")  then log[2]  = log[2]  + 1 end
+		if mag.match(line.effect,"%[SS%s%-%s%d%:%d%d%:%d%d%.%d%d%-%]") then log[3]  = log[3]  + 1 end
+		if mag.match(line.effect,"%[K%s%->%s%d+%]")                    then log[4]  = log[4]  + 1 end
+		if mag.match(line.effect,"%[S%s%->%s%d+%]")                    then log[5]  = log[5]  + 1 end
+		if mag.match(line.effect,"%[%d+%]")                            then log[6]  = log[6]  + 1 end
+		if mag.match(line.effect,"%[%d+N%]")                           then log[7]  = log[7]  + 1 end
+		if mag.match(line.effect,"%[%d+>%d+%+.-%]")                    then log[8]  = log[8]  + 1 end
+		if mag.match(line.effect,"%[%sS%s%]")                          then log[9]  = log[9]  + 1 end
+		if mag.match(line.effect,"%[S%s%]")                            then log[10] = log[10] + 1 end
+		if mag.match(line.effect,"%[%sS%]")                            then log[11] = log[11] + 1 end
+		if mag.match(line.effect,"%[%s%.%]")                           then log[12] = log[12] + 1 end
+		if mag.match(line.effect,"%[%s%,%]")                           then log[13] = log[13] + 1 end
+		if mag.match(line.effect,"%[%s%!%]")                           then log[14] = log[14] + 1 end
+		if mag.match(line.effect,"%[%s%?%]")                           then log[15] = log[15] + 1 end
+		if mag.match(line.effect,"%[%s%:%]")                           then log[16] = log[16] + 1 end
+		if mag.match(line.effect,"%[%s%;%]")                           then log[17] = log[17] + 1 end
+		if mag.match(line.effect,"%[%s%'%s%]")                         then log[18] = log[18] + 1 end
+		if mag.match(line.effect,"%[%'%s%]")                           then log[19] = log[19] + 1 end
+		if mag.match(line.effect,"%[%'%s%]")                           then log[20] = log[20] + 1 end
+		if mag.match(line.effect,"%[%s\"%s%]")                         then log[21] = log[21] + 1 end
+		if mag.match(line.effect,"%[\"%s%]")                           then log[22] = log[22] + 1 end
+		if mag.match(line.effect,"%[%s\"%]")                           then log[23] = log[23] + 1 end
+		if mag.match(line.effect,"%[%s%.%.%.%]")                       then log[24] = log[24] + 1 end
+		if mag.match(line.effect,"%[%.%.%.%s]")                        then log[25] = log[25] + 1 end
+		if mag.match(line.effect,"%[%,%s%*%]")                         then log[26] = log[26] + 1 end
+		if mag.match(line.effect,"%[%:%s%*%]")                         then log[27] = log[27] + 1 end
+		if mag.match(line.effect,"%[%;%s%*%]")                         then log[28] = log[28] + 1 end
+		if mag.match(line.effect,"%[%?%s%*%]")                         then log[29] = log[29] + 1 end
+		if mag.match(line.effect,"%[%!%s%*%]")                         then log[30] = log[30] + 1 end
+		if mag.match(line.effect,"%[%.%s%*%]")                         then log[31] = log[31] + 1 end
+	end
+	local total_problem
+	total_problem = 0
+	for t = 1, 4 do total_problem = total_problem + log[t] end
+	if total_problem > 0 then
+	pcs = true
+	mag.log("[ ZAMANLAMA ]"..mag.wall("-",96))
+	echo(log[1],  "Mevcut satır, girilen zaman değerinden daha az")
+	echo(log[2],  "Mevcut satır, girilen zaman değerinden daha fazla")
+	echo(log[3],  "Sonraki satır, girilen zaman değerinden daha az")
+	echo(log[4],  "Saniyedeki karakter sayısı, girilen saniyedeki karakter süresinden fazla")
+	echo(log[5],  "Süreleri çakışan satırlar var")
+	mag.log(mag.wall("-",114))
+	mag.log("Toplam: %s satır",{total_problem})
+	end
+	total_problem = 0
+	for t = 6, 7 do total_problem = total_problem + log[t] end
+	if total_problem > 0 then
+	if pcs then mag.log("") end
+	pcs = true
+	mag.log("[ KARAKTER ]"..mag.wall("-",100))
+	echo(log[6],  "Girilen karakter sayısını aşan satırlar var")
+	echo(log[7],  "Satır bölünme yapıldığı halde bir kısmı girilen karakter sayısını aşan satırlar var")
+	mag.log(mag.wall("-",114))
+	mag.log("Toplam: %s satır",{total_problem})
+	end
+	total_problem = 0
+	for t = 8, 31 do total_problem = total_problem + log[t] end
+	if total_problem > 0 then
+	if pcs then mag.log("") end
+	pcs = true
+	mag.log("[ BOŞLUK ]"..mag.wall("-",102))
+	echo(log[8],  "Birden fazla boşluk var")
+	echo(log[9],  "Satırın başında ve sonunda boşluk var")
+	echo(log[10], "Satırın sonunda boşluk var")
+	echo(log[11], "Satırın başında boşluk var")
+	echo(log[12], "Noktadan önce boşluk var")
+	echo(log[13], "Virgülden önce boşluk var")
+	echo(log[14], "Ünlemden önce boşluk var")
+	echo(log[15], "Soru işaretinden önce boşluk var")
+	echo(log[16], "İki noktadan önce boşluk var")
+	echo(log[17], "Noktalı virgülden önce boşluk var")
+	echo(log[18], "Tırnak işaretinden önce ve sonra boşluk var")
+	echo(log[19], "Tırnak işaretinden sonra boşluk var")
+	echo(log[20], "Tırnak işaretinden önce boşluk var")
+	echo(log[21], "Çift tırnaktan önce ve sonra boşluk var")
+	echo(log[22], "Çift tırnaktan sonra boşluk var")
+	echo(log[23], "Çift tırnaktan önce boşluk var")
+	echo(log[24], "Satırın sonundaki üç noktadan önce boşluk var")
+	echo(log[25], "Satırın başındaki üç noktadan önce boşluk var")
+	echo(log[26], "Virgülden sonra boşluk koyulmalı")
+	echo(log[27], "İki noktadan sonra boşluk koyulmalı")
+	echo(log[28], "Noktalı virgülden sonra boşluk koyulmalı")
+	echo(log[29], "Soru işaretinden sonra boşluk koyulmalı")
+	echo(log[30], "Ünlemden sonra boşluk koyulmalı")
+	echo(log[31], "Noktadan sonra boşluk koyulmalı")
+	mag.log(mag.wall("-",114))
+	mag.log("Toplam: %s satır",{total_problem})
+	end
+	mag.log_error(pcs,mag.message["no_process"])
+	end
+	mag.set_config(c)
+	end
+
+	function echo(count,alert)
+	if count > 0 then mag.log("(%s SATIR BULUNDU) %s",{count,alert}) end
+	end
+
+	function add_macro2(subs)
+	local pcs = false
+	for i = 1, #subs do
+	local line = subs[i]
+		if line.class == "dialogue" then
+			if mag.find(line.effect,c_main_msg) == 2 then
+			pcs         = true
+			line.effect = ""
+			end
+		end
+	if pcs then subs[i] = line end
+	end
+	mag.log_error(pcs,mag.message["no_process"])
+	end
+
 	function check_macro(subs,sel)
 	local fe, fee = pcall(add_macro,subs,sel)
+	mag.funce(fe,fee)
+	end
+
+	function check_macro1(subs,sel)
+	local fe, fee = pcall(add_macro1,subs,sel)
+	mag.funce(fe,fee)
+	end
+
+	function check_macro2(subs)
+	local fe, fee = pcall(add_macro2,subs)
 	mag.funce(fe,fee)
 	end
 
@@ -445,7 +641,9 @@
 			end
 		end
 		if mag_version_check then
-		mag.register(false,check_macro)
+		mag.register(script_name.."/Aç",               check_macro)
+		mag.register(script_name.."/Girdileri oku",    check_macro1)
+		mag.register(script_name.."/Girdileri kaldır", check_macro2)
 		end
 	else
 	function mag_module() local k = aegisub.dialog.display({{class = "label", label = "Mag modülü bulunamadı.\nBu lua dosyasını kullanmak için Mag modülünü indirip kurmanız gerelidir.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end
