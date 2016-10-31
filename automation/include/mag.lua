@@ -1,6 +1,6 @@
 ﻿	module_name       = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version    = "1.1.2.6"
+	module_version    = "1.1.2.7"
 	module_author     = "Magnum357"
 
 	unicode   = require 'aegisub.unicode'
@@ -9,7 +9,7 @@
 
 	local mag = {}
 
-	mag.trc = "ÂâÎîÊêÔôÛûA-Za-zşŞçÇıİğĞüÜöÖ0-9"
+	mag.trc = "%a%d"
 
 	--mag.progress("İşleminiz yapılıyor",i,7,true,5000)
 	--mag.progress("İşleminiz yapılıyor",i,7,false)
@@ -94,7 +94,7 @@
 
 	--remove_dot_text = mag.removedot("Bu bir deneme.")
 	-->>Bu bir deneme
-	function mag.removedot(str) return mag.gsub(str,"[^"..mag.trc.."]+", "") end
+	function mag.removedot(str) return mag.gsub(str,"[%p%s]+", "") end
 
 	--mag.wall(" ",5)
 	-->>5x" "
@@ -903,7 +903,7 @@
 	mag.message["no_file"]           = "Belirtilen dosya bulunamadı."
 	mag.message["is_video"]          = "Aegisub üzerinde bir video açmadan bu işlemi yapamazsınız."
 	mag.message["error"]             = "Bir hata çıktı."
-	mag.message["no_process"]        = "Hiçbir işlem yapılmadı."
+	mag.message["no_process"]        = "Hiçbir işlem yapılmadı. Ya geçersiz bir işlem yaptınız ya da tercihlerinize göre yapılacak bir şey yoktu."
 	mag.message["no_option"]         = "Hiçbir tercih yapmadınız."
 	mag.message["select_save_place"] = "Kaydedilecek yeri seçin."
 	mag.message["error_config_file"] = "Ayar dosyası oluşturulamadı."

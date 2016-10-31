@@ -1,14 +1,15 @@
 	script_name        = "Checker"
 	script_description = "Satırlardaki sorunları kontrol eder."
-	script_version     = "0.8.8"
+	script_version     = "0.9.4"
 	script_author      = "Magnum357"
-	script_mag_version = "1.1.2.6"
+	script_mag_version = "1.1.2.7"
 
 	mag_import, mag = pcall(require,"mag")
 
 	c_main_msg            = mag.format("[%s]",script_name)
 	c_buttons             = {"Kontrol et","Kapat"}
 	c_buttons1            = {"Oku","Kapat"}
+	log_name              = {}
 	c                     = {}
 	c.time                = true
 	c.time_min            = false
@@ -184,12 +185,14 @@
 	check  = ""
 		if c.space or c.space_double or c.space_break_line or c.space_line or c.space_dots then
 			if empty == false then
-			local strip_tag             = line.text
-			strip_tag                   = mag.strip(strip_tag)
-			local strip_tag_and_special = strip_tag
-			strip_tag_and_special       = mag.gsub(strip_tag_and_special,"\\[nN]","")
-			strip_tag_and_special       = mag.gsub(strip_tag_and_special,"\\h"," ")
-			local qtext                 = ""
+			local strip_tag               = line.text
+			strip_tag                     = mag.strip(strip_tag)
+			local strip_tag_and_special   = strip_tag
+			strip_tag_and_special         = mag.gsub(strip_tag_and_special,"\\h"," ")
+			local strip_tag_and_special_2 = strip_tag_and_special
+			strip_tag_and_special_2       = mag.gsub(strip_tag_and_special,"\\[nN]"," ")
+			strip_tag_and_special         = mag.gsub(strip_tag_and_special,"\\[nN]","")
+			local qtext                   = ""
 				if c.space or c.space_double then
 				local space_count = mag.ccount(strip_tag_and_special,"%s")
 				local sp          = {}
@@ -237,32 +240,23 @@
 					end
 				end
 				if c.space or c.space_dots then
-					if mag.find(strip_tag_and_special,"["..mag.trc.."]%s+%.") then
-					check = split2(check,mag.format("[%s]"," ."))
-				end
-					if mag.find(strip_tag_and_special,"%s,") then
-					check = split2(check,mag.format("[%s]"," ,"))
-					end
-					if mag.find(strip_tag_and_special,"%s!") then
-					check = split2(check,mag.format("[%s]"," !"))
-					end
-					if mag.find(strip_tag_and_special,"%s%?") then
-					check = split2(check,mag.format("[%s]"," ?"))
-					end
-					if mag.find(strip_tag_and_special,"%s:") then
-					check = split2(check,mag.format("[%s]"," :"))
-					end
-					if mag.find(strip_tag_and_special,"%s;") then
-					check = split2(check,mag.format("[%s]"," ;"))
-					end
-					if mag.find(strip_tag_and_special,"%s'%s") then
-					check = split2(check,mag.format("[%s]"," ' "))
-					elseif mag.find(strip_tag_and_special,"%s'") then
-					check = split2(check,mag.format("[%s]"," '"))
-					elseif mag.find(strip_tag_and_special,"'%s") then
-					check = split2(check,mag.format("[%s]","' "))
-					end
-				qtext = mag.match(strip_tag_and_special,"\".-\"")
+				qtext = mag.ccount(strip_tag_and_special_2.."abc","%s%.[^%.]")
+				if qtext > 0 then check = split2(check,mag.format("[%s]x%s"," .",qtext)) end
+				qtext = mag.ccount(strip_tag_and_special_2,"%s%,")
+				if qtext > 0 then check = split2(check,mag.format("[%s]x%s"," ,",qtext)) end
+				qtext = mag.ccount(strip_tag_and_special_2,"%s%!")
+				if qtext > 0 then check = split2(check,mag.format("[%s]x%s"," !",qtext)) end
+				qtext = mag.ccount(strip_tag_and_special_2,"%s%?")
+				if qtext > 0 then check = split2(check,mag.format("[%s]x%s"," ?",qtext)) end
+				qtext = mag.ccount(strip_tag_and_special_2,"%s%:")
+				if qtext > 0 then check = split2(check,mag.format("[%s]x%s"," :",qtext)) end
+				qtext = mag.ccount(strip_tag_and_special_2,"%s%;")
+				if qtext > 0 then check = split2(check,mag.format("[%s]x%s"," ;",qtext)) end
+				qtext = mag.ccount(strip_tag_and_special_2,"%s'")
+				if qtext > 0 then check = split2(check,mag.format("[%s]x%s"," '",qtext)) end
+				qtext = mag.ccount(strip_tag_and_special_2,"'%s")
+				if qtext > 0 then check = split2(check,mag.format("[%s]x%s","' ",qtext)) end
+				qtext = mag.match(strip_tag_and_special_2,"\".-\"")
 					if qtext then
 						if mag.match(qtext,"\"%s") and mag.match(qtext,"%s\"") then
 						check = split2(check,mag.format("[%s]"," \" "))
@@ -272,30 +266,42 @@
 						check = split2(check,mag.format("[%s]"," \""))
 						end
 					end
-					if mag.find(strip_tag_and_special,"%s-%.%.%.%s") == 1 then
+					if mag.find(strip_tag_and_special_2,"%s-%.%.%.%s") == 1 then
 					check = split2(check,mag.format("[%s]","... "))
 					end
-					if mag.find(mag.reverse(strip_tag_and_special),"%s-%.%.%.%s") == 1 then
+					if mag.find(mag.reverse(strip_tag_and_special_2),"%s-%.%.%.%s") == 1 then
 					check = split2(check,mag.format("[%s]"," ..."))
 					end
-					if mag.match(strip_tag_and_special,"[^%s],[^%s]") then
-					check = split2(check,mag.format("[%s]",", *"))
+				qtext = mag.ccount(strip_tag_and_special_2,"[%a%d]%,[%a%d]")
+					if qtext > 0 then
+					qtext = qtext - mag.ccount(strip_tag_and_special_2,"[%d]%,[%d]")
+					if qtext > 0 then check = split2(check,mag.format("[%s]x%s",", *",qtext)) end
 					end
-					if mag.match(strip_tag_and_special,"[^%s]:[^%s]") then
-					check = split2(check,mag.format("[%s]",": *"))
+				qtext = mag.ccount(strip_tag_and_special_2,"[%a%d]%:[%a%d]")
+					if qtext > 0 then
+					qtext = qtext - mag.ccount(strip_tag_and_special_2,"[%d]%:[%d]")
+					if qtext > 0 then check = split2(check,mag.format("[%s]x%s",": *",qtext)) end
 					end
-					if mag.match(strip_tag_and_special,"[^%s];[^%s]") then
-					check = split2(check,mag.format("[%s]","; *"))
+				qtext = mag.ccount(strip_tag_and_special_2,"[%a%d]%;[%a%d]")
+				if qtext > 0 then check = split2(check,mag.format("[%s]x%s","; *",qtext)) end
+				qtext = mag.ccount(strip_tag_and_special_2,"[%a%d]%.[%a%d]")
+					if qtext > 0 then
+					qtext = qtext - mag.ccount(strip_tag_and_special_2,"[%d]%.[%d]")
+					if qtext > 0 then check = split2(check,mag.format("[%s]x%s",". *",qtext)) end
 					end
-					if mag.match(strip_tag_and_special,"[^%s]%?[^%s]") then
-					check = split2(check,mag.format("[%s]","? *"))
-					end
-					if mag.match(strip_tag_and_special,"[^%s]%![^%s]") then
-					check = split2(check,mag.format("[%s]","! *"))
-					end
-					if mag.match(strip_tag_and_special,"[^%s%.]%.[^%s]") then
-					check = split2(check,mag.format("[%s]",". *"))
-					end
+				qtext = mag.ccount(strip_tag_and_special_2,"[%a%d]%?[%a%d]")
+				if qtext > 0 then check = split2(check,mag.format("[%s]x%s","? *",qtext)) end
+				qtext = mag.ccount(strip_tag_and_special_2,"[%a%d]%![%a%d]")
+				if qtext > 0 then check = split2(check,mag.format("[%s]x%s","! *",qtext)) end
+				qtext = mag.ccount(strip_tag_and_special_2,"[%a%d]%!%?[%a%d]")
+				if qtext > 0 then check = split2(check,mag.format("[%s]x%s","!? *",qtext)) end
+				qtext = mag.ccount(strip_tag_and_special_2,"[%a%d]%?%![%a%d]")
+				if qtext > 0 then check = split2(check,mag.format("[%s]x%s","?! *",qtext)) end
+				qtext = mag.ccount(strip_tag_and_special_2,"[%.%!%?]%-")
+				if qtext > 0 then check = split2(check,mag.format("[%s]x%s"," *-",qtext)) end
+				qtext = mag.ccount(strip_tag_and_special_2,"[%.%!%?%s]%-%S")
+				if mag.find(strip_tag_and_special_2,"%-%S") == 1 then qtext = qtext + 1 end
+				if qtext > 0 then check = split2(check,mag.format("[%s]x%s","- *",qtext)) end
 				end
 			end
 		end
@@ -446,8 +452,47 @@
 	return t
 	end
 
+	function logger()
+	if log_name[1]  == nil then log_name[1]  = "Mevcut satır, girilen zaman değerinden daha az"                                      end
+	if log_name[2]  == nil then log_name[2]  = "Mevcut satır, girilen zaman değerinden daha fazla"                                   end
+	if log_name[3]  == nil then log_name[3]  = "Sonraki satır, girilen zaman değerinden daha az"                                     end
+	if log_name[4]  == nil then log_name[4]  = "Saniyedeki karakter sayısı, girilen saniyedeki karakter süresinden fazla"            end
+	if log_name[5]  == nil then log_name[5]  = "Süreleri çakışan satırlar var"                                                       end
+	if log_name[6]  == nil then log_name[6]  = "Girilen karakter sayısını aşan satırlar var"                                         end
+	if log_name[7]  == nil then log_name[7]  = "Satır bölünme yapıldığı halde bir kısmı girilen karakter sayısını aşan satırlar var" end
+	if log_name[8]  == nil then log_name[8]  = "Birden fazla boşluk var"                                                             end
+	if log_name[9]  == nil then log_name[9]  = "Satırın başında ve sonunda boşluk var"                                               end
+	if log_name[10] == nil then log_name[10] = "Satırın sonunda boşluk var"                                                          end
+	if log_name[11] == nil then log_name[11] = "Satırın başında boşluk var"                                                          end
+	if log_name[12] == nil then log_name[12] = "Noktadan önce boşluk var"                                                            end
+	if log_name[13] == nil then log_name[13] = "Virgülden önce boşluk var"                                                           end
+	if log_name[14] == nil then log_name[14] = "Ünlemden önce boşluk var"                                                            end
+	if log_name[15] == nil then log_name[15] = "Soru işaretinden önce boşluk var"                                                    end
+	if log_name[16] == nil then log_name[16] = "İki noktadan önce boşluk var"                                                        end
+	if log_name[17] == nil then log_name[17] = "Noktalı virgülden önce boşluk var"                                                   end
+	if log_name[18] == nil then log_name[18] = "Tırnak işaretinden önce ve sonra boşluk var"                                         end
+	if log_name[19] == nil then log_name[19] = "Tırnak işaretinden sonra boşluk var"                                                 end
+	if log_name[20] == nil then log_name[20] = "Tırnak işaretinden önce boşluk var"                                                  end
+	if log_name[21] == nil then log_name[21] = "Çift tırnaktan önce ve sonra boşluk var"                                             end
+	if log_name[22] == nil then log_name[22] = "Çift tırnaktan sonra boşluk var"                                                     end
+	if log_name[23] == nil then log_name[23] = "Çift tırnaktan önce boşluk var"                                                      end
+	if log_name[24] == nil then log_name[24] = "Satırın sonundaki üç noktadan önce boşluk var"                                       end
+	if log_name[25] == nil then log_name[25] = "Satırın başındaki üç noktadan önce boşluk var"                                       end
+	if log_name[26] == nil then log_name[26] = "Virgülden sonra boşluk koyulmalı"                                                    end
+	if log_name[27] == nil then log_name[27] = "İki noktadan sonra boşluk koyulmalı"                                                 end
+	if log_name[28] == nil then log_name[28] = "Noktalı virgülden sonra boşluk koyulmalı"                                            end
+	if log_name[29] == nil then log_name[29] = "Soru işaretinden sonra boşluk koyulmalı"                                             end
+	if log_name[30] == nil then log_name[30] = "Ünlemden sonra boşluk koyulmalı"                                                     end
+	if log_name[31] == nil then log_name[31] = "Noktadan sonra boşluk koyulmalı"                                                     end
+	if log_name[32] == nil then log_name[32] = "Ünlem-soru işaretinden sonra boşluk koyulmalı"                                       end
+	if log_name[33] == nil then log_name[33] = "Soru-ünlem işaretinden sonra boşluk koyulmalı"                                       end
+	if log_name[34] == nil then log_name[34] = "Konuşma çizgisinden sonra boşluk koyulmalı"                                          end
+	if log_name[35] == nil then log_name[35] = "Konuşma çizgisinden önce boşluk koyulmalı"                                           end
+	end
+
 	function add_macro1(subs,sel)
 	mag.get_config(c)
+	logger()
 	local pcs         = false
 	local apply_items = mag.apply_items(subs,sel,"comment","")
 	c.apply           = mag.search_apply_items(apply_items,c.apply)
@@ -496,7 +541,7 @@
 		end
 	end
 	local log = {}
-	for j = 1, 31 do log[j] = 0 end
+	for j = 1, 35 do log[j] = 0 end
 	for i = 1, #lines do
 	local line = lines[i]
 		if mag.match(line.effect,"%[S%s%-%s%d%:%d%d%:%d%d%.%d%d%-%]")  then log[1]  = log[1]  + 1 end
@@ -518,7 +563,7 @@
 		if mag.match(line.effect,"%[%s%;%]")                           then log[17] = log[17] + 1 end
 		if mag.match(line.effect,"%[%s%'%s%]")                         then log[18] = log[18] + 1 end
 		if mag.match(line.effect,"%[%'%s%]")                           then log[19] = log[19] + 1 end
-		if mag.match(line.effect,"%[%'%s%]")                           then log[20] = log[20] + 1 end
+		if mag.match(line.effect,"%[%s%'%]")                           then log[20] = log[20] + 1 end
 		if mag.match(line.effect,"%[%s\"%s%]")                         then log[21] = log[21] + 1 end
 		if mag.match(line.effect,"%[\"%s%]")                           then log[22] = log[22] + 1 end
 		if mag.match(line.effect,"%[%s\"%]")                           then log[23] = log[23] + 1 end
@@ -530,6 +575,10 @@
 		if mag.match(line.effect,"%[%?%s%*%]")                         then log[29] = log[29] + 1 end
 		if mag.match(line.effect,"%[%!%s%*%]")                         then log[30] = log[30] + 1 end
 		if mag.match(line.effect,"%[%.%s%*%]")                         then log[31] = log[31] + 1 end
+		if mag.match(line.effect,"%[%!%?%s%*%]")                       then log[32] = log[32] + 1 end
+		if mag.match(line.effect,"%[%?%!%s%*%]")                       then log[33] = log[33] + 1 end
+		if mag.match(line.effect,"%[%-%s%*%]")                         then log[34] = log[34] + 1 end
+		if mag.match(line.effect,"%[%s%*%%-]")                         then log[35] = log[35] + 1 end
 	end
 	local total_problem
 	total_problem = 0
@@ -537,11 +586,11 @@
 	if total_problem > 0 then
 	pcs = true
 	mag.log("[ ZAMANLAMA ]"..mag.wall("-",96))
-	echo(log[1],  "Mevcut satır, girilen zaman değerinden daha az")
-	echo(log[2],  "Mevcut satır, girilen zaman değerinden daha fazla")
-	echo(log[3],  "Sonraki satır, girilen zaman değerinden daha az")
-	echo(log[4],  "Saniyedeki karakter sayısı, girilen saniyedeki karakter süresinden fazla")
-	echo(log[5],  "Süreleri çakışan satırlar var")
+	echo(log[1],  log_name[1])
+	echo(log[2],  log_name[2])
+	echo(log[3],  log_name[3])
+	echo(log[4],  log_name[4])
+	echo(log[5],  log_name[5])
 	mag.log(mag.wall("-",114))
 	mag.log("Toplam: %s satır",{total_problem})
 	end
@@ -551,41 +600,45 @@
 	if pcs then mag.log("") end
 	pcs = true
 	mag.log("[ KARAKTER ]"..mag.wall("-",100))
-	echo(log[6],  "Girilen karakter sayısını aşan satırlar var")
-	echo(log[7],  "Satır bölünme yapıldığı halde bir kısmı girilen karakter sayısını aşan satırlar var")
+	echo(log[6],  log_name[6])
+	echo(log[7],  log_name[7])
 	mag.log(mag.wall("-",114))
 	mag.log("Toplam: %s satır",{total_problem})
 	end
 	total_problem = 0
-	for t = 8, 31 do total_problem = total_problem + log[t] end
+	for t = 8, 35 do total_problem = total_problem + log[t] end
 	if total_problem > 0 then
 	if pcs then mag.log("") end
 	pcs = true
 	mag.log("[ BOŞLUK ]"..mag.wall("-",102))
-	echo(log[8],  "Birden fazla boşluk var")
-	echo(log[9],  "Satırın başında ve sonunda boşluk var")
-	echo(log[10], "Satırın sonunda boşluk var")
-	echo(log[11], "Satırın başında boşluk var")
-	echo(log[12], "Noktadan önce boşluk var")
-	echo(log[13], "Virgülden önce boşluk var")
-	echo(log[14], "Ünlemden önce boşluk var")
-	echo(log[15], "Soru işaretinden önce boşluk var")
-	echo(log[16], "İki noktadan önce boşluk var")
-	echo(log[17], "Noktalı virgülden önce boşluk var")
-	echo(log[18], "Tırnak işaretinden önce ve sonra boşluk var")
-	echo(log[19], "Tırnak işaretinden sonra boşluk var")
-	echo(log[20], "Tırnak işaretinden önce boşluk var")
-	echo(log[21], "Çift tırnaktan önce ve sonra boşluk var")
-	echo(log[22], "Çift tırnaktan sonra boşluk var")
-	echo(log[23], "Çift tırnaktan önce boşluk var")
-	echo(log[24], "Satırın sonundaki üç noktadan önce boşluk var")
-	echo(log[25], "Satırın başındaki üç noktadan önce boşluk var")
-	echo(log[26], "Virgülden sonra boşluk koyulmalı")
-	echo(log[27], "İki noktadan sonra boşluk koyulmalı")
-	echo(log[28], "Noktalı virgülden sonra boşluk koyulmalı")
-	echo(log[29], "Soru işaretinden sonra boşluk koyulmalı")
-	echo(log[30], "Ünlemden sonra boşluk koyulmalı")
-	echo(log[31], "Noktadan sonra boşluk koyulmalı")
+	echo(log[8],  log_name[8])
+	echo(log[9],  log_name[9])
+	echo(log[10], log_name[10])
+	echo(log[11], log_name[11])
+	echo(log[12], log_name[12])
+	echo(log[13], log_name[13])
+	echo(log[14], log_name[14])
+	echo(log[15], log_name[15])
+	echo(log[16], log_name[16])
+	echo(log[17], log_name[17])
+	echo(log[18], log_name[18])
+	echo(log[19], log_name[19])
+	echo(log[20], log_name[20])
+	echo(log[21], log_name[21])
+	echo(log[22], log_name[22])
+	echo(log[23], log_name[23])
+	echo(log[24], log_name[24])
+	echo(log[25], log_name[25])
+	echo(log[26], log_name[26])
+	echo(log[27], log_name[27])
+	echo(log[28], log_name[28])
+	echo(log[29], log_name[29])
+	echo(log[30], log_name[30])
+	echo(log[31], log_name[31])
+	echo(log[32], log_name[32])
+	echo(log[33], log_name[33])
+	echo(log[34], log_name[34])
+	echo(log[35], log_name[35])
 	mag.log(mag.wall("-",114))
 	mag.log("Toplam: %s satır",{total_problem})
 	end
@@ -613,6 +666,40 @@
 	mag.log_error(pcs,mag.message["no_process"])
 	end
 
+	function add_macro3(subs,sel,act)
+	local istart = act - 1
+	local jump   = 0
+	for i = istart, 1, -1 do
+	local line = subs[i]
+		if line.class ~= "dialogue" then break end
+		if mag.match(line.effect,c_main_msg) then
+		jump = i
+		break
+		end
+	end
+	if jump == 0 then mag.log(2,"Atlanacak satır bulunamadı.") else return {jump} end
+	end
+
+	function add_macro4(subs,sel,act)
+	local istart = act + 1
+	local jump   = 0
+	for i = istart, #subs do
+	local line = subs[i]
+		if mag.match(line.effect,c_main_msg) then
+		jump = i
+		break
+		end
+	end
+	if jump == 0 then mag.log(2,"Atlanacak satır bulunamadı.") else return {jump} end
+	end
+
+	function add_macro5()
+	logger()
+	for idx, log in pairs(log_name) do
+	mag.log("%s -> %s",{idx,log})
+	end
+	end
+
 	function check_macro(subs,sel)
 	local fe, fee = pcall(add_macro,subs,sel)
 	mag.funce(fe,fee)
@@ -625,6 +712,23 @@
 
 	function check_macro2(subs)
 	local fe, fee = pcall(add_macro2,subs)
+	mag.funce(fe,fee)
+	end
+
+	function check_macro3(subs,sel,act)
+	local fe, fee = pcall(add_macro3,subs,sel,act)
+	mag.funce(fe,fee)
+	return fee
+	end
+
+	function check_macro4(subs,sel,act)
+	local fe, fee = pcall(add_macro4,subs,sel,act)
+	mag.funce(fe,fee)
+	return fee
+	end
+
+	function check_macro5(subs)
+	local fe, fee = pcall(add_macro5,subs)
 	mag.funce(fe,fee)
 	end
 
@@ -641,9 +745,12 @@
 			end
 		end
 		if mag_version_check then
-		mag.register(script_name.."/Aç",               check_macro)
-		mag.register(script_name.."/Girdileri oku",    check_macro1)
-		mag.register(script_name.."/Girdileri kaldır", check_macro2)
+		mag.register(script_name.."/Aç",                        check_macro)
+		mag.register(script_name.."/Girdiler/Girdi Listesi",    check_macro5)
+		mag.register(script_name.."/Girdiler/Girdileri oku",    check_macro1)
+		mag.register(script_name.."/Girdiler/Girdileri kaldır", check_macro2)
+		mag.register(script_name.."/Atlama/Önceki",             check_macro3)
+		mag.register(script_name.."/Atlama/Sonraki",            check_macro4)
 		end
 	else
 	function mag_module() local k = aegisub.dialog.display({{class = "label", label = "Mag modülü bulunamadı.\nBu lua dosyasını kullanmak için Mag modülünü indirip kurmanız gerelidir.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end
