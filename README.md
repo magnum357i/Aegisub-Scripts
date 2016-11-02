@@ -5,10 +5,9 @@
   - [**(2) Kurulum**](#kurulum)
   - [**(3) Kullanım**](#kullan%C4%B1m)
   - [**(4) Destek Verilen Sürüm**](#destek-verilen-s%C3%BCr%C3%BCm)
-  - [**(5) Karakter Desteği**](#karakter-deste%C4%9Fi)
-  - [**(6) Kısayol Atamak**](#k%C4%B1sayol-atamak)
-  - [**(7) Güncelleyici veya İndirici**](#g%C3%BCncelleyici-veya-%C4%B0ndirici)
-  - [**(8) Arayüz Tercihleri**](#aray%C3%BCz-tercihleri)
+  - [**(5) Kısayol Atamak**](#k%C4%B1sayol-atamak)
+  - [**(6) Güncelleyici veya İndirici**](#g%C3%BCncelleyici-veya-%C4%B0ndirici)
+  - [**(7) Arayüz Tercihleri**](#aray%C3%BCz-tercihleri)
 - [**(B) MODÜL**](#modÜl)
   - [**(1) Mag**](#mag)
 - [**(C) MAKROLAR**](#makrolar)
@@ -19,17 +18,18 @@
   - [**(5) Checker**](#checker)
   - [**(6) Copy Dialogue**](#copy-dialogue)
   - [**(7) Finder**](#finder)
-  - [**(8) K Char**](#k-char)
-  - [**(9) Line Format**](#line-format)
-  - [**(10) Line Source Duplicate**](#line-source-duplicate)
-  - [**(11) Select Lines**](#select-lines)
-  - [**(12) Shaper**](#shaper)
-  - [**(13) Strip Line**](#strip-line)
-  - [**(14) Sub Menu Maker**](#sub-menu-maker)
-  - [**(15) Text Align**](#text-align)
-  - [**(16) Timer**](#timer)
-  - [**(17) Trans State A1**](#trans-state-a1)
-  - [**(18) Typewritter**](#typewritter)
+  - [**(8) HTML TABLE From ASS**](#html-table-from-ass)
+  - [**(9) K Char**](#k-char)
+  - [**(10) Line Format**](#line-format)
+  - [**(11) Line Source Duplicate**](#line-source-duplicate)
+  - [**(12) Select Lines**](#select-lines)
+  - [**(13) Shaper**](#shaper)
+  - [**(14) Strip Line**](#strip-line)
+  - [**(15) Sub Menu Maker**](#sub-menu-maker)
+  - [**(16) Text Align**](#text-align)
+  - [**(17) Timer**](#timer)
+  - [**(18) Trans State A1**](#trans-state-a1)
+  - [**(19) Typewritter**](#typewritter)
 - [**(D) ASS**](#ass)
  * [**(1) Autotags**](#autotags)
  * [**(2) Color Fade**](#color-fade)
@@ -47,17 +47,16 @@ Bu sayfayı açmamdaki amaç kendi yazdığım lua dosyalarının sürüm takibi
 Lua dosyası veya eklentisi **Aegisub** programına yeni özellikler katmak için kullanılır. Bu yeni özellikler ile yapılacak iş mümkün kıldırabilir veya zamandan tasarruf ettirebilir.
 
 #### Kurulum
-* **Modül dosyası:** **mag.lua** dosyasını **aegisub/automation/include/** dizinine atın. Program kapalıysa açarak, değilse **Automation/Automation.../Rescan Autoload Dir** butonuna basarak lua dosyasını aktifleştirebilirsiniz.
-* **Lua dosyaları:** Kullanmak istediğiniz lua dosyalarını **aegisub/automation/autoload/** dizinine atın. Program kapalıysa açarak, değilse **Automation/Automation.../Rescan Autoload Dir** butonuna basarak lua dosyasını aktifleştirebilirsiniz.
+* **Modül dosyası kurulum dizini(mag.lua vb.):** **aegisub/automation/include/**
+* **Lua dosyaları:** **aegisub/automation/autoload/**
+
+Modül ve lua dosyalarını ilgili yerlere attıktan sonra aktifleştirmek için program açıksa onu tekrar açarak veya bunu yapmadan program açıkken **Automation/Automation.../Rescan Autoload Dir** butonuna basabilirsiniz.
 
 #### Kullanım
 Kullanmak istediğiniz lua dosyasını doğru yere attıysanız **Automation** alt menüsüne ismi gelmelidir. O isme tıklayarak ilgili luayı kullanabilirsiniz. Kullanım amacına göre bazı lua dosyaları size bir arayüz sunarken bazıları da sunmaz.
 
 #### Destek Verilen Sürüm
 Tüm lua dosyalarımı stabil olan en güncel Aegisub sürümü **3.2.2** sürümü üzerinden yazdım. Önceki **3.x.x** sürümlerinde de sorun yaşamayabilirsiniz fakat **2.x.x** sürümlerinde kesin sorunlar yaşayabilirsiniz. Daha güncel bir sürüm çıkarsa ve uyumsuzluk sorunu olursa düzenleyebilirim. Her zaman en güncel stabil sürüme destek vereceğim.
-
-#### Karakter Desteği
-A'dan Z'ye tüm Türkçe karakterlere, sesli harflerin uzun söylenişlerine(Â, Ê, Î, Ô, Û), yarı sesli harflerin söylenişlerine(Ă, Ĕ, Ĭ, Ŏ, Ŭ) destek verilir.
 
 #### Kısayol Atamak
 Lua dosyalarını **Automation** alt menüsünden seçmeyip daha hızlı kullanmak için klavyeden bir kısayol atabilirsiniz.
@@ -141,6 +140,15 @@ Yorum parantezlerine veya girilen kelimeye göre listeleme yapar. Listeledikleri
 ---
 
 * **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz.
+* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+
+### [HTML TABLE From ASS](automation/autoload/mag.html_table_from_ass.lua)
+Alt yazı satırlarını html tablosuna çevirir.
+
+---
+
+* **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
+* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
 * **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
 
 ### [K Char](automation/autoload/mag.k_char.lua)

@@ -1,6 +1,6 @@
 ﻿	module_name       = "Mag"
 	module_desription = "Birden fazla kullandığım foksiyonlar için fonksiyon deposu."
-	module_version    = "1.1.2.7"
+	module_version    = "1.1.3.0"
 	module_author     = "Magnum357"
 
 	unicode   = require 'aegisub.unicode'
@@ -9,7 +9,10 @@
 
 	local mag = {}
 
-	mag.trc = "%a%d"
+	mag.trc            = "%a%d"
+	local select_lines = "Seçili satırlar"
+	local all_lines    = "Tüm stiller"
+	local slct         = "Seç"
 
 	--mag.progress("İşleminiz yapılıyor",i,7,true,5000)
 	--mag.progress("İşleminiz yapılıyor",i,7,false)
@@ -113,6 +116,7 @@
 	return n
 	end
 
+	--mag.total_comment_full(subs)
 	function mag.total_comment_full(subs)
 	local n = 0
 	for i = 1, #subs do if subs[i].class == "dialogue" and subs[i].comment == false then n = n + 1 end end
@@ -160,9 +164,9 @@
 
 	--apply_items = mag.apply_items(subs,sel,"comment","")
 	function mag.apply_items(subs,sel,mode,value)
-	local sel_total_format  = sel_total_format(subs,sel,mode,"Seçili satırlar")
-	local subs_total_format = subs_total_format(subs,sel,mode,"Tüm stiller")
-	local apply             = {"Seç",sel_total_format,subs_total_format}
+	local sel_total_format  = sel_total_format(subs,sel,mode,select_lines)
+	local subs_total_format = subs_total_format(subs,sel,mode,all_lines)
+	local apply             = {slct,sel_total_format,subs_total_format}
 	local styles            = mag.styles(subs,mode,value)
 	for _, style in ipairs(styles) do
 	mag.insert(apply,style)
@@ -173,13 +177,45 @@
 	--search_items = mag.search_apply_items(apply_items,"Song (50+80)")
 	-->>Song(40+48)
 	function mag.search_apply_items(apply,search)
-	local i = "Seç"
+	local i = slct
 	for _, item in ipairs(apply) do
 		if mag.unstyles(item) == mag.unstyles(search) then
 		i = item
 		end
 	end
 	return i
+	end
+
+	--lines = mag.lines(subs,sel,apply_lines,c.comment_mode,c.empty_mode)
+	function mag.lines(subs,sel,apply,comment,empty)
+	local lines = {}
+	local i_last
+	if apply == select_lines then local sel = mag.sel_index(subs,sel) i_last = #sel else i_last = #subs end
+	for i = 1, i_last do
+	local k
+	if apply == select_lines then k = sel[i] else k = i end
+	local line    = subs[k]
+	local line_ok = true
+	local style1  = 1
+	local style2  = 1
+	if apply ~= all_lines and apply ~= select_lines then style1, style2 = line.style, apply end
+		if line.class == "dialogue" and style1 == style2 then
+		if empty   and mag.is_empty_line(line.text) then line_ok = false        end
+		if comment and line.comment                 then line_ok = false        end
+		if line_ok                                  then mag.insert(lines,line) end
+		end
+	end
+	return lines
+	end
+
+	--lines = mag.lines2(subs,sel)
+	function mag.lines2(subs,sel)
+	local lines = {}
+	for _, li in pairs(sel) do
+	local line = subs[li]
+	mag.insert(lines,line)
+	end
+	return lines
 	end
 
 	--search_item = mag.search_item(items,i,"deneme")
@@ -469,7 +505,7 @@
 	else
 	if mag.match(str,ptn2) then return mag.match(str,ptn2) else return false,false,false,false end
 	end
-	end	
+	end
 
 	--rfind_text = mag.rfind("Bu bir deneme.","e")
 	-->>13
@@ -788,6 +824,7 @@
 	if file then
 	local cvals  = {}
 		for config, value in pairs(c) do
+		if mag.match(mag.s(value),"\n") then value = mag.gsub(value,"\n","\\n") end
 		mag.insert(cvals,mag.format("%s=%s",config,value))
 		end
 	mag.sort(cvals)
@@ -822,6 +859,7 @@
 			v = true
 			end
 			if v ~= nil then
+			if mag.match(mag.s(v),"\\n") then v = mag.gsub(v,"\\n","\n") end
 			c[config] = v
 			end
 		end
