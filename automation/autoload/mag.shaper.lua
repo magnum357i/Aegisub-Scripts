@@ -1,282 +1,431 @@
-	script_name        = "Shaper"
-	script_description = "Resim, şerit ve ızgara ekler. Bir VSFilterMOD etiketini kullanarak resim ekler."
-	script_author      = "Magnum357"
-	script_version     = "1.4.4"
-	script_mag_version = "1.1.2.5"
-
-	mag_import, mag             = pcall(require,"mag")
-	imagesize_import, ImageSize = pcall(require,"imagesize")
-
-	include_path      = aegisub.decode_path("?data\\automation\\include\\")
-	c_buttons         = {"Resim","Şerit","Izgara","Kapat"}
-	c_buttons1        = {"Uygula","Dosya seç","Panodan al","Geri","Kapat"}
-	c_buttons2        = {"Çizdir","Geri","Kapat"}
-	c_buttons3        = {"Oluştur","Geri","Kapat"}
-	c_image_message   = "\"Dosya seçilmedi.\""
-	c                 = {}
-	c.image_path      = c_image_message
-	c.image_tags      = "{\\an5\\bord0\\shad0\\1img($image)\\p1}$shape"
-	c.image_only_path = false
-	c.shape_width     = 0
-	c.shape_height    = 0
-	c.shape_tags      = "{\\an5\\bord0\\shad0\\blur0\\c$color\\p1}$shape"
-	c.shape_color     = "#000000"
-	c.shape_only      = false
-	c.grid_number     = 10
-	c.grid_space      = 50
-	c.grid_thick      = 2
-	c.grid_tags       = "\\an5\\alpha&H80&\\bord0\\shad0\\p1"
-	c.grid_color      = "#FF19CD"
-	c.grid_type       = "Tam"
-	c_grid_type       = {"Tam","Sadece dikey","Sadece yatay"}
-
-	function add_macro(subs,sel,act)
-	mag.get_config(c)
-	local pcs = false
-	repeat
-	local gui = {{class = "label", x = 0, y = 0, width = 1, height = 1, label = "Devam etmek için aşağıdaki seçeneklerden birini seçiniz."}}
-	local ok  = mag.dlg(gui,c_buttons)
-		if ok == c_buttons[1] then
-		pcs, ok = shaper_image(subs,sel,act)
-		end
-		if ok == c_buttons[2] then
-		pcs, ok = shaper_lane(subs,sel,act)
-		end
-		if ok == c_buttons[3] then
-		pcs, ok = shaper_grid(subs,sel,act)
-		end
-	until pcs == true or ok == c_buttons[4]
-	if pcs then
-	mag.undo_point()
-	end
-	mag.set_config(c)
-	end
-
-	function shaper_image(subs,sel,act)
-	local pcs = false
-	local ok, config
-	if not imagesize_import then
-	mag.log(1,"ImageSize modül dosyası bulunamadı. Şu bağlantıdan indirebilirsiniz:\nhttps://github.com/ScottPhillips/Corona-SDK-Lua-Image-Size/tree/master/imagesize\n\nYönlendirilen sayfadan \"imagesize.lua\" dosyası ve \"imagesize\" klasörünü automation/include/ dizinine atmanız gerekiyor. \"imagesize/format\" dosyası içinden sadece \"png.lua\" dosyasına ihtiyaç vardır.")
-	elseif not io.open(include_path.."imagesize\\util.lua") then
-	mag.log(1,"\"util.lua\" dosyası bulunamadı. Şu bağlantıdan indirebilirsiniz:\nhttps://github.com/ScottPhillips/Corona-SDK-Lua-Image-Size/tree/master/imagesize\n\nYönlendirilen sayfadaki \"imagesize\" klasörünün içindedir.")
-	elseif not io.open(include_path.."imagesize\\format\\png.lua") then
-	mag.log(1,"\"png.lua\" dosyası bulunamadı. Şu bağlantıdan indirebilirsiniz:\nhttps://github.com/ScottPhillips/Corona-SDK-Lua-Image-Size/tree/master/imagesize\n\nYönlendirilen sayfadaki \"imagesize/format\" klasörünün içindedir.")
-	else
-	local file = c.image_path
-		repeat
-		gui =
-		{
-		 {class = "label",                                                           x = 0, y = 0, width = 30, height = 1, label = mag.format("[%s / %s]",mag.up(script_name),mag.up("resim"))}
-		,{class = "label",                                                           x = 0, y = 1, width = 1,  height = 1, label = mag.wall(" ",5).."Dizin:"}
-		,{class = "label",                                                           x = 1, y = 1, width = 29, height = 1, label = c.image_path}
-		,{class = "label",                                                           x = 0, y = 2, width = 1,  height = 1, label = "Etiketler:"}
-		,{class = "edit",     name = "u_image_tags",      value = c.image_tags,      x = 1, y = 2, width = 29, height = 1, hint = "$shape = çizim\n$image = resim"}
-		,{class = "checkbox", name = "u_image_only_path", value = c.image_only_path, x = 1, y = 3, width = 29, height = 1, label = "Sadece resim yolunu değiştir.", hint = "Sadece varolan img etiketini değiştir."}
-		}
-		ok, config        = mag.dlg(gui,c_buttons1)
-		c.image_tags      = config.u_image_tags
-		c.image_only_path = config.u_image_only_path
-			if ok == mag.ascii(c_buttons1[2]) then
-			file = aegisub.dialog.open("Bir resim dosyası seçin",aegisub.decode_path("?script\\"),"","Resim dosyası (*.png)|*.png",false,true)
-			end
-			if ok == c_buttons1[3] then
-			file = mag.cget()
-			file = mag.gsub(file,"\"","")
-			file = mag.gsub(file,"\\+","\\")
-				if mag.find(mag.reverse(file),mag.reverse(".png")) ~= 1 then
-				file = file..".png"
-				end
-			end
-			if mag.find(file,"\"") ~= 1 and mag.find(mag.reverse(file),"\"") ~= 1 then
-			file = mag.format("\"%s\"",file)
-			end
-		c.image_path = file
-		until ok == mag.ascii(c_buttons1[1]) and c.image_path ~= c_image_message or ok == c_buttons[4] or ok == c_buttons1[4]
-		if ok == c_buttons1[1] then
-		local file_temp = mag.gsub(c.image_path,"\"","")
-			if io.open(file_temp) then
-			local line           = subs[act]
-				if not c.image_only_path then
-					if mag.is_video() then
-					pcs                  = true
-					local meta           = karaskel.collect_head(subs)
-					local xres, yres     = aegisub.video_size()
-					local width, height  = ImageSize.imgsize(file_temp)
-					local xratio, yratio = meta.res_x/xres, meta.res_y/yres
-					local width          = mag.floor(width * xratio)
-					local height         = mag.floor(height * yratio)
-					local shape          = mag.format("m 0 0 l %d 0 l %d %d l 0 %d l 0 0",width,width,height,height)				
-					line.text            = c.image_tags
-					line.text            = mag.gsub(line.text,"%$image",file_temp)
-					line.text            = mag.gsub(line.text,"%$shape",shape)
-					else
-					mag.log(1,mag.message["is_dir"])
-					end
-				else
-					if mag.find(line.text,"\\[1-4]img%(.-%)") then
-					pcs       = true
-					line.text = mag.gsub(line.text,"(\\[1-4]img%().-(%))","%1"..mag.gsub(c.image_path,"\"","").."%2")
-					else
-					mag.log(2,"Satırda resim ekleme etiketi bulunamadı.")
-					end
-				end
-				if pcs then
-				subs[act] = line
-				end
-			else
-			mag.log(1,mag.message["no_file"])
-			mag.log(2,"Dizin hafızası sıfırlandı.")
-			c.image_path = c_image_message
-			end
-		end
-	end
-	return pcs, ok
-	end
-
-	function shaper_lane(subs,sel,act)
-	local pcs = false
-	local gui =
+	function lang_switch_keys(lang)
+	local in_lang = {}
+	local langs   =
 	{
-	 {class = "label",                                                             x = 0, y = 0, width = 4, height = 1, label = mag.format("[%s / %s]",mag.up(script_name),mag.up("şerit"))}
-	,{class = "label",                                                             x = 1, y = 1, width = 1, height = 1, label = "Genişlik (px)"}
-	,{class = "label",                                                             x = 3, y = 1, width = 1, height = 1, label = "Yükseklik (px)"}
-	,{class = "label",                                                             x = 0, y = 2, width = 1, height = 1, label = "Büyüklük:"}
-	,{class = "intedit", min = 0, name = "u_shape_width",  value = c.shape_width,  x = 1, y = 2, width = 1, height = 1}
-	,{class = "label",                                                             x = 2, y = 2, width = 1, height = 1, label = "x"}
-	,{class = "intedit", min = 0, name = "u_shape_height", value = c.shape_height, x = 3, y = 2, width = 1, height = 1}
-	,{class = "label",                                                             x = 0, y = 3, width = 1, height = 1, label = mag.wall(" ",2).."Etiketler:"}
-	,{class = "edit",             name = "u_shape_tags",   value = c.shape_tags,   x = 1, y = 3, width = 3, height = 1, hint = "$shape = çizim\n$color = renk"}
-	,{class = "label",                                                             x = 0, y = 4, width = 1, height = 1, label = mag.wall(" ",7).."Renk:"}
-	,{class = "color",            name = "u_shape_color",  value = c.shape_color,  x = 1, y = 4, width = 3, height = 1}
-	,{class = "checkbox",         name = "u_shape_only",   value = c.shape_only,   x = 1, y = 5, width = 3, height = 1, label = "Sadece varolan şekil kodunu değiştir."}
+	[1] = {lang_key = "tr", lang_name = "Türkçe",  script_name = "Şekil Çiz"},
+	[2] = {lang_key = "en", lang_name = "English", script_name = "Shaper"}
 	}
-	local ok, config = mag.dlg(gui,c_buttons2)
-	c.shape_width    = config.u_shape_width
-	c.shape_height   = config.u_shape_height
-	c.shape_tags     = config.u_shape_tags
-	c.shape_color    = config.u_shape_color
-	c.shape_only     = config.u_shape_only
-		if ok == mag.ascii(c_buttons2[1]) then
-		local line  = subs[act]
-		local shape = mag.format("m 0 0 l %d 0 l %d %d l 0 %d l 0 0",c.shape_width,c.shape_width,c.shape_height,c.shape_height)
-			if not c.shape_only then
-			pcs       = true
-			line.text = c.shape_tags
-			line.text = mag.gsub(line.text,"%$color",mag.html_to_ass(c.shape_color))
-			line.text = mag.gsub(line.text,"%$shape",shape)
-			else
-				if mag.find(line.text,"m%s[%d%.]*%s[%d%.]*%s[%d%s%.lbm]*") then
-				pcs = true
-				line.text = mag.gsub(line.text,"m%s[%d%.]*%s[%d%.]*%s[%d%s%.lbm]*",shape)
+	local lang_list        = {}
+	local script_name_list = {}
+	for i = 1, #langs do
+	lang_list[langs[i].lang_key]        = langs[i].lang_name
+	script_name_list[langs[i].lang_key] = langs[i].script_name
+	end
+	if lang == langs[1].lang_key then
+	in_lang["module_incompatible"] = "Mag modülünün kurulu sürümü bu lua dosyası ile uyumsuz!\n\nModül dosyasının en az \"%s\" sürümü veya daha üstü gerekiyor.\n\n\nŞimdi indirme sayfasına gitmek ister misiniz?"
+	in_lang["module_not_found"]    = "Mag modülü bulunamadı!\n\nBu lua dosyasını kullanmak için Mag modülünü indirip Aegisub programı kapalıyken\n\"Aegisub/automation/include/\" dizinine taşımanız gerekiyor.\n\n\nŞimdi indirme sayfasına gitmek ister misiniz?"
+	in_lang["module_yes"]          = "Git"
+	in_lang["module_no"]           = "Daha Sonra"
+	in_lang["s_name"]              = langs[1].script_name
+	in_lang["s_desc"]              = "Aktif satıra resim, ızgara veya dörtgen ekler."
+	in_lang["tabKey1"]             = "Resim"
+	in_lang["tabKey2"]             = "Izgara"
+	in_lang["tabKey3"]             = "Dörtgen"
+	in_lang["buttonKey1"]          = "Çiz"
+	in_lang["buttonKey2"]          = "Kapat"
+	in_lang["buttonKey3"]          = "Ekle"
+	in_lang["buttonKey4"]          = "Resim Seç..."
+	in_lang["buttonKey5"]          = "Notu Görüntüle"
+	in_lang["buttonKey6"]          = "Git"
+	in_lang["buttonKey7"]          = "Geri Dön"
+	in_lang["guiLabelKey2"]        = "Adet:"
+	in_lang["guiLabelKey3"]        = "Boşluk (px):"
+	in_lang["guiLabelKey4"]        = "Kalınlık (px):"
+	in_lang["guiLabelKey6"]        = "Renk:"
+	in_lang["guiLabelKey7"]        = "Görünecek koordinat(lar):"
+	in_lang["guiLabelKey8"]        = "Görünürlülük (yüzde):"
+	in_lang["guiLabelKey9"]        = "En"
+	in_lang["guiLabelKey10"]       = "Boy"
+	in_lang["guiLabelKey11"]       = "Ebatlar (px):"
+	in_lang["guiLabelKey12"]       = "Sadece var olan şekil çizme kodunu değiştir"
+	in_lang["guiLabelKey13"]       = "Yol:"
+	in_lang["guiLabelKey14"]       = "Sadece resim yolunu değiştir"
+	in_lang["guiLabelKey15"]       = "\"\'{%s}\' butonuna tıklayın.\""
+	in_lang["guiHintKey1"]         = "Tek bir koordinattaki çizgilerin sayısı."
+	in_lang["key1"]                = "Şekil çizme kodu bulunamadı."
+	in_lang["key2"]                = "Bir resim dosyası seçin"
+	in_lang["key3"]                = "Resim Dosyası (*.png)|*.png"
+	in_lang["key4"]                = "Resim kodu bulunamadı."
+	in_lang["key5"]                = "Shaper doğrudan resim ekleyemez. Bunun için VSFilterMOD içinde bulunan img etiketini kullanır.\nEğer alt yazı işleyicisi olarak VSFilterMOD kullanmıyorsanız resmi göremezsiniz.\n\nKurulumu nasıl yapacağınızı bilmiyorsanız \"{%s}\" butonuna tıklayın."
+	in_lang["key6"]                = "Aktif satır"
+	in_lang["gridTypeListKey1"]    = "Yatay + Dikey"
+	in_lang["gridTypeListKey2"]    = "Yatay"
+	in_lang["gridTypeListKey3"]    = "Dikey"
+	elseif lang == langs[2].lang_key then
+	in_lang["module_incompatible"] = "The installed version of the Mag module is incompatible with this lua file!\n\nAt least \"%s\" version or higher of the module file is required.\n\n\nWould you like to go to the download page now?"
+	in_lang["module_not_found"]    = "The module named Mag could not be found!\n\nTo use this file, you need to download the module named mag\nand move it to \"Aegisub/automation/include/\" directory when Aegisub is off.\n\n\nDo you want to go to download page now?"
+	in_lang["module_yes"]          = "Go"
+	in_lang["module_no"]           = "Later"
+	in_lang["s_name"]              = langs[2].script_name
+	in_lang["s_desc"]              = "Adds image, grid or quad to active line."
+	in_lang["tabKey1"]             = "Image"
+	in_lang["tabKey2"]             = "Grid"
+	in_lang["tabKey3"]             = "Quad"
+	in_lang["buttonKey1"]          = "Draw"
+	in_lang["buttonKey2"]          = "Close"
+	in_lang["buttonKey3"]          = "Insert"
+	in_lang["buttonKey4"]          = "Select Image..."
+	in_lang["buttonKey5"]          = "View Note"
+	in_lang["buttonKey6"]          = "Go"
+	in_lang["buttonKey7"]          = "Back"
+	in_lang["guiLabelKey2"]        = "Number:"
+	in_lang["guiLabelKey3"]        = "Space (px):"
+	in_lang["guiLabelKey4"]        = "Thickness (px):"
+	in_lang["guiLabelKey6"]        = "Color:"
+	in_lang["guiLabelKey7"]        = "Coordinate(s) to appear:"
+	in_lang["guiLabelKey8"]        = "Visibility (percent):"
+	in_lang["guiLabelKey9"]        = "Width"
+	in_lang["guiLabelKey10"]       = "Height"
+	in_lang["guiLabelKey11"]       = "Dimensions (px):"
+	in_lang["guiLabelKey12"]       = "Just change the existing shape code"
+	in_lang["guiLabelKey13"]       = "Path:"
+	in_lang["guiLabelKey14"]       = "Just change image path"
+	in_lang["guiLabelKey15"]       = "\"Click on the \'{%s}\' button.\""
+	in_lang["guiHintKey1"]         = "The number of lines in a single coordinate."
+	in_lang["key1"]                = "Shape drawing code could not found."
+	in_lang["key2"]                = "Select an image file"
+	in_lang["key3"]                = "Image File (*.png)|*.png"
+	in_lang["key4"]                = "Image code not found."
+	in_lang["key5"]                = "Shaper can not add images directly. It uses the img tag in VsFilterMOD for this.\nYou can not see the image if VSFilterMod is not use as subtitle renderer.\n\nIf you don't know how to make it, click on the \"{%s}\" button."
+	in_lang["key6"]                = "Active line"
+	in_lang["gridTypeListKey1"]    = "Horizontal + Vertical"
+	in_lang["gridTypeListKey2"]    = "Horizontal"
+	in_lang["gridTypeListKey3"]    = "Vertical"
+	end
+	return in_lang, lang_list, script_name_list
+	end
+
+	c_lang_switch        = "en"
+	c_lang,
+	c_lang_list,
+	c_script_name_list   = lang_switch_keys(c_lang_switch)
+
+	script_name          = c_lang.s_name
+	script_description   = c_lang.s_desc
+	script_author        = "Magnum357"
+	script_version       = "1.4.7"
+	script_mag_version   = "1.1.4.4"
+	script_file_name     = "mag.shaper"
+	script_file_ext      = ".lua"
+
+	include_unicode      = true
+	include_karaskel     = true
+	mag_import, mag      = pcall(require, "mag")
+
+	if mag_import then
+	mag.lang             = c_lang_switch
+
+	c_lock_gui           = false
+	c_grid_type_list     = {c_lang.gridTypeListKey1, c_lang.gridTypeListKey2, c_lang.gridTypeListKey3}
+	c_buttons1           = {c_lang.buttonKey3, c_lang.buttonKey4, c_lang.buttonKey5, c_lang.buttonKey2}
+	c_buttons2           = {c_lang.buttonKey1, c_lang.buttonKey2}
+	c_buttons3           = {c_lang.buttonKey6, c_lang.buttonKey7}
+
+	c                    = {}
+	c.image_path         = ""
+	c.image_width        = 0
+	c.image_height       = 0
+	c.image_only         = false
+	c.shape_width        = 0
+	c.shape_height       = 0
+	c.shape_color        = "#000000"
+	c.shape_transparency = 100
+	c.shape_only         = false
+	c.grid_number        = 15
+	c.grid_space         = 30
+	c.grid_thickness     = 2
+	c.grid_color         = "#FF19CD"
+	c.grid_transparency  = 50
+	c.grid_type          = c_grid_type_list[1]
+
+	gui                  = {
+		main1              = {
+		                     {class = "label",                                                       x = 0, y = 0, width = 1, height = 1, label = c_lang.guiLabelKey2},
+		grid_number        = {class = "intedit",  name = "u_grid_number",        min = 2,            x = 1, y = 0, width = 1, height = 1, hint = c_lang.guiHintKey1},
+		                     {class = "label",                                                       x = 0, y = 1, width = 1, height = 1, label = c_lang.guiLabelKey3},
+		grid_space         = {class = "intedit",  name = "u_grid_space",         min = 1,            x = 1, y = 1, width = 1, height = 1},
+		                     {class = "label",                                                       x = 0, y = 2, width = 1, height = 1, label = c_lang.guiLabelKey4},
+		grid_thickness     = {class = "intedit",  name = "u_grid_thickness",     min = 1,            x = 1, y = 2, width = 1, height = 1},
+		                     {class = "label",                                                       x = 0, y = 3, width = 1, height = 1, label = c_lang.guiLabelKey8},
+		grid_transparency  = {class = "intedit",  name = "u_grid_transparency",  min = 1, max = 100, x = 1, y = 3, width = 1, height = 1},
+		                     {class = "label",                                                       x = 0, y = 4, width = 1, height = 1, label = c_lang.guiLabelKey6},
+		grid_color         = {class = "color",    name = "u_grid_color",                             x = 1, y = 4, width = 1, height = 1},
+		                     {class = "label",                                                       x = 0, y = 5, width = 1, height = 1, label = c_lang.guiLabelKey7},
+		grid_type          = {class = "dropdown", name = "u_grid_type",                              x = 1, y = 5, width = 1, height = 1, items = c_grid_type_list},
+		                     {class = "label",                                                       x = 0, y = 6, width = 1, height = 1, label = mag.window.lang.message("apply")},
+		                     {class = "label",                                                       x = 1, y = 6, width = 2, height = 1, label = c_lang.key6},
+		},
+		main2              = {
+		                     {class = "label",                                                       x = 1, y = 0, width = 1, height = 1, label = c_lang.guiLabelKey9},
+		                     {class = "label",                                                       x = 3, y = 0, width = 1, height = 1, label = c_lang.guiLabelKey10},
+		                     {class = "label",                                                       x = 0, y = 1, width = 1, height = 1, label = c_lang.guiLabelKey11},
+		shape_width        = {class = "intedit",  name = "u_shape_width",        min = 0,            x = 1, y = 1, width = 1, height = 1},
+		                     {class = "label",                                                       x = 2, y = 1, width = 1, height = 1, label = "x"},
+		shape_height       = {class = "intedit",  name = "u_shape_height",       min = 0,            x = 3, y = 1, width = 1, height = 1},
+		                     {class = "label",                                                       x = 0, y = 2, width = 1, height = 1, label = c_lang.guiLabelKey8},
+		shape_transparency = {class = "intedit",  name = "u_shape_transparency", min = 1, max = 100, x = 1, y = 2, width = 1, height = 1},
+		                     {class = "label",                                                       x = 0, y = 3, width = 1, height = 1, label = c_lang.guiLabelKey6},
+		shape_color        = {class = "color",    name = "u_shape_color",                            x = 1, y = 3, width = 1, height = 1},
+		shape_only         = {class = "checkbox", name = "u_shape_only",                             x = 1, y = 4, width = 3, height = 1, label = c_lang.guiLabelKey12},
+		                     {class = "label",                                                       x = 0, y = 5, width = 1, height = 1, label = mag.window.lang.message("apply")},
+		                     {class = "label",                                                       x = 1, y = 5, width = 2, height = 1, label = c_lang.key6},
+		},
+		main3              = {
+		                     {class = "label",                                                       x = 1, y = 0, width = 1, height = 1, label = c_lang.guiLabelKey9},
+		                     {class = "label",                                                       x = 3, y = 0, width = 1, height = 1, label = c_lang.guiLabelKey10},
+		                     {class = "label",                                                       x = 0, y = 1, width = 1, height = 1, label = c_lang.guiLabelKey11},
+		image_width        = {class = "intedit",  name = "u_image_width",        min = 0,            x = 1, y = 1, width = 1, height = 1},
+		                     {class = "label",                                                       x = 2, y = 1, width = 1, height = 1, label = "x"},
+		image_height       = {class = "intedit",  name = "u_image_height",       min = 0,            x = 3, y = 1, width = 1, height = 1},
+		                     {class = "label",                                                       x = 0, y = 2, width = 1, height = 1, label = c_lang.guiLabelKey13},
+		label1             = {class = "label",                                                       x = 1, y = 2, width = 3, height = 1},
+		image_only         = {class = "checkbox", name = "u_image_only",                             x = 1, y = 3, width = 3, height = 1, label = c_lang.guiLabelKey14},
+		                     {class = "label",                                                       x = 0, y = 4, width = 1, height = 1, label = mag.window.lang.message("apply")},
+		                     {class = "label",                                                       x = 1, y = 4, width = 2, height = 1, label = c_lang.key6},
+		},
+		main4              = {
+		                     {class = "label",                                                       x = 1, y = 0, width = 1, height = 1, label = mag.string.format(c_lang.key5, c_lang.buttonKey6)},
+		}
+	}
+	end
+
+	function shaper_mode1(subs,sel,act)
+	local ok, config
+	local image_filename
+	if not mag.is.video() then
+	mag.show.log(1, mag.window.lang.message("is_video"))
+	else
+	local view_note = false
+	local my_gui, button
+		repeat
+			if not view_note then
+			my_gui  = gui.main3
+			buttons = c_buttons1
+				if c.image_path ~= "" then
+				my_gui.label1.label = mag.format("\"%s\"", mag.limit.path(c.image_path, 20, 15))
 				else
-				mag.log(2,"Satırda şekil çizme kodu bulunamadı.")
+				my_gui.label1.label = mag.string.format(c_lang.guiLabelKey15, c_lang.buttonKey4)
+				end
+			my_gui.image_width.value  = c.image_width
+			my_gui.image_height.value = c.image_height
+			my_gui.image_only.value   = c.image_only
+			else
+			my_gui  = gui.main4
+			buttons = c_buttons3
+			end
+			ok, config = mag.window.dialog(my_gui, buttons)
+			if ok == mag.convert.ascii(c_buttons1[3]) then
+			view_note = true
+			elseif ok == mag.convert.ascii(c_buttons3[2]) then
+			view_note = false
+			end
+			if not view_note then
+			c.image_width  = config.u_image_width
+			c.image_height = config.u_image_height
+			c.image_only   = config.u_image_only
+				if ok == mag.convert.ascii(c_buttons1[2]) then
+				image_filename = aegisub.dialog.open(c_lang.key2, aegisub.decode_path("?script\\"), "", c_lang.key3, false, true)
+					if image_filename then
+					c.image_path = image_filename
+					end
+				end
+			else
+				if ok == mag.convert.ascii(c_buttons3[1]) then
+				os.execute("start https://biskuvininkirintilari.blogspot.com.tr/2016/03/textsubmod-kurulumu.html")
 				end
 			end
-			if pcs then
+		until ok == mag.convert.ascii(c_buttons1[1]) and c.image_path ~= "" or ok == mag.convert.ascii(c_buttons1[4]) or ok == mag.convert.ascii(c_buttons3[1])
+		if ok == mag.convert.ascii(c_buttons1[1]) then
+		local line = subs[act]
+		local shape_line
+			if not c.image_only then
+			local meta           = karaskel.collect_head(subs)
+			local xres, yres     = aegisub.video_size()
+			local xratio, yratio = meta.res_x/xres, meta.res_y/yres
+			local width          = mag.floor(c.image_width * xratio)
+			local height         = mag.floor(c.image_height * yratio)
+			local shape          = mag.format("m 0 0 l %s 0 l %s %s l 0 %s l 0 0", width, width, height, height)
+			shape_line           = mag.format("{\\bord0\\shad0\\1img(%s)\\p1}%s", c.image_path, shape)
+			else
+			local image_code_pattern = "(\\1img%().-(%))"
+				if mag.find(line.text, image_code_pattern) then
+				shape_line = mag.gsub(line.text, image_code_pattern, "%1"..c.image_path.."%2")
+				else
+				mag.show.log(1, c_lang.key4)
+				end
+			end
+			if shape_line ~= nil then
+			line.text = shape_line
 			subs[act] = line
 			end
 		end
-	return pcs, ok
+	end
 	end
 
-	function shaper_grid(subs,sel,act)
-	local pcs = false
-	local gui =
-	{
-	 {class = "label",                                                            x = 0, y = 0, width = 5, height = 1, label = mag.format("[%s / %s]",mag.up(script_name),mag.up("ızgara"))}
-	,{class = "label",                                                            x = 0, y = 1, width = 1, height = 1, label = mag.wall(" ",7).."Sayı:"}
-	,{class = "intedit",  name = "u_grid_number", value = c.grid_number, min = 2, x = 1, y = 1, width = 4, height = 1}
-	,{class = "label",                                                            x = 0, y = 2, width = 1, height = 1, label = mag.wall(" ",4).."Aralık:"}
-	,{class = "intedit",  name = "u_grid_space",  value = c.grid_space,  min = 1, x = 1, y = 2, width = 4, height = 1}
-	,{class = "label",                                                            x = 0, y = 3, width = 1, height = 1, label = mag.wall(" ",4).."Piksel:"}
-	,{class = "intedit",  name = "u_grid_thick",  value = c.grid_thick,  min = 1, x = 1, y = 3, width = 4, height = 1}
-	,{class = "label",                                                            x = 0, y = 4, width = 1, height = 1, label = "Etiketler:"}
-	,{class = "edit",     name = "u_grid_tags",   value = c.grid_tags,            x = 1, y = 4, width = 4, height = 1}
-	,{class = "label",                                                            x = 0, y = 5, width = 1, height = 1, label = mag.wall(" ",5).."Renk:"}
-	,{class = "color",    name = "u_grid_color",  value = c.grid_color,           x = 1, y = 5, width = 4, height = 1}
-	,{class = "label",                                                            x = 0, y = 6, width = 1, height = 1, label = mag.wall(" ",4).."Biçim:"}
-	,{class = "dropdown", name = "u_grid_type",   value = c.grid_type,            x = 1, y = 6, width = 4, height = 1, items = c_grid_type}
-	}
-	local ok, config = mag.dlg(gui,c_buttons3)
-	c.grid_number    = config.u_grid_number
-	c.grid_space     = config.u_grid_space
-	c.grid_thick     = config.u_grid_thick
-	c.grid_tags      = config.u_grid_tags
-	c.grid_color     = config.u_grid_color
-	c.grid_type      = config.u_grid_type
-		if ok == mag.ascii(c_buttons3[1]) then
-		pcs           = true
-		local shape   = ""
-		local px      = c.grid_thick
-		local size    = c.grid_space
-		c.grid_number = c.grid_number - 1
-			if c.grid_type == c_grid_type[3] then
-				for i = 0, c.grid_number do
-					for k = 0, c.grid_number - 1 do
-					shape = shape..mag.format("m %s %s l %s %s l %s %s l %s %s ",
-					0 + k * size,    i * size,
-					size + k * size, i * size,
-					size + k * size, px + i * size,
-					0 + k * size,    px + i * size)
-					end
+	function shaper_mode2(subs,sel,act)
+	gui.main1.grid_number.value       = c.grid_number
+	gui.main1.grid_space.value        = c.grid_space
+	gui.main1.grid_thickness.value    = c.grid_thickness
+	gui.main1.grid_transparency.value = c.grid_transparency
+	gui.main1.grid_color.value        = c.grid_color
+	gui.main1.grid_type.value         = c.grid_type
+	local ok, config                  = mag.window.dialog(gui.main1, c_buttons2)
+	c.grid_number                     = config.u_grid_number
+	c.grid_space                      = config.u_grid_space
+	c.grid_thickness                  = config.u_grid_thickness
+	c.grid_transparency               = config.u_grid_transparency
+	c.grid_color                      = config.u_grid_color
+	c.grid_type                       = config.u_grid_type
+	if ok == mag.convert.ascii(c_buttons2[1]) then
+	local shape   = ""
+	local px      = c.grid_thickness
+	local size    = c.grid_space + px
+	local number  = c.grid_number - 1
+		if c.grid_type == c_grid_type_list[1] then
+			for i = 0, number do
+				for k = 0, number - 1 do
+				shape =
+				shape..mag.format("m %s %s l %s %s l %s %s l %s %sm %s %s l %s %s l %s %s l %s %s",
+				px + (0 + k * size), i * size,
+				size + k * size,     i * size,
+				size + k * size,     px + i * size,
+				px + (0 + k * size), px + i * size,
+				size * i,      0 + k * size,
+				size * i,      (size + k * size) + px,
+				px + size * i, (size + k * size) + px,
+				px + size * i, 0 + k * size)
 				end
 			end
-			if c.grid_type == c_grid_type[2] then
-				for i = 0, c.grid_number do
-					for k = 0, c.grid_number - 1 do
-					shape = shape..mag.format("m %s %s l %s %s l %s %s l %s %s ",
-					size * i,      0 + k * size,
-					size * i,      size + k * size,
-					px + size * i, size + k * size,
-					px + size * i, 0 + k * size)
-					end
-				end
-			end
-			if c.grid_type == c_grid_type[1] then
-				for i = 0, config.u_grid_number do
-					for k = 0, config.u_grid_number - 1 do
-					shape = shape..mag.format("m %s %s l %s %s l %s %s l %s %s ",
-					px + (0 + k * size), i * size,
-					size + k * size,     i * size,
-					size + k * size,     px + i * size,
-					px + (0 + k * size), px + i * size)
-					shape = shape..mag.format("m %s %s l %s %s l %s %s l %s %s ",
-					size * i,      0 + k * size,
-					size * i,      (size + k * size) + px,
-					px + size * i, (size + k * size) + px,
-					px + size * i, 0 + k * size)
-					end
-				end
-			end
-		c.grid_number = c.grid_number + 1
-		local line    = subs[act]
-		line.text     = mag.format("{\\c%s%s}%s",mag.html_to_ass(c.grid_color),c.grid_tags,shape)
-		subs[act]     = line
 		end
-	return pcs, ok
+		if c.grid_type == c_grid_type_list[2] then
+			for i = 0, number do
+				for k = 0, number - 1 do
+				shape =
+				shape..mag.format("m %s %s l %s %s l %s %s l %s %s",
+				0 + k * size,    i * size,
+				size + k * size, i * size,
+				size + k * size, px + i * size,
+				0 + k * size,    px + i * size)
+				end
+			end
+		end
+		if c.grid_type == c_grid_type_list[3] then
+			for i = 0, number do
+				for k = 0, number - 1 do
+				shape =
+				shape..mag.format("m %s %s l %s %s l %s %s l %s %s",
+				size * i,      0 + k * size,
+				size * i,      size + k * size,
+				px + size * i, size + k * size,
+				px + size * i, 0 + k * size)
+				end
+			end
+		end
+	shape      = mag.gsub(shape, "(%d)(m)", "%1 %2")
+	local line = subs[act]
+	line.text  =
+	mag.format("{\\c%s\\1a&H%s&\\bord0\\shad0\\p1}%s",
+	mag.convert.html_from_ass(c.grid_color),
+	mag.convert.alpha_from_percent(c.grid_transparency, true),
+	shape)
+	subs[act]  = line
+	end
 	end
 
-	function check_macro(subs,sel,act)
-	local fe, fee = pcall(add_macro,subs,sel,act)
-	mag.funce(fe,fee)
+	function shaper_mode3(subs,sel,act)
+	gui.main2.shape_width.value        = c.shape_width
+	gui.main2.shape_height.value       = c.shape_height
+	gui.main2.shape_transparency.value = c.shape_transparency
+	gui.main2.shape_color.value        = c.shape_color
+	gui.main2.shape_only.value         = c.shape_only
+	local ok, config                   = mag.window.dialog(gui.main2, c_buttons2)
+	c.shape_width                      = config.u_shape_width
+	c.shape_height                     = config.u_shape_height
+	c.shape_transparency               = config.u_shape_transparency
+	c.shape_color                      = config.u_shape_color
+	c.shape_only                       = config.u_shape_only
+	if ok == mag.convert.ascii(c_buttons2[1]) then
+	local line  = subs[act]
+	local shape = mag.format("m 0 0 l %s 0 l %s %s l 0 %s l 0 0",
+	c.shape_width,
+	c.shape_width,
+	c.shape_height,
+	c.shape_height)
+	local shape_line
+		if not c.shape_only then
+		shape_line =
+		mag.format("{\\c%s\\1a&H%s&\\bord0\\shad0\\p1}%s",
+		mag.convert.html_from_ass(c.shape_color),
+		mag.convert.alpha_from_percent(c.shape_transparency, true),
+		shape)
+		else
+		local shape_code_pattern = "m%s[%d%.]*%s[%d%.]*%s[%d%s%.lbm]*"
+			if mag.find(line.text, shape_code_pattern) then
+			shape_line = mag.gsub(line.text, shape_code_pattern, shape)
+			else
+			mag.show.log(1, c_lang.key1)
+			end
+		end
+		if shape_line ~= nil then
+		line.text = shape_line
+		subs[act] = line
+		end
+	end
+	end
+
+	function check_macro1(subs,sel,act)
+	if c_lock_gui then
+	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
+	else
+	mag.config.get(c)
+	local fe, fee = pcall(shaper_mode1, subs, sel, act)
+	mag.window.funce(fe, fee)
+	mag.window.undo_point()
+	mag.config.set(c)
+	end
+	end
+
+	function check_macro2(subs,sel,act)
+	if c_lock_gui then
+	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
+	else
+	mag.config.get(c)
+	local fe, fee = pcall(shaper_mode2, subs, sel, act)
+	mag.window.funce(fe, fee)
+	mag.window.undo_point()
+	mag.config.set(c)
+	end
+	end
+
+	function check_macro3(subs,sel,act)
+	if c_lock_gui then
+	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
+	else
+	mag.config.get(c)
+	local fe, fee = pcall(shaper_mode3, subs, sel, act)
+	mag.window.funce(fe, fee)
+	mag.window.undo_point()
+	mag.config.set(c)
+	end
+	end
+
+	function mag_redirect_gui()
+	local mag_module_link = "https://github.com/magnum357i/Magnum-s-Aegisub-Scripts"
+	local k = aegisub.dialog.display({{class = "label", label = mag_gui_message}}, {c_lang.module_yes, c_lang.module_no})
+	if k == c_lang.module_yes then os.execute("start "..mag_module_link) end
 	end
 
 	if mag_import then
-	mag_update_link           = "https://github.com/magnum357i/Magnum-s-Aegisub-Scripts"
-	mag_version_check         = false
-		if not mag_version_check then
-		mag_version           = mag.match(io.open(aegisub.decode_path("?data\\automation\\include\\mag.lua")):read("*all"),"module_version%s-=%s\"([^\"]+)\"")
-			if mag_version and mag_version:gsub("%.","") < script_mag_version:gsub("%.","") then
-			function mag_check() local k = aegisub.dialog.display({{class = "label", label = "Mag modülünün kurulu sürümü bu lua dosyası ile uyumsuz.\nEn az "..script_mag_version.." veya en güncel modül sürümünü indirmeniz gerekiyor.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end
-			aegisub.register_macro(script_name,script_desription,mag_check)
-			else
-			mag_version_check = true
-			end
-		end
-		if mag_version_check then
-		mag.register(false,check_macro)
+		if mag_module_version:gsub("%.", "") < script_mag_version:gsub("%.", "") then
+		mag_gui_message = string.format(c_lang.module_incompatible, script_mag_version)
+		aegisub.register_macro(script_name, script_desription, mag_redirect_gui)
+		else
+		mag.window.register(script_name.."/"..c_lang.tabKey1, check_macro1)
+		mag.window.register(script_name.."/"..c_lang.tabKey2, check_macro2)
+		mag.window.register(script_name.."/"..c_lang.tabKey3, check_macro3)
+		mag.window.lang.register()
 		end
 	else
-	function mag_module() local k = aegisub.dialog.display({{class = "label", label = "Mag modülü bulunamadı.\nBu lua dosyasını kullanmak için Mag modülünü indirip kurmanız gerelidir.\nŞimdi indirme sayfasına gitmek ister misiniz?"}},{"Evet","Kapat"}) if k == "Evet" then os.execute("start "..mag_update_link) end end
-	aegisub.register_macro(script_name,script_desription,mag_module)
+	mag_gui_message = c_lang.module_not_found
+	aegisub.register_macro(script_name, script_desription, mag_redirect_gui)
 	end

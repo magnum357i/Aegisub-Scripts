@@ -1,257 +1,335 @@
-İÇİNDEKİLER
-===========
+# IN ENGLISH
+
+### TABLE OF CONTENTS
+- [**(A) INTRODUCTION**](#introduction)
+  - [**(1) Features**](#features)
+  - [**(2) Installation**](#installation)
+  - [**(3) Usage**](#usage)
+  - [**(4) Supported Version**](#supported-version)
+  - [**(5) Shortcut**](#shortcut)
+- [**(B) MODULE**](#module)
+  - [**(1) Mag**](#mag)
+  - [**(2) Version 1.1.4.4**](#version-1144)
+- [**(C) MACROS**](#macros)
+  - [**(1) Break Lines**](#break-lines)
+  - [**(2) Case Conversion**](#case-conversion)
+  - [**(3) Check Lines**](#check-lines)
+  - [**(4) Comment Finder**](#comment-finder)
+  - [**(5) Copy Lines**](#copy-lines)
+  - [**(6) Create Lines**](#create-lines)
+  - [**(7) Delete Lines**](#delete-lines)
+  - [**(8) Duplicate Lines**](#duplicate-lines)
+  - [**(9) Format Lines**](#format-lines)
+  - [**(10) K Char**](#k-char)
+  - [**(11) Measure Lines**](#measure-lines)
+  - [**(12) Select Lines**](#select-lines)
+  - [**(13) Shaper**](#shaper)
+  - [**(14) Strip Lines**](#strip-lines)  
+  - [**(15) Typewriter**](#typewriter)
+- [**(D) ASS Files**](#ass-files)
+  - [**(1) Autotags**](#autotags)
+  - [**(2) Color Fade**](#color-fade)
+  - [**(3) Rainbow**](#rainbow)
+  - [**(4) Rand Color**](#rand-color)
+  - [**(5) Shaper**](#shaper-1)
+  - [**(6) T_Calc**](#t_calc)
+  - [**(7) Vertical Kanji**](#vertical-kanji)
+
+## INTRODUCTION
+This page provides a download link to the lua plugins I write.
+
+#### Features
+- Multi-language
+
+*All my lua plugin has two languages, Turkish and English. The English language is selected by default on the first boot-up. To change language, each lua plugin comes with a language change interface. On the automation submenu, hover over the name of the lua plugin which you want to change the language and click on the **Change Language** option.*
+
+- Physically save interface preferences
+
+*Preferences are saved to an external file for always remembering. This file is in the **%appdata%/aegisub/** directory. In portable Aegisub, it is saved where **aegisub.exe** is.*
+
+#### Installation 
+* Installation directory of module file: **aegisub/automation/include/**
+* Installation directory of lua files: **aegisub/automation/autoload/**
+
+Move the module file and lua plugins to the installation directories while the program is closed. You can move them while the program is open but you need to press **Automation/Automation.../Rescan Autoload Dir** button to enable them.
+
+#### Usage
+The lua plugins you install are added to the **Automation** submenu with a similar name to the file name. You can run the lua plugin by clicking on that name.
+
+#### Supported Version
+I've written all of my lua files in Aegisub 3.2.2, the latest stable version. You may have a problem with previous **3.x.x versions** but will definitely with **2.x.x versions**. If a new stable version of Aegisub comes out and there is an incompatibility problem with it, I going to fix it. I will always support the most recent stable release of Aegisub.
+
+#### Shortcut
+You can assign a shortcut to use the lua plugins more quickly. For this:
+* Open **View/Options/Interface/Hotkeys**.
+* Create a shortcut in the **Default**.
+
+Wherever you are in the program, lua plugin starts to work when you press the shortcut.
+
+## MODULE
+
+### [Mag](automation/include/mag.lua)
+I made a file to not write the functions I use repeatedly and to correct mistakes from one place. If you do not install the module, you can not use the lua plugins.
+
+#### Version 1.1.4.4
+Currently the latest module file is version 1.1.4.4. With this release, I have almost rewritten all of my lua plugins. While some lua plugins have changed completely, some have not changed much. In this version of the module, multiple languages are added to all the plugins. Also the name of many plugins has changed and some plugins deleted.
+
+##### Name Changes
+Old Name              | New Name
+--------------------- | ---------------
+Trans State A1        | Measure Lines
+Line Source Duplicate | Duplicate Lines
+Finder                | Comment Finder
+Strip Line            | Strip Lines
+Checker               | Check Lines
+Copy Dialogue         | Copy Lines
+Break Line            | Break Lines
+
+##### Deleted files
+Plugin Name
+---------- |
+Basic Turning
+Text Align
+
+##### Future files
+Plugin Name
+---------- |
+Sub Menu Maker
+HTML Table From ASS
+Language Tools
+
+## MACROS
+
+### [Break Lines](automation/autoload/mag.break_lines.lua)
+Breaks the lines that are not breaked and must be breaked.
+
+### [Case Conversion](automation/autoload/mag.case_conversion.lua)
+Makes letter conversions.
+
+### [Check Lines](automation/autoload/mag.check_lines.lua)
+Detects technical problems.
+
+### [Comment Finder](automation/autoload/mag.comment_finder.lua)
+It finds notes and lists them in the interface. Also allows you to jump between them.
+
+### [Copy Lines](automation/autoload/mag.copy_lines.lua)
+Copies lines to clipboard or text file.
+
+### [Create Lines](automation/autoload/mag.create_lines.lua)
+Helps to create a line.
+
+### [Delete Lines](automation/autoload/delete_lines.lua)
+Deletes lines by style, actor or effect.
+
+### [Duplicate Lines](automation/autoload/mag.duplicate_lines.lua)
+Provides translation mode by duplicating lines.
+
+### [Format Lines](automation/autoload/mag.format_lines.lua)
+Adds italic, alignment and transparency tags.
+
+### [K Char](automation/autoload/mag.k_char.lua)
+Allows you to put anything before each character on the line.
+
+### [Measure Lines](automation/autoload/mag.measure_lines.lua)
+Adds percentage to effect box of applied lines. It is important to share translation.
+
+### [Select Lines](automation/autoload/mag.select_lines.lua)
+Selects lines in any way.
+
+### [Shaper](automation/autoload/mag.shaper.lua)
+Adds image, grid or quad to active line.
+
+### [Strip Lines](automation/autoload/mag.strip_lines.lua)
+Clears tags, extra whitespaces and things like them.
+
+### [Typewriter](automation/autoload/mag.typewriter.lua)
+Helps typewriter-style typesettings.
+
+## ASS Files
+### [Autotags](ass/autotagsv4.ass)
+Converts between two tag during the line.
+
+### [Color Fade](ass/color_fade_v3.ass)
+Makes horizontal color transition between two or more colors.
+
+### [Rainbow](ass/rainbow_v2.ass)
+Makes color transitions in rainbow color.
+
+### [Rand Color](ass/randcolor.ass)
+Specified colors applies to the karaoke lines either in sequence or randomly.
+
+### [Shaper](ass/shaper.ass)
+Draw shape based on subtitle or video resolution for picture.
+
+### [T_Calc](ass/t_calc(v11).ass)
+Converts from frame value to millisecond. You can change the color of the karaoke lines according to the scene.
+
+### [Vertical Kanji](ass/vertical_kanji.ass)
+Positions kanji characters vertically.
+
+# TÜRKÇE
+
+### İÇİNDEKİLER
 - [**(A) TANITIM**](#tanitim)
-  - [**(1) Lua dosyası nedir?**](#lua-dosyas%C4%B1-nedir)
+  - [**(1) Özellikler**](#%C3%96zellikler)
   - [**(2) Kurulum**](#kurulum)
   - [**(3) Kullanım**](#kullan%C4%B1m)
   - [**(4) Destek Verilen Sürüm**](#destek-verilen-s%C3%BCr%C3%BCm)
   - [**(5) Kısayol Atamak**](#k%C4%B1sayol-atamak)
-  - [**(6) Güncelleyici veya İndirici**](#g%C3%BCncelleyici-veya-%C4%B0ndirici)
-  - [**(7) Arayüz Tercihleri**](#aray%C3%BCz-tercihleri)
 - [**(B) MODÜL**](#modÜl)
   - [**(1) Mag**](#mag)
+  - [**(2) 1.1.4.4 sürümü**](#1144-s%C3%BCr%C3%BCm%C3%BC)
 - [**(C) MAKROLAR**](#makrolar)
-  - [**(1) Delete Lines**](#delete-lines)
-  - [**(2) Basic Turning**](#basic-turning)
-  - [**(3) Break Line**](#break-line)
-  - [**(4) Case Conversion**](#case-conversion)
-  - [**(5) Checker**](#checker)
-  - [**(6) Copy Dialogue**](#copy-dialogue)
-  - [**(7) Finder**](#finder)
-  - [**(8) HTML TABLE From ASS**](#html-table-from-ass)
-  - [**(9) K Char**](#k-char)
-  - [**(10) Line Format**](#line-format)
-  - [**(11) Line Source Duplicate**](#line-source-duplicate)
+  - [**(1) Break Lines**](#break-lines)
+  - [**(2) Case Conversion**](#case-conversion)
+  - [**(3) Check Lines**](#check-lines)
+  - [**(4) Comment Finder**](#comment-finder)
+  - [**(5) Copy Lines**](#copy-lines)
+  - [**(6) Create Lines**](#create-lines)
+  - [**(7) Delete Lines**](#delete-lines)
+  - [**(8) Duplicate Lines**](#duplicate-lines)
+  - [**(9) Format Lines**](#format-lines)
+  - [**(10) K Char**](#k-char)
+  - [**(11) Measure Lines**](#measure-lines)
   - [**(12) Select Lines**](#select-lines)
   - [**(13) Shaper**](#shaper)
-  - [**(14) Strip Line**](#strip-line)
-  - [**(15) Sub Menu Maker**](#sub-menu-maker)
-  - [**(16) Text Align**](#text-align)
-  - [**(17) Timer**](#timer)
-  - [**(18) Trans State A1**](#trans-state-a1)
-  - [**(19) Typewritter**](#typewritter)
-- [**(D) ASS**](#ass)
- * [**(1) Autotags**](#autotags)
- * [**(2) Color Fade**](#color-fade)
- * [**(3) Rainbow**](#rainbow)
- * [**(4) Rand Color**](#rand-color)
- * [**(5) Shaper**](#shaper-1)
- * [**(6) T_Calc**](#t_calc)
- * [**(7) Vertical Kanji**](#vertical-kanji)
+  - [**(14) Strip Lines**](#strip-lines)  
+  - [**(15) Typewriter**](#typewriter)
+- [**(D) ASS Dosyaları**](#ass-dosyalar%C4%B1)
+  - [**(1) Autotags**](#autotags)
+  - [**(2) Color Fade**](#color-fade)
+  - [**(3) Rainbow**](#rainbow)
+  - [**(4) Rand Color**](#rand-color)
+  - [**(5) Shaper**](#shaper-1)
+  - [**(6) T_Calc**](#t_calc)
+  - [**(7) Vertical Kanji**](#vertical-kanji)
 
 ## TANITIM
+Bu sayfa yazdığım lua eklentilerine indirme bağlantısı sunar.
 
-Bu sayfayı açmamdaki amaç kendi yazdığım lua dosyalarının sürüm takibi ve indirme bağlantısı sunmak. Bu dosyalar sadece Aegisub üzerinde çalışır. Lua isimlerini ve içerdiği kodları(değişkenleri) İngilizce yaparken arayüz ve iletileri Türkçe yapmayı tercih ediyorum.
+#### Özellikler
+- Çoklu dil
 
-#### Lua Dosyası Nedir?
-Lua dosyası veya eklentisi **Aegisub** programına yeni özellikler katmak için kullanılır. Bu yeni özellikler ile yapılacak iş mümkün kıldırabilir veya zamandan tasarruf ettirebilir.
+*Tüm lua eklentilerimde Türkçe ve İngilizce olmak üzere iki dil bulunuyor. İlk açılışta varsayılan olarak İngilizce dili seçili gelir. Dil değiştirmek için her lua eklentisi bir dil değiştirme arayüzü ile gelir. Automation alt menüsünde dilini değiştirmek istediğiniz lua eklenti isminin üzerine gelin ve **Change Language** seçeneğine tıklayın.
+
+- Arayüz tercihlerini fiziksel olarak kaydetme
+
+*Tercihler harici bir dosyaya kaydedilir. Bu dosya* **%appdata%/aegisub/** *dizininde bulunur. Taşınabilir* **Aegisub***'da* **aegisub.exe** *dosyasının olduğu yere kaydedilir.*
 
 #### Kurulum
-* **Modül dosyası kurulum dizini(mag.lua vb.):** **aegisub/automation/include/**
-* **Lua dosyaları:** **aegisub/automation/autoload/**
+* Modül dosyası kurulum dizini: **aegisub/automation/include/**
+* Lua dosyaları kurulum dizini: **aegisub/automation/autoload/**
 
-Modül ve lua dosyalarını ilgili yerlere attıktan sonra aktifleştirmek için program açıksa onu tekrar açarak veya bunu yapmadan program açıkken **Automation/Automation.../Rescan Autoload Dir** butonuna basabilirsiniz.
+Modül ve lua eklentilerini program kapalıyken kurulum dizinlerine taşıyın. Program açıkken de atabilirsiniz ama etkinleştirmek için  **Automation/Automation.../Rescan Autoload Dir** butonuna basmanız gerekiyor.
 
 #### Kullanım
-Kullanmak istediğiniz lua dosyasını doğru yere attıysanız **Automation** alt menüsüne ismi gelmelidir. O isme tıklayarak ilgili luayı kullanabilirsiniz. Kullanım amacına göre bazı lua dosyaları size bir arayüz sunarken bazıları da sunmaz.
+Kurduğunuz lua eklentileri, dosya adına benzer bir ad ile **Automation** alt menüsüne eklenir. O isme tıklayarak lua eklentisini çalıştırabilirsiniz.
 
 #### Destek Verilen Sürüm
-Tüm lua dosyalarımı stabil olan en güncel Aegisub sürümü **3.2.2** sürümü üzerinden yazdım. Önceki **3.x.x** sürümlerinde de sorun yaşamayabilirsiniz fakat **2.x.x** sürümlerinde kesin sorunlar yaşayabilirsiniz. Daha güncel bir sürüm çıkarsa ve uyumsuzluk sorunu olursa düzenleyebilirim. Her zaman en güncel stabil sürüme destek vereceğim.
+Tüm lua dosyalarımı en stabil olan Aegisub **3.2.2** sürümünde yazdım. Önceki **3.x.x sürümlerinde** sorun yaşamayabilirsiniz fakat **2.x.x sürümlerinde** kesin sorunlar yaşayabilirsiniz. Daha güncel bir sürüm çıkarsa ve uyumsuzluk sorunu olursa düzenleme yapabilirim. Her zaman en güncel stabil sürüme destek vereceğim.
 
 #### Kısayol Atamak
-Lua dosyalarını **Automation** alt menüsünden seçmeyip daha hızlı kullanmak için klavyeden bir kısayol atabilirsiniz.
+Lua dosyalarını daha hızlı kullanmak için klavyeden bir kısayol atabilirsiniz. Bunun için:
 * **View/Options/Interface/Hotkeys** kısmını açın.
-* **Defualt** içinde bir kısayol atayın. Aegisub programının hangi bölümünde olursanız olun kısayola bastığınızda lua çalışacaktır.
+* **Defualt** içinde bir kısayol atayın.
 
-#### Güncelleyici veya İndirici
-Kullanılan durumlarda çıkan hata veya eksikliklerden sürekli sürüm atlatıyorum. Eksiklikleri ekleyeceğim bir lua olmadığında ve o işi yapan başka bir lua dosyası yoksa yeni bir lua dosyası yazıyorum. İndirilen lua dosyaları için sürüm güncelleyici veya yeni lua dosyaları için bir indirici yapılabilir fakat bu yerel imkanlarla mümkün değil. Çok fazla yan dosya gerekli. Hatta farklı bir depo açmam bile gerekebilir. Bu yüzden şimdilik gerek duymuyorum.
-
-#### Arayüz Tercihleri
-~~Arayüzlü lua dosyalarında yapılan değişiklikler alt yazı dosyasını kapatmadığınız sürece bir sonraki açılışta hatırlanır fakat alt yazı dosyasını kapayıp açınca veya başka bir alt yazı dosyasında lua dosyasını çalıştırdığınızda varsayılan tercihlere döner. Bunun için bir config dosyası oluşturulması gerekmektedir. Şu anlık böyle bir planım olmadığı için tercihleri geçici hafızada tutmaya devam edeceğim.~~
-
-**Yeni özellik:**
-Tercihler, arayüz kapatıldığında harici bir dosyaya kaydedilir. Bu dosya **%appdata%/aegisub/** dizininde oluşturulmaktadır. Taşınabilir Aegisub sürümlerinde aegisub.exe dosyasının olduğu yerdedir.
-
-Bu yapı ile tercihleriniz her koşulda hatırlanır.
+Programın neresinde olursanız olun atadığınız kısayola basınca lua eklentisi çalışmaya başlar.
 
 ## MODÜL
 
 ### [Mag](automation/include/mag.lua)
-Devamlı kullandığım fonksiyonları her defasında yazmamak için tek bir dosya haline getirdim. Yazdığım lua dosyalarının başında **mag.** ön eki varsa bu modülü kullanıyor demektir. Modülü kurmamanız durumunda bu lua dosyalarını kullanamazsınız.
+Devamlı kullandığım fonksiyonları her defasında yazmamak ve hataları tek bir yerden düzeltmek için tek bir dosya haline getirdim. Modülü kurmamanız durumunda lua eklentilerimi kullanamazsınız.
+
+#### 1.1.4.4 Sürümü
+Şu anda en güncel modül dosyası sürümü 1.1.4.4'dür. Bu sürüm ile lua eklentilerimin hepsini baştan yazdım. Bazı lua eklentileri baştan aşağı değişirken bazılarında pek bir değişiklik olmadı. Modülün bu sürümünde tüm eklentilerine çoklu dil eklendi. Birçok eklentinin adında değişiklik oldu ve bazı eklentiler de silindi.
+
+##### İsim Değişiklikleri
+Eski Adı              | Yeni Adı
+--------------------- | ---------------
+Trans State A1        | Measure Lines
+Line Source Duplicate | Duplicate Lines
+Finder                | Comment Finder
+Strip Line            | Strip Lines
+Checker               | Check Lines
+Copy Dialogue         | Copy Lines
+Break Line            | Break Lines
+
+##### Silinen dosyalar
+Eklenti Adı
+---------- |
+Basic Turning
+Text Align
+
+##### Gelecek dosyalar
+Eklenti adı
+---------- |
+Sub Menu Maker
+HTML Table From ASS
+Language Tools
 
 ## MAKROLAR
 
-### [Delete Lines](automation/autoload/delete_lines.lua)
-Stile ya da aktöre göre satır silme işlemi yapar.
-
----
-
-* **Uygulanan satırlar:** Tek tek stillere veya aktörlere uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Modül:** Bu dosya modül kullanmıyor.
-
-### [Basic Turning](automation/autoload/mag.basic_turning.lua)
-Bazı işaretleri onun karşılığı olan şeye dönüştürürsünüz. Satıra sadece işaretleri yazmak yetmez, o satırı seçmelisiniz de.
-
----
-
-* **Uygulanan satırlar:** Seçili satırlara uygular.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
-
-### [Break Line](automation/autoload/mag.break_line.lua)
-Satır bölme karakteri ekler.
-
----
-
-* **Uygulanan satırlar:** Tüm stillere veya ayrı ayrı stillere uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+### [Break Lines](automation/autoload/mag.break_lines.lua)
+- **Türkçe adı:** Satır Böl
+- **Açıklama:** Bölünmemiş ve bölünmesi gereken satırları böler.
 
 ### [Case Conversion](automation/autoload/mag.case_conversion.lua)
-Harflerle ilgili büyük-küçük işlemleri yapar.
+- **Türkçe adı:** Harf Dönüştür
+- **Açıklama:** Harf dönüşümleri yapar.
 
----
+### [Check Lines](automation/autoload/mag.check_lines.lua)
+- **Türkçe adı:** Satır Kontrol Et
+- **Açıklama:** Teknik sorunları tespit eder.
 
-* **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+### [Comment Finder](automation/autoload/mag.comment_finder.lua)
+- **Türkçe adı:** Açıklama Bul
+- **Açıklama:** Notları bulup arayüzde listeler. Ayrıca bunlar arasında geçiş yapılmasını sağlar.
 
-### [Checker](automation/autoload/mag.checker.lua)
-Alt yazıdaki satırların teknik sorunlarını kontrol edip Effect kutucuğuna simgesel bir not düşer.
+### [Copy Lines](automation/autoload/mag.copy_lines.lua)
+- **Türkçe adı:** Satır Kopyala
+- **Açıklama:** Satırları panoya veya metin dosyasına kopyalar.
 
----
+### [Create Lines](automation/autoload/mag.create_lines.lua)
+- **Türkçe adı:** Satır Oluştur
+- **Açıklama:** Satır oluşturmaya yardım eder.
 
-* **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+### [Delete Lines](automation/autoload/delete_lines.lua)
+- **Türkçe adı:** Satır Sil
+- **Açıklama:** Stil, oyuncu veya efekt girdisine göre satırları siler.
 
-### [Copy Dialogue](automation/autoload/mag.copy_dialogue.lua)
-Alt yazıdaki metinleri panoya veya oluşturduğu metin dosyasına kopyalar.
+### [Duplicate Lines](automation/autoload/mag.duplicate_lines.lua)
+- **Türkçe adı:** Satır Çoğalt
+- **Açıklama:** Satırları çoğaltarak çeviri kipi imkanı sunar.
 
----
-
-* **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
-
-### [Finder](automation/autoload/mag.finder.lua)
-Yorum parantezlerine veya girilen kelimeye göre listeleme yapar. Listeledikleri arasında geçiş de yapabilir.
-
----
-
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
-
-### [HTML TABLE From ASS](automation/autoload/mag.html_table_from_ass.lua)
-Alt yazı satırlarını html tablosuna çevirir.
-
----
-
-* **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+### [Format Lines](automation/autoload/mag.format_lines.lua)
+- **Türkçe adı:** Satır Biçimlendir
+- **Açıklama:** Eğiklik, hizalama ve şeffaflık geçişi etiketleri ekler.
 
 ### [K Char](automation/autoload/mag.k_char.lua)
-Metindeki boşluk karakteri hariç her karakterinin başına **{\k}** ekler.
+- **Türkçe adı:** Karakter Yerleştir
+- **Açıklama:** Satırdaki her karakterin başına herhangi bir şey koymanızı sağlar.
 
----
-
-* **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
-
-### [Line Format](automation/autoload/mag.line_format.lua)
-Satıra eğiklik, üste alma ve geçiş etiketi ekler.
-
----
-
-* **Uygulanan satırlar:** Seçili satırlara uygular.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
-
-### [Line Source Duplicate](automation/autoload/mag.line_source_duplicate.lua)
-Kaynak metni çoğaltarak kaynak metinle beraber çeviri imkanı sunar.
-
----
-
-* **Uygulanan satırlar:** Tüm stillere veya ayrı ayrı stillere uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
-* **Modül:** Bu dosya modül kullanmıyor.
+### [Measure Lines](automation/autoload/mag.measure_lines.lua)
+- **Türkçe adı:** Satır Ölç
+- **Açıklama:** Uygulanan satırların efekt kutularına yüzde ekler. Çeviriyi paylaştırma açısından önemlidir.
 
 ### [Select Lines](automation/autoload/mag.select_lines.lua)
-Birçok ayarda satır seçme işlemi yapar.
-
----
-
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
+- **Türkçe adı:** Satır Seç
+- **Açıklama:** Her türlü yolla satırları seçer.
 
 ### [Shaper](automation/autoload/mag.shaper.lua)
-Resim, şerit ve ızgara ekler. Bir VSFilterMOD etiketini kullanarak resim ekler.
+- **Türkçe adı:** Şekil Çiz
+- **Açıklama:** Aktif satıra resim, ızgara veya dörtgen ekler.
 
-###### Notlar
-Resmin çözünürlüğünü algılamak için harici bir modüle ihtiyaç duyar. Sizi yönlendirdiği sayfadan ImageSıze lua dosyasını ve ImageSize klasörünü **automation/include/** dizinine atarak kurabilirsiniz.
+### [Strip Lines](automation/autoload/mag.strip_lines.lua)
+- **Türkçe adı:** Satır Temizle
+- **Açıklama:** Etiketleri, fazladan boşlukları ve o tarz şeyleri temizler.
 
----
+### [Typewriter](automation/autoload/mag.typewriter.lua)
+- **Türkçe adı:** Harf Harf Yaz
+- **Açıklama:** Daktilo tarzı ekran yazılarına yardım eder.
 
-* **Uygulanan satırlar:** Aktif satırın içeriğini değiştirir. Aktif satır, metin düzenleme kutusunda gördüğünüz satırdır.
-* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
-
-### [Strip Line](automation/autoload/mag.strip_line.lua)
-Satırdaki etiketleri, fazladan boşlukları ve bunlara benzer şeyleri temizler.
-
----
-
-* **Uygulanan satırlar:** Tüm stillere, ayrı ayrı stillere veya seçili satırlara uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
-
-### [Sub Menu Maker](automation/autoload/mag.sub_menu_maker_r1.lua)
-Automation menüsünde listelenen lua isimlerini gruplar. Bu gruplamayı girdiğiniz dosya adına göre yapıyor.
-
----
-
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
-
-### [Text Align](automation/autoload/mag.text_align.lua)
-Karaktere göre metni bölüp hizalar.
-
----
-
-* **Uygulanan satırlar:** Seçili satırlara uygular.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
-
-### [Timer](automation/autoload/mag.timer.lua)
-Satır zamanlama seçenekleri sunar.
-
----
-
-* **Uygulanan satırlar:** Aktif satıra göre işlem yapar. Aktif satır, metin düzenleme kutusunda gördüğünüz satırdır.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
-
-### [Trans State A1](automation/autoload/mag.trans_state_a1.lua)
-Çeviriyi yüzdeleyip yüzdelediği satırlar içinde girilen kelimeler kadar bölme yapabilir. Bölme işlemindeki fazlalıklar birer birer diğer paylara dağıtararak eşitlenir. Bunları `Effect` kutucuğuna yazar.
-
----
-
-* **Uygulanan satırlar:** Tüm stillere veya ayrı ayrı stillere uygular. Ayrı ayrı uyguladığı stiller Style Manager'de kayıtlı ve o stile sahip satırlar varsa listeler.
-* **Arayüz hafızası:** Tüm tercihler ayrı bir yerde oluşturulan bir dosyaya yazılır. Arayüz kapatıldığında son değişiklikler bu dosyaya aktarılır.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
-
-### [Typewritter](automation/autoload/mag.typewritter.lua)
-Satıra daktilo tarzı bir efekt uygular.
-
----
-
-* **Uygulanan satırlar:** Seçili satırlara uygular.
-* **Arayüz hafızası:** Her açılan dosya kapanana kadar geçen sürede tercihler hafızada tutulur. Bir dosyada yapılan tercih, aynı anda açılsa bile diğer bir dosyaya yansımaz. Uygulanan satırların tercih yapıldığı alan dışında diğer tüm tercihler hafızada tutulur.
-* **Modül:** Modülün var olup olmadığını ve varsa da istenilen sürüm olup olmadığını kontrol eder. Her şey istenildiği gibiyse lua dosyasını çalıştırır.
-
-## ASS
+## ASS Dosyaları
 ### [Autotags](ass/autotagsv4.ass)
 İki etiket arasında satır süresince dönüşüm yapar.
 
@@ -262,17 +340,17 @@ Satıra daktilo tarzı bir efekt uygular.
 Gökkuşağı renklerinde renk geçişi yapar.
 
 ### [Rand Color](ass/randcolor.ass)
-Girilen renkleri ya sırasıyla ya da rastgele bir biçimde döndürür.
+Belirlenen renkleri karaoke satırlarına ya sırasıyla ya da rastgele bir biçimde uygular.
 
 ### [Shaper](ass/shaper.ass)
-Alt yazı veya video çözünürlüğüne göre resim için şekil çizer. ASS dosyası halinde.
+Alt yazı veya video çözünürlüğüne göre resim için şekil çizer.
 
 ### [T_Calc](ass/t_calc(v11).ass)
-Girilen frame değerini alıp `\transform` etiketinin `t1` ve `t2` parametresi için ms cinsinden süre oluşturur.
+Frame değerinden milisaniyeye dönüşüm yapar. Karaoke satırlarının rengini sahneye göre değiştirebilirsiniz.
 
 ### [Vertical Kanji](ass/vertical_kanji.ass)
 Kanjiyi dikey şekilde konumlandırır.
 
 ---
 ---
-Detaylı rehberler için blog sayfamı ziyaret edebilirsiniz: http://biskuvininkirintilari.blogspot.com.tr/
+Daha detaylı rehberler için blog sayfamı ziyaret edebilirsiniz: http://biskuvininkirintilari.blogspot.com.tr/
