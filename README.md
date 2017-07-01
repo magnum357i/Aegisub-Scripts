@@ -20,12 +20,14 @@
   - [**(7) Delete Lines**](#delete-lines)
   - [**(8) Duplicate Lines**](#duplicate-lines)
   - [**(9) Format Lines**](#format-lines)
-  - [**(10) K Char**](#k-char)
-  - [**(11) Measure Lines**](#measure-lines)
-  - [**(12) Select Lines**](#select-lines)
-  - [**(13) Shaper**](#shaper)
-  - [**(14) Strip Lines**](#strip-lines)  
-  - [**(15) Typewriter**](#typewriter)
+  - [**(10) HTML TABLE From ASS**](#html-table-from-ass)
+  - [**(11) K Char**](#k-char)
+  - [**(12) Line Statistics**](#line-statistics)
+  - [**(13) Measure Lines**](#measure-lines)
+  - [**(14) Select Lines**](#select-lines)
+  - [**(15) Shaper**](#shaper)
+  - [**(16) Strip Lines**](#strip-lines)
+  - [**(17) Typewriter**](#typewriter)
 - [**(D) ASS Files**](#ass-files)
   - [**(1) Autotags**](#autotags)
   - [**(2) Color Fade**](#color-fade)
@@ -45,16 +47,16 @@ This page provides a download link to the lua plugins I write.
 
 - Physically save interface preferences
 
-*Preferences are saved to an external file for always remembering. This file is in the **%appdata%/aegisub/** directory. In portable Aegisub, it is saved where **aegisub.exe** is.*
+*Preferences are saved to an external file for always remembering. The file is in the **%appdata%/aegisub/** directory. In portable Aegisub, it is saved where **aegisub.exe** is.*
 
 #### Installation 
 * Installation directory of module file: **aegisub/automation/include/**
 * Installation directory of lua files: **aegisub/automation/autoload/**
 
-Move the module file and lua plugins to the installation directories while the program is closed. You can move them while the program is open but you need to press **Automation/Automation.../Rescan Autoload Dir** button to enable them.
+Move the module file and lua plugins to their own installation directories while the program is closed. You can move them while the program is open but you need to press **Automation/Automation.../Rescan Autoload Dir** button to enable them.
 
 #### Usage
-The lua plugins you install are added to the **Automation** submenu with a similar name to the file name. You can run the lua plugin by clicking on that name.
+The lua plugins you install are added to the **Automation** submenu as a new item with a similar name to the file name. You can run the lua plugin by clicking on the name.
 
 #### Supported Version
 I've written all of my lua files in Aegisub 3.2.2, the latest stable version. You may have a problem with previous **3.x.x versions** but will definitely with **2.x.x versions**. If a new stable version of Aegisub comes out and there is an incompatibility problem with it, I going to fix it. I will always support the most recent stable release of Aegisub.
@@ -95,8 +97,9 @@ Text Align
 Plugin Name
 ---------- |
 Sub Menu Maker
-HTML Table From ASS
-Language Tools
+Language Tools (for my own files)
+Gif Animator (ass)
+Wrap Text (ass)
 
 ## MACROS
 
@@ -127,8 +130,14 @@ Provides translation mode by duplicating lines.
 ### [Format Lines](automation/autoload/mag.format_lines.lua)
 Adds italic, alignment and transparency tags.
 
+### [HTML TABLE From ASS](automation/autoload/mag.html_table_from_ass.lua)
+Converts lines to a html table. The html table is colorful and responsive.
+
 ### [K Char](automation/autoload/mag.k_char.lua)
 Allows you to put anything before each character on the line.
+
+### [Line Statistics](automation/autoload/mag.line_statistics.lua)
+Counts lines by type.
 
 ### [Measure Lines](automation/autoload/mag.measure_lines.lua)
 Adds percentage to effect box of applied lines. It is important to share translation.
@@ -189,12 +198,14 @@ Positions kanji characters vertically.
   - [**(7) Delete Lines**](#delete-lines)
   - [**(8) Duplicate Lines**](#duplicate-lines)
   - [**(9) Format Lines**](#format-lines)
-  - [**(10) K Char**](#k-char)
-  - [**(11) Measure Lines**](#measure-lines)
-  - [**(12) Select Lines**](#select-lines)
-  - [**(13) Shaper**](#shaper)
-  - [**(14) Strip Lines**](#strip-lines)  
-  - [**(15) Typewriter**](#typewriter)
+  - [**(10) HTML TABLE From ASS**](#html-table-from-ass)
+  - [**(11) K Char**](#k-char)
+  - [**(12) Line Statistics**](#line-statistics)
+  - [**(13) Measure Lines**](#measure-lines)
+  - [**(14) Select Lines**](#select-lines)
+  - [**(15) Shaper**](#shaper)
+  - [**(16) Strip Lines**](#strip-lines)
+  - [**(17) Typewriter**](#typewriter)
 - [**(D) ASS Dosyaları**](#ass-dosyalar%C4%B1)
   - [**(1) Autotags**](#autotags)
   - [**(2) Color Fade**](#color-fade)
@@ -220,10 +231,10 @@ Bu sayfa yazdığım lua eklentilerine indirme bağlantısı sunar.
 * Modül dosyası kurulum dizini: **aegisub/automation/include/**
 * Lua dosyaları kurulum dizini: **aegisub/automation/autoload/**
 
-Modül ve lua eklentilerini program kapalıyken kurulum dizinlerine taşıyın. Program açıkken de atabilirsiniz ama etkinleştirmek için  **Automation/Automation.../Rescan Autoload Dir** butonuna basmanız gerekiyor.
+Modül ve lua eklentilerini program kapalıyken kendi kurulum dizinlerine taşıyın. Program açıkken de atabilirsiniz ama etkinleştirmek için **Automation/Automation.../Rescan Autoload Dir** butonuna basmanız gerekiyor.
 
 #### Kullanım
-Kurduğunuz lua eklentileri, dosya adına benzer bir ad ile **Automation** alt menüsüne eklenir. O isme tıklayarak lua eklentisini çalıştırabilirsiniz.
+Kurduğunuz lua eklentileri, dosya adına benzer bir ad ile **Automation** alt menüsüne yeni bir öğe olarak eklenir. O isme tıklayarak lua eklentisini çalıştırabilirsiniz.
 
 #### Destek Verilen Sürüm
 Tüm lua dosyalarımı en stabil olan Aegisub **3.2.2** sürümünde yazdım. Önceki **3.x.x sürümlerinde** sorun yaşamayabilirsiniz fakat **2.x.x sürümlerinde** kesin sorunlar yaşayabilirsiniz. Daha güncel bir sürüm çıkarsa ve uyumsuzluk sorunu olursa düzenleme yapabilirim. Her zaman en güncel stabil sürüme destek vereceğim.
@@ -231,7 +242,7 @@ Tüm lua dosyalarımı en stabil olan Aegisub **3.2.2** sürümünde yazdım. Ö
 #### Kısayol Atamak
 Lua dosyalarını daha hızlı kullanmak için klavyeden bir kısayol atabilirsiniz. Bunun için:
 * **View/Options/Interface/Hotkeys** kısmını açın.
-* **Defualt** içinde bir kısayol atayın.
+* **Default** içinde bir kısayol atayın.
 
 Programın neresinde olursanız olun atadığınız kısayola basınca lua eklentisi çalışmaya başlar.
 
@@ -264,8 +275,9 @@ Text Align
 Eklenti adı
 ---------- |
 Sub Menu Maker
-HTML Table From ASS
-Language Tools
+Language Tools (kendi lua dosyalarım için)
+Gif Animator (ass)
+Wrap Text (ass)
 
 ## MAKROLAR
 
@@ -305,9 +317,17 @@ Language Tools
 - **Türkçe adı:** Satır Biçimlendir
 - **Açıklama:** Eğiklik, hizalama ve şeffaflık geçişi etiketleri ekler.
 
+### [HTML TABLE From ASS](automation/autoload/mag.html_table_from_ass.lua)
+- **Türkçe adı:** HTML Tablosuna Çevir
+- **Açıklama:** Satırları html tablosuna çevirir. Bu html tablosu renkli ve genişliğe duyarlıdır.
+
 ### [K Char](automation/autoload/mag.k_char.lua)
 - **Türkçe adı:** Karakter Yerleştir
 - **Açıklama:** Satırdaki her karakterin başına herhangi bir şey koymanızı sağlar.
+
+### [Line Statistics](automation/autoload/mag.line_statistics.lua)
+- **Türkçe adı:** Satır İstatistikleri
+- **Açıklama:** Türlerine göre satırları sayar.
 
 ### [Measure Lines](automation/autoload/mag.measure_lines.lua)
 - **Türkçe adı:** Satır Ölç

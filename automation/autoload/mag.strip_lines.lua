@@ -51,6 +51,9 @@
 	in_lang["guiLabelKey22"]       = "Açıklama satırlarını sil"
 	in_lang["guiLabelKey23"]       = "Sıralı satırları birleştir"
 	in_lang["guiLabelKey24"]       = "Satır bölme boşluklarını temizle"
+	in_lang["guiLabelKey25"]       = "Her iki taraftaki hecesiz karaoke etiketleri kaldır"
+	in_lang["guiLabelKey26"]       = "Satır içindeki hecesiz karaoke etiketleri kaldır"
+	in_lang["guiLabelKey27"]       = "Karaoke etiketi boşluklarını gözden geçir"
 	in_lang["guiHintKey1"]         = "Aynı içeriğe sahip ve alt alta sıralanmış satırları bütünler."
 	in_lang["key1"]                = "Bulunacak harflerin sayısı ile değiştirelecek harflerin sayısı eşit değil."
 	in_lang["headerFormat"]        = "[{%s}]"
@@ -92,6 +95,9 @@
 	in_lang["guiLabelKey22"]       = "Delete comment lines"
 	in_lang["guiLabelKey23"]       = "Combine ordered lines"
 	in_lang["guiLabelKey24"]       = "Clear line break spaces"
+	in_lang["guiLabelKey25"]       = "Remove ktag without syllable in both side of line"
+	in_lang["guiLabelKey26"]       = "Remove ktag without syllable in center of line"
+	in_lang["guiLabelKey27"]       = "Remove whitespaces of karaoke tags"
 	in_lang["guiHintKey1"]         = "Combine ordered lines with the same content."
 	in_lang["key1"]                = "Number of characters to be found is not equal to the number of characters to replace."
 	in_lang["headerFormat"]        = "[{%s}]"
@@ -108,8 +114,8 @@
 	script_name              = c_lang.s_name
 	script_description       = c_lang.s_desc
 	script_author            = "Magnum357"
-	script_version           = "1.5.8"
-	script_mag_version       = "1.1.4.4"
+	script_version           = "1.6.1"
+	script_mag_version       = "1.1.4.6"
 	script_file_name         = "mag.strip_lines"
 	script_file_ext          = ".lua"
 
@@ -122,6 +128,7 @@
 	c_lock_gui               = false
 	c_window_mode_list       = {c_lang.buttonKey3, c_lang.buttonKey4}
 	c_buttons1               = {c_lang.buttonKey1, c_lang.buttonKey2}
+	c_trying_limit           = 10
 
 	c                        = {}
 	c.apply1                 = mag.window.lang.message("select")
@@ -157,6 +164,9 @@
 	c.comment_line           = false
 	c.one_line               = false
 	c.line_break_space       = false
+	c.syl_inline             = false
+	c.syl_time               = false
+	c.syl_space              = false
 
 	gui                      = {
 		main1                  = {
@@ -186,8 +196,11 @@
 		delete_fx              = {class = "checkbox", name = "u_delete_fx",              x = 1, y = 1,  width = 1, height = 1, label = c_lang.guiLabelKey13},
 		strip_template         = {class = "checkbox", name = "u_strip_template",         x = 1, y = 2,  width = 1, height = 1, label = c_lang.guiLabelKey14},
 		reset_template         = {class = "checkbox", name = "u_reset_template",         x = 1, y = 3,  width = 1, height = 1, label = c_lang.guiLabelKey15},
-		                         {class = "label",                                       x = 0, y = 4,  width = 2, height = 1, label = mag.string.format(c_lang.headerFormat, mag.gsub(mag.window.lang.message("apply"), ":", ""))},
-		apply2                 = {class = "dropdown", name = "u_apply_lines2",           x = 0, y = 5,  width = 2, height = 1, hint = mag.window.lang.message("style_hint2")},
+		syl_time               = {class = "checkbox", name = "u_syl_time",               x = 1, y = 4,  width = 2, height = 1, label = c_lang.guiLabelKey25},
+		syl_inline             = {class = "checkbox", name = "u_syl_inline",             x = 1, y = 5,  width = 2, height = 1, label = c_lang.guiLabelKey26},
+		syl_space              = {class = "checkbox", name = "u_syl_space",              x = 1, y = 6,  width = 2, height = 1, label = c_lang.guiLabelKey27},
+		                         {class = "label",                                       x = 0, y = 7,  width = 2, height = 1, label = mag.string.format(c_lang.headerFormat, mag.gsub(mag.window.lang.message("apply"), ":", ""))},
+		apply2                 = {class = "dropdown", name = "u_apply_lines2",           x = 0, y = 8,  width = 3, height = 1, hint = mag.window.lang.message("style_hint2")},
 		},
 		main3                  = {
 		subtitle_operations    = {class = "checkbox", name = "u_subtitle_operations",    x = 0, y = 0,  width = 3, height = 1, label = mag.string.format(c_lang.headerFormat, c_lang.tabKey3), hint = mag.window.lang.message("mark_all")},
@@ -385,21 +398,21 @@
 	end
 
 	function strip_lines2(subs,sel)
-	local jump
-	local line, index
+	local line, index, jump, ms1, ms2
 	local pcs          = false
 	local lines_index  = mag.line.index(subs, sel, c.apply2, false, false)
 	local delete_index = {}
-	local counter      = {delete = 0, template = 0, karaoke = 0}
+	local trying_count = 0
+	local counter      = {delete = 0, template = 0, karaoke = 0, syl_time = 0, syl_inline = 0, syl_space = 0, is_syl_time = false, is_syl_inline = false}
 	for i = 1, #lines_index do
 	mag.window.progress(i, #lines_index)
 	index = lines_index[i]
 	line  = subs[index]
-	if c.delete_fx or c.effect_template then
-		if jump == nil then
-		jump = index
+		if c.delete_fx or c.effect_template then
+			if jump == nil then
+			jump = index
+			end
 		end
-	end
 		if c.strip_template or c.effect_template then
 			if line.effect == "karaoke" and line.comment then
 			if not pcs then pcs = true end
@@ -409,7 +422,7 @@
 			end
 		end
 		if c.reset_template or c.effect_template then
-			if mag.find(line.effect, "template") == 1 and line.comment or mag.find(line.effect, "code") == 1 and line.comment then
+			if mag.match(line.effect, "^template") and line.comment or mag.match(line.effect, "^code") and line.comment then
 				if line.start_time > 0 or line.end_time > 0 then
 				if not pcs then pcs = true end
 				counter["template"] = counter["template"] + 1
@@ -425,15 +438,164 @@
 			mag.array.insert(delete_index, index)
 			end
 		end
+		if not mag.match(line.effect, "^template") and not mag.match(line.effect, "^code") then
+			if c.syl_time or c.effect_template then
+			counter["is_time"] = false
+			trying_count       = 0
+				repeat
+				matched = false
+					if mag.match(line.text, "^%s-{%s-\\%s-k%s-%d+}%s-{") then
+					ms1 = mag.match(line.text, "^%s-{%s-\\%s-k%s-(%d+)}%s-{")
+						if ms1 and mag.n(ms1) >= 0 then
+						if not pcs then pcs = true end
+						counter["is_time"] = true
+						matched            = true
+						line.text          = mag.gsub(line.text, "(%s-{%s-\\%s-k%s-%d+}%s-)({)", "%2")
+						line.start_time    = line.start_time - ms1
+						end
+					elseif mag.match(line.text, "^%s-{%s-\\%s-kf%s-%d+}%s-{") then
+					ms1 = mag.match(line.text, "^%s-{%s-\\%s-kf%s-(%d+)}%s-{")
+						if ms1 and mag.n(ms1) >= 0 then
+						if not pcs then pcs = true end
+						counter["is_time"] = true
+						matched            = true
+						line.text          = mag.gsub(line.text, "(%s-{%s-\\%s-kf%s-%d+}%s-)({)", "%2")
+						line.start_time    = line.start_time - ms1
+						end
+					elseif mag.match(line.text, "^%s-{%s-\\%s-ko%s-%d+}%s-{") then
+					ms1 = mag.match(line.text, "^%s-{%s-\\%s-ko%s-(%d+)}%s-{")
+						if ms1 and mag.n(ms1) >= 0 then
+						if not pcs then pcs = true end
+						counter["is_time"] = true
+						matched            = true
+						line.text          = mag.gsub(line.text, "(%s-{%s-\\%s-ko%s-%d+}%s-)({)", "%2")
+						line.start_time    = line.start_time - ms1
+						end
+					elseif mag.match(line.text, "^%s-{%s-\\%s-K%s-%d+}%s-{") then
+					ms1 = mag.match(line.text, "^%s-{%s-\\%s-K%s-(%d+)}%s-{")
+						if ms1 and mag.n(ms1) >= 0 then
+						if not pcs then pcs = true end
+						counter["is_time"] = true
+						matched            = true
+						line.text          = mag.gsub(line.text, "(%s-{%s-\\%s-K%s-%d+}%s-)({)", "%2")
+						line.start_time    = line.start_time - ms1
+						end
+					end
+				trying_count = trying_count + 1
+				until matched == false or trying_count == c_trying_limit
+			trying_count = 0
+				repeat
+				matched = false
+					if mag.match(line.text, "{%s-\\%s-k%s-%d+}%s-$") then
+					ms1 = mag.match(line.text, "{%s-\\%s-k%s-(%d+)}%s-$")
+						if ms1 and mag.n(ms1) >= 0 then
+						if not pcs then pcs = true end
+						counter["is_time"] = true
+						matched            = true
+						line.text          = mag.gsub(line.text, "{%s-\\%s-k%s-%d+}%s-$", "")
+						line.end_time      = line.end_time + ms1
+						end
+					elseif mag.match(line.text, "{%s-\\%s-kf%s-%d+}%s-$") then
+					ms1 = mag.match(line.text, "{%s-\\%s-kf%s-(%d+)}%s-$")
+						if ms1 and mag.n(ms1) >= 0 then
+						if not pcs then pcs = true end
+						counter["is_time"] = true
+						matched            = true
+						line.text          = mag.gsub(line.text, "{%s-\\%s-kf%s-%d+}%s-$", "")
+						line.end_time      = line.end_time + ms1
+						end
+					elseif mag.match(line.text, "{%s-\\%s-ko%s-%d+}%s-$") then
+					ms1 = mag.match(line.text, "{%s-\\%s-ko%s-(%d+)}%s-$")
+						if ms1 and mag.n(ms1) >= 0 then
+						if not pcs then pcs = true end
+						counter["is_time"] = true
+						matched            = true
+						line.text          = mag.gsub(line.text, "{%s-\\%s-ko%s-%d+}%s-$", "")
+						line.end_time      = line.end_time + ms1
+						end
+					elseif mag.match(line.text, "{%s-\\%s-K%s-%d+}%s-$") then
+					ms1 = mag.match(line.text, "{%s-\\%s-K%s-(%d+)}%s-$")
+						if ms1 and mag.n(ms1) >= 0 then
+						if not pcs then pcs = true end
+						counter["is_time"] = true
+						matched            = true
+						line.text          = mag.gsub(line.text, "{%s-\\%s-K%s-%d+}%s-$", "")
+						line.end_time      = line.end_time + ms1
+						end
+					end
+				trying_count = trying_count + 1
+				until matched == false or trying_count == c_trying_limit
+				if counter["is_time"] then
+				counter["syl_time"] = counter["syl_time"] + 1
+				end
+			end
+			if c.syl_inline or c.effect_template then
+			counter["is_inline"] = false
+			trying_count         = 0
+				repeat
+				matched = false
+					if mag.match(line.text, "{%s-\\%s-k%s-%d+%s-}%s-[^%s]+%s-{%s-\\%s-k%s-%d+%s-}%s-{%s-\\%s-k%s-%d+%s-}") then
+					ms1, ms2 = mag.match(line.text, "{%s-\\%s-k%s-(%d+)%s-}%s-[^%s]+%s-{%s-\\%s-k%s-(%d+)%s-}%s-{%s-\\%s-k%s-%d+%s-}")
+						if ms1 and mag.n(ms1) >= 0 and ms2 and mag.n(ms2) >= 0 then
+						if not pcs then pcs = true end
+						counter["is_inline"] = true
+						matched              = true
+						line.text            = mag.gsub(line.text, "({%s-\\%s-k%s-)%d+(%s-}%s-[^%s]+%s-){%s-\\%s-k%s-%d+%s-}(%s-{%s-\\%s-k%s-%d+%s-})", "%1"..ms1 + ms2.."%2%3")
+						end
+					elseif mag.match(line.text, "{%s-\\%s-kf%s-%d+}%s-{%s-\\%s-kf%s-%d+}") then
+					ms1, ms2 = mag.match(line.text, "{%s-\\%s-kf%s-(%d+)}%s-{%s-\\%s-kf%s-(%d+)}")
+						if ms1 and mag.n(ms1) >= 0 and ms2 and mag.n(ms2) >= 0 then
+						if not pcs then pcs = true end
+						counter["is_inline"] = true
+						matched              = true
+						line.text            = mag.gsub(line.text, "({%s-\\%s-kf%s-)%d+(}%s-){%s-\\%s-kf%s-%d+}", "%1"..ms1 + ms2.."%2")
+						end
+					elseif mag.match(line.text, "{%s-\\%s-ko%s-%d+}%s-{%s-\\%s-ko%s-%d+}") then
+					ms1, ms2 = mag.match(line.text, "{%s-\\%s-ko%s-(%d+)}%s-{%s-\\%s-ko%s-(%d+)}")
+						if ms1 and mag.n(ms1) >= 0 and ms2 and mag.n(ms2) >= 0 then
+						if not pcs then pcs = true end
+						counter["is_inline"] = true
+						matched              = true
+						line.text            = mag.gsub(line.text, "({%s-\\%s-ko%s-)%d+(}%s-){%s-\\%s-ko%s-%d+}", "%1"..ms1 + ms2.."%2")
+						end
+					elseif mag.match(line.text, "{%s-\\%s-K%s-%d+}%s-{%s-\\%s-K%s-%d+}") then
+					ms1, ms2 = mag.match(line.text, "{%s-\\%s-K%s-(%d+)}%s-{%s-\\%s-K%s-(%d+)}")
+						if ms1 and mag.n(ms1) >= 0 and ms2 and mag.n(ms2) >= 0 then
+						if not pcs then pcs = true end
+						counter["is_inline"] = true
+						matched              = true
+						line.text            = mag.gsub(line.text, "({%s-\\%s-K%s-)%d+(}%s-){%s-\\%s-K%s-%d+}", "%1"..ms1 + ms2.."%2")
+						end
+					end
+				trying_count = trying_count + 1
+				until matched == false or trying_count == c_trying_limit
+				if counter["is_inline"] then
+				counter["syl_inline"] = counter["syl_inline"] + 1
+				end
+			end
+			if c.syl_space or c.effect_template then
+			local strip_line = mag.strip.tag(line.text)
+				if mag.match(line.text, "}%s") or mag.match(line.text, "%s%s{") or mag.find(mag.reverse(strip_line), "%s") == 1 or mag.find(strip_line, "%s") == 1 then
+				if not pcs then pcs = true end
+				counter["syl_space"] = counter["syl_space"] + 1
+				line.text            = mag.gsub(line.text, "(})(%s+)", "%1")
+				line.text            = mag.gsub(line.text, "(%s+)({)", " %2")
+				line.text            = mag.trim.all(line.text)
+				end
+			end
+		end
 	if pcs then subs[index] = line end
 	end
 	if delete_index[1] ~= nil then
 	mag.line.delete(subs, delete_index)
 	end
 	if pcs then
-	mag.show.report(c.delete_fx      or c.effect_template, counter["delete"],   c_lang.guiLabelKey13, "", "", "")
-	mag.show.report(c.reset_template or c.effect_template, counter["template"], c_lang.guiLabelKey14, "", "", "")
-	mag.show.report(c.strip_template or c.effect_template, counter["karaoke"],  c_lang.guiLabelKey15, "", "", "")
+	mag.show.report(c.delete_fx      or c.effect_template, counter["delete"],     c_lang.guiLabelKey13, "", "", "")
+	mag.show.report(c.reset_template or c.effect_template, counter["template"],   c_lang.guiLabelKey14, "", "", "")
+	mag.show.report(c.strip_template or c.effect_template, counter["karaoke"],    c_lang.guiLabelKey15, "", "", "")
+	mag.show.report(c.syl_time       or c.effect_template, counter["syl_time"],   c_lang.guiLabelKey25, "", "", "")
+	mag.show.report(c.syl_inline     or c.effect_template, counter["syl_inline"], c_lang.guiLabelKey26, "", "", "")
+	mag.show.report(c.syl_space      or c.effect_template, counter["syl_space"],  c_lang.guiLabelKey27, "", "", "")
 	end
 	mag.show.no_op(pcs)
 	if counter["delete"] > 0 and jump ~= nil then return {jump} end
@@ -449,12 +611,18 @@
 	gui.main2.delete_fx.value       = c.delete_fx
 	gui.main2.strip_template.value  = c.strip_template
 	gui.main2.reset_template.value  = c.reset_template
+	gui.main2.syl_time.value        = c.syl_time
+	gui.main2.syl_inline.value      = c.syl_inline
+	gui.main2.syl_space.value       = c.syl_space
 	gui.main2.apply2.value          = c.apply2
 	ok, config                      = mag.window.dialog(gui.main2, c_buttons1)
 	c.effect_template               = config.u_effect_template
 	c.delete_fx                     = config.u_delete_fx
 	c.strip_template                = config.u_strip_template
 	c.reset_template                = config.u_reset_template
+	c.syl_time                      = config.u_syl_time
+	c.syl_inline                    = config.u_syl_inline
+	c.syl_space                     = config.u_syl_space
 	c.apply2                        = config.u_apply_lines2
 	until ok == mag.convert.ascii(c_buttons1[1]) and c.apply2 ~= mag.window.lang.message("select") or ok == mag.convert.ascii(c_buttons1[2])
 	if ok == mag.convert.ascii(c_buttons1[1]) then

@@ -33,10 +33,12 @@
 	in_lang["cModeListNameKey2"]      = "KARAKTER KONTROLLERİ"
 	in_lang["cModeListNameKey3"]      = "BOŞLUK KONTROLLERİ"
 	in_lang["cModeListNameKey4"]      = "STİL KONTROLÜ"
+	in_lang["cModeListNameKey5"]      = "KARAOKE KONTROLLERİ"
 	in_lang["cModeListShortNameKey1"] = "Zaman"
 	in_lang["cModeListShortNameKey2"] = "Karakter"
 	in_lang["cModeListShortNameKey3"] = "Boşluk"
 	in_lang["cModeListShortNameKey4"] = "Stil"
+	in_lang["cModeListShortNameKey5"] = "Karaoke"
 	in_lang["cModeFormat"]            = "[({%1}) {%2}]"
 	in_lang["guiLabelKey1"]           = "Şundan az:"
 	in_lang["guiLabelKey2"]           = "Şundan fazla:"
@@ -53,6 +55,8 @@
 	in_lang["guiLabelKey13"]          = "Boşlukları ve noktalama işaretlerini yoksay"
 	in_lang["guiLabelKey14"]          = "Raporu görüntüle"
 	in_lang["guiLabelKey15"]          = "Tanımsız stili olan satırlar"
+	in_lang["guiLabelKey16"]          = "Karaoke etiketlerinin süresi"
+	in_lang["guiLabelKey17"]          = "Karaoke etiketlerinin boşlukları"
 	in_lang["guiHintKey1"]            = "Aşağıdaki tercihlerin hepsini uygulamak için bu kutuyu işaretleyin."
 	in_lang["guiHintKey2"]            = "Karakter hesaplamasına boşlukları ve noktalama işaretlerini dahil etmez."
 	in_lang["guiHintKey3"]            = "Tanımlı noktalama işaretleri\n. , : ; ? ! ' \" ... -"
@@ -60,8 +64,8 @@
 	in_lang["key1"]                   = "No lines found to jump."
 	in_lang["key2"]                   = "[{%1} satır bulundu]\n{%2}"
 	in_lang["key3"]                   = "{%1}  [Toplam {%2} satır]"
-	in_lang["logKey1"]                = "Satır süresi fazla"
-	in_lang["logKey2"]                = "Satır süresi az"
+	in_lang["logKey1"]                = "Satır süresi az"
+	in_lang["logKey2"]                = "Satır süresi fazla"
 	in_lang["logKey3"]                = "Mevcut satırla sonraki satır arasındaki süre az"
 	in_lang["logKey4"]                = "Yüksek saniye başına karakter sayısı değeri"
 	in_lang["logKey5"]                = "Üst üste binen satır"
@@ -76,6 +80,8 @@
 	in_lang["logKey14"]               = "Satır bölme karakterinden sonra"
 	in_lang["logKey15"]               = "Noktalama işaretlerinden önce veya sonra"
 	in_lang["logKey16"]               = "Tanımsız stil"
+	in_lang["logKey17"]               = "Karaoke etiketlerinin süresi"
+	in_lang["logKey18"]               = "Karaoke etiketlerinin boşlukları"
 	in_lang["outputKey1_line"]        = "S"
 	in_lang["outputKey1_char"]        = "K"
 	in_lang["out"]                    = "["..langs[1].script_name.."]"
@@ -99,26 +105,30 @@
 	in_lang["cModeListNameKey2"]      = "CHARACTER CHECKS"
 	in_lang["cModeListNameKey3"]      = "WHITESPACE CHECKS"
 	in_lang["cModeListNameKey4"]      = "STYLE CHECK"
+	in_lang["cModeListNameKey5"]      = "KARAOKE CHECKS"
 	in_lang["cModeListShortNameKey1"] = "Time"
 	in_lang["cModeListShortNameKey2"] = "Char"
 	in_lang["cModeListShortNameKey3"] = "Whitespace"
 	in_lang["cModeListShortNameKey4"] = "Style"
+	in_lang["cModeListShortNameKey5"] = "Karaoke"
 	in_lang["cModeFormat"]            = "[{%1}] {%2}"
 	in_lang["guiLabelKey1"]           = "Less than:"
 	in_lang["guiLabelKey2"]           = "More than:"
-	in_lang["guiLabelKey3"]           = "If the duration difference is less than:"
+	in_lang["guiLabelKey3"]           = "Time difference is less than:"
 	in_lang["guiLabelKey4"]           = "Characters per second:"
 	in_lang["guiLabelKey5"]           = "Overlapping line"
 	in_lang["guiLabelKey6"]           = "Limit:"
 	in_lang["guiLabelKey7"]           = "Limit of breaking line:"
 	in_lang["guiLabelKey8"]           = "More than one"
-	in_lang["guiLabelKey9"]           = "Before and after the line"
+	in_lang["guiLabelKey9"]           = "Before and after line"
 	in_lang["guiLabelKey10"]          = "Before and after line break"
 	in_lang["guiLabelKey11"]          = "Before and after punctuation"
 	in_lang["guiLabelKey12"]          = "[APPLY LINES]"
-	in_lang["guiLabelKey13"]          = "Ignore spaces and punctuations"
+	in_lang["guiLabelKey13"]          = "Ignore whitespaces and punctuations"
 	in_lang["guiLabelKey14"]          = "View report"
 	in_lang["guiLabelKey15"]          = "Line with undefined style"
+	in_lang["guiLabelKey16"]          = "Duration of karaoke tags"
+	in_lang["guiLabelKey17"]          = "Whitespaces of karaoke tags"
 	in_lang["guiHintKey1"]            = "Mark this box to apply all the options below."
 	in_lang["guiHintKey2"]            = "It doesn't include the whitespaces and punctuations for character calculation."
 	in_lang["guiHintKey3"]            = "Defined punctuations\n. , : ; ? ! ' \" ... -"
@@ -126,8 +136,8 @@
 	in_lang["key1"]                   = "No lines found to jump."
 	in_lang["key2"]                   = "[{%1:# [line][lines]} found]\n{%2}"
 	in_lang["key3"]                   = "{%1}  [Total {%2:# [line][lines]}]"
-	in_lang["logKey1"]                = "Line duration is long"
-	in_lang["logKey2"]                = "Line duration is short"
+	in_lang["logKey1"]                = "Line duration is short"
+	in_lang["logKey2"]                = "Line duration is long"
 	in_lang["logKey3"]                = "Time difference is short"
 	in_lang["logKey4"]                = "High CPS"
 	in_lang["logKey5"]                = "Overlap line"
@@ -142,6 +152,8 @@
 	in_lang["logKey14"]               = "After the line break character"
 	in_lang["logKey15"]               = "Before or after punctuations"
 	in_lang["logKey16"]               = "Undefined style"
+	in_lang["logKey17"]               = "Duration of karaoke tags"
+	in_lang["logKey18"]               = "Whitespaces of karaoke tags"
 	in_lang["outputKey1_line"]        = "L"
 	in_lang["outputKey1_char"]        = "C"
 	in_lang["out"]                    = "["..langs[2].script_name.."]"
@@ -157,9 +169,9 @@
 
 	script_name               = c_lang.s_name
 	script_description        = c_lang.s_desc
-	script_version            = "0.9.7"
+	script_version            = "0.9.8.6"
 	script_author             = "Magnum357"
-	script_mag_version        = "1.1.4.4"
+	script_mag_version        = "1.1.4.6"
 	script_file_name          = "mag.check_lines"
 	script_file_ext           = ".lua"
 
@@ -204,6 +216,9 @@
 	c.view_report             = true
 	c.style                   = true
 	c.style_undefined         = false
+	c.karaoke                 = false
+	c.ktag_duration           = false
+	c.ktag_space              = false
 
 	c_output_signs            = {}
 	c_output_signs.formatKey1 = "{%2}: {%1}"
@@ -211,11 +226,11 @@
 	c_output_signs.key1       = "({%s}-)"
 	c_output_signs.key2       = "({%s}+)"
 	c_output_signs.key3       = "({%s}!)"
-	c_output_signs.key4       = "("..c_lang.outputKey1_char.." -> {%s})"
-	c_output_signs.key5       = "("..c_lang.outputKey1_line.." -> {%s}+)"
+	c_output_signs.key4       = "("..c_lang.outputKey1_char.."{%s})"
+	c_output_signs.key5       = "("..c_lang.outputKey1_line.."{%s}+)"
 	c_output_signs.key6       = "({%s})"
 	c_output_signs.key7       = "({%s}N)"
-	c_output_signs.key8       = "{%s}->{%s}"
+	c_output_signs.key8       = "{%s}->{%s}+"
 	c_output_signs.key9       = "({%s})"
 	c_output_signs.key10      = "( "..c_lang.outputKey1_line.." )"
 	c_output_signs.key11      = "( "..c_lang.outputKey1_line..")"
@@ -226,6 +241,12 @@
 	c_output_signs.key16      = "({%s})x{%s}"
 	c_output_signs.key17      = "({%s})"
 	c_output_signs.key18      = "(?)"
+	c_output_signs.key19      = "({%s} ms+)"
+	c_output_signs.key20      = "({%s} ms-)"
+	c_output_signs.key21      = "{ k{%s} }"
+	c_output_signs.key22      = "{ k{%s}}"
+	c_output_signs.key23      = "{k{%s} }"
+	c_output_signs.key24      = "{k{%s} !}"
 
 	gui                       = {
 		main1               = {
@@ -245,19 +266,24 @@
 		char_max_value      = {class = "intedit",  name = "u_char_max_value",      min = 35, max = 55, x = 2, y = 7,  width = 1, height = 1},
 		char_range          = {class = "checkbox", name = "u_char_range",                              x = 1, y = 8,  width = 1, height = 1, label = c_lang.guiLabelKey7},
 		char_range_value    = {class = "intedit",  name = "u_char_range_value",    min = 35, max = 55, x = 2, y = 8,  width = 1, height = 1},
-		space               = {class = "checkbox", name = "u_space",                                   x = 0, y = 9,  width = 3, height = 1, label = mag.string.format(c_lang.cModeFormat, c_lang.cModeListShortNameKey3, c_lang.cModeListNameKey3), hint = c_lang.guiHintKey1},
-		space_double        = {class = "checkbox", name = "u_space_double",                            x = 1, y = 10, width = 2, height = 1, label = c_lang.guiLabelKey8},
-		space_line          = {class = "checkbox", name = "u_space_line",                              x = 1, y = 11, width = 2, height = 1, label = c_lang.guiLabelKey9},
-		space_break_line    = {class = "checkbox", name = "u_space_break_line",                        x = 1, y = 12, width = 2, height = 1, label = c_lang.guiLabelKey10},
-		space_punc          = {class = "checkbox", name = "u_space_punc",                              x = 1, y = 13, width = 2, height = 1, label = c_lang.guiLabelKey11, hint = c_lang.guiHintKey3},
-		style               = {class = "checkbox", name = "u_style",                                   x = 0, y = 14, width = 3, height = 1, label = mag.string.format(c_lang.cModeFormat, c_lang.cModeListShortNameKey4, c_lang.cModeListNameKey4), hint = c_lang.guiHintKey1},
-		style_undefined     = {class = "checkbox", name = "u_style_undefined",                         x = 1, y = 15, width = 1, height = 1, label = c_lang.guiLabelKey15},
-		                      {class = "label",                                                        x = 0, y = 16, width = 3, height = 1, label = c_lang.guiLabelKey12},
-		apply1              = {class = "dropdown", name = "u_apply_lines1",                            x = 0, y = 17, width = 3, height = 1},
-		comment_mode1       = {class = "checkbox", name = "u_comment_mode1",                           x = 0, y = 18, width = 3, height = 1, label = mag.window.lang.message("comment_mode")},
-		empty_mode1         = {class = "checkbox", name = "u_empty_mode1",                             x = 0, y = 19, width = 3, height = 1, label = mag.window.lang.message("empty_mode")},
-		space_and_punc      = {class = "checkbox", name = "u_space_and_punc",                          x = 0, y = 20, width = 3, height = 1, label = c_lang.guiLabelKey13, hint = c_lang.guiHintKey2},
-		log                 = {class = "checkbox", name = "u_log",                                     x = 0, y = 21, width = 3, height = 1, label = c_lang.guiLabelKey14},
+		                      {class = "label",                                                        x = 3, y = 0,  width = 1, height = 1, label = mag.string.wall(" ", 12)},
+		                      {class = "label",                                                        x = 4, y = 1,  width = 1, height = 1, label = mag.string.wall(" ", 4)},
+		space               = {class = "checkbox", name = "u_space",                                   x = 4, y = 0,  width = 3, height = 1, label = mag.string.format(c_lang.cModeFormat, c_lang.cModeListShortNameKey3, c_lang.cModeListNameKey3), hint = c_lang.guiHintKey1},
+		space_double        = {class = "checkbox", name = "u_space_double",                            x = 5, y = 1,  width = 1, height = 1, label = c_lang.guiLabelKey8},
+		space_line          = {class = "checkbox", name = "u_space_line",                              x = 5, y = 2,  width = 1, height = 1, label = c_lang.guiLabelKey9},
+		space_break_line    = {class = "checkbox", name = "u_space_break_line",                        x = 5, y = 3,  width = 1, height = 1, label = c_lang.guiLabelKey10},
+		space_punc          = {class = "checkbox", name = "u_space_punc",                              x = 5, y = 4,  width = 1, height = 1, label = c_lang.guiLabelKey11, hint = c_lang.guiHintKey3},
+		style               = {class = "checkbox", name = "u_style",                                   x = 4, y = 5,  width = 3, height = 1, label = mag.string.format(c_lang.cModeFormat, c_lang.cModeListShortNameKey4, c_lang.cModeListNameKey4), hint = c_lang.guiHintKey1},
+		style_undefined     = {class = "checkbox", name = "u_style_undefined",                         x = 5, y = 6,  width = 1, height = 1, label = c_lang.guiLabelKey15},
+		karaoke             = {class = "checkbox", name = "u_karaoke",                                 x = 4, y = 7,  width = 3, height = 1, label = mag.string.format(c_lang.cModeFormat, c_lang.cModeListShortNameKey5, c_lang.cModeListNameKey5), hint = c_lang.guiHintKey1},
+		ktag_duration       = {class = "checkbox", name = "u_ktag_duration",                           x = 5, y = 8,  width = 1, height = 1, label = c_lang.guiLabelKey16},
+		ktag_space          = {class = "checkbox", name = "u_ktag_space",                              x = 5, y = 9,  width = 1, height = 1, label = c_lang.guiLabelKey17},
+		                      {class = "label",                                                        x = 0, y = 10, width = 3, height = 1, label = c_lang.guiLabelKey12},
+		apply1              = {class = "dropdown", name = "u_apply_lines1",                            x = 0, y = 11, width = 6, height = 1, hint = mag.window.lang.message("style_hint1")},
+		comment_mode1       = {class = "checkbox", name = "u_comment_mode1",                           x = 0, y = 12, width = 6, height = 1, label = mag.window.lang.message("comment_mode")},
+		empty_mode1         = {class = "checkbox", name = "u_empty_mode1",                             x = 0, y = 13, width = 6, height = 1, label = mag.window.lang.message("empty_mode")},
+		space_and_punc      = {class = "checkbox", name = "u_space_and_punc",                          x = 0, y = 14, width = 6, height = 1, label = c_lang.guiLabelKey13, hint = c_lang.guiHintKey2},
+		log                 = {class = "checkbox", name = "u_log",                                     x = 0, y = 15, width = 6, height = 1, label = c_lang.guiLabelKey14},
 		},
 		main2               = {
 		                      {class = "label",                                                        x = 0, y = 0,  width = 1, height = 1, label = mag.window.lang.message("apply")},
@@ -297,7 +323,7 @@
 	if c.style or c.style_undefined then
 	styles = mag.list.style(subs)
 	end
-	for n = 1, 16 do mag.array.insert(report_counter, 0) end
+	for n = 1, 18 do mag.array.insert(report_counter, 0) end
 	for i = 1, #lines_index do
 	mag.window.progress(i, #lines_index)
 	index        = lines_index[i]
@@ -380,7 +406,7 @@
 		check  = ""
 		end
 		if c.char or c.char_max or c.char_range then
-			if not mag.match(strip_line, "\\[nN]") then
+			if not mag.match(strip_line, "\\N") then
 				if c.char or c.char_max then
 					if text_len >= mag.n(c.char_max_value) then
 					if c.view_report then report_counter[6] = report_counter[6] + 1 end
@@ -389,7 +415,7 @@
 				end
 			else
 				if c.char or c.char_range then
-				local split_breaking = mag.string.split(true, mag.gsub(strip_line, "\\h", " "), "\\[nN]")
+				local split_breaking = mag.string.split(true, mag.gsub(strip_line, "\\h", " "), "\\N")
 				local breaking_len   = {}
 					for b = 1, #split_breaking do
 					mag.array.insert(breaking_len, len(split_breaking[b]))
@@ -423,7 +449,7 @@
 					end
 					for x = 1, #space_list do
 						if space_list[x] > 1 then
-						space_info = mag.string.combine(space_info, mag.string.format(c_output_signs.key8, x, mag.n(space_list[x])), "{%s}, {%s}")
+						space_info = mag.string.combine(space_info, mag.string.format(c_output_signs.key8, x, mag.n(space_list[x] - 1)), "{%s}, {%s}")
 						end
 					end
 					if space_info ~= "" then
@@ -445,13 +471,13 @@
 				end
 			end
 			if c.space or c.space_break_line then
-				if mag.match(strip_line, "%s\\[nN]%s") then
+				if mag.match(strip_line, "%s\\N%s") then
 				if c.view_report then report_counter[12] = report_counter[12] + 1 end
 				check = mag.string.combine(check, c_output_signs.key13, "{%s}, {%s}")
-				elseif mag.match(strip_line, "%s\\[nN]") then
+				elseif mag.match(strip_line, "%s\\N") then
 				if c.view_report then report_counter[13] = report_counter[13] + 1 end
 				check = mag.string.combine(check, c_output_signs.key14, "{%s}, {%s}")
-				elseif mag.match(strip_line, "\\[nN]%s") then
+				elseif mag.match(strip_line, "\\N%s") then
 				if c.view_report then report_counter[14] = report_counter[14] + 1 end
 				check = mag.string.combine(check, c_output_signs.key15, "{%s}, {%s}")
 				end
@@ -536,6 +562,51 @@
 		result = mag.string.combine(result, check,                         c_output_signs.formatKey2)
 		check  = ""
 		end
+		if not mag.match(line.effect, "^template") and not mag.match(line.effect, "^code") and not line.comment then
+			if c.karaoke or c.ktag_duration then
+			local ldur = 0
+				for kdur, ktext in mag.gmatch(line.text, "{[^{]-\\%s-[kK][of]?%s-(%d+)[^}]-}") do
+				ldur = ldur + kdur
+				end
+				if ldur ~= 0 then
+				ldur                = ldur * 10
+				local line_duration = line.end_time - line.start_time
+					if ldur ~= line_duration then
+					if c.view_report then report_counter[17] = report_counter[17] + 1 end
+						if ldur > line_duration then
+						check = mag.string.combine(check, mag.string.format(c_output_signs.key19, ldur - line_duration), "{%s}, {%s}")
+						elseif ldur < line_duration then
+						check = mag.string.combine(check, mag.string.format(c_output_signs.key20, mag.convert.positive(ldur - line_duration)), "{%s}, {%s}")
+						end
+					end
+				end
+			end
+			if c.karaoke or c.ktag_space then
+			local kct = 0
+			local kt  = ""
+				for ktext in mag.gmatch(line.text.." {\\k0}", "{[^{]-\\%s-[kK][of]?%s-%d+[^}]-}([^{]*)") do
+				kct = kct + 1
+					if mag.match(ktext, "^%s.-%s%s$") then
+					kt = mag.string.combine(kt, mag.string.format(c_output_signs.key21, kct), "{%s}, {%s}")
+					elseif mag.match(ktext, "^%s") then
+					kt = mag.string.combine(kt, mag.string.format(c_output_signs.key22, kct), "{%s}, {%s}")
+					elseif mag.match(ktext, "%s%s$") then
+					kt = mag.string.combine(kt, mag.string.format(c_output_signs.key23, kct), "{%s}, {%s}")
+					elseif mag.match(ktext, "[^%s]$") then
+					kt = mag.string.combine(kt, mag.string.format(c_output_signs.key24, kct), "{%s}, {%s}")
+					end
+				end
+				if kt ~= "" then
+				if c.view_report then report_counter[18] = report_counter[18] + 1 end
+				check = mag.string.combine(check, mag.string.format(c_output_signs.key17, kt), "{%s}, {%s}")
+				end
+			end
+		end
+		if check ~= "" then
+		check  = mag.string.combine(check,  c_lang.cModeListShortNameKey5, c_output_signs.formatKey1)
+		result = mag.string.combine(result, check,                         c_output_signs.formatKey2)
+		check  = ""
+		end
 		if result ~= "" then
 		if not pcs then pcs = true end
 		line.effect = mag.string.format("{%s} {%s}", c_lang.out, result)
@@ -546,16 +617,19 @@
 	end
 	if c.view_report and pcs then
 	local report  = ""
-	local r_group = {g1 = "", g2 = "", g3 = "", g4 = ""}
+	local r_group = {g1 = "", g2 = "", g3 = "", g4 = "", g5 = ""}
 	local r_data  = {group_name = "", loop_start = 0, loop_end = 0, total_problem = 0, header = "", hid = 0}
 	local function write_report()
 	for i = r_data.loop_start, r_data.loop_end do
-	if report_counter[i] > 0 then r_group[r_data.group_name] = mag.string.combine(r_group[r_data.group_name], mag.string.format(c_lang.key2, report_counter[i],  c_lang.logKey1),  "{%1}\n\n\n{%2}") end
+		if report_counter[i] > 0 then
+		local log_output           = c_lang["logKey"..i]
+		r_group[r_data.group_name] = mag.string.combine(r_group[r_data.group_name], mag.string.format(c_lang.key2, report_counter[i], log_output), "{%1}\n\n\n{%2}")
+		end
 	end
 	for t = r_data.loop_start, r_data.loop_end do r_data.total_problem = r_data.total_problem + report_counter[t] end
 	if r_data.total_problem > 0 then
-	r_data.header              = mag.string.format(c_lang.key3,                  c_lang["cModeListNameKey"..r_data.hid], r_data.total_problem)
-	r_data.header              = mag.string.format("{%1}\n{%2}",                 r_data.header,                          mag.string.wall("-", 114))
+	r_data.header              = mag.string.format(c_lang.key3,                 c_lang["cModeListNameKey"..r_data.hid], r_data.total_problem)
+	r_data.header              = mag.string.format("{%1}\n{%2}",                r_data.header,                          mag.string.wall("-", 114))
 	r_group[r_data.group_name] = mag.string.combine(r_group[r_data.group_name], r_data.header,                          "{%2}\n{%1}")
 	report                     = mag.string.combine(report,                     r_group[r_data.group_name],             "{%1}\n\n\n\n\n\n\n{%2}")
 	end
@@ -587,6 +661,13 @@
 	r_data.total_problem = 0
 	r_data.header        = ""
 	r_data.hid           = 4
+	write_report()
+	r_data.group_name    = "g5"
+	r_data.loop_start    = 17
+	r_data.loop_end      = 18
+	r_data.total_problem = 0
+	r_data.header        = ""
+	r_data.hid           = 5
 	write_report()
 	mag.show.basic_log(report, "nobreak")
 	end
@@ -643,6 +724,9 @@
 	gui.main1.log.value                 = c.view_report
 	gui.main1.style.value               = c.style
 	gui.main1.style_undefined.value     = c.style_undefined
+	gui.main1.karaoke.value             = c.karaoke
+	gui.main1.ktag_duration.value       = c.ktag_duration
+	gui.main1.ktag_space.value          = c.ktag_space
 	ok, config                          = mag.window.dialog(gui.main1, c_buttons1)
 	c.time                              = config.u_time
 	c.time_min                          = config.u_time_min
@@ -671,6 +755,9 @@
 	c.view_report                       = config.u_log
 	c.style                             = config.u_style
 	c.style_undefined                   = config.u_style_undefined
+	c.karaoke                           = config.u_karaoke
+	c.ktag_duration                     = config.u_ktag_duration
+	c.ktag_space                        = config.u_ktag_space
 	until ok == mag.convert.ascii(c_buttons1[1]) and c.apply1 ~= mag.window.lang.message("select") or ok == mag.convert.ascii(c_buttons1[2])
 	if ok == mag.convert.ascii(c_buttons1[1]) then
 	check_lines(subs, sel)

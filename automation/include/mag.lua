@@ -1,5 +1,5 @@
 ﻿	mag_module_name    = "Mag"
-	mag_module_version = "1.1.4.4"
+	mag_module_version = "1.1.4.6"
 	mag_module_author  = "Magnum357"
 
 	if include_unicode   == true then unicode   = require 'aegisub.unicode'   end
@@ -11,6 +11,7 @@
 	mag.strip                 = {}
 	mag.list                  = {}
 	mag.is                    = {}
+	mag.is.line               = {}
 	mag.trim                  = {}
 	mag.config                = {}
 	mag.config.file           = {}
@@ -125,162 +126,129 @@
 	end
 	if not allow then mag.lang = mag.default_lang end
 	local out
-	if name == "log_mOk" then
-		if mag.lang == "tr" then out = "YAPILDI" end
-		if mag.lang == "en" then out = "DONE" end
+	local function out_message(lang,lang_name,lang_message)
+	if lang_name == name and mag.lang == lang then
+	out = lang_message
 	end
-	if name == "log_mError" then
-		if mag.lang == "tr" then out = "BAŞARISIZ" end
-		if mag.lang == "en" then out = "FAIL" end
 	end
-	if name == "guilabel1" then
-		if mag.lang == "tr" then out = "Tüm kullanılabilir diller:" end
-		if mag.lang == "en" then out = "All available languages:" end
-	end
-	if name == "guilabel2" then
-		if mag.lang == "tr" then out = "Dilinizi değiştirdikten sonra tercihleriniz sıfırlanacaktır." end
-		if mag.lang == "en" then out = "Your options will be reset after you changed your language." end
-	end
-	if name == "guilabel3" then
-		if mag.lang == "tr" then out = "Şu an kullandığınız dil: " end
-		if mag.lang == "en" then out = "The language you are currently using: " end
-	end
-	if name == "changebutton" then
-		if mag.lang == "tr" then out = "Değiştir" end
-		if mag.lang == "en" then out = "Change" end
-	end
-	if name == "closebutton" then
-		if mag.lang == "tr" then out = "Kapat" end
-		if mag.lang == "en" then out = "Close" end
-	end
-	if name == "style_hint1" then
-		if mag.lang == "tr" then out = "Sadece kullanılan stiller listelenir. Parantez içindeki sayılar açıklama satırı yapılmamış ve yapılmış satırların sayısıdır." end
-		if mag.lang == "en" then out = "Used styles are listed only. The numbers in parentheses are the number of uncomment and comment lines." end
-	end
-	if name == "style_hint2" then
-		if mag.lang == "tr" then out = "Sadece kullanılan stiller listelenir. Parantez içindeki sayı, toplam satır sayısıdır." end
-		if mag.lang == "en" then out = "Used styles are listed only. The numbers in parentheses are the total number of lines." end
-	end
-	if name == "all_lines" then
-		if mag.lang == "tr" then out = "Tüm satırlar" end
-		if mag.lang == "en" then out = "All lines" end
-	end
-	if name == "selected_lines" then
-		if mag.lang == "tr" then out = "Seçili satırlar" end
-		if mag.lang == "en" then out = "Selected lines" end
-	end
-	if name == "select" then
-		if mag.lang == "tr" then out = "Seç" end
-		if mag.lang == "en" then out = "Select" end
-	end
-	if name == "apply" then
-		if mag.lang == "tr" then out = "Uygulanacak satırlar:" end
-		if mag.lang == "en" then out = "Apply to:" end
-	end
-	if name == "apply2" then
-		if mag.lang == "tr" then out = "Uygulanacak satırlar" end
-		if mag.lang == "en" then out = "Apply to" end
-	end
-	if name == "comment_mode" then
-		if mag.lang == "tr" then out = "Açıklama satırlarını atla" end
-		if mag.lang == "en" then out = "Skip comment lines" end
-	end
-	if name == "empty_mode" then
-		if mag.lang == "tr" then out = "Boş satırları atla" end
-		if mag.lang == "en" then out = "Skip empty lines" end
-	end
-	if name == "log_error" then
-		if mag.lang == "tr" then out = "HATA" end
-		if mag.lang == "en" then out = "ERROR" end
-	end
-	if name == "log_warning" then
-		if mag.lang == "tr" then out = "UYARI" end
-		if mag.lang == "en" then out = "WARNING" end
-	end
-	if name == "log_note" then
-		if mag.lang == "tr" then out = "NOT" end
-		if mag.lang == "en" then out = "NOTE" end
-	end
-	if name == "no_file" then
-		if mag.lang == "tr" then out = "Belirtilen dosya bulunamadı." end
-		if mag.lang == "en" then out = "The specified file not found." end
-	end
-	if name == "is_video" then
-		if mag.lang == "tr" then out = "Aegisub üzerinde sahte veya gerçek bir video açmadan yapmaya çalıştığınız işlemi yapamazsınız." end
-		if mag.lang == "en" then out = "You can not do the action you tried to do without opening a fake or real video on Aegisub." end
-	end
-	if name == "error" then
-		if mag.lang == "tr" then out = "Bir hata çıktı." end
-		if mag.lang == "en" then out = "There was an error." end
-	end
-	if name == "code_error" then
-		if mag.lang == "tr" then out = "{%1}. satırda bir hata çıktı: \"{%2}\"\n\nKullanmaya çalıştığınız lua eklentisinin ve mag modülünün son sürümünü indirdiğinize emin olun." end
-		if mag.lang == "en" then out = "There is an error on line {%1}: \"{%2}\"\n\nMake sure you download the latest version of the lua plugin and the mag module you are trying to use." end
-	end
-	if name == "no_process" then
-		if mag.lang == "tr" then out = "Hiçbir işlem yapılmadı. Ya geçersiz bir işlem yaptınız ya da tercihlerinize göre yapılacak bir şey yoktu." end
-		if mag.lang == "en" then out = "Nothing was done. Either you did something invalid or there was nothing to do with your preferences." end
-	end
-	if name == "no_process2" then
-		if mag.lang == "tr" then out = "Hiçbir işlem yapılmadı. Çünkü efekt kutularında şu girdi(ler) bulunamadı:\n{%s}" end
-		if mag.lang == "en" then out = "Nothing was done. Because the following entry(s) not found in the effect boxes:\n{%s}" end
-	end
-	if name == "select_save_place" then
-		if mag.lang == "tr" then out = "Kaydedilecek yeri seçin" end
-		if mag.lang == "en" then out = "Select the place to save" end
-	end
-	if name == "text_file_type" then
-		if mag.lang == "tr" then out = "Metin dosyası (*.txt)|*.txt" end
-		if mag.lang == "en" then out = "Text file (*.txt)|*.txt" end
-	end
-	if name == "error_config_file_write" then
-		if mag.lang == "tr" then out = "Ayar dosyası oluşturulamadı." end
-		if mag.lang == "en" then out = "Config file not create." end
-	end
-	if name == "error_open_file" then
-		if mag.lang == "tr" then out = "Dosya açma işlemi başarısız oldu." end
-		if mag.lang == "en" then out = "File failed to open." end
-	end
-	if name == "error_write_file" then
-		if mag.lang == "tr" then out = "Dosya yazma işlemi başarısız oldu." end
-		if mag.lang == "en" then out = "File failed to write." end
-	end
-	if name == "restart_aegisub" then
-		if mag.lang == "tr" then out = "Değişiklikleri görmek için Aegisub programını tekrar açın veya \"Automation / Automation... / Rescan Automation Dir\" butonuna basın." end
-		if mag.lang == "en" then out = "To see the changes, reopen the Aegisub software or press the \"Automation / Automation... / Rescan Automation Dir\" button." end
-	end
-	if name == "lang_tabname" then
-		if mag.lang == "tr" then out = "Dil Değiştir" end
-		if mag.lang == "en" then out = "Change Language" end
-	end
-	if name == "gui_tabname" then
-		if mag.lang == "tr" then out = "Pencere" end
-		if mag.lang == "en" then out = "Window" end
-	end
-	if name == "mark_all" then
-		if mag.lang == "tr" then out = "Aşağıdaki tercihlerin hepsini uygulamak için bu kutuyu işaretleyin." end
-		if mag.lang == "en" then out = "Mark this box to apply all the options below." end
-	end
-	if name == "new_script_name" then
-		if mag.lang == "tr" then out = "Bundan sonra bu lua eklentisini Automation alt menüsünde yeni ismiyle göreceksiniz:\n\"{%s}\"" end
-		if mag.lang == "en" then out = "From now on you will see this lua extension with a new name on the automation submenu:\n\"{%s}\"" end
-	end
-	if name == "report_mheader" then
-		if mag.lang == "tr" then out = "[Tercih: \"{%s}\"]" end
-		if mag.lang == "en" then out = "[Preference: \"{%s}\"]" end
-	end
-	if name == "report_mheader2" then
-		if mag.lang == "tr" then out = "[Tercih: \"{%1}\", Değer: \"{%2}\"]" end
-		if mag.lang == "en" then out = "[Preference: \"{%1}\", Value: \"{%2}\"]" end
-	end
-	if name == "report_msuccess" then
-		if mag.lang == "tr" then out = "{%s} satır" end
-		if mag.lang == "en" then out = "{%s:# [line][lines]}" end
-	end
-	if name == "report_mfail" then
-		if mag.lang == "tr" then out = "Yapılacak bir şey yoktu." end
-		if mag.lang == "en" then out = "There was nothing to do." end
-	end
+	----------------------------------------------
+	out_message("tr", "log_mOk",                  "YAPILDI")
+	out_message("en", "log_mOk",                  "DONE")
+	----------------------------------------------
+	out_message("tr", "log_mError",               "BAŞARISIZ")
+	out_message("en", "log_mError",               "FAIL")
+	----------------------------------------------
+	out_message("tr", "guilabel1",                "Tüm kullanılabilir diller:")
+	out_message("en", "guilabel1",                "All available languages:")
+	----------------------------------------------
+	out_message("tr", "guilabel2",                "Dilinizi değiştirdikten sonra tercihleriniz sıfırlanacaktır.")
+	out_message("en", "guilabel2",                "Your options will be reset after you changed your language.")
+	----------------------------------------------
+	out_message("tr", "guilabel3",                "Şu an kullandığınız dil: ")
+	out_message("en", "guilabel3",                "The language you are currently using: ")
+	----------------------------------------------
+	out_message("tr", "changebutton",             "Değiştir")
+	out_message("en", "changebutton",             "Change")
+	----------------------------------------------
+	out_message("tr", "closebutton",              "Kapat")
+	out_message("en", "closebutton",              "Close")
+	----------------------------------------------
+	out_message("tr", "style_hint1",              "Sadece kullanılan stiller listelenir. Parantez içindeki sayılar açıklama satırı yapılmamış ve yapılmış satırların sayısıdır.")
+	out_message("en", "style_hint1",              "Used styles are listed only. The numbers in parentheses are the number of uncomment and comment lines.")
+	----------------------------------------------
+	out_message("tr", "style_hint2",              "Sadece kullanılan stiller listelenir. Parantez içindeki sayı, toplam satır sayısıdır.")
+	out_message("en", "style_hint2",              "Used styles are listed only. The numbers in parentheses are the total number of lines.")
+	----------------------------------------------
+	out_message("tr", "all_lines",                "Tüm satırlar")
+	out_message("en", "all_lines",                "All lines")
+	----------------------------------------------
+	out_message("tr", "selected_lines",           "Seçili satırlar")
+	out_message("en", "selected_lines",           "Selected lines")
+	----------------------------------------------
+	out_message("tr", "select",                   "Seç")
+	out_message("en", "select",                   "Select")
+	----------------------------------------------
+	out_message("tr", "apply",                    "Uygulanacak satırlar:")
+	out_message("en", "apply",                    "Apply to:")
+	----------------------------------------------
+	out_message("tr", "apply2",                   "Uygulanacak satırlar")
+	out_message("en", "apply2",                   "Apply to")
+	----------------------------------------------
+	out_message("tr", "comment_mode",             "Açıklama satırlarını atla")
+	out_message("en", "comment_mode",             "Skip comment lines")
+	----------------------------------------------
+	out_message("tr", "empty_mode",               "Boş satırları atla")
+	out_message("en", "empty_mode",               "Skip empty lines")
+	----------------------------------------------
+	out_message("tr", "log_error",                "HATA")
+	out_message("en", "log_error",                "ERROR")
+	----------------------------------------------
+	out_message("tr", "log_warning",              "UYARI")
+	out_message("en", "log_warning",              "WARNING")
+	----------------------------------------------
+	out_message("tr", "log_note",                 "NOT")
+	out_message("en", "log_note",                 "NOTE")
+	----------------------------------------------
+	out_message("tr", "no_file",                  "Belirtilen dosya bulunamadı.")
+	out_message("en", "no_file",                  "The specified file not found.")
+	----------------------------------------------
+	out_message("tr", "is_video",                 "Aegisub üzerinde sahte veya gerçek bir video açmadan yapmaya çalıştığınız işlemi yapamazsınız.")
+	out_message("en", "is_video",                 "You can not do the action you tried to do without opening a fake or real video on Aegisub.")
+	----------------------------------------------
+	out_message("tr", "error",                    "Bir hata çıktı.")
+	out_message("en", "error",                    "There was an error.")
+	----------------------------------------------
+	out_message("tr", "code_error",               "{%1}. satırda bir hata çıktı: \"{%2}\"\n\nKullanmaya çalıştığınız lua eklentisinin ve mag modülünün son sürümünü indirdiğinize emin olun.")
+	out_message("en", "code_error",               "There is an error on line {%1}: \"{%2}\"\n\nMake sure you download the latest version of the lua plugin and the mag module you are trying to use.")
+	----------------------------------------------
+	out_message("tr", "no_process",               "Hiçbir işlem yapılmadı. Ya geçersiz bir işlem yaptınız ya da tercihlerinize göre yapılacak bir şey yoktu.")
+	out_message("en", "no_process",               "Nothing was done. Either you did something invalid or there was nothing to do with your preferences.")
+	----------------------------------------------
+	out_message("tr", "no_process2",              "Hiçbir işlem yapılmadı. Çünkü efekt kutularında şu girdi(ler) bulunamadı:\n{%s}")
+	out_message("en", "no_process2",              "Nothing was done. Because the following entry(s) not found in the effect boxes:\n{%s}")
+	----------------------------------------------
+	out_message("tr", "select_save_place",        "Kaydedilecek yeri seçin")
+	out_message("en", "select_save_place",        "Select the place to save")
+	----------------------------------------------
+	out_message("tr", "text_file_type",           "Metin dosyası (*.txt)|*.txt")
+	out_message("en", "text_file_type",           "Text file (*.txt)|*.txt")
+	----------------------------------------------
+	out_message("tr", "error_config_file_write",  "Ayar dosyası oluşturulamadı.")
+	out_message("en", "error_config_file_write",  "Config file not create.")
+	----------------------------------------------
+	out_message("tr", "error_open_file",          "Dosya açma işlemi başarısız oldu.")
+	out_message("en", "error_open_file",          "File failed to open.")
+	----------------------------------------------
+	out_message("tr", "error_write_file",         "Dosya yazma işlemi başarısız oldu.")
+	out_message("en", "error_write_file",         "File failed to write.")
+	----------------------------------------------
+	out_message("tr", "restart_aegisub",          "Değişiklikleri görmek için Aegisub programını tekrar açın veya \"Automation / Automation... / Rescan Automation Dir\" butonuna basın.")
+	out_message("en", "restart_aegisub",          "To see the changes, reopen the Aegisub software or press the \"Automation / Automation... / Rescan Automation Dir\" button.")
+	----------------------------------------------
+	out_message("tr", "lang_tabname",             "Dil Değiştir")
+	out_message("en", "lang_tabname",             "Change Language")
+	----------------------------------------------
+	out_message("tr", "gui_tabname",              "Pencere")
+	out_message("en", "gui_tabname",              "Window")
+	----------------------------------------------
+	out_message("tr", "mark_all",                 "Aşağıdaki tercihlerin hepsini uygulamak için bu kutuyu işaretleyin.")
+	out_message("en", "mark_all",                 "Mark this box to apply all the options below.")
+	----------------------------------------------
+	out_message("tr", "new_script_name",          "Bundan sonra bu lua eklentisini Automation alt menüsünde yeni ismiyle göreceksiniz:\n\"{%s}\"")
+	out_message("en", "new_script_name",          "From now on you will see this lua extension with a new name on the automation submenu:\n\"{%s}\"")
+	----------------------------------------------
+	out_message("tr", "report_mheader",           "[Tercih: \"{%s}\"]")
+	out_message("en", "report_mheader",           "[Preference: \"{%s}\"]")
+	----------------------------------------------
+	out_message("tr", "report_mheader2",          "[Tercih: \"{%1}\", Değer: \"{%2}\"]")
+	out_message("en", "report_mheader2",          "[Preference: \"{%1}\", Value: \"{%2}\"]")
+	----------------------------------------------
+	out_message("tr", "report_msuccess",          "{%s} satır")
+	out_message("en", "report_msuccess",          "{%s:# [line][lines]}")
+	----------------------------------------------
+	out_message("tr", "report_mfail",             "Yapılacak bir şey yoktu.")
+	out_message("en", "report_mfail",             "There was nothing to do.")
+	----------------------------------------------
 	return out
 	end
 
@@ -459,7 +427,7 @@
 	str              = str.." d "
 	str              = mag.gsub(str, "(\\[nNh])", " %1")
 	local words      = {}
-	local w          = "" 
+	local w          = ""
 	local n          = 0
 	local in_tags    = false
 	local chars      = {}
@@ -583,8 +551,11 @@
 	local t = ""
 	if #numbers == 1 then
 	t = numbers[1]
+		if index_mode == true then
+		t = t - first_index + 1
+		end
 	else
-	mag.array.insert(numbers,0)
+	mag.array.insert(numbers, 0)
 	local g = false
 	local c = 0
 		for _, n in pairs(numbers) do
@@ -603,7 +574,7 @@
 				g = false
 				end
 				if numbers[c] + 1 ~= numbers[c + 1] then
-					if numbers[c] ~= numbers[c - 1] + 1 then
+					if numbers[c - 1] ~= nil and numbers[c] ~= numbers[c - 1] + 1 then
 					t = mag.string.combine(t, n, "{%1}, {%2}")
 					else
 					t = mag.string.combine(t, n, "{%1} - {%2}")
@@ -692,7 +663,7 @@
 
 	--frame_time = mag.convert.frame_time(14554)
 	function mag.convert.frame_time(time) return aegisub.ms_from_frame(aegisub.frame_from_ms(time)) end
-	
+
 	--ass_color = mag.convert.html_to_ass("#FFFFFF")
 	function mag.convert.html_from_ass(color) return ass_color(extract_color(color)) end
 
@@ -889,6 +860,7 @@
 				end
 			end
 		end
+	mag.array.insert(apply_items, mag.window.lang.message("select"))
 		if select_mode == mode_list[1] then
 			for s = 1, #styles do
 				if counter[styles[s]]["both"] > 0 then
@@ -1031,9 +1003,9 @@
 	if alert == 3 then alert_message = mag.window.lang.message("log_note")    end
 	end
 	if alert ~= nil then
-	result = mag.format("[%s]\n%s\n%s", alert_message, mag.s(str), divide)
+	result = mag.format("[%s]\n%s\n%s\n", alert_message, mag.s(str), divide)
 	else
-	result = mag.format("%s\n%s", mag.s(str), divide)
+	result = mag.format("%s\n%s\n", mag.s(str), divide)
 	end
 	aegisub.log(result)
 	end
@@ -1057,7 +1029,21 @@
 			if mag.is.array(value) then
 			mag.show.basic_log(mag.string.format(format2, key), "autobreak")
 				for key2, value2 in pairs(value) do
-				mag.show.basic_log(mag.string.format(mag.string.wall(" ", 5)..format1, key2, value2), "autobreak")
+					if mag.is.array(value2) then
+					mag.show.basic_log(mag.string.format(mag.string.wall(" ", 5)..format2, key2), "autobreak")
+						for key3, value3 in pairs(value2) do
+							if mag.is.array(value3) then
+							mag.show.basic_log(mag.string.format(mag.string.wall(" ", 10)..format2, key3), "autobreak")
+								for key4, value4 in pairs(value3) do
+								mag.show.basic_log(mag.string.format(mag.string.wall(" ", 15)..format1, key4, value4), "autobreak")
+								end
+							else
+							mag.show.basic_log(mag.string.format(mag.string.wall(" ", 10)..format1, key3, value3), "autobreak")
+							end
+						end
+					else
+					mag.show.basic_log(mag.string.format(mag.string.wall(" ", 5)..format1, key2, value2), "autobreak")
+					end
 				end
 			else
 			mag.show.basic_log(mag.string.format(format1, key, value), "autobreak")
@@ -1264,6 +1250,38 @@
 	end
 	return l
 	end
+
+	--line  = subs[50]
+	--value = mag.is.line.comment(line)
+	function mag.is.line.comment(line) return line.comment == true end
+
+	--line  = subs[50]
+	--value = mag.is.line.empty(line)
+	function mag.is.line.empty(line) return mag.is.empty(line.text) end
+
+	--line  = subs[50]
+	--value = mag.is.line.generated(line)
+	function mag.is.line.generated(line) return mag.find(line.effect, "fx") == 1 and line.comment == false end
+
+	--line  = subs[50]
+	--value = mag.is.line.template(line)
+	function mag.is.line.template(line) return mag.find(line.effect, "template") == 1 and line.comment == true end
+
+	--line  = subs[50]
+	--value = mag.is.line.code(line)
+	function mag.is.line.code(line) return mag.find(line.effect, "code") == 1 and line.comment == true end
+
+	--line  = subs[50]
+	--value = mag.is.line.karaoke(line)
+	function mag.is.line.karaoke(line) return mag.find(line.effect, "karaoke") == 1 and line.comment == true end
+
+	--line  = subs[50]
+	--value = mag.is.line.actor(line)
+	function mag.is.line.actor(line) return not mag.is.empty(line.actor) and line.comment == false end
+
+	--line  = subs[50]
+	--value = mag.is.line.effect(line)
+	function mag.is.line.effect(line) return not mag.is.empty(line.effect) and line.comment == false end
 
 	--value = mag.is.even(50)
 	function mag.is.even(t) return t % 2 == 0 end
