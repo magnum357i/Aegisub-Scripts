@@ -34,11 +34,13 @@
 	in_lang["cModeListNameKey3"]      = "BOŞLUK KONTROLLERİ"
 	in_lang["cModeListNameKey4"]      = "STİL KONTROLÜ"
 	in_lang["cModeListNameKey5"]      = "KARAOKE KONTROLLERİ"
+	in_lang["cModeListNameKey6"]      = "NOKTALAMA KONTROLLERİ"
 	in_lang["cModeListShortNameKey1"] = "Zaman"
 	in_lang["cModeListShortNameKey2"] = "Karakter"
 	in_lang["cModeListShortNameKey3"] = "Boşluk"
 	in_lang["cModeListShortNameKey4"] = "Stil"
 	in_lang["cModeListShortNameKey5"] = "Karaoke"
+	in_lang["cModeListShortNameKey6"] = "Noktalama"
 	in_lang["cModeFormat"]            = "[({%1}) {%2}]"
 	in_lang["guiLabelKey1"]           = "Şundan az:"
 	in_lang["guiLabelKey2"]           = "Şundan fazla:"
@@ -57,11 +59,13 @@
 	in_lang["guiLabelKey15"]          = "Tanımsız stili olan satırlar"
 	in_lang["guiLabelKey16"]          = "Karaoke etiketlerinin süresi"
 	in_lang["guiLabelKey17"]          = "Karaoke etiketlerinin boşlukları"
+	in_lang["guiLabelKey18"]          = "Aynı türden yanyana"
+	in_lang["guiLabelKey19"]          = "Eksik (sadece satır sonu için)"
 	in_lang["guiHintKey1"]            = "Aşağıdaki tercihlerin hepsini uygulamak için bu kutuyu işaretleyin."
 	in_lang["guiHintKey2"]            = "Karakter hesaplamasına boşlukları ve noktalama işaretlerini dahil etmez."
 	in_lang["guiHintKey3"]            = "Tanımlı noktalama işaretleri\n. , : ; ? ! ' \" ... -"
 	in_lang["guiHintKey4"]            = "Geçerli satırın bitiş süresi ile sonraki satırın başlangıç süresi arasındaki süre bu değerden az ise"
-	in_lang["key1"]                   = "No lines found to jump."
+	in_lang["key1"]                   = "Atlanacak satır bulunamadı."
 	in_lang["key2"]                   = "[{%1} satır bulundu]\n{%2}"
 	in_lang["key3"]                   = "{%1}  [Toplam {%2} satır]"
 	in_lang["logKey1"]                = "Satır süresi az"
@@ -82,6 +86,8 @@
 	in_lang["logKey16"]               = "Tanımsız stil"
 	in_lang["logKey17"]               = "Karaoke etiketlerinin süresi"
 	in_lang["logKey18"]               = "Karaoke etiketlerinin boşlukları"
+	in_lang["logKey19"]               = "Aynı türden yanyana noktalamalar"
+	in_lang["logKey20"]               = "Eksik noktalamalar"
 	in_lang["outputKey1_line"]        = "S"
 	in_lang["outputKey1_char"]        = "K"
 	in_lang["out"]                    = "["..langs[1].script_name.."]"
@@ -106,11 +112,13 @@
 	in_lang["cModeListNameKey3"]      = "WHITESPACE CHECKS"
 	in_lang["cModeListNameKey4"]      = "STYLE CHECK"
 	in_lang["cModeListNameKey5"]      = "KARAOKE CHECKS"
+	in_lang["cModeListNameKey6"]      = "PUNCTUATION CHECKS"
 	in_lang["cModeListShortNameKey1"] = "Time"
 	in_lang["cModeListShortNameKey2"] = "Char"
 	in_lang["cModeListShortNameKey3"] = "Whitespace"
 	in_lang["cModeListShortNameKey4"] = "Style"
 	in_lang["cModeListShortNameKey5"] = "Karaoke"
+	in_lang["cModeListShortNameKey6"] = "Punctuation"
 	in_lang["cModeFormat"]            = "[{%1}] {%2}"
 	in_lang["guiLabelKey1"]           = "Less than:"
 	in_lang["guiLabelKey2"]           = "More than:"
@@ -129,6 +137,8 @@
 	in_lang["guiLabelKey15"]          = "Line with undefined style"
 	in_lang["guiLabelKey16"]          = "Duration of karaoke tags"
 	in_lang["guiLabelKey17"]          = "Whitespaces of karaoke tags"
+	in_lang["guiLabelKey18"]          = "Double"
+	in_lang["guiLabelKey19"]          = "Missing (for the end of line)"
 	in_lang["guiHintKey1"]            = "Mark this box to apply all the options below."
 	in_lang["guiHintKey2"]            = "It doesn't include the whitespaces and punctuations for character calculation."
 	in_lang["guiHintKey3"]            = "Defined punctuations\n. , : ; ? ! ' \" ... -"
@@ -154,6 +164,8 @@
 	in_lang["logKey16"]               = "Undefined style"
 	in_lang["logKey17"]               = "Duration of karaoke tags"
 	in_lang["logKey18"]               = "Whitespaces of karaoke tags"
+	in_lang["logKey19"]               = "Double punctuations"
+	in_lang["logKey20"]               = "Missing punctuations"
 	in_lang["outputKey1_line"]        = "L"
 	in_lang["outputKey1_char"]        = "C"
 	in_lang["out"]                    = "["..langs[2].script_name.."]"
@@ -169,7 +181,7 @@
 
 	script_name               = c_lang.s_name
 	script_description        = c_lang.s_desc
-	script_version            = "0.9.8.6"
+	script_version            = "1"
 	script_author             = "Magnum357"
 	script_mag_version        = "1.1.4.6"
 	script_file_name          = "mag.check_lines"
@@ -179,7 +191,7 @@
 	mag_import, mag           = pcall(require, "mag")
 
 	if mag_import then
-	mag.lang                  = c_lang_switch	
+	mag.lang                  = c_lang_switch
 
 	c_lock_gui                = false
 	c_buttons1                = {c_lang.buttonKey1, c_lang.buttonKey2}
@@ -206,10 +218,10 @@
 	c.space_line              = false
 	c.space_break_line        = false
 	c.space_punc              = false
-	c.apply1                  = mag.window.lang.message("select") 
+	c.apply1                  = mag.window.lang.message("select")
 	c.comment_mode1           = true
 	c.empty_mode1             = true
-	c.apply2                  = mag.window.lang.message("select") 
+	c.apply2                  = mag.window.lang.message("select")
 	c.comment_mode2           = true
 	c.empty_mode2             = true
 	c.space_and_punc          = false
@@ -219,6 +231,9 @@
 	c.karaoke                 = false
 	c.ktag_duration           = false
 	c.ktag_space              = false
+	c.punc                    = false
+	c.punc_double             = false
+	c.punc_missing            = false
 
 	c_output_signs            = {}
 	c_output_signs.formatKey1 = "{%2}: {%1}"
@@ -266,6 +281,9 @@
 		char_max_value      = {class = "intedit",  name = "u_char_max_value",      min = 35, max = 55, x = 2, y = 7,  width = 1, height = 1},
 		char_range          = {class = "checkbox", name = "u_char_range",                              x = 1, y = 8,  width = 1, height = 1, label = c_lang.guiLabelKey7},
 		char_range_value    = {class = "intedit",  name = "u_char_range_value",    min = 35, max = 55, x = 2, y = 8,  width = 1, height = 1},
+		punc                = {class = "checkbox", name = "u_punc",                                    x = 0, y = 9,  width = 3, height = 1, label = mag.string.format(c_lang.cModeFormat, c_lang.cModeListShortNameKey6, c_lang.cModeListNameKey6), hint = c_lang.guiHintKey1},
+		punc_double         = {class = "checkbox", name = "u_punc_double",                             x = 1, y = 10, width = 1, height = 1, label = c_lang.guiLabelKey18},
+		punc_missing        = {class = "checkbox", name = "u_punc_missing",                            x = 1, y = 11, width = 1, height = 1, label = c_lang.guiLabelKey19},
 		                      {class = "label",                                                        x = 3, y = 0,  width = 1, height = 1, label = mag.string.wall(" ", 12)},
 		                      {class = "label",                                                        x = 4, y = 1,  width = 1, height = 1, label = mag.string.wall(" ", 4)},
 		space               = {class = "checkbox", name = "u_space",                                   x = 4, y = 0,  width = 3, height = 1, label = mag.string.format(c_lang.cModeFormat, c_lang.cModeListShortNameKey3, c_lang.cModeListNameKey3), hint = c_lang.guiHintKey1},
@@ -278,12 +296,12 @@
 		karaoke             = {class = "checkbox", name = "u_karaoke",                                 x = 4, y = 7,  width = 3, height = 1, label = mag.string.format(c_lang.cModeFormat, c_lang.cModeListShortNameKey5, c_lang.cModeListNameKey5), hint = c_lang.guiHintKey1},
 		ktag_duration       = {class = "checkbox", name = "u_ktag_duration",                           x = 5, y = 8,  width = 1, height = 1, label = c_lang.guiLabelKey16},
 		ktag_space          = {class = "checkbox", name = "u_ktag_space",                              x = 5, y = 9,  width = 1, height = 1, label = c_lang.guiLabelKey17},
-		                      {class = "label",                                                        x = 0, y = 10, width = 3, height = 1, label = c_lang.guiLabelKey12},
-		apply1              = {class = "dropdown", name = "u_apply_lines1",                            x = 0, y = 11, width = 6, height = 1, hint = mag.window.lang.message("style_hint1")},
-		comment_mode1       = {class = "checkbox", name = "u_comment_mode1",                           x = 0, y = 12, width = 6, height = 1, label = mag.window.lang.message("comment_mode")},
-		empty_mode1         = {class = "checkbox", name = "u_empty_mode1",                             x = 0, y = 13, width = 6, height = 1, label = mag.window.lang.message("empty_mode")},
-		space_and_punc      = {class = "checkbox", name = "u_space_and_punc",                          x = 0, y = 14, width = 6, height = 1, label = c_lang.guiLabelKey13, hint = c_lang.guiHintKey2},
-		log                 = {class = "checkbox", name = "u_log",                                     x = 0, y = 15, width = 6, height = 1, label = c_lang.guiLabelKey14},
+		                      {class = "label",                                                        x = 0, y = 12, width = 3, height = 1, label = c_lang.guiLabelKey12},
+		apply1              = {class = "dropdown", name = "u_apply_lines1",                            x = 0, y = 13, width = 6, height = 1, hint = mag.window.lang.message("style_hint1")},
+		comment_mode1       = {class = "checkbox", name = "u_comment_mode1",                           x = 0, y = 14, width = 6, height = 1, label = mag.window.lang.message("comment_mode")},
+		empty_mode1         = {class = "checkbox", name = "u_empty_mode1",                             x = 0, y = 15, width = 6, height = 1, label = mag.window.lang.message("empty_mode")},
+		space_and_punc      = {class = "checkbox", name = "u_space_and_punc",                          x = 0, y = 16, width = 6, height = 1, label = c_lang.guiLabelKey13, hint = c_lang.guiHintKey2},
+		log                 = {class = "checkbox", name = "u_log",                                     x = 0, y = 17, width = 6, height = 1, label = c_lang.guiLabelKey14},
 		},
 		main2               = {
 		                      {class = "label",                                                        x = 0, y = 0,  width = 1, height = 1, label = mag.window.lang.message("apply")},
@@ -319,11 +337,11 @@
 		if lines_index[1] ~= nil then
 		lines_index = mag.sort.index(subs, lines_index)
 		end
-	end	
+	end
 	if c.style or c.style_undefined then
 	styles = mag.list.style(subs)
 	end
-	for n = 1, 18 do mag.array.insert(report_counter, 0) end
+	for n = 1, 20 do mag.array.insert(report_counter, 0) end
 	for i = 1, #lines_index do
 	mag.window.progress(i, #lines_index)
 	index        = lines_index[i]
@@ -331,15 +349,9 @@
 	local result = ""
 	local check  = ""
 	local strip_line, strip_line2, text_len, temp_line
-		if c.time or c.time_cps or c.char or c.char_max then
-		text_len = len(line.text)
-		end
-		if c.char or c.char_max or c.char_range or c.space or c.space_double or c.space_line or c.space_break_line or c.space_punc then
-		strip_line = mag.strip.bracket(line.text)
-		end
-		if c.space or c.space_double or c.space_line or c.space_break_line or c.space_punc then
-		strip_line2 = strip_special(strip_line)
-		end
+	text_len    = len(line.text)
+	strip_line  = mag.strip.bracket(line.text)
+	strip_line2 = strip_special(strip_line)
 		if c.time or c.time_min or c.time_max or c.time_next_min or c.time_cps or c.time_overlap then
 		local dur
 			if line.end_time > line.start_time then
@@ -607,6 +619,53 @@
 		result = mag.string.combine(result, check,                         c_output_signs.formatKey2)
 		check  = ""
 		end
+		if c.punc or c.punc_double then
+			local pis = false
+			if mag.match(strip_line2, "%?%?") then
+			if c.view_report then pis = true end
+			check = mag.string.combine(check, mag.string.format(c_output_signs.key17, "??"), "{%s}, {%s}")
+			end
+			if mag.match(strip_line2, "%!%!") then
+			if c.view_report then pis = true end
+			check = mag.string.combine(check, mag.string.format(c_output_signs.key17, "!!"), "{%s}, {%s}")
+			end
+			if mag.match(strip_line2, ",,") then
+			if c.view_report then pis = true end
+			check = mag.string.combine(check, mag.string.format(c_output_signs.key17, ",,"), "{%s}, {%s}")
+			end
+			if mag.match(strip_line2, "%'%'") then
+			if c.view_report then pis = true end
+			check = mag.string.combine(check, mag.string.format(c_output_signs.key17, "''"), "{%s}, {%s}")
+			end
+			if mag.match(strip_line2, "::") then
+			if c.view_report then pis = true end
+			check = mag.string.combine(check, mag.string.format(c_output_signs.key17, "::"), "{%s}, {%s}")
+			end
+			if mag.match(strip_line2, ";;") then
+			if c.view_report then pis = true end
+			check = mag.string.combine(check, mag.string.format(c_output_signs.key17, ";;"), "{%s}, {%s}")
+			end
+			if mag.match(strip_line2, "\"\"") then
+			if c.view_report then pis = true end
+			check = mag.string.combine(check, mag.string.format(c_output_signs.key17, "\"\""), "{%s}, {%s}")
+			end
+			if mag.match("z" .. strip_line2 .. "z", "[^%.]%.%.[^%.]") then
+			if c.view_report then pis = true end
+			check = mag.string.combine(check, mag.string.format(c_output_signs.key17, ".."), "{%s}, {%s}")
+			end
+			if pis == true then report_counter[19] = report_counter[19] + 1 end
+		end
+		if c.punc or c.punc_missing then
+			if mag.find(mag.reverse(strip_line2 .. " "), "%s+[^%s" .. mag.pattern.punc .. "]") == 1 then
+				check = mag.string.combine(check, mag.string.format(c_output_signs.key17, ".?"), "{%s}, {%s}")
+				if c.view_report then report_counter[20] = report_counter[20] + 1 end
+			end
+		end
+		if check ~= "" then
+		check  = mag.string.combine(check,  c_lang.cModeListShortNameKey6, c_output_signs.formatKey1)
+		result = mag.string.combine(result, check,                         c_output_signs.formatKey2)
+		check  = ""
+		end
 		if result ~= "" then
 		if not pcs then pcs = true end
 		line.effect = mag.string.format("{%s} {%s}", c_lang.out, result)
@@ -616,60 +675,36 @@
 	subs[index] = line
 	end
 	if c.view_report and pcs then
-	local report  = ""
-	local r_group = {g1 = "", g2 = "", g3 = "", g4 = "", g5 = ""}
-	local r_data  = {group_name = "", loop_start = 0, loop_end = 0, total_problem = 0, header = "", hid = 0}
-	local function write_report()
-	for i = r_data.loop_start, r_data.loop_end do
-		if report_counter[i] > 0 then
-		local log_output           = c_lang["logKey"..i]
-		r_group[r_data.group_name] = mag.string.combine(r_group[r_data.group_name], mag.string.format(c_lang.key2, report_counter[i], log_output), "{%1}\n\n\n{%2}")
+	local first_row = false
+		local function write_report(l_start,l_end,g_id)
+		local row_space     = ""
+		local all_err       = ""
+		local total_problem = 0
+			for i = l_start, l_end do
+				if report_counter[i] > 0 then
+				if all_err == "" then row_space = "" else row_space = "\n\n" end
+				local errTitle = c_lang["logKey"..i]
+				all_err       = all_err .. row_space .. mag.string.format(c_lang.key2, report_counter[i], errTitle)
+				total_problem = total_problem + report_counter[i]
+				end
+			end
+			if all_err ~= "" then
+			local err_header = ""
+			local report     = ""
+			err_header = mag.string.format(c_lang.key3,  c_lang["cModeListNameKey"..g_id], total_problem)
+			err_header = mag.string.format("{%1}\n{%2}", err_header,                       mag.string.wall("-", 114))
+			report     = err_header .. "\n" .. all_err
+			if first_row == true then report = "\n\n\n" .. report end
+			mag.show.basic_log(report, "nobreak")
+			if first_row == false then first_row = true end
+			end
 		end
-	end
-	for t = r_data.loop_start, r_data.loop_end do r_data.total_problem = r_data.total_problem + report_counter[t] end
-	if r_data.total_problem > 0 then
-	r_data.header              = mag.string.format(c_lang.key3,                 c_lang["cModeListNameKey"..r_data.hid], r_data.total_problem)
-	r_data.header              = mag.string.format("{%1}\n{%2}",                r_data.header,                          mag.string.wall("-", 114))
-	r_group[r_data.group_name] = mag.string.combine(r_group[r_data.group_name], r_data.header,                          "{%2}\n{%1}")
-	report                     = mag.string.combine(report,                     r_group[r_data.group_name],             "{%1}\n\n\n\n\n\n\n{%2}")
-	end
-	end
-	r_data.group_name    = "g1"
-	r_data.loop_start    = 1
-	r_data.loop_end      = 5
-	r_data.total_problem = 0
-	r_data.header        = ""
-	r_data.hid           = 1
-	write_report()
-	r_data.group_name    = "g2"
-	r_data.loop_start    = 6
-	r_data.loop_end      = 7
-	r_data.total_problem = 0
-	r_data.header        = ""
-	r_data.hid           = 2
-	write_report()
-	r_data.group_name    = "g3"
-	r_data.loop_start    = 8
-	r_data.loop_end      = 15
-	r_data.total_problem = 0
-	r_data.header        = ""
-	r_data.hid           = 3
-	write_report()
-	r_data.group_name    = "g4"
-	r_data.loop_start    = 16
-	r_data.loop_end      = 16
-	r_data.total_problem = 0
-	r_data.header        = ""
-	r_data.hid           = 4
-	write_report()
-	r_data.group_name    = "g5"
-	r_data.loop_start    = 17
-	r_data.loop_end      = 18
-	r_data.total_problem = 0
-	r_data.header        = ""
-	r_data.hid           = 5
-	write_report()
-	mag.show.basic_log(report, "nobreak")
+	write_report(1,  5,  1)
+	write_report(6,  7,  2)
+	write_report(8,  15, 3)
+	write_report(16, 16, 4)
+	write_report(17, 18, 5)
+	write_report(19, 20, 6)
 	end
 	mag.show.no_op(pcs)
 	end
@@ -727,6 +762,9 @@
 	gui.main1.karaoke.value             = c.karaoke
 	gui.main1.ktag_duration.value       = c.ktag_duration
 	gui.main1.ktag_space.value          = c.ktag_space
+	gui.main1.punc.value                = c.punc
+	gui.main1.punc_double.value         = c.punc_double
+	gui.main1.punc_missing.value        = c.punc_missing
 	ok, config                          = mag.window.dialog(gui.main1, c_buttons1)
 	c.time                              = config.u_time
 	c.time_min                          = config.u_time_min
@@ -758,6 +796,9 @@
 	c.karaoke                           = config.u_karaoke
 	c.ktag_duration                     = config.u_ktag_duration
 	c.ktag_space                        = config.u_ktag_space
+	c.punc                              = config.u_punc
+	c.punc_double                       = config.u_punc_double
+	c.punc_missing                      = config.u_punc_missing
 	until ok == mag.convert.ascii(c_buttons1[1]) and c.apply1 ~= mag.window.lang.message("select") or ok == mag.convert.ascii(c_buttons1[2])
 	if ok == mag.convert.ascii(c_buttons1[1]) then
 	check_lines(subs, sel)
