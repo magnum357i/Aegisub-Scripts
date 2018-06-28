@@ -181,7 +181,7 @@
 
 	script_name               = c_lang.s_name
 	script_description        = c_lang.s_desc
-	script_version            = "1"
+	script_version            = "1.0.2"
 	script_author             = "Magnum357"
 	script_mag_version        = "1.1.4.6"
 	script_file_name          = "mag.check_lines"
@@ -231,7 +231,7 @@
 	c.karaoke                 = false
 	c.ktag_duration           = false
 	c.ktag_space              = false
-	c.punc                    = false
+	c.punc                    = true
 	c.punc_double             = false
 	c.punc_missing            = false
 
@@ -536,14 +536,16 @@
 			if punc_count > 0 then if c.view_report then isl = true end check = mag.string.combine(check, mag.string.format(c_output_signs.key16, ", ?", punc_count), "{%s}, {%s}") end
 			punc_count = mag.string.count(strip_line2, "[^%p%s]%;[^%p%s]")
 			if punc_count > 0 then if c.view_report then isl = true end check = mag.string.combine(check, mag.string.format(c_output_signs.key16, "; *", punc_count), "{%s}, {%s}") end
-			punc_count = mag.string.count(strip_line2, "[^%p%s]%:[^%p%s]")
+			punc_count = mag.string.count(strip_line2, "[^%p%s%d]%:[^%p%s]")
 			if punc_count > 0 then if c.view_report then isl = true end check = mag.string.combine(check, mag.string.format(c_output_signs.key16, ": *", punc_count), "{%s}, {%s}") end
-			if mag.find(strip_line2, "%s-%.%.%.%s") == 1 then if c.view_report then isl = true end check = mag.string.combine(check, mag.string.format(c_output_signs.key17, "... "), "{%s}, {%s}") end
-			if mag.find(mag.reverse(strip_line2), "%s-%.%.%.%s") == 1 then if c.view_report then isl = true end check = mag.string.combine(check, mag.string.format(c_output_signs.key17, " ..."), "{%s}, {%s}") end
-			punc_count = mag.string.count(strip_line2, "%-[^%s]")
+			punc_count = mag.string.count(strip_line2, "%-%.*".."["..mag.pattern.uppercase.."]")
 			if punc_count > 0 then if c.view_report then isl = true end check = mag.string.combine(check, mag.string.format(c_output_signs.key16, "- *", punc_count), "{%s}, {%s}") end
-			punc_count = mag.string.count(strip_line2, "[^%s]%-.")
+			punc_count = mag.string.count(strip_line2, "["..mag.pattern.punc.."]".."%-")
 			if punc_count > 0 then if c.view_report then isl = true end check = mag.string.combine(check, mag.string.format(c_output_signs.key16, "* -", punc_count), "{%s}, {%s}") end
+			punc_count = mag.string.count(strip_line2, "["..mag.pattern.lowercase.."]".."%-%s+".."["..mag.pattern.lowercase.."]")
+			if punc_count > 0 then if c.view_report then isl = true end check = mag.string.combine(check, mag.string.format(c_output_signs.key3, "- ", punc_count), "{%s}, {%s}") end
+			punc_count = mag.string.count(strip_line2, "["..mag.pattern.lowercase.."]".."%s+%-".."["..mag.pattern.lowercase.."]")
+			if punc_count > 0 then if c.view_report then isl = true end check = mag.string.combine(check, mag.string.format(c_output_signs.key3, " -", punc_count), "{%s}, {%s}") end
 			if c.view_report and isl then report_counter[15] = report_counter[15] + 1 end
 			end
 		end
@@ -649,7 +651,7 @@
 			if c.view_report then pis = true end
 			check = mag.string.combine(check, mag.string.format(c_output_signs.key17, "\"\""), "{%s}, {%s}")
 			end
-			if mag.match("z" .. strip_line2 .. "z", "[^%.]%.%.[^%.]") then
+			if mag.match("abc"..strip_line2.."abc", "[^%.]%.%s*%.[^%.]") or mag.match("abc"..strip_line2.."abc", "[^%.]%.%s*%.%s*%.%s*%.[^%.]") then
 			if c.view_report then pis = true end
 			check = mag.string.combine(check, mag.string.format(c_output_signs.key17, ".."), "{%s}, {%s}")
 			end
@@ -694,7 +696,7 @@
 			err_header = mag.string.format(c_lang.key3,  c_lang["cModeListNameKey"..g_id], total_problem)
 			err_header = mag.string.format("{%1}\n{%2}", err_header,                       mag.string.wall("-", 114))
 			report     = err_header .. "\n" .. all_err
-			if first_row == true then report = "\n\n\n" .. report end
+			if first_row == true then report = "\n\n\n\n" .. report end
 			mag.show.basic_log(report, "nobreak")
 			if first_row == false then first_row = true end
 			end
