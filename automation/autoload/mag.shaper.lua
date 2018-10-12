@@ -41,6 +41,7 @@
 	in_lang["guiLabelKey13"]       = "Yol:"
 	in_lang["guiLabelKey14"]       = "Sadece resim yolunu değiştir"
 	in_lang["guiLabelKey15"]       = "\"\'{%s}\' butonuna tıklayın.\""
+	in_lang["guiLabelKey16"]       = "Hizalama yönü:"
 	in_lang["guiHintKey1"]         = "Tek bir koordinattaki çizgilerin sayısı."
 	in_lang["key1"]                = "Şekil çizme kodu bulunamadı."
 	in_lang["key2"]                = "Bir resim dosyası seçin"
@@ -51,6 +52,10 @@
 	in_lang["gridTypeListKey1"]    = "Yatay + Dikey"
 	in_lang["gridTypeListKey2"]    = "Yatay"
 	in_lang["gridTypeListKey3"]    = "Dikey"
+	in_lang["shapeAlignListKey1"]  = "Sol"
+	in_lang["shapeAlignListKey2"]  = "Sağ"
+	in_lang["shapeAlignListKey3"]  = "Üst"
+	in_lang["shapeAlignListKey4"]  = "Alt"
 	elseif lang == langs[2].lang_key then
 	in_lang["module_incompatible"] = "The installed version of the Mag module is incompatible with this lua file!\n\nAt least \"%s\" version or higher of the module file is required.\n\n\nWould you like to go to the download page now?"
 	in_lang["module_not_found"]    = "The module named Mag could not be found!\n\nTo use this file, you need to download the module named mag\nand move it to \"Aegisub/automation/include/\" directory when Aegisub is off.\n\n\nDo you want to go to download page now?"
@@ -81,6 +86,7 @@
 	in_lang["guiLabelKey13"]       = "Path:"
 	in_lang["guiLabelKey14"]       = "Just change image path"
 	in_lang["guiLabelKey15"]       = "\"Click on the \'{%s}\' button.\""
+	in_lang["guiLabelKey16"]       = "Align to:"
 	in_lang["guiHintKey1"]         = "The number of lines in a single coordinate."
 	in_lang["key1"]                = "Shape drawing code could not found."
 	in_lang["key2"]                = "Select an image file"
@@ -91,6 +97,10 @@
 	in_lang["gridTypeListKey1"]    = "Horizontal + Vertical"
 	in_lang["gridTypeListKey2"]    = "Horizontal"
 	in_lang["gridTypeListKey3"]    = "Vertical"
+	in_lang["shapeAlignListKey1"]  = "Left"
+	in_lang["shapeAlignListKey2"]  = "Right"
+	in_lang["shapeAlignListKey3"]  = "Top"
+	in_lang["shapeAlignListKey4"]  = "Bottom"
 	end
 	return in_lang, lang_list, script_name_list
 	end
@@ -103,7 +113,7 @@
 	script_name          = c_lang.s_name
 	script_description   = c_lang.s_desc
 	script_author        = "Magnum357"
-	script_version       = "1.4.7"
+	script_version       = "1.5.0"
 	script_mag_version   = "1.1.4.4"
 	script_file_name     = "mag.shaper"
 	script_file_ext      = ".lua"
@@ -117,6 +127,7 @@
 
 	c_lock_gui           = false
 	c_grid_type_list     = {c_lang.gridTypeListKey1, c_lang.gridTypeListKey2, c_lang.gridTypeListKey3}
+	c_shape_align_list   = {mag.window.lang.message("select"), c_lang.shapeAlignListKey1, c_lang.shapeAlignListKey2, c_lang.shapeAlignListKey3, c_lang.shapeAlignListKey4}
 	c_buttons1           = {c_lang.buttonKey3, c_lang.buttonKey4, c_lang.buttonKey5, c_lang.buttonKey2}
 	c_buttons2           = {c_lang.buttonKey1, c_lang.buttonKey2}
 	c_buttons3           = {c_lang.buttonKey6, c_lang.buttonKey7}
@@ -131,6 +142,7 @@
 	c.shape_color        = "#000000"
 	c.shape_transparency = 100
 	c.shape_only         = false
+	c.shape_align        = mag.window.lang.message("select")
 	c.grid_number        = 15
 	c.grid_space         = 30
 	c.grid_thickness     = 2
@@ -166,9 +178,11 @@
 		shape_transparency = {class = "intedit",  name = "u_shape_transparency", min = 1, max = 100, x = 1, y = 2, width = 1, height = 1},
 		                     {class = "label",                                                       x = 0, y = 3, width = 1, height = 1, label = c_lang.guiLabelKey6},
 		shape_color        = {class = "color",    name = "u_shape_color",                            x = 1, y = 3, width = 1, height = 1},
-		shape_only         = {class = "checkbox", name = "u_shape_only",                             x = 1, y = 4, width = 3, height = 1, label = c_lang.guiLabelKey12},
-		                     {class = "label",                                                       x = 0, y = 5, width = 1, height = 1, label = mag.window.lang.message("apply")},
-		                     {class = "label",                                                       x = 1, y = 5, width = 2, height = 1, label = c_lang.key6},
+		                     {class = "label",                                                       x = 0, y = 4, width = 1, height = 1, label = c_lang.guiLabelKey16},
+		shape_align        = {class = "dropdown", name = "u_shape_align",                            x = 1, y = 4, width = 2, height = 1, items = c_shape_align_list},
+		shape_only         = {class = "checkbox", name = "u_shape_only",                             x = 1, y = 5, width = 3, height = 1, label = c_lang.guiLabelKey12},
+		                     {class = "label",                                                       x = 0, y = 6, width = 1, height = 1, label = mag.window.lang.message("apply")},
+		                     {class = "label",                                                       x = 1, y = 6, width = 2, height = 1, label = c_lang.key6},
 		},
 		main3              = {
 		                     {class = "label",                                                       x = 1, y = 0, width = 1, height = 1, label = c_lang.guiLabelKey9},
@@ -245,7 +259,7 @@
 			local width          = mag.floor(c.image_width * xratio)
 			local height         = mag.floor(c.image_height * yratio)
 			local shape          = mag.format("m 0 0 l %s 0 l %s %s l 0 %s l 0 0", width, width, height, height)
-			shape_line           = mag.format("{\\bord0\\shad0\\1img(%s)\\p1}%s", c.image_path, shape)
+			shape_line           = mag.format("{\\an5\\pos(%s,%s)\\bord0\\shad0\\1img(%s)\\p1}%s", xres / 2, yres / 2, c.image_path, shape)
 			else
 			local image_code_pattern = "(\\1img%().-(%))"
 				if mag.find(line.text, image_code_pattern) then
@@ -263,6 +277,9 @@
 	end
 
 	function shaper_mode2(subs,sel,act)
+	if not mag.is.video() then
+	mag.show.log(1, mag.window.lang.message("is_video"))
+	else
 	gui.main1.grid_number.value       = c.grid_number
 	gui.main1.grid_space.value        = c.grid_space
 	gui.main1.grid_thickness.value    = c.grid_thickness
@@ -276,99 +293,143 @@
 	c.grid_transparency               = config.u_grid_transparency
 	c.grid_color                      = config.u_grid_color
 	c.grid_type                       = config.u_grid_type
-	if ok == mag.convert.ascii(c_buttons2[1]) then
-	local shape   = ""
-	local px      = c.grid_thickness
-	local size    = c.grid_space + px
-	local number  = c.grid_number - 1
-		if c.grid_type == c_grid_type_list[1] then
-			for i = 0, number do
-				for k = 0, number - 1 do
-				shape =
-				shape..mag.format("m %s %s l %s %s l %s %s l %s %sm %s %s l %s %s l %s %s l %s %s",
-				px + (0 + k * size), i * size,
-				size + k * size,     i * size,
-				size + k * size,     px + i * size,
-				px + (0 + k * size), px + i * size,
-				size * i,      0 + k * size,
-				size * i,      (size + k * size) + px,
-				px + size * i, (size + k * size) + px,
-				px + size * i, 0 + k * size)
+		if ok == mag.convert.ascii(c_buttons2[1]) then
+		local meta       = karaskel.collect_head(subs)
+		local width      = meta.res_x
+		local height     = meta.res_y
+		local shape      = ""
+		local px         = c.grid_thickness
+		local size       = c.grid_space + px
+		local number     = c.grid_number - 1
+			if c.grid_type == c_grid_type_list[1] then
+				for i = 0, number do
+					for k = 0, number - 1 do
+					shape =
+					shape..mag.format("m %s %s l %s %s l %s %s l %s %sm %s %s l %s %s l %s %s l %s %s",
+					px + (0 + k * size), i * size,
+					size + k * size,     i * size,
+					size + k * size,     px + i * size,
+					px + (0 + k * size), px + i * size,
+					size * i,      0 + k * size,
+					size * i,      (size + k * size) + px,
+					px + size * i, (size + k * size) + px,
+					px + size * i, 0 + k * size)
+					end
 				end
 			end
-		end
-		if c.grid_type == c_grid_type_list[2] then
-			for i = 0, number do
-				for k = 0, number - 1 do
-				shape =
-				shape..mag.format("m %s %s l %s %s l %s %s l %s %s",
-				0 + k * size,    i * size,
-				size + k * size, i * size,
-				size + k * size, px + i * size,
-				0 + k * size,    px + i * size)
+			if c.grid_type == c_grid_type_list[2] then
+				for i = 0, number do
+					for k = 0, number - 1 do
+					shape =
+					shape..mag.format("m %s %s l %s %s l %s %s l %s %s",
+					0 + k * size,    i * size,
+					size + k * size, i * size,
+					size + k * size, px + i * size,
+					0 + k * size,    px + i * size)
+					end
 				end
 			end
-		end
-		if c.grid_type == c_grid_type_list[3] then
-			for i = 0, number do
-				for k = 0, number - 1 do
-				shape =
-				shape..mag.format("m %s %s l %s %s l %s %s l %s %s",
-				size * i,      0 + k * size,
-				size * i,      size + k * size,
-				px + size * i, size + k * size,
-				px + size * i, 0 + k * size)
+			if c.grid_type == c_grid_type_list[3] then
+				for i = 0, number do
+					for k = 0, number - 1 do
+					shape =
+					shape..mag.format("m %s %s l %s %s l %s %s l %s %s",
+					size * i,      0 + k * size,
+					size * i,      size + k * size,
+					px + size * i, size + k * size,
+					px + size * i, 0 + k * size)
+					end
 				end
 			end
+		shape      = mag.gsub(shape, "(%d)(m)", "%1 %2")
+		local line = subs[act]
+		line.text  =
+		mag.format("{\\an5\\pos(%s,%s)\\c%s\\1a&H%s&\\bord0\\shad0\\p1}%s",
+		width / 2,
+		height / 2,
+		mag.convert.html_from_ass(c.grid_color),
+		mag.convert.alpha_from_percent(c.grid_transparency, true),
+		shape)
+		subs[act]  = line
 		end
-	shape      = mag.gsub(shape, "(%d)(m)", "%1 %2")
-	local line = subs[act]
-	line.text  =
-	mag.format("{\\c%s\\1a&H%s&\\bord0\\shad0\\p1}%s",
-	mag.convert.html_from_ass(c.grid_color),
-	mag.convert.alpha_from_percent(c.grid_transparency, true),
-	shape)
-	subs[act]  = line
 	end
 	end
 
 	function shaper_mode3(subs,sel,act)
+	if not mag.is.video() then
+	mag.show.log(1, mag.window.lang.message("is_video"))
+	else
+	c.shape_align                      = mag.array.search_apply(c_shape_align_list, c.shape_align)
 	gui.main2.shape_width.value        = c.shape_width
 	gui.main2.shape_height.value       = c.shape_height
 	gui.main2.shape_transparency.value = c.shape_transparency
 	gui.main2.shape_color.value        = c.shape_color
 	gui.main2.shape_only.value         = c.shape_only
+	gui.main2.shape_align.value        = c.shape_align
 	local ok, config                   = mag.window.dialog(gui.main2, c_buttons2)
 	c.shape_width                      = config.u_shape_width
 	c.shape_height                     = config.u_shape_height
 	c.shape_transparency               = config.u_shape_transparency
 	c.shape_color                      = config.u_shape_color
 	c.shape_only                       = config.u_shape_only
-	if ok == mag.convert.ascii(c_buttons2[1]) then
-	local line  = subs[act]
-	local shape = mag.format("m 0 0 l %s 0 l %s %s l 0 %s l 0 0",
-	c.shape_width,
-	c.shape_width,
-	c.shape_height,
-	c.shape_height)
-	local shape_line
-		if not c.shape_only then
-		shape_line =
-		mag.format("{\\c%s\\1a&H%s&\\bord0\\shad0\\p1}%s",
-		mag.convert.html_from_ass(c.shape_color),
-		mag.convert.alpha_from_percent(c.shape_transparency, true),
-		shape)
-		else
-		local shape_code_pattern = "m%s[%d%.]*%s[%d%.]*%s[%d%s%.lbm]*"
-			if mag.find(line.text, shape_code_pattern) then
-			shape_line = mag.gsub(line.text, shape_code_pattern, shape)
+	c.shape_align                      = config.u_shape_align
+		if ok == mag.convert.ascii(c_buttons2[1]) then
+		local line  = subs[act]
+		local shape = mag.format("m 0 0 l %s 0 l %s %s l 0 %s l 0 0",
+		c.shape_width,
+		c.shape_width,
+		c.shape_height,
+		c.shape_height)
+		local shape_line
+			if not c.shape_only then
+			local meta       = karaskel.collect_head(subs)
+			local width      = meta.res_x
+			local height     = meta.res_y
+			local align_data = mag.format("\\an%s\\pos(%s,%s)",
+				5,
+				width / 2,
+				height / 2)
+					if c.shape_align ~= mag.window.lang.message("select") then
+						if c.shape_align == c_shape_align_list[2] then
+						align_data = mag.format("\\an%s\\pos(%s,%s)",
+							4,
+							0,
+							height / 2)
+						elseif c.shape_align == c_shape_align_list[3] then
+						align_data = mag.format("\\an%s\\pos(%s,%s)",
+							6,
+							width,
+							height / 2)
+						elseif c.shape_align == c_shape_align_list[4] then
+						align_data = mag.format("\\an%s\\pos(%s,%s)",
+							8,
+							width / 2,
+							0)
+						elseif c.shape_align == c_shape_align_list[5] then
+						align_data = mag.format("\\an%s\\pos(%s,%s)",
+							2,
+							width / 2,
+							height)
+						end
+					end
+			shape_line =
+			mag.format("{%s\\c%s\\1a&H%s&\\bord0\\shad0\\p1}%s",
+			align_data,
+			mag.convert.html_from_ass(c.shape_color),
+			mag.convert.alpha_from_percent(c.shape_transparency, true),
+			shape)
 			else
-			mag.show.log(1, c_lang.key1)
+			local shape_code_pattern = "m%s[%d%.]*%s[%d%.]*%s[%d%s%.lbm]*"
+				if mag.find(line.text, shape_code_pattern) then
+				shape_line = mag.gsub(line.text, shape_code_pattern, shape)
+				else
+				mag.show.log(1, c_lang.key1)
+				end
 			end
-		end
-		if shape_line ~= nil then
-		line.text = shape_line
-		subs[act] = line
+			if shape_line ~= nil then
+			line.text = shape_line
+			subs[act] = line
+			end
 		end
 	end
 	end
