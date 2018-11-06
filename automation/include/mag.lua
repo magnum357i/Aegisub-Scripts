@@ -1,5 +1,5 @@
 ﻿	mag_module_name    = "Mag"
-	mag_module_version = "1.1.4.6"
+	mag_module_version = "1.1.4.7"
 	mag_module_author  = "Magnum357"
 
 	if include_unicode   == true then unicode   = require 'aegisub.unicode'   end
@@ -132,12 +132,6 @@
 	end
 	end
 	----------------------------------------------
-	out_message("tr", "log_mOk",                  "YAPILDI")
-	out_message("en", "log_mOk",                  "DONE")
-	----------------------------------------------
-	out_message("tr", "log_mError",               "BAŞARISIZ")
-	out_message("en", "log_mError",               "FAIL")
-	----------------------------------------------
 	out_message("tr", "guilabel1",                "Tüm kullanılabilir diller:")
 	out_message("en", "guilabel1",                "All available languages:")
 	----------------------------------------------
@@ -189,6 +183,12 @@
 	out_message("tr", "log_note",                 "NOT")
 	out_message("en", "log_note",                 "NOTE")
 	----------------------------------------------
+	out_message("tr", "log_success",              "YAPILDI")
+	out_message("en", "log_success",              "DONE")
+	----------------------------------------------
+	out_message("tr", "log_fail",                 "BAŞARISIZ")
+	out_message("en", "log_fail",                 "FAIL")
+	----------------------------------------------
 	out_message("tr", "no_file",                  "Belirtilen dosya bulunamadı.")
 	out_message("en", "no_file",                  "The specified file not found.")
 	----------------------------------------------
@@ -212,6 +212,12 @@
 	----------------------------------------------
 	out_message("tr", "text_file_type",           "Metin dosyası (*.txt)|*.txt")
 	out_message("en", "text_file_type",           "Text file (*.txt)|*.txt")
+	----------------------------------------------
+	out_message("tr", "ass_file_type",            "Altyazı dosyası (*.ass)|*.ass")
+	out_message("en", "ass_file_type",            "Subtitle file (*.ass)|*.ass")
+	----------------------------------------------
+	out_message("tr", "srt_file_type",            "Altyazı dosyası (*.srt)|*.srt")
+	out_message("en", "srt_file_type",            "Subtitle file (*.srt)|*.srt")
 	----------------------------------------------
 	out_message("tr", "error_config_file_write",  "Ayar dosyası oluşturulamadı.")
 	out_message("en", "error_config_file_write",  "Config file not create.")
@@ -719,7 +725,7 @@
 		hour = mag.floor(min / 60)
 		min = min - hour * 60
 		end
-	hour, min, sec, ms = hour / 100, mag.convert.zero(10, min), mag.convert.zero(10, sec), mag.convert.zero(10, ms)
+	hour, min, sec, ms = mag.gsub(hour / 100, "^[0%.]+", ""), mag.convert.zero(10, min), mag.convert.zero(10, sec), mag.convert.zero(10, ms)
 	time = mag.format("%s:%s:%s.%s", hour, min, sec, ms)
 	end
 	return time
@@ -993,7 +999,7 @@
 	alert = nil
 	end
 	if alert ~= nil then
-		if alert > 3 or alert < 1 then
+		if alert > 5 or alert < 1 then
 		alert = nil
 		end
 	end
@@ -1001,6 +1007,8 @@
 	if alert == 1 then alert_message = mag.window.lang.message("log_error")   end
 	if alert == 2 then alert_message = mag.window.lang.message("log_warning") end
 	if alert == 3 then alert_message = mag.window.lang.message("log_note")    end
+	if alert == 4 then alert_message = mag.window.lang.message("log_success") end
+	if alert == 5 then alert_message = mag.window.lang.message("log_fail")    end
 	end
 	if alert ~= nil then
 	result = mag.format("[%s]\n%s\n%s\n", alert_message, mag.s(str), divide)
@@ -1105,7 +1113,7 @@
 	--total_line = mag.index.total(subs)
 	function mag.index.total(subs)
 	local first_index = mag.index.first(subs) - 1
-	return #subs - first_index 
+	return #subs - first_index
 	end
 
 	--selected_lines = mag.index.sel(subs, sel)
@@ -1374,6 +1382,12 @@
 		end
 	end
 	end
+
+	--mag.config.put(gui.main)
+	function mag.config.put(gui_var) for key, value in pairs(gui_var) do if not mag.is.number(key) then gui_var[key].value = c[key] end end end
+
+	--mag.config.put(config)
+	function mag.config.take(config_var) for key, value in pairs(config_var) do c[key] = config_var[key] end end
 
 	--apply_item = mag.array.search_apply(appy_items, "Default")
 	function mag.array.search_apply(items,search)
