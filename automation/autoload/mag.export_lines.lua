@@ -21,14 +21,18 @@
 	in_lang["sub_menu"]            = langs[1].sub_menu
 	in_lang["s_name"]              = langs[1].script_name
 	in_lang["s_desc"]              = "Belirli filtrelere göre seçilmiş satırların olduğu yeni bir altyazı dosyası oluşturur."
-	in_lang["buttonKey1"]          = "ASS olaraK kaydet"
+	in_lang["buttonKey1"]          = "ASS olarak kaydet"
 	in_lang["buttonKey2"]          = "Kapat"
 	in_lang["buttonKey3"]          = "SRT olarak kaydet"
 	in_lang["guiLabel1"]           = "Oyuncu"
 	in_lang["guiLabel2"]           = "Efekt"
 	in_lang["guiLabel3"]           = "Stil"
 	in_lang["guiHeader1"]          = "FİLTRELER"
-	in_lang["msgSuccess"]          = "Yeni bir altyazı başarıyla oluşturuldu. Dosyanızın yolu: {%s}"
+	in_lang["msgCalculatingLines"] = "Satırlar hesaplanıyor..."
+	in_lang["msgDataReceive"]      = "Veri alındı. Toplam {%s} satır."
+	in_lang["msgNoData"]           = "Hiçbir veri bulunamadı."
+	in_lang["msgSuccess"]          = "Yeni bir altyazı başarıyla oluşturuldu."
+	in_lang["msgNewFile"]          = "Dosyanızın yolu: {%s}"
 	in_lang["txtMatchMode1"]       = "tamamı"
 	in_lang["txtMatchMode2"]       = "normal"
 	in_lang["txtMatchMode3"]       = "regex"
@@ -47,7 +51,11 @@
 	in_lang["guiLabel2"]           = "Effect"
 	in_lang["guiLabel3"]           = "Style"
 	in_lang["guiHeader1"]          = "FILTERS"
-	in_lang["msgSuccess"]          = "A new subtitle file created successfully. The path of your file: {%s}"
+	in_lang["msgCalculatingLines"] = "Calculating lines..."
+	in_lang["msgDataReceive"]      = "Data received. Total {%s:# [line][lines]}."
+	in_lang["msgNoData"]           = "No data found."
+	in_lang["msgSuccess"]          = "A new subtitle file created successfully."
+	in_lang["msgNewFile"]          = "The path of your file: {%s}"
 	in_lang["txtMatchMode1"]       = "whole word"
 	in_lang["txtMatchMode2"]       = "normal"
 	in_lang["txtMatchMode3"]       = "regex"
@@ -63,15 +71,13 @@
 
 	script_name         = c_lang.s_name
 	script_description  = c_lang.s_desc
-	script_version      = "1"
+	script_version      = "1.0.1"
 	script_author       = "Magnum357"
 	script_mag_version  = "1.1.4.7"
 	script_file_name    = "mag.export_lines"
 	script_file_ext     = ".lua"
 
 	include_unicode     = true
-	include_clipboard   = true
-	include_karaskel    = true
 	mag_import, mag     = pcall(require, "mag")
 
 	if mag_import then
@@ -111,6 +117,7 @@
 	local pcs                = false
 	local pass               = 0
 	local passed             = 0
+	local count              = 0
 	local clean_style_filter = mag.strip.apply(c.style_filter)
 	if c.use_style_filter == true and clean_style_filter ~= mag.window.lang.message("select") then
 	lines_index = mag.line.index(subs, sel, c.style_filter, false, true)
@@ -170,16 +177,17 @@
 			passed = passed + 1
 			end
 		end
-	if c.use_style_filter  == true and clean_style_filter ~= mag.window.lang.message("select")     then passed = passed + 1 end
+	if c.use_style_filter  == true and clean_style_filter ~= mag.window.lang.message("select") then passed = passed + 1 end
 		if passed > 0 and pass == passed then
 		if not pcs then pcs = true end
+		count = count + 1
 		mag.array.insert(content.lines, line_break..line.raw)
 		line_break = "\n"
 		end
 	end
 	mag.show.no_op(pcs)
 	if #content.lines > 0 then
-	return mag.string.format("[Script Info]\n{%s}\n\n[V4+ Styles]\n{%s}{%s}\n\n[Events]\n{%s}\n{%s}", mag.array.concat(content.info), content.styles_format, mag.array.concat(content.styles), content.events_format, mag.array.concat(content.lines))
+	return mag.string.format("[Script Info]\n{%s}\n\n[V4+ Styles]\n{%s}{%s}\n\n[Events]\n{%s}\n{%s}", mag.array.concat(content.info), content.styles_format, mag.array.concat(content.styles), content.events_format, mag.array.concat(content.lines)), count
 	else
 	return nil
 	end
@@ -247,7 +255,7 @@
 		end
 	end
 	mag.show.no_op(pcs)
-	if #content > 0 then return mag.array.concat(content) else return nil end
+	if #content > 0 then return mag.array.concat(content), count else return nil end
 	end
 
 	function ass_time_to_srt_time(time)
@@ -322,20 +330,25 @@
 	if ok == mag.convert.ascii(c_buttons1[1]) or ok == mag.convert.ascii(c_buttons1[2]) then
 		if export_file then
 		local data
+		mag.show.log(c_lang.msgCalculatingLines)
 			if ok == mag.convert.ascii(c_buttons1[1]) then
-			data = export_data_ass(subs, sel)
+			data, count = export_data_ass(subs, sel)
 			elseif ok == mag.convert.ascii(c_buttons1[2]) then
-			data = export_data_srt(subs, sel)
+			data, count = export_data_srt(subs, sel)
 			end
 			if data ~= nil then
+			mag.show.log(mag.string.format(c_lang.msgDataReceive, count))
 			local file = io.open(export_file, "w")
 				if not file then
 				mag.show.log(1, mag.window.lang.message("error_write_file"))
 				else
-				mag.show.log(4,  mag.string.format(c_lang.msgSuccess, export_file))
 				file:write(data)
 				file:close()
+				mag.show.log(4, c_lang.msgSuccess)
+				mag.show.log(3, mag.string.format(c_lang.msgNewFile, export_file))
 				end
+			else
+			mag.show.log(1, c_lang.msgNoData)
 			end
 		end
 	end
