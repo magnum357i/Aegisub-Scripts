@@ -31,9 +31,9 @@
 	in_lang["buttonKey2"]          = "Kapat"
 	in_lang["buttonKey3"]          = "Kaldır"
 	in_lang["guiLabelKey1"]        = "Çoğaltma kipi:"
-	in_lang["guiLabelKey2"]        = "Satırları başlangıç zamanına göre sırala"
-	in_lang["outKey1"]             = "["..langs[1].script_name.."]"
-	in_lang["outKey2"]             = "[#"..langs[1].script_name.."]"
+	in_lang["outKey1"]             = "[SÇ] Değiştirildi"
+	in_lang["outKey2"]             = "[SÇ] Hedef"
+	in_lang["outKey3"]             = "[SÇ] Kaynak"
 	elseif lang == langs[2].lang_key then
 	in_lang["module_incompatible"] = "The installed version of the Mag module is incompatible with this lua file!\n\nAt least \"%s\" version or higher of the module file is required.\n\n\nWould you like to go to the download page now?"
 	in_lang["module_not_found"]    = "The module named Mag could not be found!\n\nTo use this file, you need to download the module named mag\nand move it to \"Aegisub/automation/include/\" directory when Aegisub is off.\n\n\nDo you want to go to download page now?"
@@ -53,8 +53,9 @@
 	in_lang["buttonKey3"]          = "Remove"
 	in_lang["guiLabelKey1"]        = "Duplicate mode:"
 	in_lang["guiLabelKey2"]        = "Sort lines by start time"
-	in_lang["outKey1"]             = "["..langs[2].script_name.."]"
-	in_lang["outKey2"]             = "[#"..langs[2].script_name.."]"
+	in_lang["outKey1"]             = "[DL] Changed"
+	in_lang["outKey2"]             = "[DL] Target"
+	in_lang["outKey3"]             = "[DL] Source"
 	end
 	return in_lang, lang_list, script_name_list, sub_menu_list
 	end
@@ -68,8 +69,8 @@
 	script_name        = c_lang.s_name
 	script_description = c_lang.s_desc
 	script_author      = "Magnum357"
-	script_version     = "3.1.8"
-	script_mag_version = "1.1.4.4"
+	script_version     = "3.2.0"
+	script_mag_version = "1.1.4.7"
 	script_file_name   = "mag.duplicate_lines"
 	script_file_ext    = ".lua"
 
@@ -81,8 +82,6 @@
 	mag.lang           = c_lang_switch
 
 	c_lock_gui         = false
-	c_output_message1  = c_lang.outKey1
-	c_output_message2  = c_lang.outKey2
 	c_dmode_list       = {mag.window.lang.message("select"), c_lang.dModeListKey1, c_lang.dModeListKey2, c_lang.dModeListKey3, c_lang.dModeListKey4}
 	c_buttons1         = {c_lang.buttonKey1, c_lang.buttonKey2}
 	c_buttons2         = {c_lang.buttonKey3, c_lang.buttonKey2}
@@ -97,17 +96,17 @@
 
 	gui                = {
 		main1        = {
-		               {class = "label",                             x = 0, y = 0, width = 1, height = 1, label = c_lang.guiLabelKey1},
-		dmode        = {class = "dropdown", name = "u_dmode",        x = 1, y = 0, width = 1, height = 1},
-		               {class = "label",                             x = 0, y = 1, width = 1, height = 1, label = mag.window.lang.message("apply")},
-		apply1       = {class = "dropdown", name = "u_apply_lines1", x = 1, y = 1, width = 1, height = 1, hint  = mag.window.lang.message("style_hint1")},
-		comment_mode = {class = "checkbox", name = "u_comment_mode", x = 1, y = 2, width = 1, height = 1, label = mag.window.lang.message("comment_mode")},
-		empty_mode   = {class = "checkbox", name = "u_empty_mode",   x = 1, y = 3, width = 1, height = 1, label = mag.window.lang.message("empty_mode")},
-		sort_lines   = {class = "checkbox", name = "u_sort_lines",   x = 1, y = 4, width = 1, height = 1, label = c_lang.guiLabelKey2},
+		               {class = "label",                           x = 0, y = 0, width = 1, height = 1, label = c_lang.guiLabelKey1},
+		dmode_select = {class = "dropdown", name = "dmode_select", x = 1, y = 0, width = 1, height = 1},
+		               {class = "label",                           x = 0, y = 1, width = 1, height = 1, label = mag.window.lang.message("apply")},
+		apply1       = {class = "dropdown", name = "apply1",       x = 1, y = 1, width = 1, height = 1, hint  = mag.window.lang.message("style_hint1")},
+		comment_mode = {class = "checkbox", name = "comment_mode", x = 1, y = 2, width = 1, height = 1, label = mag.window.lang.message("comment_mode")},
+		empty_mode   = {class = "checkbox", name = "empty_mode",   x = 1, y = 3, width = 1, height = 1, label = mag.window.lang.message("empty_mode")},
+		sort_lines   = {class = "checkbox", name = "sort_lines",   x = 1, y = 4, width = 1, height = 1, label = c_lang.guiLabelKey2},
 		},
 		main2        = {
-		               {class = "label",                             x = 0, y = 0, width = 1, height = 1, label = mag.window.lang.message("apply")},
-		apply2       = {class = "dropdown", name = "u_apply_lines2", x = 1, y = 0, width = 1, height = 1, hint  = mag.window.lang.message("style_hint1")},
+		               {class = "label",                     x = 0, y = 0, width = 1, height = 1, label = mag.window.lang.message("apply")},
+		apply2       = {class = "dropdown", name = "apply2", x = 1, y = 0, width = 1, height = 1, hint  = mag.window.lang.message("style_hint1")},
 		}
 	}
 	end
@@ -125,7 +124,7 @@
 		index       = lines_index[i]
 		line        = subs[index]
 		line.text   = mag.format("%s{%s}", line.text, strip(line.text))
-		line.effect = c_output_message1
+		line.effect = c_lang.outKey1
 		subs[index] = line
 		end
 	if pcs then jlines = lines_index end
@@ -137,7 +136,7 @@
 		index       = lines_index[i]
 		line        = subs[index]
 		line.text   = mag.format("{%s}", strip(line.text))
-		line.effect = c_output_message1
+		line.effect = c_lang.outKey1
 		subs[index] = line
 		end
 	if pcs then jlines = lines_index end
@@ -147,8 +146,10 @@
 	local dlines = {}
 		for i = 1, #lines_index do
 		mag.window.progress(i, #lines_index)
-		index = lines_index[i]
-		line  = subs[index]
+		index       = lines_index[i]
+		line        = subs[index]
+		line.effect = c_lang.outKey3
+		subs[index] = line
 		mag.array.insert(dlines, line)
 		end
 		for i = 1, #lines_index do
@@ -158,7 +159,7 @@
 		line      = dlines[i]
 		l         = table.copy(line)
 		l.comment = true
-		l.effect  = c_output_message2
+		l.effect  = c_lang.outKey2
 		l.text    = strip(l.text)
 		j         = j + 1
 		subs.insert(index + j, l)
@@ -170,8 +171,10 @@
 	local dlines = {}
 		for i = 1, #lines_index do
 		mag.window.progress(i, #lines_index)
-		index = lines_index[i]
-		line  = subs[index]
+		index       = lines_index[i]
+		line        = subs[index]
+		line.effect = c_lang.outKey3
+		subs[index] = line
 		mag.array.insert(dlines, line)
 		end
 	local last_index = lines_index[#lines_index]
@@ -181,7 +184,7 @@
 		line      = dlines[i]
 		l         = table.copy(line)
 		l.comment = true
-		l.effect  = c_output_message2
+		l.effect  = c_lang.outKey2
 		l.text    = strip(l.text)
 		j         = j + 1
 		subs.insert(last_index + j, l)
@@ -202,7 +205,7 @@
 	mag.window.progress(i, #lines_index)
 	index = lines_index[i]
 	line  = subs[index]
-		if line.effect == c_output_message1 then
+		if line.effect == c_lang.outKey1 then
 		local trim1, trim2 = mag.string.last_find(line.text, "{"), mag.string.last_find(line.text, "}")
 			if trim1 and trim2 then
 				if trim2 > trim1 then
@@ -215,9 +218,13 @@
 				subs[index] = line
 				end
 			end
-		elseif line.effect == c_output_message2 then
+		elseif line.effect == c_lang.outKey2 then
 		if not pcs then pcs = true end
 		subs.delete(index)
+		elseif line.effect == c_lang.outKey3 then
+		if not pcs then pcs = true end
+		line.effect = ""
+		subs[index] = line
 		end
 	end
 	mag.show.no_op(pcs, "effect", mag.string.format("{%s}, {%s}", c_lang.outKey1, c_lang.outKey2))
@@ -230,23 +237,15 @@
 	end
 
 	function add_macro1(subs,sel)
-	local apply_items      = mag.list.full_apply(subs, sel, "comment")
-	c.apply1               = mag.array.search_apply(apply_items, c.apply1)
-	gui.main1.apply1.items = apply_items
-	gui.main1.dmode.items  = c_dmode_list
+	local apply_items            = mag.list.full_apply(subs, sel, "comment")
+	c.apply1                     = mag.array.search_apply(apply_items, c.apply1)
+	gui.main1.apply1.items       = apply_items
+	gui.main1.dmode_select.items = c_dmode_list
 	local ok, config
 	repeat
-	gui.main1.sort_lines.value   = c.sort_lines
-	gui.main1.dmode.value        = c.dmode_select
-	gui.main1.apply1.value       = c.apply1
-	gui.main1.comment_mode.value = c.comment_mode
-	gui.main1.empty_mode.value   = c.empty_mode
-	ok, config                   = mag.window.dialog(gui.main1, c_buttons1)
-	c.sort_lines                 = config.u_sort_lines
-	c.dmode_select               = config.u_dmode
-	c.apply1                     = config.u_apply_lines1
-	c.comment_mode               = config.u_comment_mode
-	c.empty_mode                 = config.u_empty_mode
+	mag.config.put(gui.main1)
+	ok, config = mag.window.dialog(gui.main1, c_buttons1)
+	mag.config.take(config)
 	until ok == mag.convert.ascii(c_buttons1[1]) and c.dmode_select ~= mag.window.lang.message("select") and c.apply1 ~= mag.window.lang.message("select") or ok == mag.convert.ascii(c_buttons1[2])
 	if ok == mag.convert.ascii(c_buttons1[1]) then
 	return duplicate_lines(subs, sel)
@@ -259,9 +258,9 @@
 	gui.main2.apply2.items = apply_items
 	local ok, config
 	repeat
-	gui.main2.apply2.value = c.apply2
-	ok, config             = mag.window.dialog(gui.main2, c_buttons2)
-	c.apply2               = config.u_apply_lines2
+	mag.config.put(gui.main2)
+	ok, config = mag.window.dialog(gui.main2, c_buttons2)
+	mag.config.take(config)
 	until ok == mag.convert.ascii(c_buttons2[1]) and c.apply2 ~= mag.window.lang.message("select") or ok == mag.convert.ascii(c_buttons2[2])
 	if ok == mag.convert.ascii(c_buttons2[1]) then
 	remove_duplicate_lines(subs, sel)
