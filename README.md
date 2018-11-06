@@ -19,15 +19,16 @@
   - [**(6) Create Lines**](#create-lines)
   - [**(7) Delete Lines**](#delete-lines)
   - [**(8) Duplicate Lines**](#duplicate-lines)
-  - [**(9) Format Lines**](#format-lines)
-  - [**(10) HTML TABLE From ASS**](#html-table-from-ass)
-  - [**(11) K Char**](#k-char)
-  - [**(12) Line Statistics**](#line-statistics)
-  - [**(13) Measure Lines**](#measure-lines)
-  - [**(14) Select Lines**](#select-lines)
-  - [**(15) Shaper**](#shaper)
-  - [**(16) Strip Lines**](#strip-lines)
-  - [**(17) Typewriter**](#typewriter)
+  - [**(9) Export Lines**](#export-lines)
+  - [**(10) Format Lines**](#format-lines)
+  - [**(11) HTML TABLE From ASS**](#html-table-from-ass)
+  - [**(12) K Char**](#k-char)
+  - [**(13) Line Statistics**](#line-statistics)
+  - [**(14) Measure Lines**](#measure-lines)
+  - [**(15) Select Lines**](#select-lines)
+  - [**(16) Shaper**](#shaper)
+  - [**(17) Strip Lines**](#strip-lines)
+  - [**(18) Typewriter**](#typewriter)
 - [**(D) ASS Files**](#ass-files)
   - [**(1) Autotags**](#autotags)
   - [**(2) Color Fade**](#color-fade)
@@ -127,6 +128,9 @@ Deletes lines by style, actor or effect.
 ### [Duplicate Lines](automation/autoload/mag.duplicate_lines.lua)
 Provides translation mode by duplicating lines.
 
+### [Export Lines](automation/autoload/mag.export_lines.lua)
+Creates a new subtitle file with selected lines based on specific filters.
+
 ### [Format Lines](automation/autoload/mag.format_lines.lua)
 Adds italic, alignment and transparency tags.
 
@@ -197,15 +201,16 @@ Positions kanji characters vertically.
   - [**(6) Create Lines**](#create-lines)
   - [**(7) Delete Lines**](#delete-lines)
   - [**(8) Duplicate Lines**](#duplicate-lines)
-  - [**(9) Format Lines**](#format-lines)
-  - [**(10) HTML TABLE From ASS**](#html-table-from-ass)
-  - [**(11) K Char**](#k-char)
-  - [**(12) Line Statistics**](#line-statistics)
-  - [**(13) Measure Lines**](#measure-lines)
-  - [**(14) Select Lines**](#select-lines)
-  - [**(15) Shaper**](#shaper)
-  - [**(16) Strip Lines**](#strip-lines)
-  - [**(17) Typewriter**](#typewriter)
+  - [**(9) Export Lines**](#export-lines)
+  - [**(10) Format Lines**](#format-lines)
+  - [**(11) HTML TABLE From ASS**](#html-table-from-ass)
+  - [**(12) K Char**](#k-char)
+  - [**(13) Line Statistics**](#line-statistics)
+  - [**(14) Measure Lines**](#measure-lines)
+  - [**(15) Select Lines**](#select-lines)
+  - [**(16) Shaper**](#shaper)
+  - [**(17) Strip Lines**](#strip-lines)
+  - [**(18) Typewriter**](#typewriter)
 - [**(D) ASS Dosyaları**](#ass-dosyalar%C4%B1)
   - [**(1) Autotags**](#autotags)
   - [**(2) Color Fade**](#color-fade)
@@ -312,6 +317,10 @@ Wrap Text (ass)
 ### [Duplicate Lines](automation/autoload/mag.duplicate_lines.lua)
 - **Türkçe adı:** Satır Çoğalt
 - **Açıklama:** Satırları çoğaltarak çeviri kipi imkanı sunar.
+
+### [Export Lines](automation/autoload/mag.export_lines.lua)
+- **Türkçe adı:** Satırları Dışa Aktar
+- **Açıklama:** Belirli filtrelere göre seçilmiş satırların olduğu yeni bir altyazı dosyası oluşturur.
 
 ### [Format Lines](automation/autoload/mag.format_lines.lua)
 - **Türkçe adı:** Satır Biçimlendir
