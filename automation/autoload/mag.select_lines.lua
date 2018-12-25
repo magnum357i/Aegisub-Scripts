@@ -45,6 +45,10 @@
 	in_lang["tabKey22"]            = "Tek Haneli Satırlar"
 	in_lang["tabKey23"]            = "Çift Haneli Satırlar"
 	in_lang["tabKey24"]            = "Seçilmemiş Satırlar"
+	in_lang["tabKey25"]            = "Yorum olmayan"
+	in_lang["tabKey26"]            = "Yorum"
+	in_lang["tabKey27"]            = "Boş"
+	in_lang["tabKey28"]            = "Satır Tipi"
 	in_lang["guiLabelKey1"]        = "Başlangıç noktası:"
 	in_lang["guiLabelKey2"]        = "Bitiş noktası:"
 	in_lang["guiLabelKey3"]        = "Satır numarası:"
@@ -91,6 +95,10 @@
 	in_lang["tabKey22"]            = "Odd numbered lines"
 	in_lang["tabKey23"]            = "Even numbered lines"
 	in_lang["tabKey24"]            = "Reverse"
+	in_lang["tabKey25"]            = "Uncomment"
+	in_lang["tabKey26"]            = "Comment"
+	in_lang["tabKey27"]            = "Empty"
+	in_lang["tabKey28"]            = "Line Type"
 	in_lang["guiLabelKey1"]        = "Starting point:"
 	in_lang["guiLabelKey2"]        = "Ending point:"
 	in_lang["guiLabelKey3"]        = "Line number:"
@@ -117,7 +125,7 @@
 
 	script_name        = c_lang.s_name
 	script_description = c_lang.s_desc
-	script_version     = "1.6.0"
+	script_version     = "1.6.1"
 	script_author      = "Magnum357"
 	script_mag_version = "1.1.4.4"
 	script_file_name   = "mag.select_lines"
@@ -323,7 +331,7 @@
 	function line_numb_jumping(subs)
 	local total_line      = mag.index.total(subs)
 	gui.main2.linej.max   = total_line
-	gui.main2.linej.value = c.linej	
+	gui.main2.linej.value = c.linej
 	local ok, config      = mag.window.dialog(gui.main2, c_buttons2)
 	c.linej               = config.u_linej
 	if ok == mag.convert.ascii(c_buttons2[1]) then
@@ -532,6 +540,42 @@
 	return index
 	end
 
+	function uncomment_lines(subs)
+	local index = {}
+	for i = 1, #subs do
+		if subs[i].class == "dialogue" then
+			if mag.is.line.comment(subs[i]) == false then
+				mag.array.insert(index, i)
+			end
+		end
+	end
+	return index
+	end
+
+	function comment_lines(subs)
+	local index = {}
+	for i = 1, #subs do
+		if subs[i].class == "dialogue" then
+			if mag.is.line.comment(subs[i]) == true then
+				mag.array.insert(index, i)
+			end
+		end
+	end
+	return index
+	end
+
+	function empty_lines(subs)
+	local index = {}
+	for i = 1, #subs do
+		if subs[i].class == "dialogue" then
+			if mag.is.line.empty(subs[i]) == true then
+				mag.array.insert(index, i)
+			end
+		end
+	end
+	return index
+	end
+
 	function check_macro1(subs,sel,act)
 	if c_lock_gui then
 	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
@@ -730,6 +774,36 @@
 	end
 	end
 
+	function check_macro20(subs,sel)
+	if c_lock_gui then
+	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
+	else
+	local fe, fee = pcall(uncomment_lines, subs, sel)
+	mag.window.funce(fe, fee)
+	return fee
+	end
+	end
+
+	function check_macro21(subs,sel)
+	if c_lock_gui then
+	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
+	else
+	local fe, fee = pcall(comment_lines, subs, sel)
+	mag.window.funce(fe, fee)
+	return fee
+	end
+	end
+
+	function check_macro22(subs,sel)
+	if c_lock_gui then
+	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
+	else
+	local fe, fee = pcall(empty_lines, subs, sel)
+	mag.window.funce(fe, fee)
+	return fee
+	end
+	end
+
 	function mag_redirect_gui()
 	local mag_module_link = "https://github.com/magnum357i/Magnum-s-Aegisub-Scripts"
 	local k = aegisub.dialog.display({{class = "label", label = mag_gui_message}}, {c_lang.module_yes, c_lang.module_no})
@@ -745,19 +819,27 @@
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey1.."/"..c_lang.tabKey7,  check_macro2)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey1.."/"..c_lang.tabKey8,  check_macro3)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey1.."/"..c_lang.tabKey9,  check_macro4)
+
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey2.."/"..c_lang.tabKey10, check_macro5)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey2.."/"..c_lang.tabKey11, check_macro6)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey2.."/"..c_lang.tabKey12, check_macro7)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey2.."/"..c_lang.tabKey13, check_macro8)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey2.."/"..c_lang.tabKey14, check_macro9)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey2.."/"..c_lang.tabKey15, check_macro10)
+
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey3.."/"..c_lang.tabKey16, check_macro11)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey3.."/"..c_lang.tabKey17, check_macro12)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey3.."/"..c_lang.tabKey18, check_macro13)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey3.."/"..c_lang.tabKey19, check_macro14)
+
+		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey28.."/"..c_lang.tabKey25, check_macro20)
+		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey28.."/"..c_lang.tabKey26, check_macro21)
+		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey28.."/"..c_lang.tabKey27, check_macro22)
+
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey4.."/"..c_lang.tabKey20, check_macro15)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey4.."/"..c_lang.tabKey21, check_macro16)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey5.."/"..c_lang.tabKey22, check_macro17)
+
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey5.."/"..c_lang.tabKey23, check_macro18)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey5.."/"..c_lang.tabKey24, check_macro19)
 		mag.window.lang.register(c_sub_name_list[c_lang_switch])
