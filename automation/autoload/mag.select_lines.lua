@@ -42,13 +42,15 @@
 	in_lang["tabKey19"]            = "Atlama"
 	in_lang["tabKey20"]            = "Aralık"
 	in_lang["tabKey21"]            = "Atlama"
-	in_lang["tabKey22"]            = "Tek Haneli Satırlar"
-	in_lang["tabKey23"]            = "Çift Haneli Satırlar"
-	in_lang["tabKey24"]            = "Seçilmemiş Satırlar"
+	in_lang["tabKey22"]            = "Tek"
+	in_lang["tabKey23"]            = "Çift"
+	in_lang["tabKey24"]            = "Tersini Al"
 	in_lang["tabKey25"]            = "Yorum olmayan"
 	in_lang["tabKey26"]            = "Yorum"
 	in_lang["tabKey27"]            = "Boş"
 	in_lang["tabKey28"]            = "Satır Tipi"
+	in_lang["tabKey29"]            = "Yorum Satırlarını Çıkar"
+	in_lang["tabKey30"]            = "Boş Satırları Çıkar"
 	in_lang["guiLabelKey1"]        = "Başlangıç noktası:"
 	in_lang["guiLabelKey2"]        = "Bitiş noktası:"
 	in_lang["guiLabelKey3"]        = "Satır numarası:"
@@ -92,13 +94,15 @@
 	in_lang["tabKey19"]            = "Jumping"
 	in_lang["tabKey20"]            = "Interval"
 	in_lang["tabKey21"]            = "Jumping"
-	in_lang["tabKey22"]            = "Odd numbered lines"
-	in_lang["tabKey23"]            = "Even numbered lines"
+	in_lang["tabKey22"]            = "Odd"
+	in_lang["tabKey23"]            = "Even"
 	in_lang["tabKey24"]            = "Reverse"
 	in_lang["tabKey25"]            = "Uncomment"
 	in_lang["tabKey26"]            = "Comment"
 	in_lang["tabKey27"]            = "Empty"
 	in_lang["tabKey28"]            = "Line Type"
+	in_lang["tabKey29"]            = "Subtract Comment Lines"
+	in_lang["tabKey30"]            = "Subtract Empty Lines"
 	in_lang["guiLabelKey1"]        = "Starting point:"
 	in_lang["guiLabelKey2"]        = "Ending point:"
 	in_lang["guiLabelKey3"]        = "Line number:"
@@ -125,7 +129,7 @@
 
 	script_name        = c_lang.s_name
 	script_description = c_lang.s_desc
-	script_version     = "1.6.1"
+	script_version     = "1.6.2"
 	script_author      = "Magnum357"
 	script_mag_version = "1.1.4.4"
 	script_file_name   = "mag.select_lines"
@@ -545,7 +549,7 @@
 	for i = 1, #subs do
 		if subs[i].class == "dialogue" then
 			if mag.is.line.comment(subs[i]) == false then
-				mag.array.insert(index, i)
+			mag.array.insert(index, i)
 			end
 		end
 	end
@@ -557,7 +561,7 @@
 	for i = 1, #subs do
 		if subs[i].class == "dialogue" then
 			if mag.is.line.comment(subs[i]) == true then
-				mag.array.insert(index, i)
+			mag.array.insert(index, i)
 			end
 		end
 	end
@@ -569,11 +573,37 @@
 	for i = 1, #subs do
 		if subs[i].class == "dialogue" then
 			if mag.is.line.empty(subs[i]) == true then
-				mag.array.insert(index, i)
+			mag.array.insert(index, i)
 			end
 		end
 	end
 	return index
+	end
+
+	function subtract_comment_lines(subs,sel)
+	local selected_lines = mag.index.sel(subs, sel)
+	local return_index   = {}
+	for i = 1, #selected_lines do
+	index = selected_lines[i]
+	line  = subs[index]
+		if mag.is.line.comment(line) == false then
+		mag.array.insert(return_index, index)
+		end
+	end
+	return return_index
+	end
+
+	function subtract_empty_lines(subs,sel)
+	local selected_lines = mag.index.sel(subs, sel)
+	local return_index   = {}
+	for i = 1, #selected_lines do
+	index = selected_lines[i]
+	line  = subs[index]
+		if mag.is.line.empty(line) == false then
+		mag.array.insert(return_index, index)
+		end
+	end
+	return return_index
 	end
 
 	function check_macro1(subs,sel,act)
@@ -804,6 +834,26 @@
 	end
 	end
 
+	function check_macro23(subs,sel)
+	if c_lock_gui then
+	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
+	else
+	local fe, fee = pcall(subtract_comment_lines, subs, sel)
+	mag.window.funce(fe, fee)
+	return fee
+	end
+	end
+
+	function check_macro24(subs,sel)
+	if c_lock_gui then
+	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
+	else
+	local fe, fee = pcall(subtract_empty_lines, subs, sel)
+	mag.window.funce(fe, fee)
+	return fee
+	end
+	end
+
 	function mag_redirect_gui()
 	local mag_module_link = "https://github.com/magnum357i/Magnum-s-Aegisub-Scripts"
 	local k = aegisub.dialog.display({{class = "label", label = mag_gui_message}}, {c_lang.module_yes, c_lang.module_no})
@@ -831,6 +881,8 @@
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey3.."/"..c_lang.tabKey17, check_macro12)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey3.."/"..c_lang.tabKey18, check_macro13)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey3.."/"..c_lang.tabKey19, check_macro14)
+		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey3.."/"..c_lang.tabKey22, check_macro17)
+		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey3.."/"..c_lang.tabKey23, check_macro18)
 
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey28.."/"..c_lang.tabKey25, check_macro20)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey28.."/"..c_lang.tabKey26, check_macro21)
@@ -838,10 +890,10 @@
 
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey4.."/"..c_lang.tabKey20, check_macro15)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey4.."/"..c_lang.tabKey21, check_macro16)
-		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey5.."/"..c_lang.tabKey22, check_macro17)
 
-		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey5.."/"..c_lang.tabKey23, check_macro18)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey5.."/"..c_lang.tabKey24, check_macro19)
+		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey5.."/"..c_lang.tabKey29, check_macro23)
+		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey5.."/"..c_lang.tabKey30, check_macro24)
 		mag.window.lang.register(c_sub_name_list[c_lang_switch])
 		end
 	else
