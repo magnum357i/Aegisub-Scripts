@@ -114,8 +114,8 @@
 	script_name              = c_lang.s_name
 	script_description       = c_lang.s_desc
 	script_author            = "Magnum357"
-	script_version           = "1.6.1"
-	script_mag_version       = "1.1.4.6"
+	script_version           = "1.6.2"
+	script_mag_version       = "1.1.4.8"
 	script_file_name         = "mag.strip_lines"
 	script_file_ext          = ".lua"
 
@@ -775,16 +775,20 @@
 		if c.line_break_space or c.extra then
 			if not deleted and mag.match(line.text, "\\N") then
 			local strip_line = mag.strip.bracket(line.text)
-				if mag.match(strip_line, "\\N%s") or mag.match(strip_line, "%s\\N") then
-				local w = mag.string.words(line.text)
-					for b = 1, #w do
-						if mag.match(w[b], "\\N") then
-						if not pcs then pcs = true end
-						counter["break_space"] = counter["break_space"] + 1
-						w[b]                   = mag.trim.left(w[b])
+			if mag.match(strip_line, "\\N%s") or mag.match(strip_line, "%s\\N") then
+				local parts = mag.string.split(line.text, "\\N")
+				counter["break_space"] = counter["break_space"] + 1
+				if not pcs then pcs = true end
+					for p = 1, #parts do
+						if p == 1 then
+						parts[p] = mag.trim.right(parts[p]).."\\N"
+						elseif p == #parts then
+						parts[p] = mag.trim.left(parts[p])
+						else
+						parts[p] = mag.trim.all(parts[p]).."\\N"
 						end
 					end
-					line.text = mag.array.concat(w)
+					line.text = mag.array.concat(parts)
 				end
 			end
 		end
@@ -825,8 +829,8 @@
 	if pcs then
 	mag.show.report(c.empty_line       or c.extra, counter["empty_line"],   c_lang.guiLabelKey21, "", "", "")
 	mag.show.report(c.comment_line     or c.extra, counter["comment_line"], c_lang.guiLabelKey22, "", "", "")
-	mag.show.report(c.line_break_space or c.extra, counter["break_space"],  c_lang.guiLabelKey23, "", "", "")
-	mag.show.report(c.one_line         or c.extra, counter["merged_line"],  c_lang.guiLabelKey24, "", "", "")
+	mag.show.report(c.one_line         or c.extra, counter["merged_line"],  c_lang.guiLabelKey23, "", "", "")
+	mag.show.report(c.line_break_space or c.extra, counter["break_space"],  c_lang.guiLabelKey24, "", "", "")
 	end
 	mag.show.no_op(pcs)
 	if counter["empty_line"] > 0 or counter["comment_line"] > 0 or counter["merged_line"] > 0 then
