@@ -1,5 +1,5 @@
 ﻿	mag_module_name    = "Mag"
-	mag_module_version = "1.1.4.7"
+	mag_module_version = "1.1.4.8"
 	mag_module_author  = "Magnum357"
 
 	if include_unicode   == true then unicode   = require 'aegisub.unicode'   end
@@ -462,12 +462,11 @@
 	return words
 	end
 
-	--split_string = mag.string.split(true, "Lorem ipsum dolor sit amet, consectetur, adipiscing elit. Proin posuere sed, libero ac, consectetur.", ",")
-	function mag.string.split(last,str,split)
+	--split_string = mag.string.split("Lorem ipsum dolor sit amet, consectetur, adipiscing elit. Proin posuere sed, libero ac, consectetur.", ",")
+	function mag.string.split(str,split)
+	if not mag.match(str, split) then return {str} end
 	local parts = {}
-	if last == true then
-	str = str..mag.match(str, split)
-	end
+	str         = str..mag.match(str, split)
 	for part in mag.gmatch(str, ".-"..split) do
 	part = mag.gsub(part, split, "")
 	mag.array.insert(parts, part)
@@ -1406,6 +1405,11 @@
 		end
 	end
 	return r
+	end
+
+	--sitem = mag.array.create("foo,bar")
+	function mag.array.create(items)
+	return mag.string.split(items,",")
 	end
 
 	--sitem = mag.array.count({"foo", "foo", "bar"}, "foo")
