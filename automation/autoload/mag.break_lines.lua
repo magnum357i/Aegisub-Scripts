@@ -26,8 +26,8 @@
 	in_lang["guiLabelKey2"]        = "Boşlukları ve noktalama işaretlerini yoksay"
 	in_lang["guiLabelKey3"]        = "Yukarıda kalacak kelimeler:"
 	in_lang["guiLabelKey4"]        = "Aşağıda kalacak kelimeler:"
-	in_lang["topWordsDefault"]     = "de,da,ki,ile,ya"
-	in_lang["bottomWordsDefault"]  = "ama,lakin,fakat,ve,hem,anca,oysa,oysaki,ha"
+	in_lang["topWordsDefault"]     = "de,da,ki,ile,ya,kadar,mı,mi,mu,mü,bile,için,gibi"
+	in_lang["bottomWordsDefault"]  = "ama,lakin,fakat,ve,hem,anca,oysa,oysaki,ha,yoksa,en,her"
 	in_lang["key1"]                = "[Toplam bölünen satır: {%s}]\nBir konuşma çizgisi: {%s}\nİki konuşma çizgisi: {%s}\nKonuşma çizgisiz: {%s}"
 	elseif lang == langs[2].lang_key then
 	in_lang["module_incompatible"] = "The installed version of the Mag module is incompatible with this lua file!\n\nAt least \"%s\" version or higher of the module file is required.\n\n\nWould you like to go to the download page now?"
@@ -59,7 +59,7 @@
 	script_name        = c_lang.s_name
 	script_description = c_lang.s_desc
 	script_author      = "Magnum357"
-	script_version     = "1.3.0"
+	script_version     = "1.3.1"
 	script_mag_version = "1.1.4.8"
 	script_file_name   = "mag.break_lines"
 	script_file_ext    = ".lua"
@@ -174,9 +174,9 @@
 				local break_next = ""
 					-- Not break speech line
 					if mag.strip.space(word[break_point]) == "-" then break_point = break_point - 1 end
-					if mag.array.search(top_words, mag.strip.space(word[break_point+1])) == true then
+					if mag.array.search(top_words, mag.gsub(word[break_point+1], "[%s"..mag.pattern.punc.."]+", "")) == true then
 					break_point = break_point + 1
-					elseif mag.array.search(bottom_words, mag.strip.space(word[break_point])) == true then
+					elseif mag.array.search(bottom_words, mag.gsub(word[break_point], "[%s"..mag.pattern.punc.."]+", "")) == true then
 					break_point = break_point - 1
 					end
 					for m = 1, #word do
