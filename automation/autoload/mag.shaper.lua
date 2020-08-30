@@ -114,7 +114,7 @@
 	script_description   = c_lang.s_desc
 	script_author        = "Magnum357"
 	script_version       = "1.5.0"
-	script_mag_version   = "1.1.4.4"
+	script_mag_version   = "1.1.4.9"
 	script_file_name     = "mag.shaper"
 	script_file_ext      = ".lua"
 
@@ -347,7 +347,7 @@
 		mag.format("{\\an5\\pos(%s,%s)\\c%s\\1a&H%s&\\bord0\\shad0\\p1}%s",
 		width / 2,
 		height / 2,
-		mag.convert.html_from_ass(c.grid_color),
+		mag.convert.html_to_ass(c.grid_color),
 		mag.convert.alpha_from_percent(c.grid_transparency, true),
 		shape)
 		subs[act]  = line
@@ -415,7 +415,7 @@
 			shape_line =
 			mag.format("{%s\\c%s\\1a&H%s&\\bord0\\shad0\\p1}%s",
 			align_data,
-			mag.convert.html_from_ass(c.shape_color),
+			mag.convert.html_to_ass(c.shape_color),
 			mag.convert.alpha_from_percent(c.shape_transparency, true),
 			shape)
 			else

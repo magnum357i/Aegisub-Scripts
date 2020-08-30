@@ -1,5 +1,5 @@
 ﻿	mag_module_name    = "Mag"
-	mag_module_version = "1.1.4.8"
+	mag_module_version = "1.1.4.9"
 	mag_module_author  = "Magnum357"
 
 	if include_unicode   == true then unicode   = require 'aegisub.unicode'   end
@@ -97,8 +97,14 @@
 	--mag.window.funce(fe, fee)
 	function mag.window.funce(fe,fee)
 	if not fe then
-	local err = mag.gsub(fee, "%[.-%]:", "")
-	mag.show.log(1, mag.string.format(mag.window.lang.message("code_error"), mag.match(err, "(%d+)%:"), mag.match(err, "%:%s(.+)")))
+	local fileormodule
+	if mag.match(fee, "automation\\aut..") then fileormodule = mag.window.lang.message("code_typefile") else fileormodule = mag.window.lang.message("code_typemodule") end
+		if mag.match(fee, "(%d+)%:") then
+		local err = mag.gsub(fee, "%[.-%]:", "")
+		mag.show.log(1, mag.string.format(mag.window.lang.message("code_error"), mag.match(err, "(%d+)%:"), fileormodule, mag.match(err, "%:%s(.+)")))
+		else
+		mag.show.log(1, mag.string.format(mag.window.lang.message("code_error2"), fee))
+		end
 	end
 	end
 
@@ -107,11 +113,11 @@
 	aegisub.progress.set(mag.convert.percent(max, i, true, "percent"))
 	end
 
-	--mag.window.progress2("Process...", i, #lines_index)
-	function mag.window.progress2(str,i,max)
-	aegisub.progress.task(mag.format("(%s/%s) %s", max, i, str))
-	aegisub.progress.set(mag.convert.percent(max, i, true, "percent"))
-	aegisub.progress.title(mag.format("%s %s%%", script_name, mag.convert.percent(max, i, true, "percent")))
+	--mag.window.task("Processing...")
+	function mag.window.task(str)
+	if str == nil then str = mag.window.lang.message("progress_calc") end
+	aegisub.progress.task(str)
+	aegisub.progress.title(script_name)
 	end
 
 	--mag.lang = "en"
@@ -198,8 +204,17 @@
 	out_message("tr", "error",                    "Bir hata çıktı.")
 	out_message("en", "error",                    "There was an error.")
 	----------------------------------------------
-	out_message("tr", "code_error",               "{%1}. satırda bir hata çıktı: \"{%2}\"\n\nKullanmaya çalıştığınız lua eklentisinin ve mag modülünün son sürümünü indirdiğinize emin olun.")
-	out_message("en", "code_error",               "There is an error on line {%1}: \"{%2}\"\n\nMake sure you download the latest version of the lua plugin and the mag module you are trying to use.")
+	out_message("tr", "code_error",               "Satır: {%1}\nYer: {%2}\nMesaj: \"{%3}\"\n\nKullanmaya çalıştığınız lua eklentisinin ve mag modülünün son sürümünü indirdiğinize emin olun.")
+	out_message("en", "code_error",               "Line: {%1}\nLocation: {%2}\nMessage: \"{%3}\"\n\nMake sure you download the latest version of the lua plugin and the mag module you are trying to use.")
+	----------------------------------------------
+	out_message("tr", "code_error2",              "Bir hata çıktı: \"{%s}\"\n\nKullanmaya çalıştığınız lua eklentisinin ve mag modülünün son sürümünü indirdiğinize emin olun.")
+	out_message("en", "code_error2",              "There is an error: \"{%s}\"\n\nMake sure you download the latest version of the lua plugin and the mag module you are trying to use.")
+	----------------------------------------------
+	out_message("tr", "code_typefile",            "eklenti dosyası")
+	out_message("en", "code_typefile",            "macro file")
+	----------------------------------------------
+	out_message("tr", "code_typemodule",          "modül")
+	out_message("en", "code_typemodule",          "module")
 	----------------------------------------------
 	out_message("tr", "no_process",               "Hiçbir işlem yapılmadı. Ya geçersiz bir işlem yaptınız ya da tercihlerinize göre yapılacak bir şey yoktu.")
 	out_message("en", "no_process",               "Nothing was done. Either you did something invalid or there was nothing to do with your preferences.")
@@ -254,6 +269,9 @@
 	----------------------------------------------
 	out_message("tr", "report_mfail",             "Yapılacak bir şey yoktu.")
 	out_message("en", "report_mfail",             "There was nothing to do.")
+	----------------------------------------------
+	out_message("tr", "progress_calc",            "Hesaplanıyor...")
+	out_message("en", "progress_calc",            "Calculating...")
 	----------------------------------------------
 	return out
 	end
@@ -367,7 +385,7 @@
 	end
 	local function replace(m,v)
 	local match_var = mag.match(str, "%{%%"..m..".-%}")
-	local value     = mag.s(v)
+	local value     = mag.convert.esc(mag.s(v))
 		if match_var and mag.match(match_var, "%{%%"..m.."%}") then
 		str = mag.gsub(str, "%{%%"..m.."%}", value, 1)
 		elseif match_var and mag.match(match_var, "%{%%"..m..":.-%[.-%]%[.-%].-%}") then
@@ -566,6 +584,8 @@
 		for _, n in pairs(numbers) do
 		c = c + 1
 		mag.window.progress(c, #numbers)
+		local cancel = aegisub.progress.is_cancelled()
+		if cancel then break end
 			if numbers[c + 1] ~= nil then
 				if index_mode == true then
 				n = n - first_index + 1
@@ -610,19 +630,7 @@
 
 	--string = mag.convert.esc("[example]")
 	function mag.convert.esc(str)
-	str = mag.gsub(str, "(%()",  "%%%1")
-	str = mag.gsub(str, "(%))",  "%%%1")
-	str = mag.gsub(str, "(%.)",  "%%%1")
-	str = mag.gsub(str, "(%%)",  "%%%1")
-	str = mag.gsub(str, "(%+)",  "%%%1")
-	str = mag.gsub(str, "(%-)",  "%%%1")
-	str = mag.gsub(str, "(%*)",  "%%%1")
-	str = mag.gsub(str, "(%?)",  "%%%1")
-	str = mag.gsub(str, "(%[)",  "%%%1")
-	str = mag.gsub(str, "(%])",  "%%%1")
-	str = mag.gsub(str, "(%^)",  "%%%1")
-	str = mag.gsub(str, "(%$)",  "%%%1")
-	str = mag.gsub(str, "(%\\)", "\\\\%1")
+	str = mag.gsub(str, "([%.%[%]%^%$%(%)%-%?%*%+%%\\])",  "%%%1")
 	return str
 	end
 
@@ -670,7 +678,7 @@
 	function mag.convert.frame_time(time) return aegisub.ms_from_frame(aegisub.frame_from_ms(time)) end
 
 	--ass_color = mag.convert.html_to_ass("#FFFFFF")
-	function mag.convert.html_from_ass(color) return ass_color(extract_color(color)) end
+	function mag.convert.html_to_ass(color) return ass_color(extract_color(color)) end
 
 	--filename = mag.convert.filename("Random Text")
 	function mag.convert.filename(filename)
@@ -777,6 +785,8 @@
 		end
 		for i = 1, #subs do
 		mag.window.progress(i, #subs)
+		local cancel = aegisub.progress.is_cancelled()
+		if cancel then break end
 		index = i
 		line  = subs[i]
 			if line.class == "dialogue" then
@@ -847,6 +857,8 @@
 		end
 		for i = 1, #subs do
 		mag.window.progress(i, #subs)
+		local cancel = aegisub.progress.is_cancelled()
+		if cancel then break end
 		index = i
 		line  = subs[i]
 			if line.class == "dialogue" then
@@ -903,6 +915,8 @@
 	if count == true or count == false then
 		for i = 1, #subs do
 		mag.window.progress(i, #subs)
+		local cancel = aegisub.progress.is_cancelled()
+		if cancel then break end
 		local line = subs[i]
 			if line.class == "dialogue" and line.actor ~= "" then
 			local actor = line.actor
@@ -919,6 +933,8 @@
 		end
 		for i = 1, #subs do
 		mag.window.progress(i, #subs)
+		local cancel = aegisub.progress.is_cancelled()
+		if cancel then break end
 		local line = subs[i]
 			if line.class == "dialogue" then
 				for _, name in pairs(actor_list1) do
@@ -949,6 +965,8 @@
 	if count == true or count == false then
 		for i = 1, #subs do
 		mag.window.progress(i, #subs)
+		local cancel = aegisub.progress.is_cancelled()
+		if cancel then break end
 		local line = subs[i]
 			if line.class == "dialogue" and line.effect ~= "" then
 			local effect = line.effect
@@ -965,6 +983,8 @@
 		end
 		for i = 1, #subs do
 		mag.window.progress(i, #subs)
+		local cancel = aegisub.progress.is_cancelled()
+		if cancel then break end
 		local line = subs[i]
 			if line.class == "dialogue" then
 				for _, name in pairs(effect_list1) do
@@ -1120,6 +1140,8 @@
 	local index = {}
 	for si, li in pairs(sel) do
 	mag.window.progress(si, #sel)
+	local cancel = aegisub.progress.is_cancelled()
+	if cancel then break end
 	mag.array.insert(index, li)
 	end
 	return index
@@ -1310,6 +1332,7 @@
 
 	--value = mag.is.empty("  ")
 	function mag.is.empty(t)
+	t = mag.s(t)
 	t = mag.strip.all(t)
 	t = mag.strip.space(t)
 	return mag.convert.len(t) == 0
@@ -1424,10 +1447,16 @@
 	end
 
 	--c = mag.array.merge({"aa", "bb"}, {"cc", "dd"})
-	function mag.array.merge(first_array,second_array)
+	function mag.array.merge(first_array,second_array,keepkey)
 	local merge_array = first_array
-	for _, value in pairs(second_array) do
-	mag.array.insert(merge_array, value)
+	if keepkey ~= true then
+		for _, value in pairs(second_array) do
+		mag.array.insert(merge_array, value)
+		end
+	else
+		for key, value in pairs(second_array) do
+		merge_array[key] = value
+		end
 	end
 	return merge_array
 	end
@@ -1440,6 +1469,8 @@
 	if apply == mag.window.lang.message("all_lines") then
 		for i = 1, #subs do
 		mag.window.progress(i, #subs)
+		local cancel = aegisub.progress.is_cancelled()
+		if cancel then break end
 		index = i
 		line  = subs[index]
 			if line.class == "dialogue" then
@@ -1454,6 +1485,8 @@
 	elseif apply == mag.window.lang.message("selected_lines") then
 		for n, i in pairs(sel) do
 		mag.window.progress(n, #sel)
+		local cancel = aegisub.progress.is_cancelled()
+		if cancel then break end
 		index = i
 		line  = subs[index]
 			if line.class == "dialogue" then
@@ -1468,6 +1501,8 @@
 	else
 		for i = 1, #subs do
 		mag.window.progress(i, #subs)
+		local cancel = aegisub.progress.is_cancelled()
+		if cancel then break end
 		index = i
 		line  = subs[index]
 			if line.class == "dialogue" and line.style == apply then
@@ -1491,6 +1526,8 @@
 	local start_time_list = {}
 		for i = 1, #idx do
 		mag.window.progress(i, #idx)
+		local cancel = aegisub.progress.is_cancelled()
+		if cancel then break end
 		local start_time = subs[idx[i]].start_time
 			if not sort[start_time] then
 			sort[start_time] = {}
@@ -1501,6 +1538,8 @@
 	mag.sort.bubble(start_time_list)
 		for k = 1, #start_time_list do
 		mag.window.progress(k, #start_time_list)
+		local cancel = aegisub.progress.is_cancelled()
+		if cancel then break end
 			for _, line in pairs(sort[start_time_list[k]]) do
 			subs[idx[k]] = line
 			end
@@ -1513,17 +1552,38 @@
 	index = mag.sort.reverse(index)
 	for i = 1, #index do
 	mag.window.progress(i, #index)
+	local cancel = aegisub.progress.is_cancelled()
+	if cancel then break end
 	subs.delete(index[i])
 	end
 	end
 
-	--mag.sort.bubble(5, 8, 4, 2, 7)
+	--mag.sort.bubble({5, 8, 4, 2, 7})
 	function mag.sort.bubble(array)
 	local sort = array
 	for i = 1, #sort do
 	mag.window.progress(i, #sort)
+	local cancel = aegisub.progress.is_cancelled()
+	if cancel then break end
 		for j = 1, #sort - 1 do
 			if mag.n(sort[j]) > mag.n(sort[j + 1]) then
+			local sort_temp = sort[j + 1]
+			sort[j + 1]     = sort[j]
+			sort[j]         = sort_temp
+			end
+		end
+	end
+	end
+
+	--mag.sort.bubble2({index = 50, value = "Test"})
+	function mag.sort.bubble2(array)
+	local sort = array
+	for i = 1, #sort do
+	mag.window.progress(i, #sort)
+	local cancel = aegisub.progress.is_cancelled()
+	if cancel then break end
+		for j = 1, #sort - 1 do
+			if mag.n(sort[j]["index"]) > mag.n(sort[j + 1]["index"]) then
 			local sort_temp = sort[j + 1]
 			sort[j + 1]     = sort[j]
 			sort[j]         = sort_temp
@@ -1540,6 +1600,8 @@
 	local start_time_list = {}
 		for i = 1, #idx do
 		mag.window.progress(i, #idx)
+		local cancel = aegisub.progress.is_cancelled()
+		if cancel then break end
 		local start_time = subs[idx[i]].start_time
 			if not sort[start_time] then
 			sort[start_time] = {}
@@ -1550,6 +1612,8 @@
 	mag.sort.bubble(start_time_list)
 		for k = 1, #start_time_list do
 		mag.window.progress(k, #start_time_list)
+		local cancel = aegisub.progress.is_cancelled()
+		if cancel then break end
 			for _, index in pairs(sort[start_time_list[k]]) do
 			mag.array.insert(sort_index, index)
 			end
@@ -1563,6 +1627,8 @@
 	local c, index = 0, {}
 	for i = 1, #array do
 	mag.window.progress(i, #array)
+	local cancel = aegisub.progress.is_cancelled()
+	if cancel then break end
 	c = 0
 	for j = i, #array do if array[i] == array[j] then c = c + 1 end end
 	if c > 1 then mag.array.insert(index, i) end
@@ -1574,11 +1640,13 @@
 	end
 	end
 
-	--reverse_array = mag.sort.reverse({"5", "10", "15", "20"})
+	--reverse_array = mag.sort.reverse({5, 10, 15, 20})
 	function mag.sort.reverse(array)
 	local array_temp = {}
 	for i = 1, #array do
 	mag.window.progress(i, #array)
+	local cancel = aegisub.progress.is_cancelled()
+	if cancel then break end
 	array_temp[i] = array[(#array + 1) - i]
 	end
 	return array_temp

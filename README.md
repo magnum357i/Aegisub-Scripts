@@ -24,11 +24,13 @@
   - [**(11) HTML TABLE From ASS**](#html-table-from-ass)
   - [**(12) K Char**](#k-char)
   - [**(13) Line Statistics**](#line-statistics)
-  - [**(14) Measure Lines**](#measure-lines)
-  - [**(15) Select Lines**](#select-lines)
-  - [**(16) Shaper**](#shaper)
-  - [**(17) Strip Lines**](#strip-lines)
-  - [**(18) Typewriter**](#typewriter)
+  - [**(14) Manage Lines**](#manage-lines)
+  - [**(15) Measure Lines**](#measure-lines)
+  - [**(16) Select Lines**](#select-lines)
+  - [**(17) Shaper**](#shaper)
+  - [**(18) Strip Lines**](#strip-lines)
+  - [**(19) Translate Info**](#translate-info)
+  - [**(20) Typewriter**](#typewriter)
 - [**(D) ASS Files**](#ass-files)
   - [**(1) Autotags**](#autotags)
   - [**(2) Color Fade**](#color-fade)
@@ -143,6 +145,9 @@ Allows you to put anything before each character on the line.
 ### [Line Statistics](automation/autoload/mag.line_statistics.lua)
 Counts lines by type.
 
+### [Manage Lines](automation/autoload/mag.manage_lines.lua)
+Facilitates various editing works.
+
 ### [Measure Lines](automation/autoload/mag.measure_lines.lua)
 Adds percentage to effect box of applied lines. It is important to share translation.
 
@@ -154,6 +159,9 @@ Adds image, grid or quad to active line.
 
 ### [Strip Lines](automation/autoload/mag.strip_lines.lua)
 Clears tags, extra whitespaces and things like them.
+
+### [Translate Info](automation/autoload/mag.translate_info.lua)
+Designed to write translator data with social media accounts.
 
 ### [Typewriter](automation/autoload/mag.typewriter.lua)
 Helps typewriter-style typesettings.
@@ -206,11 +214,13 @@ Positions kanji characters vertically.
   - [**(11) HTML TABLE From ASS**](#html-table-from-ass)
   - [**(12) K Char**](#k-char)
   - [**(13) Line Statistics**](#line-statistics)
-  - [**(14) Measure Lines**](#measure-lines)
-  - [**(15) Select Lines**](#select-lines)
-  - [**(16) Shaper**](#shaper)
-  - [**(17) Strip Lines**](#strip-lines)
-  - [**(18) Typewriter**](#typewriter)
+  - [**(14) Manage Lines**](#manage-lines)
+  - [**(15) Measure Lines**](#measure-lines)
+  - [**(16) Select Lines**](#select-lines)
+  - [**(17) Shaper**](#shaper)
+  - [**(18) Strip Lines**](#strip-lines)
+  - [**(19) Translate Info**](#translate-info)
+  - [**(20) Typewriter**](#typewriter)
 - [**(D) ASS Dosyaları**](#ass-dosyalar%C4%B1)
   - [**(1) Autotags**](#autotags)
   - [**(2) Color Fade**](#color-fade)
@@ -338,6 +348,10 @@ Wrap Text (ass)
 - **Türkçe adı:** Satır İstatistikleri
 - **Açıklama:** Türlerine göre satırları sayar.
 
+### [Manage Lines](automation/autoload/mag.manage_lines.lua)
+- **Türkçe adı:** Satır Yönet
+- **Açıklama:** Çeşitli düzenleme işlerini kolaylaştırır.
+
 ### [Measure Lines](automation/autoload/mag.measure_lines.lua)
 - **Türkçe adı:** Satır Ölç
 - **Açıklama:** Uygulanan satırların efekt kutularına yüzde ekler. Çeviriyi paylaştırma açısından önemlidir.
@@ -353,6 +367,10 @@ Wrap Text (ass)
 ### [Strip Lines](automation/autoload/mag.strip_lines.lua)
 - **Türkçe adı:** Satır Temizle
 - **Açıklama:** Etiketleri, fazladan boşlukları ve o tarz şeyleri temizler.
+
+### [Translate Info](automation/autoload/mag.translate_info.lua)
+- **Türkçe adı:** Çevirmen Bilgisi
+- **Açıklama:** Çevirmen bilgisini sosyal medya adresleriyle birlikte yazmak için tasarlanmıştır.
 
 ### [Typewriter](automation/autoload/mag.typewriter.lua)
 - **Türkçe adı:** Harf Harf Yaz
