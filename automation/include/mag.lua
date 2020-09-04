@@ -1,5 +1,5 @@
 ﻿	mag_module_name    = "Mag"
-	mag_module_version = "1.1.4.9"
+	mag_module_version = "1.1.5.0"
 	mag_module_author  = "Magnum357"
 
 	if include_unicode   == true then unicode   = require 'aegisub.unicode'   end
@@ -703,8 +703,8 @@
 	return value
 	end
 
-	--time = mag.convert.ms_from_time("00:02:03.20")
-	function mag.convert.ms_from_time(time)
+	--time = mag.convert.time_to_ms("00:02:03.20")
+	function mag.convert.time_to_ms(time)
 	local result
 	if mag.match(time, "(%d+):(%d+):(%d+)%.(%d+)") then
 	local hour, min, sec, ms = mag.match(time, "(%d+):(%d+):(%d+)%.(%d+)")
@@ -715,8 +715,8 @@
 	return result ~= nil and result or 0
 	end
 
-	--time = mag.convert.time_from_ms(46587)
-	function mag.convert.time_from_ms(time)
+	--time = mag.convert.ms_to_time(46587)
+	function mag.convert.ms_to_time(time)
 	time = mag.s(mag.sub(time, 1, -2))
 	local hour, min, sec, ms = "0", "00", "00", "00"
 	if mag.convert.len(time) <= 2 then
@@ -732,7 +732,7 @@
 		hour = mag.floor(min / 60)
 		min = min - hour * 60
 		end
-	hour, min, sec, ms = mag.gsub(hour / 100, "^[0%.]+", ""), mag.convert.zero(10, min), mag.convert.zero(10, sec), mag.convert.zero(10, ms)
+	hour, min, sec, ms = hour, mag.convert.zero(10, min), mag.convert.zero(10, sec), mag.convert.zero(10, ms)
 	time = mag.format("%s:%s:%s.%s", hour, min, sec, ms)
 	end
 	return time

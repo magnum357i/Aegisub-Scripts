@@ -24,8 +24,8 @@
 	in_lang["guiLabel1"]           = "Şundan:"
 	in_lang["guiLabel2"]           = "Şuna:"
 	in_lang["guiLabel3"]           = "Satırı temizle"
-	in_lang["guiLabel4"]           = "Satır zamanlarını ekle"
-	in_lang["guiLabel5"]           = "Satır numarasını ekle"
+	in_lang["guiLabel4"]           = "Zamanları ekle"
+	in_lang["guiLabel5"]           = "Numarasını ekle"
 	in_lang["guiLabel6"]           = "Satırları say"
 	in_lang["guiHint1"]            = "Satırları kopyalamadan önce ass etiketi, yorum parantezi veya satır bölme gibi şeyleri siler."
 	in_lang["key1"]                = "Pano"
@@ -43,8 +43,8 @@
 	in_lang["guiLabel1"]           = "From:"
 	in_lang["guiLabel2"]           = "To:"
 	in_lang["guiLabel3"]           = "Strip line"
-	in_lang["guiLabel4"]           = "Add line times"
-	in_lang["guiLabel5"]           = "Add line number"
+	in_lang["guiLabel4"]           = "Insert times"
+	in_lang["guiLabel5"]           = "Insert number"
 	in_lang["guiLabel6"]           = "Count lines"
 	in_lang["guiHint1"]            = "Before copying lines, deletes things like ass tag, comment bracket or line break."
 	in_lang["key1"]                = "Clipboard"
@@ -63,9 +63,9 @@
 
 	script_name         = c_lang.s_name
 	script_description  = c_lang.s_desc
-	script_version      = "1.4.6"
+	script_version      = "1.4.9"
 	script_author       = "Magnum357"
-	script_mag_version  = "1.1.4.4"
+	script_mag_version  = "1.1.5.0"
 	script_file_name    = "mag.copy_lines"
 	script_file_ext     = ".lua"
 
@@ -135,15 +135,15 @@
 		if c.line_time then
 			if mag.is.video() then
 			line_info = mag.string.combine(line_info, mag.string.format("({%s} / {%s} - {%s} / {%s})",
-			mag.convert.time_from_ms(line.start_time),
+			mag.convert.ms_to_time(line.start_time),
 			mag.convert.frame_from_ms(line.start_time),
-			mag.convert.time_from_ms(line.end_time),
+			mag.convert.ms_to_time(line.end_time),
 			mag.convert.frame_from_ms(line.end_time)),
 			"{%1} {%2}")
 			else
 			line_info = mag.string.combine(line_info, mag.string.format("({%s} - {%s})",
-			mag.convert.time_from_ms(line.start_time),
-			mag.convert.time_from_ms(line.end_time)),
+			mag.convert.ms_to_time(line.start_time),
+			mag.convert.ms_to_time(line.end_time)),
 			"{%1} {%2}")
 			end
 		end

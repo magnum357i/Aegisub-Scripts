@@ -63,9 +63,9 @@
 
 	script_name          = c_lang.s_name
 	script_description   = c_lang.s_desc
-	script_version       = "1.2"
+	script_version       = "1.3"
 	script_author        = "Magnum357"
-	script_mag_version   = "1.1.4.4"
+	script_mag_version   = "1.1.5.0"
 	script_file_name     = "mag.create_lines"
 	script_file_ext      = ".lua"
 
@@ -118,11 +118,11 @@
 		c_hardsub_end_time   = current_time
 		local jump
 			if c_hardsub_start_time > c_hardsub_end_time then
-			mag.show.log(1, mag.string.format(c_lang.key1, mag.convert.time_from_ms(c_hardsub_start_time), mag.convert.time_from_ms(c_hardsub_end_time)))
+			mag.show.log(1, mag.string.format(c_lang.key1, mag.convert.ms_to_time(c_hardsub_start_time), mag.convert.ms_to_time(c_hardsub_end_time)))
 			else
 			local ok, config
-			gui.main1.label1.label = mag.convert.time_from_ms(c_hardsub_start_time)
-			gui.main1.label2.label = mag.convert.time_from_ms(c_hardsub_end_time)
+			gui.main1.label1.label = mag.convert.ms_to_time(c_hardsub_start_time)
+			gui.main1.label2.label = mag.convert.ms_to_time(c_hardsub_end_time)
 				repeat
 				ok, config             = mag.window.dialog(gui.main1, c_buttons1)
 				until ok == mag.convert.ascii(c_buttons1[1]) and not mag.is.empty(config.u_text) or ok == mag.convert.ascii(c_buttons1[2])
@@ -154,15 +154,15 @@
 	else
 	local ok, config
 	local line_end_time      = subs[act].end_time
-	gui.main2.label2.label   = mag.convert.time_from_ms(line_end_time)
+	gui.main2.label2.label   = mag.convert.ms_to_time(line_end_time)
 	gui.main2.text.value     = ""
 		repeat
 		if ok == mag.convert.ascii(c_buttons2[2]) then
 		gui.main2.text.value     = mag.clip.get()
 		end
-		gui.main2.duration.value = mag.convert.time_from_ms(c.kdur)
+		gui.main2.duration.value = mag.convert.ms_to_time(c.kdur)
 		ok, config               = mag.window.dialog(gui.main2, c_buttons2)
-		c.kdur                   = mag.convert.ms_from_time(config.u_duration)
+		c.kdur                   = mag.convert.time_to_ms(config.u_duration)
 		until ok == mag.convert.ascii(c_buttons2[1]) and not mag.is.empty(config.u_text) or ok == mag.convert.ascii(c_buttons2[3])
 		if ok == mag.convert.ascii(c_buttons1[1]) then
 		local l      = table.copy(subs[act])

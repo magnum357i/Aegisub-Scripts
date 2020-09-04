@@ -129,9 +129,9 @@
 
 	script_name        = c_lang.s_name
 	script_description = c_lang.s_desc
-	script_version     = "1.6.2"
+	script_version     = "1.6.3"
 	script_author      = "Magnum357"
-	script_mag_version = "1.1.4.4"
+	script_mag_version = "1.1.5.0"
 	script_file_name   = "mag.select_lines"
 	script_file_ext    = ".lua"
 
@@ -376,8 +376,8 @@
 		my_gui.label2.label        = mag.string.format(c_lang.guiLabelKey5, c.tft_modSelect)
 		ok, config                 = mag.window.dialog(my_gui, buttons)
 			if c.tft_modSelect == c_tf_modList[1] then
-			c.tft_tstart = mag.convert.time_from_ms(mag.convert.ms_from_time(config.u_tft_start))
-			c.tft_tend   = mag.convert.time_from_ms(mag.convert.ms_from_time(config.u_tft_end))
+			c.tft_tstart = mag.convert.ms_to_time(mag.convert.time_to_ms(config.u_tft_start))
+			c.tft_tend   = mag.convert.ms_to_time(mag.convert.time_to_ms(config.u_tft_end))
 			elseif c.tft_modSelect == c_tf_modList[2] then
 			c.tft_fstart = config.u_tft_start
 			c.tft_fend   = config.u_tft_end
@@ -392,8 +392,8 @@
 		local start_time
 		local end_time
 			if c.tft_modSelect == c_tf_modList[1] then
-			start_time = mag.convert.ms_from_time(c.tft_tstart)
-			end_time   = mag.convert.ms_from_time(c.tft_tend)
+			start_time = mag.convert.time_to_ms(c.tft_tstart)
+			end_time   = mag.convert.time_to_ms(c.tft_tend)
 			elseif c.tft_modSelect == c_tf_modList[2] then
 			start_time = mag.convert.ms_from_frame(c.tft_fstart)
 			end_time   = mag.convert.ms_from_frame(c.tft_fend)
@@ -453,7 +453,7 @@
 		my_gui.label.label         = mag.string.format(c_lang.guiLabelKey6, c.ltj_modSelect)
 		ok, config                 = mag.window.dialog(my_gui, buttons)
 			if c.ltj_modSelect == c_tf_modList[1] then
-			c.ltj_time             = mag.convert.time_from_ms(mag.convert.ms_from_time(config.u_ltj_value))
+			c.ltj_time             = mag.convert.ms_to_time(mag.convert.time_to_ms(config.u_ltj_value))
 			elseif c.ltj_modSelect == c_tf_modList[2] then
 			c.ltj_frame            = config.u_ltj_value
 			end
@@ -466,7 +466,7 @@
 		if ok == mag.convert.ascii(c_buttons3[1]) then
 		local select_time
 			if c.ltj_modSelect == c_tf_modList[1] then
-			select_time = mag.convert.ms_from_time(c.ltj_time)
+			select_time = mag.convert.time_to_ms(c.ltj_time)
 			elseif c.ltj_modSelect == c_tf_modList[2] then
 			select_time = mag.convert.ms_from_frame(c.ltj_frame)
 			end

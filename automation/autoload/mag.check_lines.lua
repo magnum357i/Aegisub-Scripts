@@ -60,7 +60,7 @@
 	in_lang["guiLabelKey10"]          = "Satır bölmeden önce veya sonra"
 	in_lang["guiLabelKey11"]          = "Noktalama işaretlerinden önce veya sonra:"
 	in_lang["guiLabelKey12"]          = "[UYGULANACAK SATIRLAR]"
-	in_lang["guiLabelKey13"]          = "Boşlukları ve noktalama işaretlerini yoksay"
+	in_lang["guiLabelKey13"]          = "Boşlukları ve noktalama işaretlerini yoksay:"
 	in_lang["guiLabelKey14"]          = "Raporu görüntüle"
 	in_lang["guiLabelKey15"]          = "Tanımsız stil"
 	in_lang["guiLabelKey16"]          = "Karaoke etiketlerinin süreleri"
@@ -85,6 +85,8 @@
 	in_lang["guiLabelKey35"]          = "Yorum bloklarını kaldır."
 	in_lang["guiLabelKey36"]          = "Blokları birleştir."
 	in_lang["guiLabelKey37"]          = "Kullanılmayan stilleri sil"
+	in_lang["guiLabelKey38"]          = "karakter sayısı"
+	in_lang["guiLabelKey39"]          = "saniye/karakter"
 	in_lang["guiHintKey1"]            = "Aşağıdaki tercihlerin hepsini uygulamak için bu kutuyu işaretleyin."
 	in_lang["guiHintKey2"]            = "Karakter hesaplamasına boşlukları ve noktalama işaretlerini dahil etmez."
 	in_lang["guiHintKey4"]            = "Geçerli satırın bitiş süresi ile sonraki satırın başlangıç süresi arasındaki süre bu değerden az ise"
@@ -238,7 +240,7 @@
 	in_lang["guiLabelKey10"]          = "Before or after line break"
 	in_lang["guiLabelKey11"]          = "Before punctuation:"
 	in_lang["guiLabelKey12"]          = "[APPLY LINES]"
-	in_lang["guiLabelKey13"]          = "Ignore whitespaces and punctuations"
+	in_lang["guiLabelKey13"]          = "Ignore whitespaces and punctuations:"
 	in_lang["guiLabelKey14"]          = "View the report"
 	in_lang["guiLabelKey15"]          = "Undefined style"
 	in_lang["guiLabelKey16"]          = "Durations of karaoke tags"
@@ -263,6 +265,8 @@
 	in_lang["guiLabelKey35"]          = "Remove comment blocks."
 	in_lang["guiLabelKey36"]          = "Merge blocks."
 	in_lang["guiLabelKey37"]          = "Delete unused styles."
+	in_lang["guiLabelKey38"]          = "character count"
+	in_lang["guiLabelKey39"]          = "cps"
 	in_lang["guiHintKey1"]            = "Mark this box to apply all the options below."
 	in_lang["guiHintKey2"]            = "It doesn't include the whitespaces and punctuations for character calculation."
 	in_lang["guiHintKey4"]            = "If the duration between the end time of the current line and the start time of the next line is less than this value"
@@ -381,9 +385,9 @@
 
 	script_name               = c_lang.s_name
 	script_description        = c_lang.s_desc
-	script_version            = "1.5.2"
+	script_version            = "1.5.3"
 	script_author             = "Magnum357"
-	script_mag_version        = "1.1.4.9"
+	script_mag_version        = "1.1.5.0"
 	script_file_name          = "mag.check_lines"
 	script_file_ext           = ".lua"
 
@@ -429,7 +433,8 @@
 	c.apply_lines1            = mag.window.lang.message("select")
 	c.comment_mode1           = true
 	c.empty_mode1             = true
-	c.space_and_punc          = false
+	c.space_and_punc_cc       = false
+	c.space_and_punc_cps      = false
 	c.view_report             = true
 	c.style                   = true
 	c.style_undefined         = false
@@ -546,9 +551,11 @@
 		apply_lines1            = {class = "dropdown", name = "apply_lines1",                              x = 0, y = 17, width = 8, height = 1, hint = mag.window.lang.message("style_hint1")},
 		comment_mode1           = {class = "checkbox", name = "comment_mode1",                             x = 0, y = 18, width = 8, height = 1, label = mag.window.lang.message("comment_mode")},
 		empty_mode1             = {class = "checkbox", name = "empty_mode1",                               x = 0, y = 19, width = 8, height = 1, label = mag.window.lang.message("empty_mode")},
-		space_and_punc          = {class = "checkbox", name = "space_and_punc",                            x = 0, y = 20, width = 8, height = 1, label = c_lang.guiLabelKey13, hint = c_lang.guiHintKey2},
+		                          {class = "label",                                                        x = 0, y = 20, width = 4, height = 1, label = c_lang.guiLabelKey13},
+		space_and_punc_cc       = {class = "checkbox", name = "space_and_punc_cc",                         x = 5, y = 20, width = 2, height = 1, label = c_lang.guiLabelKey38, hint = c_lang.guiHintKey2},
+		space_and_punc_cps      = {class = "checkbox", name = "space_and_punc_cps",                        x = 7, y = 20, width = 1, height = 1, label = c_lang.guiLabelKey39, hint = c_lang.guiHintKey2},
 		zero_in_diff            = {class = "checkbox", name = "zero_in_diff",                              x = 0, y = 21, width = 8, height = 1, label = c_lang.guiLabelKey30},
-		                          {class = "label",                                                        x = 1, y = 22, width = 1, height = 1, label = c_lang.guiLabelKey27},
+		                          {class = "label",                                                        x = 0, y = 22, width = 2, height = 1, label = c_lang.guiLabelKey27},
 		punc_enclose_list       = {class = "edit",     name = "punc_enclose_list",                         x = 2, y = 22, width = 1, height = 1, hint = c_lang.guiHintKey11.."\n\n"..c_lang.guiHintKey12},
 		view_report             = {class = "checkbox", name = "view_report",                               x = 0, y = 23, width = 8, height = 1, label = c_lang.guiLabelKey14},
 		},
@@ -618,10 +625,10 @@
 	return text
 	end
 
-	function len(str)
+	function len(str,spaceandpunc)
 	str = mag.strip.bracket(str)
 	str = strip_special(str)
-	if c.space_and_punc then
+	if spaceandpunc then
 	str = mag.strip.space(str)
 	str = mag.strip.punc(str)
 	end
@@ -740,9 +747,8 @@
 	local check  = ""
 	local prev_line, strip_line, strip_line2, text_len, temp_line
 	if lines_index[i - 1] ~= nil then
-	prev_line = subs[lines_index[i - 1]]
+	prev_line   = subs[lines_index[i - 1]]
 	end
-	text_len    = len(line.text)
 	strip_line  = mag.strip.bracket(line.text)
 	strip_line2 = strip_special(strip_line)
 		if c.time or c.time_min or c.time_max or c.time_next_min or c.time_cps or c.time_overlap then
@@ -783,8 +789,9 @@
 				if dur > 0 then
 					if c.time or c.time_cps then
 					local cps
-					cps = text_len / dur
-					cps = mag.floor(cps * 1000)
+					text_len = len(line.text, c.space_and_punc_cps)
+					cps      = text_len / dur
+					cps      = mag.floor(cps * 1000)
 						if cps > mag.n(c.time_cps_value) then
 						if c.view_report then report_counter[4] = report_counter[4] + 1 end
 						check = mag.string.combine(check, mag.string.format(c_output_signs.key4, cps), "{%s}, {%s}")
@@ -815,6 +822,7 @@
 		end
 		if c.char or c.char_max or c.char_range or c.char_screenline then
 			if not mag.match(strip_line, "\\N") then
+			text_len = len(line.text, c.space_and_punc_cc)
 				if c.char or c.char_max then
 					if text_len > mag.n(c.char_max_value) then
 					if c.view_report then report_counter[6] = report_counter[6] + 1 end
@@ -826,7 +834,7 @@
 				local split_breaking = mag.string.split(mag.gsub(strip_line, "\\h", " "), "\\N")
 				local breaking_len   = {}
 					for b = 1, #split_breaking do
-					mag.array.insert(breaking_len, len(split_breaking[b]))
+					mag.array.insert(breaking_len, len(split_breaking[b], c.space_and_punc_cc))
 					end
 				mag.sort.basic(breaking_len)
 					if breaking_len[#breaking_len] > mag.n(c.char_range_value) then
