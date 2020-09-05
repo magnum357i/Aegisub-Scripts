@@ -24,7 +24,8 @@
   - [**(15) Shaper**](#shaper)
   - [**(16) Strip Lines**](#strip-lines)
   - [**(17) Translator Info**](#translator-info)
-  - [**(18) Typewriter**](#typewriter)
+  - [**(18) Translator Status**](#translation-status)
+  - [**(19) Typewriter**](#typewriter)
 - [**(D) ASS Files**](#ass-files)
   - [**(1) Autotags**](#autotags)
   - [**(2) Color Fade**](#color-fade)
@@ -120,6 +121,9 @@ Clears tags, extra whitespaces and things like them.
 
 ### [Translator Info](automation/autoload/mag.translator_info.lua)
 Designed to write translator data with social media accounts.
+
+### [Translation Status](automation/autoload/mag.translation_status)
+Shows the status of your translation.
 
 ### [Typewriter](automation/autoload/mag.typewriter.lua)
 Helps typewriter-style typesettings.

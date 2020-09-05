@@ -20,6 +20,7 @@
 	in_lang["s_desc"]              = "Lua dosyalarımın şablonu. Herhangi bir dosyanın çalışıp çalışmamasına etkisi yoktur."
 	in_lang["buttonKey1"]          = "Uygula"
 	in_lang["buttonKey2"]          = "Kapat"
+	in_lang["progressKey1"]        = "Çalışılıyor..."
 	elseif lang == langs[2].lang_key then
 	in_lang["module_incompatible"] = "The installed version of the Mag module is incompatible with this lua file!\n\nAt least \"%s\" version or higher of the module file is required.\n\n\nWould you like to go to the download page now?"
 	in_lang["module_not_found"]    = "The module named Mag could not be found!\n\nTo use this file, you need to download the module named mag\nand move it to \"Aegisub/automation/include/\" directory when Aegisub is off.\n\n\nDo you want to go to download page now?"
@@ -29,6 +30,7 @@
 	in_lang["s_desc"]              = "This a template for my lua files. There is no effect on whether any file work."
 	in_lang["buttonKey1"]          = "Apply"
 	in_lang["buttonKey2"]          = "Close"
+	in_lang["progressKey1"]        = "Working..."
 	end
 	return in_lang, lang_list, script_name_list
 	end
@@ -42,7 +44,7 @@
 	script_description = c_lang.s_desc
 	script_version     = "1"
 	script_author      = "Magnum357"
-	script_mag_version = "1.1.4.4"
+	script_mag_version = "1.1.5.0"
 	script_file_name   = "mag.template"
 	script_file_ext    = ".lua"
 
@@ -82,7 +84,11 @@
 	"The student researched the history of that word.",
 	"My Russian pen pal and I have been corresponding for several years.",
 	"Fire had devoured our home."}
+	mag.window.task(c_lang.progressKey1)
 	for i = 1, #lines_index do
+	mag.window.progress(i, #lines_index)
+	local cancel = aegisub.progress.is_cancelled()
+	if cancel then break end
 	if not pcs then pcs = true end
 	index       = lines_index[i]
 	line        = subs[index]
@@ -112,6 +118,7 @@
 	end
 
 	function check_macro1(subs,sel)
+	mag.window.task()
 	if c_lock_gui then
 	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
 	else
