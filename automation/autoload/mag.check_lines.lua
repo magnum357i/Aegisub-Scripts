@@ -26,6 +26,7 @@
 	in_lang["tabKey3"]                = "Sonraki"
 	in_lang["tabKey4"]                = "Tara"
 	in_lang["tabKey5"]                = "Kaldır"
+	in_lang["tabKey6"]                = "İmla Denetimi Kurulumu"
 	in_lang["buttonKey1"]             = "Tara"
 	in_lang["buttonKey2"]             = "Kapat"
 	in_lang["buttonKey3"]             = "Kaldır"
@@ -87,6 +88,8 @@
 	in_lang["guiLabelKey37"]          = "Kullanılmayan stilleri sil"
 	in_lang["guiLabelKey38"]          = "karakter sayısı"
 	in_lang["guiLabelKey39"]          = "saniye/karakter"
+	in_lang["guiLabelKey40"]          = "[AYARLAR]"
+	in_lang["guiLabelKey41"]          = "İmla denetimi dili:"
 	in_lang["guiHintKey1"]            = "Aşağıdaki tercihlerin hepsini uygulamak için bu kutuyu işaretleyin."
 	in_lang["guiHintKey2"]            = "Karakter hesaplamasına boşlukları ve noktalama işaretlerini dahil etmez."
 	in_lang["guiHintKey4"]            = "Geçerli satırın bitiş süresi ile sonraki satırın başlangıç süresi arasındaki süre bu değerden az ise"
@@ -98,6 +101,8 @@
 	in_lang["guiHintKey10"]           = "Kontrol ettikleri:\n- yazım hatası: {{...}\n- birleştirilmesi gereken: {...}{...}"
 	in_lang["guiHintKey11"]           = "Lütfen en karmaşık olanı en başa yazın.\n\nDEĞİŞKENLER\n\"$s\" = boşluk."
 	in_lang["guiHintKey12"]           = "Buraya yazılanlar satırdan silinir. Bu sayede ilgili kontrolün daha hatasız çalışması sağlanır."
+	in_lang["guiHintKey13"]           = "KS = Karakter Sayısı"
+	in_lang["guiHintKey14"]           = "Dil seçilirse imla denetimi devreye girer."
 	in_lang["key1"]                   = "Atlanacak satır bulunamadı."
 	in_lang["key2"]                   = "{%s}{%s}  |  {%s}"
 	in_lang["key3"]                   = "{%1}  [Toplam {%2} satır]"
@@ -148,6 +153,8 @@
 	in_lang["char"]                   = "K"
 	in_lang["out"]                    = "[KONTROL]"
 	in_lang["errorKey1"]              = "Çözünürlük sıfırdan büyük olmalıdır."
+	in_lang["errorKey2"]              = "İmla kontrol modülü yüklenmemiş."
+	in_lang["errorKey3"]              = "Sözlük dosyaları bulunamadı."
 	in_lang["warningKey1"]            = "Zaten şu bölümde aşağıdakilerin hepsini işaretlemeyi seçtiniz: \"{%s}\""
 	in_lang["progressKey1"]           = "Kontrol ediliyor..."
 	in_lang["progressKey2"]           = "Kaldırılıyor..."
@@ -193,6 +200,30 @@
 	in_lang["staHeader6"]             = "ALT YAZI BİLGİLERİ"
 	in_lang["staFormat1"]             = "{%s}{%s} - %{%s} -> {%s}"
 	in_lang["staFormat2"]             = "{%s}  {%s}"
+	in_lang["langCodeKey0"]           = "Seç"
+	in_lang["langCodeKey1"]           = "Almanca"
+	in_lang["langCodeKey2"]           = "İngilizce (Amerikan)"
+	in_lang["langCodeKey3"]           = "İngilizce (İngiliz)"
+	in_lang["langCodeKey4"]           = "Fransızca"
+	in_lang["langCodeKey5"]           = "İtalyanca"
+	in_lang["langCodeKey6"]           = "Polonyaca"
+	in_lang["langCodeKey7"]           = "Portekizce"
+	in_lang["langCodeKey8"]           = "Rusça"
+	in_lang["langCodeKey9"]           = "İspanyolca"
+	in_lang["langCodeKey10"]          = "İsveççe"
+	in_lang["langCodeKey11"]          = "Türkçe"
+	in_lang["ignoreKey1"]             = "Hiçbiri"
+	in_lang["ignoreKey2"]             = "KS"
+	in_lang["ignoreKey3"]             = "Karakter/Saniye"
+	in_lang["ignoreKey4"]             = "KS ve Karakter/Saniye"
+	in_lang["sp_install_notes"]       = "İmla Denetimi Nasıl Yüklenir?"
+	.."\n1. Modül dosyalarını indirin: https://yadi.sk/d/T26kCPEeUeFvSw"
+	.."\n2. İndirilen dosyaları include dizinine atın."
+	.."\n3. Sözlük dosyaları bulun."
+	.."\n  - http://www.aegisub.org/downloads/#dictionaries"
+	.."\n  - https://wiki.documentfoundation.org/Language/Support"
+	.."\n4. Aegisub açıksa tekrar açın veya \"rescan autoload dir.\" butonuna basın."
+	.."\n\nNOT: x64 Aegisub gerekiyor."
 	elseif lang == langs[2].lang_key then
 	in_lang["module_incompatible"]    = "The installed version of the Mag module is incompatible with this lua file!\n\nAt least \"%s\" version or higher of the module file is required.\n\n\nWould you like to go to the download page now?"
 	in_lang["module_not_found"]       = "The module named Mag could not be found!\n\nTo use this file, you need to download the module named mag\nand move it to \"Aegisub/automation/include/\" directory when Aegisub is off.\n\n\nDo you want to go to download page now?"
@@ -206,6 +237,7 @@
 	in_lang["tabKey3"]                = "Next"
 	in_lang["tabKey4"]                = "Scan"
 	in_lang["tabKey5"]                = "Remove"
+	in_lang["tabKey6"]                = "Spell Check Installation"
 	in_lang["buttonKey1"]             = "Scan"
 	in_lang["buttonKey2"]             = "Close"
 	in_lang["buttonKey3"]             = "Remove"
@@ -240,7 +272,7 @@
 	in_lang["guiLabelKey10"]          = "Before or after line break"
 	in_lang["guiLabelKey11"]          = "Before punctuation:"
 	in_lang["guiLabelKey12"]          = "[APPLY LINES]"
-	in_lang["guiLabelKey13"]          = "Ignore whitespaces and punctuations:"
+	in_lang["guiLabelKey13"]          = "Ignore space and punc:"
 	in_lang["guiLabelKey14"]          = "View the report"
 	in_lang["guiLabelKey15"]          = "Undefined style"
 	in_lang["guiLabelKey16"]          = "Durations of karaoke tags"
@@ -267,6 +299,8 @@
 	in_lang["guiLabelKey37"]          = "Delete unused styles."
 	in_lang["guiLabelKey38"]          = "character count"
 	in_lang["guiLabelKey39"]          = "cps"
+	in_lang["guiLabelKey40"]          = "[OPTIONS]"
+	in_lang["guiLabelKey41"]          = "Spell check language:"
 	in_lang["guiHintKey1"]            = "Mark this box to apply all the options below."
 	in_lang["guiHintKey2"]            = "It doesn't include the whitespaces and punctuations for character calculation."
 	in_lang["guiHintKey4"]            = "If the duration between the end time of the current line and the start time of the next line is less than this value"
@@ -278,6 +312,8 @@
 	in_lang["guiHintKey10"]           = "Checks:\n- syntax error: {{...}\n- to be combined: {...}{...}"
 	in_lang["guiHintKey11"]           = "Please write the most complex first.\n\nVARIABLES\n\"$s\" = whitespace."
 	in_lang["guiHintKey12"]           = "Anything written here is deleted from the line. In this way, the related controls are provided to work as flawless."
+	in_lang["guiHintKey13"]           = "CC = Character Count"
+	in_lang["guiHintKey14"]           = "The spell checking is activated if you choose a language."
 	in_lang["key1"]                   = "No lines found to jump."
 	in_lang["key2"]                   = "{%s}{%s}  |  {%s}"
 	in_lang["key3"]                   = "{%1}  [Total {%2:# [line][lines]}]"
@@ -328,6 +364,8 @@
 	in_lang["char"]                   = "C"
 	in_lang["out"]                    = "[CHECK]"
 	in_lang["errorKey1"]              = "Resolution must be greater than zero."
+	in_lang["errorKey2"]              = "The spell check module not installed."
+	in_lang["errorKey3"]              = "The dictionary files not found."
 	in_lang["warningKey1"]            = "You've already chosen the option to mark all of the following on the \"{%s}\"."
 	in_lang["progressKey1"]           = "Checking..."
 	in_lang["progressKey2"]           = "Removing..."
@@ -373,6 +411,30 @@
 	in_lang["staHeader6"]             = "SUBTITLE INFO"
 	in_lang["staFormat1"]             = "{%s}{%s} - {%s}% -> {%s}"
 	in_lang["staFormat2"]             = "{%s}  {%s}"
+	in_lang["langCodeKey0"]           = "Select"
+	in_lang["langCodeKey1"]           = "German"
+	in_lang["langCodeKey2"]           = "English (American)"
+	in_lang["langCodeKey3"]           = "English (British)"
+	in_lang["langCodeKey4"]           = "French"
+	in_lang["langCodeKey5"]           = "Italian"
+	in_lang["langCodeKey6"]           = "Polish"
+	in_lang["langCodeKey7"]           = "Portuguese"
+	in_lang["langCodeKey8"]           = "Russian"
+	in_lang["langCodeKey9"]           = "Spanish"
+	in_lang["langCodeKey10"]          = "Swedish"
+	in_lang["langCodeKey11"]          = "Turkish"
+	in_lang["ignoreKey1"]             = "None"
+	in_lang["ignoreKey2"]             = "CC Only"
+	in_lang["ignoreKey3"]             = "CPS Only"
+	in_lang["ignoreKey4"]             = "CC and CPS"
+	in_lang["sp_install_notes"]       = "How to Install Spell Check?"
+	.."\n1. Download the module files: https://yadi.sk/d/T26kCPEeUeFvSw"
+	.."\n2. Put the downloaded files in the include directory."
+	.."\n3. Find dictionary files."
+	.."\n  - http://www.aegisub.org/downloads/#dictionaries"
+	.."\n  - https://wiki.documentfoundation.org/Language/Support"
+	.."\n4. If Aeigsub is open, restart it or click on the \"rescan autoload dir.\" button"
+	.."\n\nNOTE: x64 Aegisub is needed."
 	end
 	return in_lang, lang_list, script_name_list, sub_menu_list
 	end
@@ -385,7 +447,7 @@
 
 	script_name               = c_lang.s_name
 	script_description        = c_lang.s_desc
-	script_version            = "1.5.3"
+	script_version            = "1.5.6"
 	script_author             = "Magnum357"
 	script_mag_version        = "1.1.5.0"
 	script_file_name          = "mag.check_lines"
@@ -394,6 +456,7 @@
 	include_unicode           = true
 	include_karaskel          = true
 	mag_import, mag           = pcall(require, "mag")
+	hunspell_import, hunspell = pcall(require, "hunspell")
 
 	if mag_import then
 	mag.lang                  = c_lang_switch
@@ -401,6 +464,9 @@
 	c_lock_gui                = false
 	c_buttons1                = {c_lang.buttonKey1, c_lang.buttonKey3, c_lang.buttonKey5, c_lang.buttonKey6, c_lang.tabKey2, c_lang.tabKey3, c_lang.buttonKey4, c_lang.buttonKey2}
 	c_buttons2                = {c_lang.buttonKey8, c_lang.buttonKey9, c_lang.buttonKey7, c_lang.buttonKey2}
+	c_spell_langlist          = {}
+	c_spell_langtable         = {"de_DE", "en_GB", "en_US", "fr_FR", "it_IT", "pl_PL", "pt_PT", "ru_RU", "es_ES", "sv_SE", "tr_TR"}
+	c_ignorelist              = {c_lang.ignoreKey1, c_lang.ignoreKey2, c_lang.ignoreKey3, c_lang.ignoreKey4}
 
 	c                         = {}
 	c.time                    = true
@@ -433,9 +499,7 @@
 	c.apply_lines1            = mag.window.lang.message("select")
 	c.comment_mode1           = true
 	c.empty_mode1             = true
-	c.space_and_punc_cc       = false
-	c.space_and_punc_cps      = false
-	c.view_report             = true
+	c.view_report             = false
 	c.style                   = true
 	c.style_undefined         = false
 	c.style_tsyntax           = false
@@ -460,6 +524,8 @@
 	c.remove_commentblock     = true
 	c.merge_block             = true
 	c.delete_unusedstyle      = true
+	c.spellcheck_lang         = c_lang.langCodeKey0
+	c.ignore_spaceandpunc     = c_ignorelist[1]
 
 	c_output_signs            = {}
 	c_output_signs.formatKey1 = "{%2} {%1}"
@@ -494,6 +560,7 @@
 	c_output_signs.key28      = "(}{)"
 	c_output_signs.key29      = "({%s}"..c_lang.line..")=x"
 	c_output_signs.key30      = "("..c_lang.line.."{%s})=?"
+	c_output_signs.key31      = "<{%s}>"
 
 	gui                         = {
 		main1                   = {
@@ -547,17 +614,19 @@
 		karaoke                 = {class = "checkbox", name = "karaoke",                                   x = 5, y = 11, width = 3, height = 1, label = mag.string.format(c_lang.cModeFormat, c_lang.cModeListShortNameKey6, c_lang.cModeListNameKey6), hint = c_lang.guiHintKey1},
 		ktag_duration           = {class = "checkbox", name = "ktag_duration",                             x = 6, y = 12, width = 1, height = 1, label = c_lang.guiLabelKey16},
 		ktag_space              = {class = "checkbox", name = "ktag_space",                                x = 6, y = 13, width = 1, height = 1, label = c_lang.guiLabelKey17},
-		                          {class = "label",                                                        x = 0, y = 16, width = 8, height = 1, label = c_lang.guiLabelKey12},
-		apply_lines1            = {class = "dropdown", name = "apply_lines1",                              x = 0, y = 17, width = 8, height = 1, hint = mag.window.lang.message("style_hint1")},
-		comment_mode1           = {class = "checkbox", name = "comment_mode1",                             x = 0, y = 18, width = 8, height = 1, label = mag.window.lang.message("comment_mode")},
-		empty_mode1             = {class = "checkbox", name = "empty_mode1",                               x = 0, y = 19, width = 8, height = 1, label = mag.window.lang.message("empty_mode")},
-		                          {class = "label",                                                        x = 0, y = 20, width = 4, height = 1, label = c_lang.guiLabelKey13},
-		space_and_punc_cc       = {class = "checkbox", name = "space_and_punc_cc",                         x = 5, y = 20, width = 2, height = 1, label = c_lang.guiLabelKey38, hint = c_lang.guiHintKey2},
-		space_and_punc_cps      = {class = "checkbox", name = "space_and_punc_cps",                        x = 7, y = 20, width = 1, height = 1, label = c_lang.guiLabelKey39, hint = c_lang.guiHintKey2},
-		zero_in_diff            = {class = "checkbox", name = "zero_in_diff",                              x = 0, y = 21, width = 8, height = 1, label = c_lang.guiLabelKey30},
-		                          {class = "label",                                                        x = 0, y = 22, width = 2, height = 1, label = c_lang.guiLabelKey27},
-		punc_enclose_list       = {class = "edit",     name = "punc_enclose_list",                         x = 2, y = 22, width = 1, height = 1, hint = c_lang.guiHintKey11.."\n\n"..c_lang.guiHintKey12},
-		view_report             = {class = "checkbox", name = "view_report",                               x = 0, y = 23, width = 8, height = 1, label = c_lang.guiLabelKey14},
+		                          {class = "label",                                                        x = 0, y = 16, width = 4, height = 1, label = c_lang.guiLabelKey12},
+		apply_lines1            = {class = "dropdown", name = "apply_lines1",                              x = 0, y = 17, width = 4, height = 1, hint = mag.window.lang.message("style_hint1")},
+		                          {class = "label",                                                        x = 5, y = 16, width = 4, height = 1, label = c_lang.guiLabelKey40},
+		comment_mode1           = {class = "checkbox", name = "comment_mode1",                             x = 0, y = 18, width = 4, height = 1, label = mag.window.lang.message("comment_mode")},
+		empty_mode1             = {class = "checkbox", name = "empty_mode1",                               x = 0, y = 19, width = 4, height = 1, label = mag.window.lang.message("empty_mode")},
+		zero_in_diff            = {class = "checkbox", name = "zero_in_diff",                              x = 5, y = 17, width = 4, height = 1, label = c_lang.guiLabelKey30},
+		                          {class = "label",                                                        x = 5, y = 18, width = 2, height = 1, label = c_lang.guiLabelKey27},
+		punc_enclose_list       = {class = "edit",     name = "punc_enclose_list",                         x = 7, y = 18, width = 1, height = 1, hint = c_lang.guiHintKey11.."\n\n"..c_lang.guiHintKey12},
+								  {class = "label",                                                        x = 5, y = 19, width = 2, height = 1, label = c_lang.guiLabelKey41},
+		spellcheck_lang         = {class = "dropdown", name = "spellcheck_lang",                           x = 7, y = 19, width = 1, height = 1, hint = c_lang.guiHintKey14},
+								  {class = "label",                                                        x = 5, y = 20, width = 2, height = 1, label = c_lang.guiLabelKey13},
+		ignore_spaceandpunc     = {class = "dropdown", name = "ignore_spaceandpunc",                       x = 7, y = 20, width = 1, height = 1, items = c_ignorelist, hint = c_lang.guiHintKey13},
+		view_report             = {class = "checkbox", name = "view_report",                               x = 5, y = 21, width = 4, height = 1, label = c_lang.guiLabelKey14},
 		},
 		main2 = {
 		delete_commentline      = {class = "checkbox", name = "delete_commentline",                        x = 0, y = 0,  width = 1, height = 1, label = c_lang.guiLabelKey31},
@@ -642,6 +711,30 @@
 	return t
 	end
 
+	function spellcheck(sinit,langcode,text)
+	if langcode == "tr_TR" then
+	text = mag.gsub(text, "â", "a")
+	text = mag.gsub(text, "î", "i")
+	text = mag.gsub(text, "û", "u")
+	text = mag.gsub(text, "ô", "o")
+	text = mag.gsub(text, "Â", "A")
+	text = mag.gsub(text, "Î", "İ")
+	text = mag.gsub(text, "Û", "U")
+	text = mag.gsub(text, "Ô", "O")
+	end
+	local words      = mag.string.words(text)
+	local res, comma = "", ""
+	for w = 1, #words do
+	words[w] = mag.gsub(words[w], "^[%s%p]+", "")
+	words[w] = mag.gsub(words[w], "[%s%p—]+$", "")
+		if not sinit:spell(words[w]) then
+		res   = res..comma..mag.string.format(c_output_signs.key31, words[w])
+		comma = ", "
+		end
+	end
+	return res
+	end
+
 	function check_lines(subs,sel)
 	local lines, index
 	local stylesTable     = {}
@@ -653,7 +746,23 @@
 	local styles
 	local prev_style
 	local meta
-	local tag_list = {}
+	local tag_list  = {}
+	local lang_code = ""
+	local sinit     = false
+	if not hunspell_import and c.spellcheck_lang ~= mag.window.lang.message("select") then
+	mag.show.log(1, c_lang.errorKey2)
+	end
+	if hunspell_import and c.spellcheck_lang ~= mag.window.lang.message("select") then
+	for i = 1, 11 do if c.spellcheck_lang == c_lang["langCodeKey"..i] then lang_code = c_spell_langtable[i] end end
+	local aff_file         = aegisub.decode_path("?data\\dictionaries\\"..lang_code..".aff")
+	local dic_file         = aegisub.decode_path("?data\\dictionaries\\"..lang_code..".dic")
+	local fcheck1, fcheck2 = io.open(aff_file, "r"), io.open(dic_file, "r")
+		if not fcheck1 and not fcheck2 then
+		mag.show.log(1, c_lang.errorKey3)
+		else
+		sinit = hunspell.new(aff_file, dic_file)
+		end
+	end
 	if c.time then
 		if c.time_min or c.time_max or c.time_next_min or c.time_cps or c.time_overlap then
 		mag.show.log(2, mag.string.format(c_lang.warningKey1, c_lang.cModeListNameKey1))
@@ -789,7 +898,7 @@
 				if dur > 0 then
 					if c.time or c.time_cps then
 					local cps
-					text_len = len(line.text, c.space_and_punc_cps)
+					text_len = len(line.text, c.ignore_spaceandpunc == c_ignorelist[3] or c.ignore_spaceandpunc == c_ignorelist[4])
 					cps      = text_len / dur
 					cps      = mag.floor(cps * 1000)
 						if cps > mag.n(c.time_cps_value) then
@@ -822,7 +931,7 @@
 		end
 		if c.char or c.char_max or c.char_range or c.char_screenline then
 			if not mag.match(strip_line, "\\N") then
-			text_len = len(line.text, c.space_and_punc_cc)
+			text_len = len(line.text, c.ignore_spaceandpunc == c_ignorelist[2] or c.ignore_spaceandpunc == c_ignorelist[4])
 				if c.char or c.char_max then
 					if text_len > mag.n(c.char_max_value) then
 					if c.view_report then report_counter[6] = report_counter[6] + 1 end
@@ -834,7 +943,7 @@
 				local split_breaking = mag.string.split(mag.gsub(strip_line, "\\h", " "), "\\N")
 				local breaking_len   = {}
 					for b = 1, #split_breaking do
-					mag.array.insert(breaking_len, len(split_breaking[b], c.space_and_punc_cc))
+					mag.array.insert(breaking_len, len(split_breaking[b], c.ignore_spaceandpunc == c_ignorelist[2] or c.ignore_spaceandpunc == c_ignorelist[4]))
 					end
 				mag.sort.basic(breaking_len)
 					if breaking_len[#breaking_len] > mag.n(c.char_range_value) then
@@ -1159,6 +1268,13 @@
 		result = mag.string.combine(result, check,                         c_output_signs.formatKey2)
 		check  = ""
 		end
+		if c.spellcheck_lang ~= mag.window.lang.message("select") and sinit ~= false then
+		local sc_result = spellcheck(sinit, lang_code, strip_line2)
+			if sc_result ~= "" then
+			check  = mag.string.combine(check, sc_result, "{%s}, {%s]")
+			result = mag.string.combine(result, check, c_output_signs.formatKey2)
+			end
+		end
 		if result ~= "" then
 		if not pcs then pcs = true end
 		line.effect = mag.string.format("{%s} {%s}", c_lang.out, result)
@@ -1216,10 +1332,12 @@
 	end
 
 	function add_macro1(subs,sel,act)
-	local apply_items            = mag.list.full_apply(subs, sel, "comment")
-	c.apply_lines1               = mag.array.search_apply(apply_items, c.apply_lines1)
-	gui.main1.apply_lines1.items = apply_items
-	gui.main2.apply_lines1.items = apply_items
+	if #c_spell_langlist == 0 then for i = 0, 11 do mag.array.insert(c_spell_langlist, c_lang["langCodeKey"..i]) end end
+	gui.main1.spellcheck_lang.items = c_spell_langlist
+	local apply_items               = mag.list.full_apply(subs, sel, "comment")
+	c.apply_lines1                  = mag.array.search_apply(apply_items, c.apply_lines1)
+	gui.main1.apply_lines1.items    = apply_items
+	gui.main2.apply_lines1.items    = apply_items
 	local ok, config
 	repeat
 	if ok == mag.convert.ascii(c_buttons1[4]) then
@@ -1688,6 +1806,10 @@
 	mag.show.no_op(pcs)
 	end
 
+	function add_macro7(subs,sel)
+	mag.show.log(c_lang.sp_install_notes)
+	end
+
 	function progresschart(percent)
 	percent     = mag.ceil(percent)
 	local space = ""
@@ -1747,6 +1869,16 @@
 	end
 	end
 
+	function check_macro7(subs,sel)
+	mag.window.task()
+	if c_lock_gui then
+	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
+	else
+	local fe, fee = pcall(add_macro7, subs, sel)
+	mag.window.funce(fe, fee)
+	end
+	end
+
 	function mag_redirect_gui()
 	local mag_module_link = "https://github.com/magnum357i/Magnum-s-Aegisub-Scripts"
 	local k = aegisub.dialog.display({{class = "label", label = mag_gui_message}}, {c_lang.module_yes, c_lang.module_no})
@@ -1762,6 +1894,7 @@
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey5,                      check_macro4)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey1.."/"..c_lang.tabKey2, check_macro2)
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey1.."/"..c_lang.tabKey3, check_macro3)
+		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey6,                      check_macro7)
 		mag.window.lang.register(c_sub_name_list[c_lang_switch])
 		end
 	else

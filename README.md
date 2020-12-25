@@ -122,7 +122,7 @@ Clears tags, extra whitespaces and things like them.
 ### [Translator Info](automation/autoload/mag.translator_info.lua)
 Designed to write translator data with social media accounts.
 
-### [Translation Status](automation/autoload/mag.translation_status)
+### [Translation Status](automation/autoload/mag.translation_status.lua)
 Shows the status of your translation.
 
 ### [Typewriter](automation/autoload/mag.typewriter.lua)
