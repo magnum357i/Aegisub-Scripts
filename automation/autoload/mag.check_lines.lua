@@ -51,7 +51,7 @@
 	in_lang["cModeFormat"]            = "[({%1}) {%2}]"
 	in_lang["guiLabelKey1"]           = "Şundan az:"
 	in_lang["guiLabelKey2"]           = "Şundan fazla:"
-	in_lang["guiLabelKey3"]           = "Zaman farkı şundan az ise:"
+	in_lang["guiLabelKey3"]           = "Zaman farkı"
 	in_lang["guiLabelKey4"]           = "Karakter/saniye sınırı:"
 	in_lang["guiLabelKey5"]           = "Üst üste binen satır"
 	in_lang["guiLabelKey6"]           = "Bölünmemiş satırların sınırı:"
@@ -78,7 +78,6 @@
 	in_lang["guiLabelKey27"]          = "Belirli gruplar için ayıraç:"
 	in_lang["guiLabelKey28"]          = "ms"
 	in_lang["guiLabelKey29"]          = "karakter"
-	in_lang["guiLabelKey30"]          = "Sıfır olan zaman farklarını yazma."
 	in_lang["guiLabelKey31"]          = "Yorum satırlarını sil."
 	in_lang["guiLabelKey32"]          = "Boş satırları sil."
 	in_lang["guiLabelKey33"]          = "Bölme karakterlerinin boşluklarını temizle."
@@ -90,9 +89,11 @@
 	in_lang["guiLabelKey39"]          = "saniye/karakter"
 	in_lang["guiLabelKey40"]          = "[AYARLAR]"
 	in_lang["guiLabelKey41"]          = "İmla denetimi dili:"
+	in_lang["guiLabelKey42"]          = "Başlangıç:"
+	in_lang["guiLabelKey43"]          = "Bitiş:"
 	in_lang["guiHintKey1"]            = "Aşağıdaki tercihlerin hepsini uygulamak için bu kutuyu işaretleyin."
 	in_lang["guiHintKey2"]            = "Karakter hesaplamasına boşlukları ve noktalama işaretlerini dahil etmez."
-	in_lang["guiHintKey4"]            = "Geçerli satırın bitiş süresi ile sonraki satırın başlangıç süresi arasındaki süre bu değerden az ise"
+	in_lang["guiHintKey4"]            = "Zaman farkı, geçerli sürenin bitiş zamanıyla sonraki satırın başlangıç zamanı arasındaki süredir. Belirlediğiniz aralıktaki farkları gösterir."
 	in_lang["guiHintKey5"]            = "Tüm yazı tipleri yüklü olmalıdır."
 	in_lang["guiHintKey6"]            = "Her yeri kontrol eder(satırın başı, ortası ve sonu)."
 	in_lang["guiHintKey7"]            = "Satır sonu içindir. \"{%s}\" kontrolündeki karakterleri arar ve hiçbirini bulamazsa hata basar."
@@ -156,6 +157,7 @@
 	in_lang["errorKey2"]              = "İmla kontrol modülü yüklenmemiş."
 	in_lang["errorKey3"]              = "Sözlük dosyaları bulunamadı."
 	in_lang["warningKey1"]            = "Zaten şu bölümde aşağıdakilerin hepsini işaretlemeyi seçtiniz: \"{%s}\""
+	in_lang["warningKey2"]            = "Zaman farkındaki başlangıç değeri, bitiş değerinden daha büyük."
 	in_lang["progressKey1"]           = "Kontrol ediliyor..."
 	in_lang["progressKey2"]           = "Kaldırılıyor..."
 	in_lang["progressKey3"]           = "Öncekine atlanıyor..."
@@ -262,7 +264,7 @@
 	in_lang["cModeFormat"]            = "[{%1}] {%2}"
 	in_lang["guiLabelKey1"]           = "Less than:"
 	in_lang["guiLabelKey2"]           = "More than:"
-	in_lang["guiLabelKey3"]           = "Time difference is less than:"
+	in_lang["guiLabelKey3"]           = "Time difference"
 	in_lang["guiLabelKey4"]           = "Char/sec threshold:"
 	in_lang["guiLabelKey5"]           = "Overlapping line"
 	in_lang["guiLabelKey6"]           = "Limit of unbreaked line:"
@@ -289,7 +291,6 @@
 	in_lang["guiLabelKey27"]          = "Enclose for certain groups:"
 	in_lang["guiLabelKey28"]          = "ms"
 	in_lang["guiLabelKey29"]          = "chars"
-	in_lang["guiLabelKey30"]          = "Don't write the zero in the time difference."
 	in_lang["guiLabelKey31"]          = "Delete comment lines."
 	in_lang["guiLabelKey32"]          = "Delete empty lines."
 	in_lang["guiLabelKey33"]          = "Clear spaces on break chars."
@@ -301,9 +302,11 @@
 	in_lang["guiLabelKey39"]          = "cps"
 	in_lang["guiLabelKey40"]          = "[OPTIONS]"
 	in_lang["guiLabelKey41"]          = "Spell check language:"
+	in_lang["guiLabelKey42"]          = "Start:"
+	in_lang["guiLabelKey43"]          = "End:"
 	in_lang["guiHintKey1"]            = "Mark this box to apply all the options below."
 	in_lang["guiHintKey2"]            = "It doesn't include the whitespaces and punctuations for character calculation."
-	in_lang["guiHintKey4"]            = "If the duration between the end time of the current line and the start time of the next line is less than this value"
+	in_lang["guiHintKey4"]            = "The time difference is the duration between the end time of the current line and the start time of the next line. Shows the differences between the range you specify."
 	in_lang["guiHintKey5"]            = "All fonts must be installed."
 	in_lang["guiHintKey6"]            = "Checks everywhere (start, center, end of line)."
 	in_lang["guiHintKey7"]            = "For the end of a line. Searches for the characters in \"{%s}\" check and if it can find none of them, it gives an error."
@@ -367,6 +370,7 @@
 	in_lang["errorKey2"]              = "The spell check module not installed."
 	in_lang["errorKey3"]              = "The dictionary files not found."
 	in_lang["warningKey1"]            = "You've already chosen the option to mark all of the following on the \"{%s}\"."
+	in_lang["warningKey2"]            = "The start range is bigger than the stop range in the time difference."
 	in_lang["progressKey1"]           = "Checking..."
 	in_lang["progressKey2"]           = "Removing..."
 	in_lang["progressKey3"]           = "Jumping to prev..."
@@ -447,7 +451,7 @@
 
 	script_name               = c_lang.s_name
 	script_description        = c_lang.s_desc
-	script_version            = "1.5.6"
+	script_version            = "1.5.8"
 	script_author             = "Magnum357"
 	script_mag_version        = "1.1.5.0"
 	script_file_name          = "mag.check_lines"
@@ -474,8 +478,9 @@
 	c.time_min_value          = "70"
 	c.time_max                = false
 	c.time_max_value          = "600"
-	c.time_next_min           = false
-	c.time_next_min_value     = "10"
+	c.time_next               = false
+	c.time_next_value1        = "0"
+	c.time_next_value2        = "50"
 	c.time_cps                = false
 	c.time_cps_value          = 20
 	c.time_overlap            = false
@@ -516,7 +521,6 @@
 	c.punc_endline_list       = "... ! ? : . —"
 	c.punc_missing            = false
 	c.punc_enclose_list       = "\" ( ) [ ]"
-	c.zero_in_diff            = false
 	c.delete_commentline      = true
 	c.delete_emptyline        = true
 	c.clear_breaklinespace    = true
@@ -570,31 +574,35 @@
 		time_min_value          = {class = "intedit",  name = "time_min_value",        min = 0,            x = 2, y = 1,  width = 1, height = 1},
 		time_max                = {class = "checkbox", name = "time_max",                                  x = 1, y = 2,  width = 1, height = 1, label = c_lang.guiLabelKey2},
 		time_max_value          = {class = "intedit",  name = "time_max_value",        min = 0,            x = 2, y = 2,  width = 1, height = 1},
-		time_next_min           = {class = "checkbox", name = "time_next_min",                             x = 1, y = 3,  width = 1, height = 1, label = c_lang.guiLabelKey3, hint = c_lang.guiHintKey4},
-		time_next_min_value     = {class = "intedit",  name = "time_next_min_value",   min = 0,            x = 2, y = 3,  width = 1, height = 1},
-		time_cps                = {class = "checkbox", name = "time_cps",                                  x = 1, y = 4,  width = 1, height = 1, label = c_lang.guiLabelKey4},
-		time_cps_value          = {class = "intedit",  name = "time_cps_value",        min = 15, max = 70, x = 2, y = 4,  width = 1, height = 1},
-		time_overlap            = {class = "checkbox", name = "time_overlap",                              x = 1, y = 5,  width = 1, height = 1, label = c_lang.guiLabelKey5},
-		char                    = {class = "checkbox", name = "char",                                      x = 0, y = 6,  width = 3, height = 1, label = mag.string.format(c_lang.cModeFormat, c_lang.cModeListShortNameKey2, c_lang.cModeListNameKey2), hint = c_lang.guiHintKey1},
-		char_max                = {class = "checkbox", name = "char_max",                                  x = 1, y = 7,  width = 1, height = 1, label = c_lang.guiLabelKey6},
-		char_max_value          = {class = "intedit",  name = "char_max_value",        min = 35, max = 55, x = 2, y = 7,  width = 1, height = 1},
-		char_range              = {class = "checkbox", name = "char_range",                                x = 1, y = 8,  width = 1, height = 1, label = c_lang.guiLabelKey7},
-		char_range_value        = {class = "intedit",  name = "char_range_value",      min = 35, max = 55, x = 2, y = 8,  width = 1, height = 1},
-		char_screenline         = {class = "checkbox", name = "char_screenline",                           x = 1, y = 9,  width = 1, height = 1, label = c_lang.guiLabelKey20, hint = c_lang.guiHintKey5},
-		                          {class = "label",                                                        x = 2, y = 9,  width = 1, height = 1, label = "2"},
-		punc                    = {class = "checkbox", name = "punc",                                      x = 0, y = 10, width = 3, height = 1, label = mag.string.format(c_lang.cModeFormat, c_lang.cModeListShortNameKey3, c_lang.cModeListNameKey3), hint = c_lang.guiHintKey1},
-		punc_double             = {class = "checkbox", name = "punc_double",                               x = 1, y = 11, width = 1, height = 1, label = c_lang.guiLabelKey18, hint = c_lang.guiHintKey6},
-		punc_double_list        = {class = "edit",     name = "punc_double_list",                          x = 2, y = 11, width = 1, height = 1, hint = c_lang.guiHintKey11},
-		punc_startline          = {class = "checkbox", name = "punc_startline",                            x = 1, y = 12, width = 1, height = 1, label = c_lang.guiLabelKey19},
-		punc_startline_list     = {class = "edit",     name = "punc_startline_list",                       x = 2, y = 12, width = 1, height = 1, hint = c_lang.guiHintKey11},
-		punc_endline            = {class = "checkbox", name = "punc_endline",                              x = 1, y = 13, width = 1, height = 1, label = c_lang.guiLabelKey23},
-		punc_endline_list       = {class = "edit",     name = "punc_endline_list",                         x = 2, y = 13, width = 1, height = 1, hint = c_lang.guiHintKey11},
-		punc_missing            = {class = "checkbox", name = "punc_missing",                              x = 1, y = 14, width = 1, height = 1, label = c_lang.guiLabelKey26, hint = mag.string.format(c_lang.guiHintKey7, c_lang.guiLabelKey23)},
+		time_next               = {class = "checkbox", name = "time_next",                                 x = 1, y = 3,  width = 1, height = 1, label = c_lang.guiLabelKey3, hint = c_lang.guiHintKey4},
+		                          {class = "label",                                                        x = 1, y = 4,  width = 1, height = 1, label = c_lang.guiLabelKey42},
+								  {class = "label",                                                        x = 1, y = 5,  width = 1, height = 1, label = c_lang.guiLabelKey43},
+		time_next_value1        = {class = "intedit",  name = "time_next_value1",      min = 0, max = 100, x = 2, y = 4,  width = 1, height = 1},
+		time_next_value2        = {class = "intedit",  name = "time_next_value2",      min = 1, max = 300, x = 2, y = 5,  width = 1, height = 1},
+		time_cps                = {class = "checkbox", name = "time_cps",                                  x = 1, y = 6,  width = 1, height = 1, label = c_lang.guiLabelKey4},
+		time_cps_value          = {class = "intedit",  name = "time_cps_value",        min = 15, max = 70, x = 2, y = 6,  width = 1, height = 1},
+		time_overlap            = {class = "checkbox", name = "time_overlap",                              x = 1, y = 7,  width = 1, height = 1, label = c_lang.guiLabelKey5},
+		char                    = {class = "checkbox", name = "char",                                      x = 0, y = 8,  width = 3, height = 1, label = mag.string.format(c_lang.cModeFormat, c_lang.cModeListShortNameKey2, c_lang.cModeListNameKey2), hint = c_lang.guiHintKey1},
+		char_max                = {class = "checkbox", name = "char_max",                                  x = 1, y = 9,  width = 1, height = 1, label = c_lang.guiLabelKey6},
+		char_max_value          = {class = "intedit",  name = "char_max_value",        min = 35, max = 55, x = 2, y = 9,  width = 1, height = 1},
+		char_range              = {class = "checkbox", name = "char_range",                                x = 1, y = 10, width = 1, height = 1, label = c_lang.guiLabelKey7},
+		char_range_value        = {class = "intedit",  name = "char_range_value",      min = 35, max = 55, x = 2, y = 10, width = 1, height = 1},
+		char_screenline         = {class = "checkbox", name = "char_screenline",                           x = 1, y = 11, width = 1, height = 1, label = c_lang.guiLabelKey20, hint = c_lang.guiHintKey5},
+		                          {class = "label",                                                        x = 2, y = 11, width = 1, height = 1, label = "2"},
+		punc                    = {class = "checkbox", name = "punc",                                      x = 0, y = 12, width = 3, height = 1, label = mag.string.format(c_lang.cModeFormat, c_lang.cModeListShortNameKey3, c_lang.cModeListNameKey3), hint = c_lang.guiHintKey1},
+		punc_double             = {class = "checkbox", name = "punc_double",                               x = 1, y = 13, width = 1, height = 1, label = c_lang.guiLabelKey18, hint = c_lang.guiHintKey6},
+		punc_double_list        = {class = "edit",     name = "punc_double_list",                          x = 2, y = 13, width = 1, height = 1, hint = c_lang.guiHintKey11},
+		punc_startline          = {class = "checkbox", name = "punc_startline",                            x = 1, y = 14, width = 1, height = 1, label = c_lang.guiLabelKey19},
+		punc_startline_list     = {class = "edit",     name = "punc_startline_list",                       x = 2, y = 14, width = 1, height = 1, hint = c_lang.guiHintKey11},
+		punc_endline            = {class = "checkbox", name = "punc_endline",                              x = 1, y = 15, width = 1, height = 1, label = c_lang.guiLabelKey23},
+		punc_endline_list       = {class = "edit",     name = "punc_endline_list",                         x = 2, y = 15, width = 1, height = 1, hint = c_lang.guiHintKey11},
+		punc_missing            = {class = "checkbox", name = "punc_missing",                              x = 1, y = 16, width = 1, height = 1, label = c_lang.guiLabelKey26, hint = mag.string.format(c_lang.guiHintKey7, c_lang.guiLabelKey23)},
 								  {class = "label",                                                        x = 3, y = 1,  width = 1, height = 1, label = c_lang.guiLabelKey28},
 								  {class = "label",                                                        x = 3, y = 2,  width = 1, height = 1, label = c_lang.guiLabelKey28},
-								  {class = "label",                                                        x = 3, y = 3,  width = 1, height = 1, label = c_lang.guiLabelKey28},
-								  {class = "label",                                                        x = 3, y = 7,  width = 1, height = 1, label = c_lang.guiLabelKey29},
-								  {class = "label",                                                        x = 3, y = 8,  width = 1, height = 1, label = c_lang.guiLabelKey29},
+								  {class = "label",                                                        x = 3, y = 4,  width = 1, height = 1, label = c_lang.guiLabelKey28},
+								  {class = "label",                                                        x = 3, y = 5,  width = 1, height = 1, label = c_lang.guiLabelKey28},
+								  {class = "label",                                                        x = 3, y = 9,  width = 1, height = 1, label = c_lang.guiLabelKey29},
+								  {class = "label",                                                        x = 3, y = 10, width = 1, height = 1, label = c_lang.guiLabelKey29},
 		                          {class = "label",                                                        x = 4, y = 0,  width = 1, height = 1, label = mag.string.wall(" ", 10)},
 		                          {class = "label",                                                        x = 5, y = 1,  width = 1, height = 1, label = mag.string.wall(" ", 4)},
 		space                   = {class = "checkbox", name = "space",                                     x = 5, y = 0,  width = 3, height = 1, label = mag.string.format(c_lang.cModeFormat, c_lang.cModeListShortNameKey4, c_lang.cModeListNameKey4), hint = c_lang.guiHintKey1},
@@ -614,19 +622,18 @@
 		karaoke                 = {class = "checkbox", name = "karaoke",                                   x = 5, y = 11, width = 3, height = 1, label = mag.string.format(c_lang.cModeFormat, c_lang.cModeListShortNameKey6, c_lang.cModeListNameKey6), hint = c_lang.guiHintKey1},
 		ktag_duration           = {class = "checkbox", name = "ktag_duration",                             x = 6, y = 12, width = 1, height = 1, label = c_lang.guiLabelKey16},
 		ktag_space              = {class = "checkbox", name = "ktag_space",                                x = 6, y = 13, width = 1, height = 1, label = c_lang.guiLabelKey17},
-		                          {class = "label",                                                        x = 0, y = 16, width = 4, height = 1, label = c_lang.guiLabelKey12},
-		apply_lines1            = {class = "dropdown", name = "apply_lines1",                              x = 0, y = 17, width = 4, height = 1, hint = mag.window.lang.message("style_hint1")},
-		                          {class = "label",                                                        x = 5, y = 16, width = 4, height = 1, label = c_lang.guiLabelKey40},
-		comment_mode1           = {class = "checkbox", name = "comment_mode1",                             x = 0, y = 18, width = 4, height = 1, label = mag.window.lang.message("comment_mode")},
-		empty_mode1             = {class = "checkbox", name = "empty_mode1",                               x = 0, y = 19, width = 4, height = 1, label = mag.window.lang.message("empty_mode")},
-		zero_in_diff            = {class = "checkbox", name = "zero_in_diff",                              x = 5, y = 17, width = 4, height = 1, label = c_lang.guiLabelKey30},
-		                          {class = "label",                                                        x = 5, y = 18, width = 2, height = 1, label = c_lang.guiLabelKey27},
-		punc_enclose_list       = {class = "edit",     name = "punc_enclose_list",                         x = 7, y = 18, width = 1, height = 1, hint = c_lang.guiHintKey11.."\n\n"..c_lang.guiHintKey12},
-								  {class = "label",                                                        x = 5, y = 19, width = 2, height = 1, label = c_lang.guiLabelKey41},
-		spellcheck_lang         = {class = "dropdown", name = "spellcheck_lang",                           x = 7, y = 19, width = 1, height = 1, hint = c_lang.guiHintKey14},
-								  {class = "label",                                                        x = 5, y = 20, width = 2, height = 1, label = c_lang.guiLabelKey13},
-		ignore_spaceandpunc     = {class = "dropdown", name = "ignore_spaceandpunc",                       x = 7, y = 20, width = 1, height = 1, items = c_ignorelist, hint = c_lang.guiHintKey13},
-		view_report             = {class = "checkbox", name = "view_report",                               x = 5, y = 21, width = 4, height = 1, label = c_lang.guiLabelKey14},
+		                          {class = "label",                                                        x = 0, y = 18, width = 4, height = 1, label = c_lang.guiLabelKey12},
+		apply_lines1            = {class = "dropdown", name = "apply_lines1",                              x = 0, y = 19, width = 4, height = 1, hint = mag.window.lang.message("style_hint1")},
+		                          {class = "label",                                                        x = 5, y = 18, width = 4, height = 1, label = c_lang.guiLabelKey40},
+		comment_mode1           = {class = "checkbox", name = "comment_mode1",                             x = 0, y = 20, width = 4, height = 1, label = mag.window.lang.message("comment_mode")},
+		empty_mode1             = {class = "checkbox", name = "empty_mode1",                               x = 0, y = 21, width = 4, height = 1, label = mag.window.lang.message("empty_mode")},
+		                          {class = "label",                                                        x = 5, y = 19, width = 2, height = 1, label = c_lang.guiLabelKey27},
+		punc_enclose_list       = {class = "edit",     name = "punc_enclose_list",                         x = 7, y = 19, width = 1, height = 1, hint = c_lang.guiHintKey11.."\n\n"..c_lang.guiHintKey12},
+								  {class = "label",                                                        x = 5, y = 20, width = 2, height = 1, label = c_lang.guiLabelKey41},
+		spellcheck_lang         = {class = "dropdown", name = "spellcheck_lang",                           x = 7, y = 20, width = 1, height = 1, hint = c_lang.guiHintKey14},
+								  {class = "label",                                                        x = 5, y = 21, width = 2, height = 1, label = c_lang.guiLabelKey13},
+		ignore_spaceandpunc     = {class = "dropdown", name = "ignore_spaceandpunc",                       x = 7, y = 21, width = 1, height = 1, items = c_ignorelist, hint = c_lang.guiHintKey13},
+		view_report             = {class = "checkbox", name = "view_report",                               x = 5, y = 22, width = 4, height = 1, label = c_lang.guiLabelKey14},
 		},
 		main2 = {
 		delete_commentline      = {class = "checkbox", name = "delete_commentline",                        x = 0, y = 0,  width = 1, height = 1, label = c_lang.guiLabelKey31},
@@ -712,6 +719,7 @@
 	end
 
 	function spellcheck(sinit,langcode,text)
+	text = mag.gsub(text, "\"", "")
 	if langcode == "tr_TR" then
 	text = mag.gsub(text, "â", "a")
 	text = mag.gsub(text, "î", "i")
@@ -763,8 +771,11 @@
 		sinit = hunspell.new(aff_file, dic_file)
 		end
 	end
+	if (c.time or c.time_next) and c.time_next_value1 > c.time_next_value2 then
+	mag.show.log(2, mag.string.format(c_lang.warningKey2, c_lang.cModeListNameKey1))
+	end
 	if c.time then
-		if c.time_min or c.time_max or c.time_next_min or c.time_cps or c.time_overlap then
+		if c.time_min or c.time_max or c.time_next or c.time_cps or c.time_overlap then
 		mag.show.log(2, mag.string.format(c_lang.warningKey1, c_lang.cModeListNameKey1))
 		end
 	end
@@ -796,7 +807,7 @@
 	if c.style or c.style_tsyntax then
 	tag_list = tags()
 	end
-	if c.time or c.time_next_min or c.time_overlap then
+	if c.time or c.time_next or c.time_overlap then
 		if lines_index[1] ~= nil then
 		lines_index = mag.sort.index(subs, lines_index)
 		end
@@ -860,7 +871,7 @@
 	end
 	strip_line  = mag.strip.bracket(line.text)
 	strip_line2 = strip_special(strip_line)
-		if c.time or c.time_min or c.time_max or c.time_next_min or c.time_cps or c.time_overlap then
+		if c.time or c.time_min or c.time_max or c.time_next or c.time_cps or c.time_overlap then
 		local dur
 			if line.end_time > line.start_time then
 			dur = (line.end_time - line.start_time) / 10
@@ -879,16 +890,14 @@
 				check = mag.string.combine(check, mag.string.format(c_output_signs.key2, dur - c.time_max_value), "{%s}, {%s]")
 				end
 			end
-			if c.time or c.time_next_min then
+			if c.time or c.time_next then
 				if lines_index[i + 1] ~= nil then
 				local next_line = subs[lines_index[i + 1]]
 					if next_line.start_time >= line.end_time then
 					local dur2 = (next_line.start_time - line.end_time) / 10
-						if not c.zero_in_diff or c.zero_in_diff and dur2 > 0 then
-							if dur2 <= c.time_next_min_value then
-							if c.view_report then report_counter[3] = report_counter[3] + 1 end
-							check = mag.string.combine(check, mag.string.format(c_output_signs.key3, dur2), "{%s}, {%s}")
-							end
+						if dur2 >= c.time_next_value1 and dur2 <= c.time_next_value2 then
+						if c.view_report then report_counter[3] = report_counter[3] + 1 end
+						check = mag.string.combine(check, mag.string.format(c_output_signs.key3, dur2), "{%s}, {%s}")
 						end
 					end
 				end
@@ -1537,11 +1546,13 @@
 		{["key"] = "commentblock", ["lang"] = 5},
 		{["key"] = "uniqueactor",  ["lang"] = 32},
 		{["key"] = "totalstyle",   ["lang"] = 7},
-		{["key"] = "totalfont",    ["lang"] = 27},
 	}) do
 		if count[val.key] > 0 then
 		 mag.array.insert(all_msg["summary"], mag.string.format(c_lang["key2"], mag.string.wall("  ", max_digit - mag.convert.len(mag.s(count[val.key]))), count[val.key], c_lang["staKey"..val.lang]))
 		end
+	end
+	if count.totalstyle ~= count.totalfont then
+	mag.array.insert(all_msg["summary"], mag.string.format(c_lang["key2"], mag.string.wall("  ", max_digit - mag.convert.len(mag.s(count.totalfont))), count.totalfont, c_lang.staKey27))
 	end
 	local reorder = {}
 	for _, val in pairs({
