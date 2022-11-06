@@ -117,11 +117,22 @@
 	in_lang["buttonKey22"]         = "Add tags"
 	in_lang["buttonKey23"]         = "Strip"
 	in_lang["buttonKey24"]         = "Shift"
+	in_lang["buttonKey25"]         = "Replace"
 	in_lang["errorKey1"]           = "Previous line not exists."
 	in_lang["errorKey3"]           = "Next line not exists."
 	in_lang["errorKey4"]           = "Line is too short."
 	in_lang["tabKey1"]             = "All"
 	in_lang["tabKey2"]             = "Notes"
+	in_lang["tabKey3"]             = "Shift"
+	in_lang["tabKey4"]             = "Right (1px)"
+	in_lang["tabKey5"]             = "Left (1px)"
+	in_lang["tabKey6"]             = "Top (1px)"
+	in_lang["tabKey7"]             = "Bottom (1px)"
+	in_lang["tabKey8"]             = "Actions"
+	in_lang["tabKey9"]             = "Italic"
+	in_lang["tabKey10"]            = "Top"
+	in_lang["tabKey11"]            = "Fad"
+	in_lang["tabKey12"]            = "Tags"
 	in_lang["key1"]                = "LEFT"
 	in_lang["key2"]                = "CENTER"
 	in_lang["key3"]                = "RIGHT"
@@ -145,7 +156,7 @@
 
 	script_name         = c_lang.s_name
 	script_description  = c_lang.s_desc
-	script_version      = "1.1.0"
+	script_version      = "1.1.1"
 	script_author       = "Magnum357"
 	script_mag_version  = "1.1.5.0"
 	script_file_name    = "mag.manage_lines"
@@ -160,7 +171,7 @@
 	mag.lang            = c_lang_switch
 
 	c_lock_gui          = false
-	c_buttons1          = {c_lang.buttonKey1, c_lang.buttonKey2, c_lang.buttonKey3, c_lang.buttonKey4, c_lang.buttonKey5, c_lang.buttonKey6, c_lang.buttonKey7}
+	c_buttons1          = {c_lang.buttonKey1, c_lang.buttonKey2, c_lang.buttonKey3, c_lang.buttonKey4, c_lang.buttonKey5, c_lang.buttonKey6, c_lang.buttonKey25, c_lang.buttonKey7}
 	c_buttons2          = {c_lang.buttonKey8, c_lang.buttonKey9, c_lang.buttonKey10}
 	c_buttons3          = {c_lang.buttonKey12}
 	c_buttons4          = {c_lang.buttonKey13, c_lang.buttonKey14, c_lang.buttonKey15}
@@ -498,7 +509,7 @@
 		line.text = toggletag(line.text, "an[1-9]", "an8")
 		elseif ok == c_lang.buttonKey21 then
 		line.text = removetag_atfirst(line.text, "fad%(%s*%d+%s*,%s*%d+%s*%)")
-			if c.fl_fads > 0 and c.fl_fade > 0 then
+			if c.fl_fads > 0 or c.fl_fade > 0 then
 			line.text = toggletag(line.text, "fad%(%s*%d+%s*,%s*%d+%s*%)", mag.string.format("fad({%s},{%s})", c.fl_fads, c.fl_fade))
 			end
 		elseif ok == c_lang.buttonKey22 then
@@ -547,6 +558,29 @@
 			end
 		else
 		mag.show.log(2, c_lang.warningKey2)
+		end
+	if pcs then subs[index] = line end
+	end
+	mag.show.no_op(pcs)
+	end
+
+	function replacetext(oldtext, newtext)
+	return newtext
+	end
+
+	function replaceline(subs,sel)
+	local pcs = false
+	local lines_index = mag.line.index(subs, sel, mag.window.lang.message("all_lines"), true, true)
+	mag.window.task(c_lang.progressKey1)
+	for i = 1, #lines_index do
+	mag.window.progress(i, #lines_index)
+	local cancel = aegisub.progress.is_cancelled()
+	if cancel then break end
+	index = lines_index[i]
+	line  = subs[index]
+		if mag.match(line.text, "{%*}[^{]*{%*[^}]*}") then
+		if pcs == false then pcs = true end
+		line.text = mag.gsub(line.text, "{%*}([^{]+){%*([^}]+)}", replacetext)
 		end
 	if pcs then subs[index] = line end
 	end
@@ -714,53 +748,81 @@
 	return formatline(subs, sel, act, ok)
 	elseif guiselect == "shifter" then
 	return shifterline(subs, sel, act, ok)
+	elseif ok == mag.convert.ascii(c_lang.buttonKey25) then
+	return replaceline(subs, sel)
 	end
 	end
 
-	function add_macro2(subs,sel,act)
-	local ok, config
-	mag.config.put(gui.main2)
-	ok, config = mergeline_gui(subs, sel, act, "single")
-	mag.config.take(config)
-	if ok ~= c_lang.buttonKey7 then return mergeline(subs, sel, act, ok) end
-	end
-
-	function add_macro3(subs,sel,act)
-	local ok, config
-	ok, config = splitline_gui(subs, sel, act, "single")
-	if ok ~= c_lang.buttonKey7 then return splitline(subs, sel, act, ok) end
-	end
-
-	function add_macro4(subs,sel,act)
-	local ok, config
-	ok, config = breakline_gui(subs, sel, act, "single")
-	if ok ~= c_lang.buttonKey7 then return breakline(subs, sel, act, ok) end
-	end
-
-	function add_macro5(subs,sel,act)
-	local ok, config
-	ok, config = combineline_gui(subs, sel, act, "single")
-	if ok ~= c_lang.buttonKey7 then return combineline(subs, sel, act, ok) end
-	end
-
-	function add_macro6(subs,sel,act)
-	local ok, config
-	mag.config.put(gui.main3)
-	ok, config = formatline_gui(subs, sel, act, "single")
-	mag.config.take(config)
-	if ok ~= c_lang.buttonKey7 then return formatline(subs, sel, act, ok) end
-	end
-
-	function add_macro7(subs,sel,act)
-	local ok, config
-	mag.config.put(gui.main4)
-	ok, config = shifterline_gui(subs, sel, act, "single")
-	mag.config.take(config)
-	if ok ~= c_lang.buttonKey7 then return shifterline(subs, sel, act, ok) end
-	end
-
-	function add_macro8(subs,sel)
+	function add_macro2(subs,sel)
 	mag.show.log(c_lang.notes)
+	end
+
+	function add_macro3(subs,sel)
+	local selected_lines = mag.index.sel(subs, sel)
+	local return_index   = {}
+	local pcs            = false
+	for i = 1, #selected_lines do
+	index = selected_lines[i]
+	line  = subs[index]
+	local istag, changedtext = shiftxy(line.text,1,0)
+	if istag == true then line.text = changedtext end
+	subs[index] = line
+	end
+	end
+
+	function add_macro4(subs,sel)
+	local selected_lines = mag.index.sel(subs, sel)
+	local return_index   = {}
+	local pcs            = false
+	for i = 1, #selected_lines do
+	index = selected_lines[i]
+	line  = subs[index]
+	local istag, changedtext = shiftxy(line.text,-1,0)
+	if istag == true then line.text = changedtext end
+	subs[index] = line
+	end
+	end
+
+	function add_macro5(subs,sel)
+	local selected_lines = mag.index.sel(subs, sel)
+	local return_index   = {}
+	local pcs            = false
+	for i = 1, #selected_lines do
+	index = selected_lines[i]
+	line  = subs[index]
+	local istag, changedtext = shiftxy(line.text,0,1)
+	if istag == true then line.text = changedtext end
+	subs[index] = line
+	end
+	end
+
+	function add_macro6(subs,sel)
+	local selected_lines = mag.index.sel(subs, sel)
+	local return_index   = {}
+	local pcs            = false
+	for i = 1, #selected_lines do
+	index = selected_lines[i]
+	line  = subs[index]
+	local istag, changedtext = shiftxy(line.text,0,-1)
+	if istag == true then line.text = changedtext end
+	subs[index] = line
+	end
+	end
+
+	function shiftxy(text,x,y)
+	local istag = false
+	local posx, posy = mag.match(line.text, "\\pos%((%-?%d*%.?%d*),(%-?%d*%.?%d*)%s*%)")
+	if posx ~= nil then
+	istag = true
+	text  = mag.gsub(line.text, "\\pos%([^%)]+%)", mag.string.format("\\pos({%s},{%s})", posx + x, posy + y))
+	else
+		local movex1, movey1, movex2, movey2 = mag.match(line.text, "\\move%((%-?%d*%.?%d*),(%-?%d*%.?%d*),(%-?%d*%.?%d*),(%-?%d*%.?%d*)")
+		if movex1 ~= nil then
+		istag = true
+		text  = mag.gsub(line.text, "\\move%(%-?%d*%.?%d*,%-?%d*%.?%d*,%-?%d*%.?%d*,%-?%d*%.?%d*", mag.string.format("\\move({%s},{%s},{%s},{%s}", movex1 + x, movey1 + y, movex2 + x, movey2 + y))
+		end
+	end
+	return istag, text
 	end
 
 	function check_macro1(subs,sel,act)
@@ -783,9 +845,8 @@
 	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
 	else
 	mag.config.get(c)
-	local fe, fee = pcall(add_macro2, subs, sel, act)
+	local fe, fee = pcall(add_macro8, subs, sel, act)
 	mag.window.funce(fe, fee)
-	mag.window.undo_point()
 	mag.config.set(c)
 	return fee
 	end
@@ -796,12 +857,8 @@
 	if c_lock_gui then
 	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
 	else
-	mag.config.get(c)
 	local fe, fee = pcall(add_macro3, subs, sel, act)
 	mag.window.funce(fe, fee)
-	mag.window.undo_point()
-	mag.config.set(c)
-	return fee
 	end
 	end
 
@@ -810,12 +867,8 @@
 	if c_lock_gui then
 	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
 	else
-	mag.config.get(c)
 	local fe, fee = pcall(add_macro4, subs, sel, act)
 	mag.window.funce(fe, fee)
-	mag.window.undo_point()
-	mag.config.set(c)
-	return fee
 	end
 	end
 
@@ -824,12 +877,8 @@
 	if c_lock_gui then
 	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
 	else
-	mag.config.get(c)
 	local fe, fee = pcall(add_macro5, subs, sel, act)
 	mag.window.funce(fe, fee)
-	mag.window.undo_point()
-	mag.config.set(c)
-	return fee
 	end
 	end
 
@@ -838,39 +887,8 @@
 	if c_lock_gui then
 	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
 	else
-	mag.config.get(c)
 	local fe, fee = pcall(add_macro6, subs, sel, act)
 	mag.window.funce(fe, fee)
-	mag.window.undo_point()
-	mag.config.set(c)
-	return fee
-	end
-	end
-
-	function check_macro7(subs,sel,act)
-	mag.window.task()
-	if c_lock_gui then
-	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
-	else
-	mag.config.get(c)
-	local fe, fee = pcall(add_macro7, subs, sel, act)
-	mag.window.funce(fe, fee)
-	mag.window.undo_point()
-	mag.config.set(c)
-	return fee
-	end
-	end
-
-	function check_macro8(subs,sel,act)
-	mag.window.task()
-	if c_lock_gui then
-	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
-	else
-	mag.config.get(c)
-	local fe, fee = pcall(add_macro8, subs, sel, act)
-	mag.window.funce(fe, fee)
-	mag.config.set(c)
-	return fee
 	end
 	end
 
@@ -886,13 +904,11 @@
 		aegisub.register_macro(script_name, script_desription, mag_redirect_gui)
 		else
 		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey1, check_macro1)
-		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.buttonKey1, check_macro2)
-		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.buttonKey2, check_macro3)
-		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.buttonKey3, check_macro4)
-		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.buttonKey4, check_macro5)
-		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.buttonKey5, check_macro6)
-		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.buttonKey6, check_macro7)
-		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey2,    check_macro8)
+		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey8.."/"..c_lang.tabKey3.."/"..c_lang.tabKey4, check_macro3)
+		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey8.."/"..c_lang.tabKey3.."/"..c_lang.tabKey5, check_macro4)
+		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey8.."/"..c_lang.tabKey3.."/"..c_lang.tabKey6, check_macro5)
+		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey8.."/"..c_lang.tabKey3.."/"..c_lang.tabKey7, check_macro6)
+		mag.window.register(c_sub_name_list[c_lang_switch].."/"..c_lang.tabKey2, check_macro2)
 		mag.window.lang.register(c_sub_name_list[c_lang_switch])
 		end
 	else
