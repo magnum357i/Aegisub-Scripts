@@ -28,12 +28,14 @@
 	in_lang["signtext"]            = "çevrilecek"
 	in_lang["guiLabelKey1"]        = "İşaret yazısı:"
 	in_lang["percentFormat"]       = "{%s}{%s} - %{%s} -> {%s}"
-	in_lang["headerKey1"]          = "DURUMUNUZ"
+	in_lang["headerKey1"]          = "DURUMUNUZ > {%s}/{%s} ({%s})"
 	in_lang["messageKey1"]         = "Düşük"
 	in_lang["messageKey2"]         = "Orta"
 	in_lang["messageKey3"]         = "Yüksek"
 	in_lang["messageKey4"]         = "Tüm satırlar çevrilmiş."
-	in_lang["messageLineFormat"]   = "#{%s} - {%s}"
+	in_lang["messageKey5"]         = "Çevrilmiş"
+	in_lang["messageKey7"]         = "Artış oranı: {%s} ({%s} satır)"
+	in_lang["messageLineFormat"]   = "#{%s} {%s} {%s}"
 	in_lang["hintKey1"]            = "Olabildiğince eşsiz bir şey girmeye özen gösterin."
 	in_lang["tabKey1"]             = "Talimatlar"
 	in_lang["notes"]               =
@@ -41,6 +43,11 @@
 	.."\n1. İşaretle butonuna basın. Uygulanacak satırlara bir işaret koyar."
 	.."\n2. Çevirdikçe bu işaretleri silin veya zorluk seviyesini (düşük, orta, yüksek) değiştirin."
 	.."\n3. Çevrilmemiş satırları görmek için durum butonuna basın."
+	.."\n\n\n\"SATIR ÖLÇ\"LE ORTAK ÇALIŞMA"
+	.."\n1. Satır ölç eklentisini -yeni satır kipiyle- uyguladıktan sonra bunu kullanın."
+	.."\n2. Durum butonuna basın."
+	.."\n\nÇevrilmiş satırlar çubuğu görünür."
+	in_lang["measureKey"]          = "[Satır Ölç]"
 	elseif lang == langs[2].lang_key then
 	in_lang["module_incompatible"] = "The installed version of the Mag module is incompatible with this lua file!\n\nAt least \"%s\" version or higher of the module file is required.\n\n\nWould you like to go to the download page now?"
 	in_lang["module_not_found"]    = "The module named Mag could not be found!\n\nTo use this file, you need to download the module named mag\nand move it to \"Aegisub/automation/include/\" directory when Aegisub is off.\n\n\nDo you want to go to download page now?"
@@ -58,12 +65,24 @@
 	in_lang["signtext"]            = "not translated"
 	in_lang["guiLabelKey1"]        = "Sign text:"
 	in_lang["percentFormat"]       = "{%s}{%s} - %{%s} -> {%s}"
-	in_lang["headerKey1"]          = "YOUR STATUS"
+	in_lang["headerKey1"]          = "YOUR STATUS > {%s}/{%s} ({%s})"
+	in_lang["headerKey2"]          = "CURRENT POINT"
+	in_lang["headerKey3"]          = "INCREASE TABLE (FOR ONE LINE)"
 	in_lang["messageKey1"]         = "Low"
 	in_lang["messageKey2"]         = "Medium"
 	in_lang["messageKey3"]         = "High"
 	in_lang["messageKey4"]         = "All lines translated"
-	in_lang["messageLineFormat"]   = "#{%s} - {%s}"
+	in_lang["messageKey5"]         = "Translated"
+	in_lang["messageKey6"]         = "Percent: {%s}"
+	in_lang["messageKey7"]         = "Ratio: {%s}"
+	in_lang["messageKey8"]         = "Count of the prev lines: {%s}"
+	in_lang["messageKey9"]         = "Count of the next lines: {%s}"
+	in_lang["messageKey10"]        = "Prev ({%s})"
+	in_lang["messageKey11"]        = "Next: ({%s})"
+	in_lang["messageKey12"]        = "Untranslated"
+	in_lang["messageKey13"]        = "Types"
+	in_lang["messageKey14"]        = "Summary"
+	in_lang["messageLineFormat"]   = "#{%s} {%s} {%s}"
 	in_lang["hintKey1"]            = "Try to enter a unique thing as possible."
 	in_lang["tabKey1"]             = "Instructions"
 	in_lang["notes"]               =
@@ -71,6 +90,11 @@
 	.."\n1. Click the mark button. Puts a mark on the lines to be apply."
 	.."\n2. Delete these marks or change the difficulty (to low, medium, high) as you translate."
 	.."\n3. Click the status button to view the untranslated lines."
+	.."\n\n\nWORKING WITH MEASURE LINES"
+	.."\n1. Use this after applying the measure lines (next line mode only)."
+	.."\n2. Click the status button."
+	.."\n\nYou will see the bar of translated lines."
+	in_lang["measureKey"]          = "[Measure Lines]"
 	end
 	return in_lang, lang_list, script_name_list
 	end
@@ -82,7 +106,7 @@
 
 	script_name        = c_lang.s_name
 	script_description = c_lang.s_desc
-	script_version     = "1.0.0"
+	script_version     = "1.0.4"
 	script_author      = "Magnum357"
 	script_mag_version = "1.1.5.0"
 	script_file_name   = "mag.translation_status"
@@ -107,7 +131,7 @@
 
 	gui = {
 		main1 = {
-						   {class = "label",                           x = 0, y = 0, width = 1, height = 1, label = c_lang.guiLabelKey1},
+			               {class = "label",                           x = 0, y = 0, width = 1, height = 1, label = c_lang.guiLabelKey1},
 			signtext     = {class = "edit",     name = "signtext",     x = 1, y = 0, width = 1, height = 1, hint = c_lang.hintKey1},
 			               {class = "label",                           x = 0, y = 1, width = 1, height = 1, label = mag.window.lang.message("apply")},
 			apply        = {class = "dropdown", name = "apply",        x = 1, y = 1, width = 1, height = 1, hint = mag.window.lang.message("style_hint1")},
@@ -189,14 +213,22 @@
 	mag.show.no_op(pcs)
 	end
 
-	function getstatus(subs,sel)
+	c_rate      = 0
+	c_rateline  = 0
+	c_totalline = 0
+
+	function getstatus(subs,sel,act)
 	local line, index
 	local first_index  = mag.index.first(subs) - 1
+	local act_index    = act - first_index
 	local pcs          = false
 	local lines_index  = mag.line.index(subs, sel, c.apply, c.comment_mode, c.empty_mode)
 	local signtext_org = c.signtext
 	local signtext_ct  = mag.convert.esc(signtext_org)
-	local counts       = {low = 0, medium = 0, high = 0, untranslated = 0}
+	local counts       = {low = 0, medium = 0, high = 0, untranslated = 0, translated = 0, total = 0, prevc = {total = 0, low = 0, medium = 0, high = 0}, nextc = {total = 0, low = 0, medium = 0, high = 0}}
+	local scount       = #subs - first_index
+	local max_digit    = mag.n(mag.convert.len(mag.s(scount)))
+	local selected     = false
 	for i = 1, #lines_index do
 	mag.window.progress(i, #lines_index)
 	local cancel = aegisub.progress.is_cancelled()
@@ -204,28 +236,114 @@
 	if not pcs then pcs = true end
 	index        = lines_index[i]
 	line         = subs[index]
-	local passed = false
+	local icon   = ""
 		if mag.match(line.text, "{"..signtext_ct.."}") then
 		counts.untranslated = counts.untranslated + 1
 		counts.low          = counts.low + 1
 		passed              = true
+		icon                = "▶"..mag.string.wall(" ", 6)
 		elseif mag.match(line.text, "{"..signtext_ct..":2}") then
 		counts.untranslated = counts.untranslated + 1
 		counts.medium       = counts.medium + 1
 		passed              = true
+		icon                = "▶▶"..mag.string.wall(" ", 3)
 		elseif mag.match(line.text, "{"..signtext_ct..":3}") then
 		counts.untranslated = counts.untranslated + 1
 		counts.high         = counts.high + 1
 		passed              = true
+		icon                = "▶▶▶"
+		elseif mag.match(line.effect, mag.convert.esc(c_lang.measureKey)) then
+		counts.translated   = counts.translated + 1
 		end
-	if passed then mag.show.basic_log(mag.string.format(c_lang.messageLineFormat,index - first_index, mag.strip.all(line.text)).."\n", "nobreak") end
+		if icon ~= "" then
+		local linenumber = index - first_index
+		local msg        = mag.string.format(c_lang.messageLineFormat, linenumber..mag.string.wall("  ", max_digit - mag.convert.len(mag.s(linenumber))), icon, mag.strip.all(line.text))
+			if selected == false and linenumber >= act_index then
+			selected     = true
+			counts.prevc.total  = counts.untranslated - 1
+			counts.prevc.low    = counts.low
+			counts.prevc.medium = counts.medium
+			counts.prevc.high   = counts.high
+				if icon == "▶"..mag.string.wall(" ", 6) then
+				counts.prevc.low = counts.prevc.low - 1
+				elseif icon == "▶▶"..mag.string.wall(" ", 3) then
+				counts.prevc.medium = counts.prevc.medium - 1
+				elseif icon == "▶▶▶" then
+				counts.prevc.high = counts.prevc.high - 1
+				end
+			mag.show.basic_log(mag.string.wall("━", 95), "autobreak")
+			mag.show.basic_log(msg, "autobreak")
+			mag.show.basic_log(mag.string.wall("━", 95), "autobreak")
+			else
+			mag.show.basic_log(msg, "autobreak")
+			end
+		end
 	end
 	if pcs and counts.untranslated > 0 then
-	mag.show.log("\n\n"..c_lang.headerKey1)
+	counts.total = counts.translated + counts.untranslated
+	mag.show.log("\n\n"..mag.string.format(c_lang.headerKey1, counts.translated, counts.total, counts.untranslated))
+	mag.show.basic_log(mag.string.format(c_lang.messageKey14), "autobreak")
+	local percent
+		if counts.translated > 0 then
+		percent = calc_percent(counts.translated, counts.total)
+		mag.show.basic_log(mag.string.format(c_lang["percentFormat"], progresschart(percent), counts.translated, percent, c_lang["messageKey5"]), "autobreak")
+		end
+		if counts.untranslated > 0 then
+		percent = calc_percent(counts.untranslated, counts.total)
+		mag.show.basic_log(mag.string.format(c_lang["percentFormat"], progresschart(percent), counts.untranslated, percent, c_lang["messageKey12"]), "autobreak")
+		end
+		mag.show.basic_log("", "autobreak")
+		mag.show.basic_log(mag.string.format(c_lang.messageKey13), "autobreak")
 		for i, key in pairs({"low", "medium", "high"}) do
 			if counts[key] > 0 then
-			local percent = calc_percent(counts[key], counts.untranslated)
+			percent = calc_percent(counts[key], counts.total)
 			mag.show.basic_log(mag.string.format(c_lang["percentFormat"], progresschart(percent), counts[key], percent, c_lang["messageKey"..i]), "autobreak")
+			end
+		end
+		if c_totalline ~= counts.total then
+		local rate, rate_temp, countforonepercent = calc_percent(1, counts.total), 0, 1
+		rate_temp = rate
+			for i = 1, 15 do
+			countforonepercent = countforonepercent + 1
+			rate_temp          = rate_temp + rate
+			if rate_temp > 1 then break end
+			end
+		c_rate      = rate
+		c_rateline  = countforonepercent
+		c_totalline = counts.total
+		end
+	mag.show.log("\n\n"..c_lang.headerKey3)
+	mag.show.basic_log(mag.string.format(c_lang.messageKey6, c_rateline), "autobreak")
+	mag.show.basic_log(mag.string.format(c_lang.messageKey7, c_rate), "autobreak")
+	mag.show.log("\n\n"..c_lang.headerKey2)
+	if selected then
+	counts.nextc.total  = counts.untranslated - counts.prevc.total
+	counts.nextc.low    = counts.low - counts.prevc.low
+	counts.nextc.medium = counts.medium - counts.prevc.medium
+	counts.nextc.high   = counts.high - counts.prevc.high
+	else
+	counts.prevc.total  = counts.untranslated
+	counts.prevc.low    = counts.low
+	counts.prevc.medium = counts.medium
+	counts.prevc.high   = counts.high
+	end
+		if counts.prevc.total > 0 then
+		mag.show.basic_log(mag.string.format(c_lang.messageKey10, counts.prevc.total), "autobreak")
+			for i, key in pairs({"low", "medium", "high"}) do
+				if counts.prevc[key] > 0 then
+				percent = calc_percent(counts.prevc[key], counts.prevc.total)
+				mag.show.basic_log(mag.string.format(c_lang["percentFormat"], progresschart(percent), counts.prevc[key], percent, c_lang["messageKey"..i]), "autobreak")
+				end
+			end
+		end
+		if counts.nextc.total > 0 then
+		if counts.prevc.total > 0 then mag.show.basic_log("", "autobreak") end
+		mag.show.basic_log(mag.string.format(c_lang.messageKey11, counts.nextc.total), "autobreak")
+			for i, key in pairs({"low", "medium", "high"}) do
+				if counts.nextc[key] > 0 then
+				percent = calc_percent(counts.nextc[key], counts.nextc.total)
+				mag.show.basic_log(mag.string.format(c_lang["percentFormat"], progresschart(percent), counts.nextc[key], percent, c_lang["messageKey"..i]), "autobreak")
+				end
 			end
 		end
 	else
@@ -234,7 +352,7 @@
 	mag.show.no_op(pcs)
 	end
 
-	function add_macro1(subs, sel)
+	function add_macro1(subs,sel,act)
 	local apply_items     = mag.list.full_apply(subs, sel, "comment")
 	c.apply               = mag.array.search_apply(apply_items, c.apply)
 	gui.main1.apply.items = apply_items
@@ -255,7 +373,7 @@
 	elseif ok == mag.convert.ascii(c_buttons1[5]) then
 	clearlines(subs, sel)
 	elseif ok == mag.convert.ascii(c_buttons1[6]) then
-	getstatus(subs, sel)
+	getstatus(subs, sel, act)
 	end
 	end
 
@@ -263,13 +381,13 @@
 	mag.show.log(c_lang.notes)
 	end
 
-	function check_macro1(subs,sel)
+	function check_macro1(subs,sel,act)
 	mag.window.task()
 	if c_lock_gui then
 	mag.show.log(1, mag.window.lang.message("restart_aegisub"))
 	else
 	mag.config.get(c)
-	local fe, fee = pcall(add_macro1, subs, sel)
+	local fe, fee = pcall(add_macro1, subs, sel, act)
 	mag.window.funce(fe, fee)
 	mag.window.undo_point()
 	mag.config.set(c)
@@ -280,7 +398,9 @@
 	percent     = mag.ceil(percent)
 	local space = ""
 	if mag.n(percent) > 0 then space = " " end
-	return mag.string.wall("▎", percent)..space
+	percent = math.floor(percent / 5)
+	if percent == 0 then percent = 1 end
+	return "[ "..mag.string.wall("▋ ", percent).."]"..space
 	end
 
 	function calc_percent(a,b) return mag.gsub((a / b) * 100, "%.(%d%d)%d+", ".%1") end
