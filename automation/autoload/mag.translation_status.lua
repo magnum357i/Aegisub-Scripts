@@ -73,7 +73,7 @@
 	in_lang["messageKey3"]         = "High"
 	in_lang["messageKey4"]         = "All lines translated"
 	in_lang["messageKey5"]         = "Translated"
-	in_lang["messageKey6"]         = "Percent: {%s}"
+	in_lang["messageKey6"]         = "One percent: {%s} lines"
 	in_lang["messageKey7"]         = "Ratio: {%s}"
 	in_lang["messageKey8"]         = "Count of the prev lines: {%s}"
 	in_lang["messageKey9"]         = "Count of the next lines: {%s}"
@@ -400,7 +400,7 @@
 	if mag.n(percent) > 0 then space = " " end
 	percent = math.floor(percent / 5)
 	if percent == 0 then percent = 1 end
-	return "[ "..mag.string.wall("▋ ", percent).."]"..space
+	return mag.string.wall("▋", percent)..space
 	end
 
 	function calc_percent(a,b) return mag.gsub((a / b) * 100, "%.(%d%d)%d+", ".%1") end
