@@ -96,6 +96,7 @@
 	in_lang["guiLabel15"]          = "Text code:"
 	in_lang["guiLabel16"]          = "X Padding:"
 	in_lang["guiLabel17"]          = "Y Padding:"
+	in_lang["guiLabel18"]          = "{%s} ms"
 	in_lang["guiHintKey1"]         = "Does not apply in multi selections: multi mode of combine, format, shifter."
 	in_lang["guiHintKey2"]         = "Deletes the first parenthesis at the beginning of the line."
 	in_lang["guiHintKey3"]         = "If the other parameter is also set to zero, deletes the fad tag of the line."
@@ -128,6 +129,12 @@
 	in_lang["buttonKey28"]         = "Note"
 	in_lang["buttonKey29"]         = "Rescale"
 	in_lang["buttonKey30"]         = "Copy"
+	in_lang["buttonKey31"]         = "Get Width"
+	in_lang["buttonKey32"]         = "Align"
+	in_lang["buttonKey33"]         = "Top Left"
+	in_lang["buttonKey34"]         = "Top Right"
+	in_lang["buttonKey35"]         = "Bottom Left"
+	in_lang["buttonKey36"]         = "Bottom Right"
 	in_lang["errorKey1"]           = "Previous line not exists."
 	in_lang["errorKey3"]           = "Next line not exists."
 	in_lang["errorKey4"]           = "Line is too short."
@@ -166,7 +173,7 @@
 
 	script_name         = c_lang.s_name
 	script_description  = c_lang.s_desc
-	script_version      = "1.1.2"
+	script_version      = "1.1.3"
 	script_author       = "Magnum357"
 	script_mag_version  = "1.1.5.0"
 	script_file_name    = "mag.manage_lines"
@@ -181,14 +188,15 @@
 	mag.lang            = c_lang_switch
 
 	c_lock_gui          = false
-	c_buttons1          = {c_lang.buttonKey1, c_lang.buttonKey2, c_lang.buttonKey3, c_lang.buttonKey4, c_lang.buttonKey5, c_lang.buttonKey6, c_lang.buttonKey25, c_lang.buttonKey26, c_lang.buttonKey28, c_lang.buttonKey7}
+	c_buttons1          = {c_lang.buttonKey1, c_lang.buttonKey2, c_lang.buttonKey3, c_lang.buttonKey4, c_lang.buttonKey5, c_lang.buttonKey6, c_lang.buttonKey25, c_lang.buttonKey26, c_lang.buttonKey28, c_lang.buttonKey32, c_lang.buttonKey7}
 	c_buttons2          = {c_lang.buttonKey8, c_lang.buttonKey9, c_lang.buttonKey10}
 	c_buttons3          = {c_lang.buttonKey12}
 	c_buttons4          = {c_lang.buttonKey13, c_lang.buttonKey14, c_lang.buttonKey15}
 	c_buttons5          = {c_lang.buttonKey19, c_lang.buttonKey20, c_lang.buttonKey21, c_lang.buttonKey22, c_lang.buttonKey23}
 	c_buttons6          = {c_lang.buttonKey24}
 	c_buttons7          = {c_lang.buttonKey27, c_lang.buttonKey11}
-	c_buttons8          = {c_lang.buttonKey27, c_lang.buttonKey30, c_lang.buttonKey29,  c_lang.buttonKey11}
+	c_buttons8          = {c_lang.buttonKey27, c_lang.buttonKey30, c_lang.buttonKey29, c_lang.buttonKey11}
+	c_buttons9          = {c_lang.buttonKey33, c_lang.buttonKey34, c_lang.buttonKey35, c_lang.buttonKey36, c_lang.buttonKey31, c_lang.buttonKey11}
 	c_centerline        = 0
 
 	c                   = {}
@@ -206,6 +214,7 @@
 	c.sl_movey          = 0
 	c.commentmode       = true
 	c.jl_maxwidth       = 500
+	c.jl_increase       = 0
 	c.nl_shapecode      = ""
 	c.nl_textcode       = ""
 	c.nl_wpadding       = 30
@@ -220,10 +229,11 @@
 		space_and_punc = {class = "checkbox", name = "space_and_punc", x = 0, y = 2, width = 3, height = 1, label = c_lang.guiLabel4},
 		},
 		main2 = {
-		example1       = {class = "label",                             x = 0, y = 0, width = 1, height = 1},
-		example2       = {class = "label",                             x = 0, y = 2, width = 1, height = 1},
-		example3       = {class = "label",                             x = 0, y = 4, width = 1, height = 1},
-		ml_target      = {class = "dropdown", name = "ml_target",      x = 0, y = 6, width = 1, height = 1, items = {c_lang.guiLabel2, c_lang.guiLabel3}, value = c.ml_target},
+		totaltime      = {class = "label",                             x = 0, y = 0, width = 1, height = 1},
+		example1       = {class = "label",                             x = 0, y = 2, width = 1, height = 1},
+		example2       = {class = "label",                             x = 0, y = 4, width = 1, height = 1},
+		example3       = {class = "label",                             x = 0, y = 6, width = 1, height = 1},
+		ml_target      = {class = "dropdown", name = "ml_target",      x = 0, y = 8, width = 1, height = 1, items = {c_lang.guiLabel2, c_lang.guiLabel3}, value = c.ml_target},
 		},
 		main3 = {
 		              {class = "label",                                x = 0, y = 0, width = 1, height = 1, label = c_lang.guiLabel10},
@@ -246,6 +256,8 @@
 		main5 = {
 		              {class = "label",                                x = 0, y = 0, width = 1, height = 1, label = c_lang.guiLabel13},
 		jl_maxwidth = {class = "intedit",     name = "jl_maxwidth",    x = 1, y = 0, width = 1, height = 1},
+		              {class = "label",                                x = 0, y = 1, width = 1, height = 1, label = "Increase:"},
+		jl_increase = {class = "intedit",     name = "jl_increase",    x = 1, y = 1, width = 1, height = 1},
 		},
 		main6 = {
 		               {class = "label",                               x = 0, y = 0, width = 1,  height = 1, label = c_lang.guiLabel14},
@@ -259,6 +271,9 @@
 		nl_applyskew = {class = "checkbox",   name = "nl_applyskew",   x = 0, y = 8, width = 26, height = 1, label = "Apply skew on scale."},
 		               {class = "label",                               x = 0, y = 9, width = 1,  height = 1, label = "Skew value:"},
 		nl_skewval   = {class = "intedit",    name = "nl_skewval",     x = 1, y = 9, width = 1,  height = 1}
+		},
+		main7 = {
+ 		               {class = "label",                               x = 0, y = 0, width = 1,  height = 1, label = "Please select the mode if you want."},
 		}
 	}
 	end
@@ -279,9 +294,10 @@
 		line1 = subs[act]
 		line2 = find_nextline(subs,sel,act)
 		end
-	gui.main2.example1.label = mag.string.format(c_lang.f2, c_buttons4[1]).."\n- "..line1.text.."\n- "..line2.text
-	gui.main2.example2.label = mag.string.format(c_lang.f2, c_buttons4[2]).."\n"..line1.text.."\n"..line2.text
-	gui.main2.example3.label = mag.string.format(c_lang.f2, c_buttons4[3]).."\n"..line1.text.." "..line2.text
+	gui.main2.example1.label  = mag.string.format(c_lang.f2, c_buttons4[1]).."\n- "..line1.text.."\n- "..line2.text
+	gui.main2.example2.label  = mag.string.format(c_lang.f2, c_buttons4[2]).."\n"..line1.text.."\n"..line2.text
+	gui.main2.example3.label  = mag.string.format(c_lang.f2, c_buttons4[3]).."\n"..line1.text.." "..line2.text
+	gui.main2.totaltime.label = mag.string.format(c_lang.guiLabel18, ((line2.end_time - line2.start_time) + (line1.end_time - line1.start_time)) / 10)
 	return mag.window.dialog(gui.main2, buttons)
 	end
 	end
@@ -627,6 +643,112 @@
 	return mag.window.dialog(gui.main5, c_buttons7)
 	end
 
+	function alignline_gui(subs,sel,act,mode,button)
+	return mag.window.dialog(gui.main7, c_buttons9)
+	end
+
+	function alignline(subs,sel,act,button)
+	local line, index, text, width
+	local pcs = false
+	if button == mag.convert.ascii(c_lang.buttonKey31) then
+	local line = subs[act]
+		if mag.match(line.text, "m %d+ %d+ l %d+ %d+") then
+		local xpoints = {}
+		xpoints.x1, xpoints.x2, xpoints.x3, xpoints.x4 = mag.match(line.text, "(%d+) %d+ l (%d+) %d+ (%d+) %d+ (%d+) %d+")
+		local sortxp = {}
+		mag.array.insert(sortxp, xpoints.x1)
+		mag.array.insert(sortxp, xpoints.x2)
+		mag.array.insert(sortxp, xpoints.x3)
+		mag.array.insert(sortxp, xpoints.x4)
+		mag.sort.basic(sortxp)
+		width = sortxp[1] - sortxp[4]
+		else
+		local styleinfo = getstyle(subs, line.style)
+		local fontname  = mag.match(line.text, "\\fn([^\\}]+)")
+		if fontname then styleinfo.fontname = fontname end
+		local fontsize  = mag.match(line.text, "\\fs(%d+)")
+		if fontsize then styleinfo.fontsize = fontsize end
+		width           = mag.floor(getsize(subs, styleinfo, mag.gsub(line.text, "{[^}]+}", ""), styleinfo.scale_x))
+		end
+	mag.clip.set(width)
+	else
+	local lines_index = mag.line.index(subs, sel, mag.window.lang.message("selected_lines"), true, true)
+	local mode, anv = "", 0
+		if button == mag.convert.ascii(c_lang.buttonKey33) then
+		mode = "lefttop"
+		anv  = 7
+		elseif button == mag.convert.ascii(c_lang.buttonKey34) then
+		mode = "righttop"
+		anv  = 9
+		elseif button == mag.convert.ascii(c_lang.buttonKey35) then
+		mode = "leftbottom"
+		anv  = 1
+		elseif button == mag.convert.ascii(c_lang.buttonKey36) then
+		mode = "rightbottom"
+		anv  = 3
+		end
+		if #lines_index == 1 then
+		mag.show.log(2, "Count of selected lines is 1.")
+		else
+		local shapepoints = {}
+		for i = 1, #lines_index do
+		mag.window.progress(i, #lines_index)
+		local cancel = aegisub.progress.is_cancelled()
+		if cancel then break end
+		index = lines_index[i]
+		line  = subs[index]
+		text  = mag.strip.all(line.text)
+			if shapepoints.x1 == nil and mag.match(text, "m %d+ %d+ l %d+ %d+") then
+			shapepoints.x1, shapepoints.y1,
+			shapepoints.x2, shapepoints.y2,
+			shapepoints.x3, shapepoints.y3,
+			shapepoints.x4, shapepoints.y4
+			= mag.match(text, "(%d+) (%d+) l (%d+) (%d+) (%d+) (%d+) (%d+) (%d+)")
+			else
+			local sx, sy = getshapexy(shapepoints, mode)
+			line.text    = mag.gsub(line.text, "\\pos%([^%)]+%)", "")
+			line.text    = mag.gsub(line.text, "\\an%d", "")
+			line.text    = mag.string.format("{\\an{%s}\\pos({%s},{%s})}", anv, sx, sy)..line.text
+			line.text    = mag.strip.clean(line.text)
+			pcs          = true
+			end
+		if pcs then subs[index] = line end
+		end
+		end
+	end
+	end
+
+	function zerofill(total, str)
+	return mag.string.wall("0", total - mag.convert.len(mag.s(str)))..str
+	end
+
+	function getshapexy(points,mode)
+	local x, y = 0, 0
+	local sort = {}
+	local sortindex
+	mag.array.insert(sort, zerofill(4, points.x1)..zerofill(4, points.y1))
+	mag.array.insert(sort, zerofill(4, points.x2)..zerofill(4, points.y2))
+	mag.array.insert(sort, zerofill(4, points.x3)..zerofill(4, points.y3))
+	mag.array.insert(sort, zerofill(4, points.x4)..zerofill(4, points.y4))
+	mag.sort.basic(sort)
+	if mode == "lefttop" then
+	sortindex = 1
+	elseif mode == "righttop" then
+	sortindex = 3
+	elseif mode == "leftbottom" then
+	sortindex = 2
+	elseif mode == "rightbottom" then
+	sortindex = 4
+	end
+	for i = 1, 4 do
+		if sort[sortindex] == zerofill(4, points["x"..i])..zerofill(4, points["y"..i]) then
+		x = points["x"..i]
+		y = points["y"..i]
+		end
+	end
+	return x, y
+	end
+
 	function noteline_gui(subs,sel,act,mode,button)
 	if button == mag.convert.ascii(c_lang.buttonKey30) then
 	local pcs = false
@@ -659,7 +781,7 @@
 	return mag.window.dialog(gui.main6, c_buttons8)
 	end
 
-	function noteline(subs,sel,button)
+	function noteline(subs,sel,act,button)
 	if button == mag.convert.ascii(c_lang.buttonKey27) then
 	local lines_index = mag.line.index(subs, sel, mag.window.lang.message("selected_lines"), true, true)
 	local counter     = 0
@@ -744,7 +866,8 @@
 	function justifyline(subs,sel)
 	local pcs         = false
 	local lines_index = mag.line.index(subs, sel, mag.window.lang.message("selected_lines"), true, true)
-	local line, index
+	local jmaxwidth   = c.jl_maxwidth
+	local line, index, text
 	mag.window.task(c_lang.progressKey1)
 	for i = 1, #lines_index do
 	mag.window.progress(i, #lines_index)
@@ -756,25 +879,41 @@
 	local textcontent    = ""
 	local width          = 0
 	local styleinfo      = getstyle(subs, line.style)
-	if getsize(subs, styleinfo, line.text, styleinfo.scale_x) > c.jl_maxwidth then
+	local text           = line.text
+	local getpostag      = mag.match(text, "\\pos%(([%d%.,]+)%)")
+	local getantag       = mag.match(text, "\\an(%d+)")
+	local getfstag       = mag.match(text, "\\fs(%d+)")
+	local getfntag       = mag.match(text, "\\fn([^\\}]+)")
+	text                 = mag.gsub(text, "\\N", " ")
+	text                 = mag.gsub(text, "%s+", " ")
+	text                 = mag.gsub(text, "{\\fsc[%d%.]+}", "")
+	if getfstag then styleinfo.fontsize = getfstag end
+	if getfntag then styleinfo.fontname = getfntag end
+	if getsize(subs, styleinfo, text, styleinfo.scale_x) > jmaxwidth then
 	pcs         = true
-	local words = mag.string.words(mag.strip.tag(line.text))
+	local words = mag.string.words(mag.strip.tag(text))
 		for w = 1, #words-1 do
 		alltext = alltext..words[w]
 		width   = getsize(subs, styleinfo, mag.trim.all(alltext..words[w + 1]), styleinfo.scale_x)
-			if width > c.jl_maxwidth then
-			textcontent = textcontent..justify(subs, mag.trim.all(alltext), styleinfo).."\\N"
+			if width > jmaxwidth then
+			textcontent = textcontent..justify(subs, mag.trim.all(alltext), styleinfo, jmaxwidth).."\\N"
 			alltext     = ""
+			jmaxwidth   = jmaxwidth + c.jl_increase
 			end
 		end
-	line.text = textcontent..alltext
+	local tags = ""
+	if getpostag then tags = tags.."{\\pos("..getpostag..")}" end
+	if getantag  then tags = tags.."{\\an"..getantag.."}"  end
+	if getfstag  then tags = tags.."{\\fs"..getfstag.."}"  end
+	if getfntag  then tags = tags.."{\\fn"..getfntag.."}"  end
+	line.text = tags..textcontent..alltext
 	end
 	if pcs then subs[index] = line end
 	end
 	mag.show.no_op(pcs)
 	end
 
-	function justify(subs,text,styleinfo)
+	function justify(subs,text,styleinfo,maxwidth)
 	local result          = ""
 	local width           = getsize(subs, styleinfo, text, styleinfo.scale_x)
 	local scounts         = {}
@@ -788,8 +927,8 @@
 	requiredspace = requiredspace + 1
 	ttetxt        = ttetxt.." "
 	swidth        = getsize(subs, styleinfo, ttetxt, styleinfo.scale_x)
-	until swidth >= c.jl_maxwidth
-	if swidth > c.jl_maxwidth then requiredspace = requiredspace - 1 end
+	until swidth >= maxwidth
+	if swidth > maxwidth then requiredspace = requiredspace - 1 end
 	if requiredspace > 0 then
 	for k = 0, currentspace - 1 do
 	scounts[k] = 0
@@ -815,7 +954,7 @@
 	repeat
 	fx_counter = fx_counter + 0.1
 	fx_width   = getsize(subs, styleinfo, result, styleinfo.scale_x - fx_counter)
-	until fx_width <= c.jl_maxwidth
+	until fx_width <= maxwidth
 	result = "{\\fscx"..styleinfo.scale_x - fx_counter.."}"..result
 	else
 	result = text
@@ -986,6 +1125,10 @@
 	mag.config.put(gui.main6)
 	guiselect = "note"
 	ok, config = noteline_gui(subs, sel, act, "multi", ok)
+	elseif ok == mag.convert.ascii(c_buttons1[10]) then
+	mag.config.put(gui.main7)
+	guiselect = "align"
+	ok, config = alignline_gui(subs, sel, act, "multi", ok)
 	else
 	guiselect = ""
 	ok, config = mag.window.dialog(gui.main1, c_buttons1)
@@ -1011,6 +1154,8 @@
 	ok ~= mag.convert.ascii(c_lang.buttonKey28)
 	and
 	ok ~= mag.convert.ascii(c_lang.buttonKey30)
+	and
+	ok ~= mag.convert.ascii(c_lang.buttonKey32)
 	if guiselect == "merge" then
 	return mergeline(subs, sel, act, ok)
 	elseif guiselect == "split" then
@@ -1028,7 +1173,9 @@
 	elseif guiselect == "justify" then
 	return justifyline(subs, sel)
 	elseif guiselect == "note" then
-	return noteline(subs, sel, ok)
+	return noteline(subs, sel, act, ok)
+	elseif guiselect == "align" then
+	return alignline(subs, sel, act, ok)
 	end
 	end
 
