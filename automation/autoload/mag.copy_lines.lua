@@ -73,6 +73,9 @@
 	in_lang["sapKey2"]             = "CC Only"
 	in_lang["sapKey3"]             = "CPS Only"
 	in_lang["sapKey4"]             = "CC and CPS"
+	in_lang["dcKey1"]              = "Markdown not selected"
+	in_lang["dcKey2"]              = "Markdown Enabled: Dialogue"
+	in_lang["dcKey3"]              = "Markdown Enabled: Code"
 	in_lang["guiHint1"]            = "Before copying lines, deletes things like ass tag, comment bracket and line break."
 	in_lang["key1"]                = "Clipboard"
 	in_lang["key2"]                = "Text File"
@@ -93,7 +96,7 @@
 
 	script_name         = c_lang.s_name
 	script_description  = c_lang.s_desc
-	script_version      = "1.5.1"
+	script_version      = "1.5.2"
 	script_author       = "Magnum357"
 	script_mag_version  = "1.1.5.0"
 	script_file_name    = "mag.copy_lines"
@@ -111,6 +114,7 @@
 	c_buttons1          = {c_lang.buttonKey1, c_lang.buttonKey2}
 	c_copy_target_items = {mag.window.lang.message("select"), c_lang.key1, c_lang.key2}
 	c_sap_items         = {c_lang.sapKey1, c_lang.sapKey2, c_lang.sapKey3, c_lang.sapKey4}
+	c_dc_items          = {c_lang.dcKey1, c_lang.dcKey2, c_lang.dcKey3}
 
 	c                   = {}
 	c.copy_target       = mag.window.lang.message("select")
@@ -125,17 +129,18 @@
 	c.line_count        = false
 	c.line_cps          = false
 	c.line_cc           = false
+	c.dmarkdown         = c_dc_items[1]
 	c.spaceandpunc      = c_sap_items[1]
 
 	gui                 = {
 		main1        = {
-		               {class = "label",                           x = 0, y = 8,  width = 2, height = 1, label = c_lang.guiLabel12},
-		               {class = "label",                           x = 0, y = 9,  width = 1, height = 1, label = c_lang.guiLabel1},
-		apply_lines  = {class = "dropdown", name = "apply_lines",  x = 1, y = 9,  width = 1, height = 1},
-		               {class = "label",                           x = 0, y = 10, width = 1, height = 1, label = c_lang.guiLabel2},
-		copy_target  = {class = "dropdown", name = "copy_target",  x = 1, y = 10, width = 1, height = 1},
-		comment_mode = {class = "checkbox", name = "comment_mode", x = 1, y = 11, width = 1, height = 1, label = mag.window.lang.message("comment_mode")},
-		empty_mode   = {class = "checkbox", name = "empty_mode",   x = 1, y = 12, width = 1, height = 1, label = mag.window.lang.message("empty_mode")},
+		               {class = "label",                           x = 0, y = 10, width = 2, height = 1, label = c_lang.guiLabel12},
+		               {class = "label",                           x = 0, y = 11, width = 1, height = 1, label = c_lang.guiLabel1},
+		apply_lines  = {class = "dropdown", name = "apply_lines",  x = 1, y = 11, width = 1, height = 1},
+		               {class = "label",                           x = 0, y = 12, width = 1, height = 1, label = c_lang.guiLabel2},
+		copy_target  = {class = "dropdown", name = "copy_target",  x = 1, y = 12, width = 1, height = 1},
+		comment_mode = {class = "checkbox", name = "comment_mode", x = 1, y = 13, width = 1, height = 1, label = mag.window.lang.message("comment_mode")},
+		empty_mode   = {class = "checkbox", name = "empty_mode",   x = 1, y = 14, width = 1, height = 1, label = mag.window.lang.message("empty_mode")},
 		               {class = "label",                           x = 0, y = 0,  width = 2, height = 1, label = c_lang.guiLabel9},
 		strip        = {class = "checkbox", name = "strip",        x = 0, y = 1,  width = 2, height = 1, label = c_lang.guiLabel3, hint = c_lang.guiHint1},
 		line_stime   = {class = "checkbox", name = "line_stime",   x = 0, y = 2,  width = 2, height = 1, label = c_lang.guiLabel4},
@@ -143,6 +148,7 @@
 		line_frames  = {class = "checkbox", name = "line_frames",  x = 0, y = 4,  width = 2, height = 1, label = c_lang.guiLabel11},
 		line_number  = {class = "checkbox", name = "line_number",  x = 0, y = 5,  width = 2, height = 1, label = c_lang.guiLabel5},
 		line_count   = {class = "checkbox", name = "line_count",   x = 0, y = 6,  width = 2, height = 1, label = c_lang.guiLabel6},
+		dmarkdown    = {class = "dropdown", name = "dmarkdown",    x = 0, y = 7,  width = 2, height = 1},
 		               {class = "label",                           x = 5, y = 0,  width = 2, height = 1, label = c_lang.guiLabel13},
 		line_cps     = {class = "checkbox", name = "line_cps",     x = 5, y = 1,  width = 1, height = 1, label = c_lang.guiLabel7},
 		line_cc      = {class = "checkbox", name = "line_cc",      x = 5, y = 2,  width = 1, height = 1, label = c_lang.guiLabel8},
@@ -215,13 +221,48 @@
 			end
 		end
 		if line_info ~= "" then
+			if c.dmarkdown == c_dc_items[2] then
+				if mag.match(line_text, "{") then
+				local wl      = ""
+				local bolded  = false
+				local in_tags = false
+				line_text     = line_text.."{"
+					for c in mag.convert.chars(line_text) do
+					if c == "{" then in_tags = true end
+						if in_tags == false and bolded == false then
+						bolded = true
+						c      = "**"..c
+						end
+						if c == "{" and bolded == true then
+						bolded = false
+						c      = "**"..c
+						end
+					wl = wl..c
+					if c == "}" then in_tags = false end
+					end
+				line_text = wl
+				line_text = mag.gsub(line_text, "{$", "")
+				else
+				line_text = "**"..line_text.."**"
+				end
+			end
 		line_text = mag.string.combine(mag.string.format("[{%s}]", line_info), line_text, "{%1} {%2}")
 		end
 	mag.array.insert(copy_lines, line_break..line_text)
 	line_break = "\n"
 	end
 	mag.show.no_op(pcs)
-	if copy_lines[1] ~= nil then return mag.array.concat(copy_lines) else return nil end
+	if copy_lines[1] ~= nil then
+		if c.dmarkdown == c_dc_items[3] then
+		return "```"..mag.array.concat(copy_lines).."```"
+		elseif c.dmarkdown == c_dc_items[2] then
+		return ">>> "..mag.array.concat(copy_lines)
+		else
+		return mag.array.concat(copy_lines)
+		end
+	else
+	return nil
+	end
 	end
 
 	function cpsmeter(line)
@@ -274,6 +315,7 @@
 	gui.main1.apply_lines.items  = apply_items
 	gui.main1.copy_target.items  = c_copy_target_items
 	gui.main1.spaceandpunc.items = c_sap_items
+	gui.main1.dmarkdown.items    = c_dc_items
 	local ok, config
 	repeat
 	mag.config.put(gui.main1)
