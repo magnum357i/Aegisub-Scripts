@@ -173,7 +173,7 @@
 
 	script_name         = c_lang.s_name
 	script_description  = c_lang.s_desc
-	script_version      = "1.1.3"
+	script_version      = "1.1.4"
 	script_author       = "Magnum357"
 	script_mag_version  = "1.1.5.0"
 	script_file_name    = "mag.manage_lines"
@@ -294,12 +294,45 @@
 		line1 = subs[act]
 		line2 = find_nextline(subs,sel,act)
 		end
-	gui.main2.example1.label  = mag.string.format(c_lang.f2, c_buttons4[1]).."\n- "..line1.text.."\n- "..line2.text
-	gui.main2.example2.label  = mag.string.format(c_lang.f2, c_buttons4[2]).."\n"..line1.text.."\n"..line2.text
-	gui.main2.example3.label  = mag.string.format(c_lang.f2, c_buttons4[3]).."\n"..line1.text.." "..line2.text
-	gui.main2.totaltime.label = mag.string.format(c_lang.guiLabel18, ((line2.end_time - line2.start_time) + (line1.end_time - line1.start_time)) / 10)
+	gui.main2.example1.label  = mag.string.format(c_lang.f2, c_buttons4[1]).."\n"..mag.gsub(merge(line1.text, line2.text, c_buttons4[1]), "\\N", "\n")
+	gui.main2.example2.label  = mag.string.format(c_lang.f2, c_buttons4[2]).."\n"..mag.gsub(merge(line1.text, line2.text, c_buttons4[2]), "\\N", "\n")
+	gui.main2.example3.label  = mag.string.format(c_lang.f2, c_buttons4[3]).."\n"..merge(line1.text, line2.text, c_buttons4[3])
+	gui.main2.totaltime.label = mag.string.format(c_lang.guiLabel18, (line2.end_time - line1.start_time) / 10)
 	return mag.window.dialog(gui.main2, buttons)
 	end
+	end
+
+	function merge(text1, text2, mode)
+	text1 = mag.gsub(text1, "}%s*{", "")
+	text2 = mag.gsub(text2, "}%s*{", "")
+	local result = ""
+	local stag1 = mag.match(text1, "^%s*{[^}]+}")
+	local stag2 = mag.match(text2, "^%s*{[^}]+}")
+	local ptext = remove_breakline(text1)
+	local ntext = remove_breakline(text2)
+	if stag1 ~= nil then ptext = mag.gsub(ptext, stag1, "", 1) end
+	if stag2 ~= nil then ntext = mag.gsub(ntext, stag2, "", 1) end
+	if mag.match(ptext, "%s*%.%.%.%s*$") then ptext = mag.gsub(ptext, "%.%.%.%s*$", "", 1) end
+	if mag.match(ptext, "%s*%.%.%.%s*{[^}]+}$") then ptext = mag.gsub(ptext, "%.%.%.%s*({[^}]+})$", "%1", 1) end
+	if mag.match(ntext, "^%s*%.%.%.") then ntext = mag.gsub(ntext, "%.%.%.", "", 1) end
+	if stag1 == stag2 then stag2 = "" end
+	if mode == c_buttons4[1] then
+	if stag1 ~= nil then result = result..stag1 end
+	result = result.."- "..ptext.."\\N"
+	if stag2 ~= nil then result = result..stag2 end
+	result = result.."- "..ntext
+	elseif mode == c_buttons4[2] then
+	if stag1 ~= nil then result = result..stag1 end
+	result = result..ptext.."\\N"
+	if stag2 ~= nil then result = result..stag2 end
+	result = result..ntext
+	elseif mode == c_buttons4[3] then
+	if stag1 ~= nil then result = result..stag1 end
+	result = result..ptext
+	if stag2 ~= nil then result = result..stag2 end
+	result = result.." "..ntext
+	end
+	return result
 	end
 
 	function mergeline(subs,sel,act,ok)
@@ -310,13 +343,7 @@
 	templine, tempindex = find_prevline(subs,sel,act)
 	if templine.start_time < line.start_time then line.start_time = templine.start_time end
 	if templine.end_time   > line.end_time   then line.end_time   = templine.end_time   end
-		if ok == c_buttons4[1] then
-		line.text = "- "..remove_breakline(templine.text).."\\N- "..remove_breakline(line.text)
-		elseif ok == c_buttons4[2] then
-		line.text = remove_breakline(templine.text).."\\N"..remove_breakline(line.text)
-		else
-		line.text = templine.text.." "..line.text
-		end
+	line.text       = merge(templine.text, line.text, ok)
 	pcs             = true
 	subs[tempindex] = line
 	jump            = tempindex
@@ -325,13 +352,7 @@
 	templine, tempindex = find_nextline(subs,sel,act)
 	if templine.start_time < line.start_time then line.start_time = templine.start_time end
 	if templine.end_time   > line.end_time   then line.end_time   = templine.end_time   end
-		if ok == c_buttons4[1] then
-		line.text = "- "..remove_breakline(line.text).."\\N- "..remove_breakline(templine.text)
-		elseif ok == c_buttons4[2] then
-		line.text = remove_breakline(line.text).."\\N"..remove_breakline(templine.text)
-		else
-		line.text = line.text.." "..templine.text
-		end
+	line.text = merge(line.text, templine.text, ok)
 	pcs       = true
 	subs[act] = line
 	jump      = act
