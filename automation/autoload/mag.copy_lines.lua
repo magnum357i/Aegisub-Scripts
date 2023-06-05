@@ -76,6 +76,7 @@
 	in_lang["dcKey1"]              = "Markdown not selected"
 	in_lang["dcKey2"]              = "Markdown Enabled: Dialogue"
 	in_lang["dcKey3"]              = "Markdown Enabled: Code"
+	in_lang["dcKey4"]              = "Markdown Enabled: Comments"
 	in_lang["guiHint1"]            = "Before copying lines, deletes things like ass tag, comment bracket and line break."
 	in_lang["key1"]                = "Clipboard"
 	in_lang["key2"]                = "Text File"
@@ -96,7 +97,7 @@
 
 	script_name         = c_lang.s_name
 	script_description  = c_lang.s_desc
-	script_version      = "1.5.2"
+	script_version      = "1.5.3"
 	script_author       = "Magnum357"
 	script_mag_version  = "1.1.5.0"
 	script_file_name    = "mag.copy_lines"
@@ -114,7 +115,7 @@
 	c_buttons1          = {c_lang.buttonKey1, c_lang.buttonKey2}
 	c_copy_target_items = {mag.window.lang.message("select"), c_lang.key1, c_lang.key2}
 	c_sap_items         = {c_lang.sapKey1, c_lang.sapKey2, c_lang.sapKey3, c_lang.sapKey4}
-	c_dc_items          = {c_lang.dcKey1, c_lang.dcKey2, c_lang.dcKey3}
+	c_dc_items          = {c_lang.dcKey1, c_lang.dcKey2, c_lang.dcKey3, c_lang.dcKey4}
 
 	c                   = {}
 	c.copy_target       = mag.window.lang.message("select")
@@ -246,7 +247,11 @@
 				line_text = "**"..line_text.."**"
 				end
 			end
-		line_text = mag.string.combine(mag.string.format("[{%s}]", line_info), line_text, "{%1} {%2}")
+			if c.dmarkdown == c_dc_items[4] and mag.is.line.comment(line) then
+			line_text = "`"..line_text.."`"
+			else
+			line_text = mag.string.combine(mag.string.format("[{%s}]", line_info), line_text, "{%1} {%2}")
+			end
 		end
 	mag.array.insert(copy_lines, line_break..line_text)
 	line_break = "\n"
