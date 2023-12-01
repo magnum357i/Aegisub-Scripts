@@ -5,9 +5,9 @@ Scripts for Aegisub 3.2.2 (tr &amp; en)
 * Installation directory of module file (mag.lua): **aegisub/automation/include/**
 * Installation directory of lua files (mag.manage_lines, mag.shaper etc.): **aegisub/automation/autoload/**
 
-The module file is reqiured! You have to install the module file (mag.lua) whatever lua plugin you want to use.
+First close Aegisub, then move files to specified directories and open Aegisub again. If you want to install when Aegisub is active, you must click Automation/Automation.../Rescan Autoload Dir button to enable plugins.
 
-Move the module file to the include and the lua plugin you want to the autoload while the program is closed. You can move them while the program is open but you must click **Automation/Automation.../Rescan Autoload Dir** button to enable them.
+And don't forget the module file is reqiured for all plugins!
 
 #### Usage
 The lua plugin you want to install is added to the **Automation** submenu as a new item with a similar name to its file name. Just click it.
