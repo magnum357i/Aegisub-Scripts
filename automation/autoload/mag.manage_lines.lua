@@ -215,6 +215,7 @@
 	c.commentmode       = true
 	c.jl_maxwidth       = 500
 	c.jl_increase       = 0
+	c.jl_nospace        = false
 	c.nl_shapecode      = ""
 	c.nl_textcode       = ""
 	c.nl_wpadding       = 30
@@ -258,6 +259,7 @@
 		jl_maxwidth = {class = "intedit",     name = "jl_maxwidth",    x = 1, y = 0, width = 1, height = 1},
 		              {class = "label",                                x = 0, y = 1, width = 1, height = 1, label = "Increase:"},
 		jl_increase = {class = "intedit",     name = "jl_increase",    x = 1, y = 1, width = 1, height = 1},
+		jl_nospace  = {class = "checkbox",    name = "jl_nospace",     x = 0, y = 2, width = 2, height = 1, label = "No space."},
 		},
 		main6 = {
 		               {class = "label",                               x = 0, y = 0, width = 1,  height = 1, label = c_lang.guiLabel14},
@@ -683,6 +685,8 @@
 		mag.array.insert(sortxp, xpoints.x4)
 		mag.sort.basic(sortxp)
 		width = sortxp[1] - sortxp[4]
+		if width < 0 then width = mag.convert.positive(width) end
+		width = mag.s(width)
 		else
 		local styleinfo = getstyle(subs, line.style)
 		local fontname  = mag.match(line.text, "\\fn([^\\}]+)")
@@ -917,7 +921,11 @@
 		alltext = alltext..words[w]
 		width   = getsize(subs, styleinfo, mag.trim.all(alltext..words[w + 1]), styleinfo.scale_x)
 			if width > jmaxwidth then
-			textcontent = textcontent..justify(subs, mag.trim.all(alltext), styleinfo, jmaxwidth).."\\N"
+				if c.jl_nospace then
+				textcontent = textcontent..alltext.."\\N"
+				else
+				textcontent = textcontent..justify(subs, mag.trim.all(alltext), styleinfo, jmaxwidth).."\\N"
+				end
 			alltext     = ""
 			jmaxwidth   = jmaxwidth + c.jl_increase
 			end
