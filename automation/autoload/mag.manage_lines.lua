@@ -1,4 +1,4 @@
-	function lang_switch_keys(lang)
+function lang_switch_keys(lang)
 	local in_lang = {}
 	local langs   =
 	{
@@ -588,7 +588,7 @@
 			line.text = toggletag(line.text, "fad%(%s*%d+%s*,%s*%d+%s*%)", mag.string.format("fad({%s},{%s})", c.fl_fads, c.fl_fade))
 			end
 		elseif ok == c_lang.buttonKey22 then
-			if mag.match(line.text, "^%s*{") then
+			if mag.match(line.text, "^%s*{[^%*]") then
 			if c.fl_tagreset then line.text = mag.gsub(line.text, "{[^}]*}", "{}") end
 			line.text = mag.gsub(line.text, "{", "{"..c.fl_tags, 1)
 			else
