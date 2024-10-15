@@ -173,7 +173,7 @@ function lang_switch_keys(lang)
 
 	script_name         = c_lang.s_name
 	script_description  = c_lang.s_desc
-	script_version      = "1.1.4"
+	script_version      = "1.1.5"
 	script_author       = "Magnum357"
 	script_mag_version  = "1.1.5.0"
 	script_file_name    = "mag.manage_lines"
