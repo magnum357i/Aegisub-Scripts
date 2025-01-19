@@ -323,7 +323,7 @@ if __name__ == "__main__":
 	--language
 	wcommand = wcommand..mag.string.format(" --language {%s}", "Japanese")
 	--model
-	wcommand = wcommand..mag.string.format(" --model {%s}", "large")
+	wcommand = wcommand..mag.string.format(" --model {%s}", "large-v2")
 	--format
 	wcommand = wcommand..mag.string.format(" --output_format {%s}", "txt")
 	--temp
