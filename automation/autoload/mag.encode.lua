@@ -60,7 +60,7 @@
 	script_name          = c_lang.s_name
 	script_description   = c_lang.s_desc
 	script_author        = "Magnum357"
-	script_version       = "1.0.0"
+	script_version       = "1.0.1"
 	script_mag_version   = "1.1.5.0"
 	script_file_name     = "mag.encode"
 	script_file_ext      = ".lua"
@@ -127,7 +127,7 @@
 	local subpath = getfilepath("subtitle")
 	subpath = mag.gsub(subpath, "\\", "\\\\")
 	subpath = mag.gsub(subpath, ":", "\\:")
-	fcommand = fcommand.." "..mag.string.format("-vf \"ass='{%s}'\"", subpath)
+	fcommand = fcommand.." "..mag.string.format("-vf \"scale=in_color_matrix=bt709:out_color_matrix=bt709,ass='{%s}'\"", subpath)
 	end
 	--audio
 	if not c.putaudio then
@@ -144,6 +144,7 @@
 	outputpath       = mag.gsub(outputpath, "$video",    aegisub.decode_path("?video"))
 	outputpath       = mag.gsub(outputpath, "\\", "\\\\")
 	fcommand         = fcommand.." ".."\""..outputpath.."\""
+	mag.show.log(fcommand)
 	return mag.string.format("ffmpeg {%s} 2>&1", fcommand)
 	end
 
