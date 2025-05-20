@@ -60,7 +60,7 @@
 	script_name          = c_lang.s_name
 	script_description   = c_lang.s_desc
 	script_author        = "Magnum357"
-	script_version       = "1.0.1"
+	script_version       = "1.0.2"
 	script_mag_version   = "1.1.5.0"
 	script_file_name     = "mag.encode"
 	script_file_ext      = ".lua"
@@ -77,7 +77,7 @@
 	c_lastbutton         = ""
 
 	c                    = {}
-	c.customcommands     = "-c:v libx265 -c:a aac -b:a 128k -x265-params crf=20"
+	c.customcommands     = "-c:v libx265 -c:a aac -b:a 128k -x265-params crf=20:colorprim=bt709:transfer=bt709:colormatrix=bt709"
 	c.putaudio           = true
 	c.putsubtitle        = true
 	c.outputpath         = "$subtitle\\encout.mp4"
