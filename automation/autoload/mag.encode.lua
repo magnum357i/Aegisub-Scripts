@@ -60,7 +60,7 @@
 	script_name          = c_lang.s_name
 	script_description   = c_lang.s_desc
 	script_author        = "Magnum357"
-	script_version       = "1.0.0"
+	script_version       = "1.1.0"
 	script_mag_version   = "1.1.5.0"
 	script_file_name     = "mag.encode"
 	script_file_ext      = ".lua"
@@ -74,13 +74,16 @@
 
 	c_lock_gui           = false
 	c_buttons1           = {c_lang.buttonKey1, c_lang.buttonKey2, c_lang.buttonKey4}
+	c_cspace_list        = {c_lang.dModeListKey1, c_lang.dModeListKey1, c_lang.dModeListKey2, c_lang.dModeListKey3, c_lang.dModeListKey4}
 	c_lastbutton         = ""
+	c_audiolist          = {}
 
 	c                    = {}
 	c.customcommands     = "-c:v libx265 -c:a aac -b:a 128k -x265-params crf=20"
 	c.putaudio           = true
 	c.putsubtitle        = true
 	c.outputpath         = "$subtitle\\encout.mp4"
+	c.selectaudio        = "jpn"
 
 	gui                  = {
 		main1              = {
@@ -88,8 +91,8 @@
 		outputpath     = {class = "edit",     name = "outputpath",     x = 0, y = 1, width = 35, height = 1},
 		                 {class = "label",                             x = 0, y = 2, width = 35, height = 1, label = c_lang.guiLabelKey1},
 		customcommands = {class = "textbox",  name = "customcommands", x = 0, y = 3, width = 35, height = 4},
-		putaudio       = {class = "checkbox", name = "putaudio",       x = 0, y = 7, width = 35, height = 1, label=c_lang.guiLabelKey2},
-		putsubtitle    = {class = "checkbox", name = "putsubtitle",    x = 0, y = 8, width = 35, height = 1, label=c_lang.guiLabelKey3},
+		putaudio       = {class = "checkbox", name = "putaudio",       x = 0, y = 7, width = 25, height = 1, label=c_lang.guiLabelKey2},
+		putsubtitle    = {class = "checkbox", name = "putsubtitle",    x = 0, y = 8, width = 35, height = 1, label=c_lang.guiLabelKey3}
 		}
 	}
 	end
@@ -103,35 +106,53 @@
 
 	function getfilepath(type)
 	if type == "subtitle" then
-	return mag.string.format("{%s}{%s}",aegisub.decode_path("?script\\"), aegisub.file_name())
+	return mag.string.format("{%s}\\{%s}",aegisub.decode_path("?script"), aegisub.file_name())
 	elseif type == "video" then
 	local properties = aegisub.project_properties()
 	return properties.video_file
 	end
 	end
 
+	function pathconversion(path)
+	path = mag.gsub(path, "\\", "/")
+	return path
+	end
+
 	function ffmpegline(startt,endt)
 	local fcommand = ""
 	--input video
-	fcommand = fcommand..mag.string.format("-i \"{%s}\"", getfilepath("video"))
-	--custom commands
-	if not mag.is.empty(c.customcommands) then
-	fcommand = fcommand.." "..c.customcommands
-	end
+	fcommand = fcommand..mag.string.format("-i \"{%s}\"", pathconversion(getfilepath("video")))
 	--trim
 	if mag.n(startt) ~= 0 and mag.n(endt) ~= 0 then
 	fcommand = fcommand.." "..mag.string.format("-ss {%s} -to {%s}", mag.convert.ms_to_time(startt), mag.convert.ms_to_time(endt))
 	end
+	--custom commands
+	if not mag.is.empty(c.customcommands) then
+	fcommand = fcommand.." "..c.customcommands
+	end
 	--subtitle
 	if c.putsubtitle then
-	local subpath = getfilepath("subtitle")
-	subpath = mag.gsub(subpath, "\\", "\\\\")
+	local subpath = pathconversion(getfilepath("subtitle"))
 	subpath = mag.gsub(subpath, ":", "\\:")
-	fcommand = fcommand.." "..mag.string.format("-vf \"ass='{%s}'\"", subpath)
+		if mag.match(fcommand, "%-vf%s+\"") then
+		fcommand = mag.gsub(fcommand, "(%-vf%s+\"[^\"]*)", "%1"..mag.string.format(",ass='{%s}'", subpath))
+		else
+		fcommand = fcommand.." "..mag.string.format("-vf \"ass='{%s}'\"", subpath)
+		end
 	end
 	--audio
 	if not c.putaudio then
 	fcommand = fcommand.." ".."-an"
+	else if #c_audiolist > 1 then
+	local audioindex = 1
+    	for aindex, alang in pairs(c_audiolist) do
+        	if alang == c.selectaudio then
+            audioindex = aindex
+			break
+        	end
+    	end
+	fcommand = fcommand.." "..mag.string.format("-map 0:0 -map 0:{%s}", audioindex)
+	end
 	end
 	--quiet mode
 	--fcommand = fcommand.." ".."-v quiet"
@@ -142,8 +163,9 @@
 	local outputpath = c.outputpath
 	outputpath       = mag.gsub(outputpath, "$subtitle", aegisub.decode_path("?script"))
 	outputpath       = mag.gsub(outputpath, "$video",    aegisub.decode_path("?video"))
-	outputpath       = mag.gsub(outputpath, "\\", "\\\\")
+	outputpath       = pathconversion(outputpath)
 	fcommand         = fcommand.." ".."\""..outputpath.."\""
+	mag.show.log(fcommand)
 	return mag.string.format("ffmpeg {%s} 2>&1", fcommand)
 	end
 
@@ -173,14 +195,33 @@
 	local fps = mag.match(staline, "([%d%.]+) fps")
 	local totalframe = mag.match(staline, "encoded ([%d]+) frames")
 	local elevatedtime = mag.match(staline, "frames in ([%d%.]+[sm])")
-	mag.show.log(mag.string.format(c_lang.key1,totalframe,fps,elevatedtime))
+	if mag.n(totalframe) > 0 then mag.show.log(mag.string.format(c_lang.key1,totalframe,fps,elevatedtime)) end
 	else
 	mag.show.log(output)
 	end
 	end
 
+	function getaudiolist()
+    local file   = io.popen(mag.string.format("ffprobe -v error -select_streams a -show_entries stream=index,codec_type:stream_tags=language -of csv=p=0 \"{%s}\" 2>&1", pathconversion(getfilepath("video"))))
+    local output = file:read("*all")
+    file:close()
+	if mag.match(output, "1,audio,") then
+	local audiolist = mag.string.split(mag.gsub(output, "%d+,audio,", ""), "\n")
+	mag.array.remove(audiolist, #audiolist)
+	return audiolist
+	else
+	mag.show.log("DK3M1")
+	end
+    return nil
+	end
+
 	function add_macro1(subs, sel)
 	mag.config.put(gui.main1)
+	if #c_audiolist == 0 then c_audiolist = getaudiolist() end
+	if #c_audiolist > 1 then
+	local selectaudio = (mag.array.search(c_audiolist, c.selectaudio)) and c.selectaudio or c_audiolist[1]
+	gui.main1.selectaudio = {class = "dropdown", name = "selectaudio", x = 25, y = 7, width = 10, height = 1, items=c_audiolist, value=selectaudio}
+	end
 	local ok, config = mag.window.dialog(gui.main1, c_buttons1)
 	mag.config.take(config)
 	if ok == mag.convert.ascii(c_buttons1[1]) or ok == mag.convert.ascii(c_buttons1[2]) then

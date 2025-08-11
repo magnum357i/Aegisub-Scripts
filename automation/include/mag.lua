@@ -1,5 +1,5 @@
 ﻿	mag_module_name    = "Mag"
-	mag_module_version = "1.1.5.0"
+	mag_module_version = "1.1.5.1"
 	mag_module_author  = "Magnum357"
 
 	if include_unicode   == true then unicode   = require 'aegisub.unicode'   end
@@ -1338,9 +1338,9 @@
 	return mag.convert.len(t) == 0
 	end
 
-	mag.directory.automation  = aegisub.decode_path("?data\\automation\\autoload\\")
-	mag.directory.include     = aegisub.decode_path("?data\\automation\\include\\")
-	mag.directory.temp        = aegisub.decode_path("?user\\")
+	mag.directory.automation  = aegisub.decode_path("?data").."\\automation\\autoload\\"
+	mag.directory.include     = aegisub.decode_path("?data").."\\automation\\include\\"
+	mag.directory.temp        = aegisub.decode_path("?user").."\\"
 
 	mag.config.file.directory = mag.directory.temp
 	mag.config.file.ext       = "config"

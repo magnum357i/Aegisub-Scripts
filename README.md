@@ -1,5 +1,5 @@
 # Aegisub-Scripts
-Scripts for Aegisub 3.2.2 (tr &amp; en)
+Scripts for Aegisub (tr & en)
 
 #### Installation
 * Installation directory of module file (mag.lua): **aegisub/automation/include/**
@@ -12,7 +12,6 @@ And don't forget the module file is reqiured for all plugins!
 #### Usage
 The lua plugin you want to install is added to the **Automation** submenu as a new item with a similar name to its file name. Just click it.
 
-
 #### The Latest Pluings
-- kanjilator
-- encode
+* kanjilator
+* encode
