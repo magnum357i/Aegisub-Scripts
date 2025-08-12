@@ -1,5 +1,5 @@
 ﻿	mag_module_name    = "Mag"
-	mag_module_version = "1.1.5.1"
+	mag_module_version = "1.1.5.2"
 	mag_module_author  = "Magnum357"
 
 	if include_unicode   == true then unicode   = require 'aegisub.unicode'   end
@@ -539,6 +539,12 @@
 
 	--strip_text = mag.strip.comment("{\bord3}This is an {Holla!}example.")
 	function mag.strip.comment(str) return mag.gsub(str, "{[^\\]-}", "") end
+
+	function mag.strip.clean(str)
+	str = mag.gsub(str, "{%s*}", "")
+	str = mag.gsub(str, "}%s*{", "")
+	return str
+	end
 
 	--strip_text = mag.strip.all("{\bord3}This is\h an {Holla!}example.")
 	function mag.strip.all(str)
@@ -1433,6 +1439,12 @@
 	--sitem = mag.array.create("foo,bar")
 	function mag.array.create(items)
 	return mag.string.split(items,",")
+	end
+
+	function mag.array.copy(items)
+	local newtable = {}
+	for k, v in pairs(items) do newtable[k] = v end
+	return newtable
 	end
 
 	--sitem = mag.array.count({"foo", "foo", "bar"}, "foo")
