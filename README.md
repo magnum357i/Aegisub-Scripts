@@ -12,6 +12,6 @@ And don't forget the module file is reqiured for all plugins!
 #### Usage
 The lua plugin you want to install is added to the **Automation** submenu as a new item with a similar name to its file name. Just click it.
 
-#### The Latest Pluings
+#### Newest Plugins
 * kanjilator
 * encode
