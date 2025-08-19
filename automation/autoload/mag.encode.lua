@@ -42,6 +42,8 @@
 	in_lang["buttonKey6"]          = "Geri"
 	in_lang["key1"]                = "Video Oluşturuldu: {%s} kare, {%s} FPS, {%s}"
 	in_lang["key2"]                = "GIF Oluşturuldu"
+	in_lang["key3"]                = "Kaydedilmemiş değişiklikler var! Lütfen dosyayı kaydedin."
+	in_lang["key4"]                = "Ses listesi alınıyor... Bu işlem program açıldığında tek seferliğine yapılır."
 	elseif lang == langs[2].lang_key then
 	in_lang["module_incompatible"] = "The installed version of the Mag module is incompatible with this lua file!\n\nAt least \"%s\" version or higher of the module file is required.\n\n\nWould you like to go to the download page now?"
 	in_lang["module_not_found"]    = "The module named Mag could not be found!\n\nTo use this file, you need to download the module named mag\nand move it to \"Aegisub/automation/include/\" directory when Aegisub is off.\n\n\nDo you want to go to download page now?"
@@ -68,6 +70,8 @@
 	in_lang["buttonKey6"]          = "Back"
 	in_lang["key1"]                = "Video Created: {%s} frames, {%s} FPS, {%s}"
 	in_lang["key2"]                = "GIF Created"
+	in_lang["key3"]                = "There are unsaved changes! Please save the file."
+	in_lang["key4"]                = "Getting audio list... This process runs just once when the program starts."
 	end
 	return in_lang, lang_list, script_name_list
 	end
@@ -80,7 +84,7 @@
 	script_name          = c_lang.s_name
 	script_description   = c_lang.s_desc
 	script_author        = "Magnum357"
-	script_version       = "1.2.0"
+	script_version       = "1.2.2"
 	script_mag_version   = "1.1.5.0"
 	script_file_name     = "mag.encode"
 	script_file_ext      = ".lua"
@@ -354,7 +358,10 @@
 	end
 
 	function add_macro1(subs, sel)
-	if #c_audiolist == 0 then c_audiolist = getaudiolist() end
+	if #c_audiolist == 0 then
+	mag.show.log(3, c_lang.key4)
+	c_audiolist = getaudiolist()
+	end
 	if #c_audiolist > 1 then
 	local selectaudio = (mag.array.search(c_audiolist, c.selectaudio)) and c.selectaudio or c_audiolist[1]
 	gui.main1.selectaudio = {class = "dropdown", name = "selectaudio", x = 25, y = 7, width = 10, height = 1, items=c_audiolist, value=selectaudio}
@@ -371,10 +378,18 @@
 	mag.config.take(config)
 	until ok == mag.convert.ascii(c_buttons1[1]) or ok == mag.convert.ascii(c_buttons1[3]) or ok == mag.convert.ascii(c_buttons1[4]) or ok == mag.convert.ascii(c_buttons2[1])
 	if ok == mag.convert.ascii(c_buttons1[1]) or ok == mag.convert.ascii(c_buttons1[3]) then
-	c_lastbutton = ok
-	encodevideo(subs, sel)
+		if c.putsubtitle and aegisub.gui and aegisub.gui.is_modified() then
+		mag.show.log(1, c_lang.key3)
+		else
+		c_lastbutton = ok
+		encodevideo(subs, sel)
+		end
 	elseif ok == mag.convert.ascii(c_buttons2[1]) then
-	gifvideo(subs, sel)
+		if c.putsubtitle2 and aegisub.gui and aegisub.gui.is_modified() then
+		mag.show.log(1, c_lang.key3)
+		else
+		gifvideo(subs, sel)
+		end
 	end
 	end
 
