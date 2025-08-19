@@ -84,7 +84,7 @@
 	script_name          = c_lang.s_name
 	script_description   = c_lang.s_desc
 	script_author        = "Magnum357"
-	script_version       = "1.2.2"
+	script_version       = "1.2.3"
 	script_mag_version   = "1.1.5.0"
 	script_file_name     = "mag.encode"
 	script_file_ext      = ".lua"
@@ -208,7 +208,9 @@
 	--fcommand = fcommand.." ".."-v quiet"
 	--fcommand = fcommand.." ".."-stats"
 	--overwrite
+	if not mag.match(c.outputpath, "{n}") then
 	fcommand = fcommand.." ".."-y"
+	end
 	--output video
 	local outputpath = c.outputpath
 	outputpath       = mag.gsub(outputpath, "$subtitle", aegisub.decode_path("?script"))
@@ -275,7 +277,9 @@
 	fcommand = mag.gsub(fcommand, "(%-filter_complex%s+\")", "%1"..mag.string.format("ass='{%s}',", subpath))
 	end
 	--overwrite
+	if not mag.match(c.outputpath, "{n}") then
 	fcommand = fcommand.." ".."-y"
+	end
 	--output video
 	local outputpath = c.outputpath2
 	outputpath       = mag.gsub(outputpath, "$subtitle", aegisub.decode_path("?script"))
@@ -335,7 +339,7 @@
 	end
 
 	function estatistics2(output)
-	local staline = mag.match(output,"fps=0.0")
+	local staline = mag.match(output,"fps=%s*[%d%.]+")
 	if staline then
 	mag.show.log(c_lang.key2)
 	else
