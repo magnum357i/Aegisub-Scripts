@@ -84,7 +84,7 @@
 	script_name          = c_lang.s_name
 	script_description   = c_lang.s_desc
 	script_author        = "Magnum357"
-	script_version       = "1.2.3"
+	script_version       = "1.3.0"
 	script_mag_version   = "1.1.5.0"
 	script_file_name     = "mag.encode"
 	script_file_ext      = ".lua"
@@ -104,7 +104,7 @@
 	c_audiolist          = {}
 
 	c                    = {}
-	c.customcommands     = "-c:v libx265 -c:a aac -b:a 128k -x265-params crf=20"
+	c.customcommands     = "-c:v libx265 -c:a aac -b:a 192k -x265-params crf=20"
 	c.putaudio           = true
 	c.putsubtitle        = true
 	c.putsubtitle2       = false
@@ -145,28 +145,7 @@
 	}
 	end
 
-	function runcommand(content)
-	local file = assert(io.popen(content, 'r'))
-	local output = file:read('*all')
-	file:close()
-	return output
-	end
-
-	function getfilepath(type)
-	if type == "subtitle" then
-	return mag.string.format("{%s}\\{%s}",aegisub.decode_path("?script"), aegisub.file_name())
-	elseif type == "video" then
-	local properties = aegisub.project_properties()
-	return properties.video_file
-	end
-	end
-
-	function pathconversion(path)
-	path = mag.gsub(path, "\\", "/")
-	return path
-	end
-
-	function ffmpegline(startt,endt)
+	function clipline(startt,endt)
 	local fcommand = ""
 	--input video
 	fcommand = fcommand..mag.string.format("-i \"{%s}\"", pathconversion(getfilepath("video")))
@@ -183,7 +162,7 @@
 	--subtitle
 	if c.putsubtitle then
 	local subpath = pathconversion(getfilepath("subtitle"))
-	subpath = mag.gsub(subpath, ":", "\\:")
+	subpath       = mag.gsub(subpath, ":", "\\:")
 		if mag.match(fcommand, "%-vf%s+\"") then
 		fcommand = mag.gsub(fcommand, "(%-vf%s+\"[^\"]*)", "%1"..mag.string.format(",ass='{%s}'", subpath))
 		else
@@ -211,6 +190,8 @@
 	if not mag.match(c.outputpath, "{n}") then
 	fcommand = fcommand.." ".."-y"
 	end
+	--progress
+	fcommand = fcommand.." ".."-progress pipe:1 -nostats"
 	--output video
 	local outputpath = c.outputpath
 	outputpath       = mag.gsub(outputpath, "$subtitle", aegisub.decode_path("?script"))
@@ -218,18 +199,71 @@
 	outputpath       = pathconversion(outputpath)
 	if mag.match(outputpath, "{n}") then
 		for i = 1, 999 do
-			if not file_exists(mag.gsub(outputpath, "{n}", tostring(i))) then
+			if not fileexists(mag.gsub(outputpath, "{n}", tostring(i))) then
 			outputpath = mag.gsub(outputpath, "{n}", tostring(i))
 			break
 			end
 		end
 	end
-	fcommand         = fcommand.." ".."\""..outputpath.."\""
+	fcommand = fcommand.." ".."\""..outputpath.."\""
+	fcommand = mag.string.format("ffmpeg {%s} 2>&1", fcommand)
 	mag.show.log(fcommand)
-	return mag.string.format("ffmpeg {%s} 2>&1", fcommand)
+	return fcommand
 	end
 
-	function encodevideo(subs,sel)
+	function gifline(startt,endt)
+	local fcommand = ""
+	--trim
+	fcommand = fcommand.." "..mag.string.format("-ss {%s} -to {%s}", startt / 1000, endt / 1000)
+	--input video
+	fcommand = fcommand.." "..mag.string.format("-i \"{%s}\"", pathconversion(getfilepath("video")))
+	--sync
+	fcommand = fcommand.." -copyts"
+	--filter and palette
+	local convertedfilter = c.giffilter
+	convertedfilter = mag.gsub(convertedfilter, "$fps",   c.giffps)
+	convertedfilter = mag.gsub(convertedfilter, "$width", c.gifwidth)
+	fcommand        = fcommand.." "..mag.string.format("-filter_complex \"{%s},split[a][b];[a]palettegen[p];[b][p]paletteuse\"", convertedfilter)
+	--palettegen
+	if not mag.is.empty(c.palettegenparams) then
+	fcommand = mag.gsub(fcommand, "palettegen", "palettegen="..c.palettegenparams)
+	end
+	--paletteuse
+	if not mag.is.empty(c.paletteuseparams) then
+	fcommand = mag.gsub(fcommand, "paletteuse", "paletteuse="..c.paletteuseparams)
+	end
+	--subtitle
+	if c.putsubtitle2 then
+	local subpath = pathconversion(getfilepath("subtitle"))
+	subpath       = mag.gsub(subpath, ":", "\\:")
+	fcommand      = mag.gsub(fcommand, "(%-filter_complex%s+\")", "%1"..mag.string.format("ass='{%s}',", subpath))
+	end
+	--overwrite
+	if not mag.match(c.outputpath, "{n}") then
+	fcommand = fcommand.." ".."-y"
+	end
+	--progress
+	fcommand = fcommand.." ".."-progress pipe:1 -nostats"
+	--output video
+	local outputpath = c.outputpath2
+	outputpath       = mag.gsub(outputpath, "$subtitle", aegisub.decode_path("?script"))
+	outputpath       = mag.gsub(outputpath, "$video",    aegisub.decode_path("?video"))
+	outputpath       = pathconversion(outputpath)
+	if mag.match(outputpath, "{n}") then
+		for i = 1, 999 do
+			if not fileexists(mag.gsub(outputpath, "{n}", tostring(i))) then
+			outputpath = mag.gsub(outputpath, "{n}", tostring(i))
+			break
+			end
+		end
+	end
+	fcommand = fcommand.." ".."\""..outputpath.."\""
+	fcommand = mag.string.format("ffmpeg {%s} 2>&1", fcommand)
+	mag.show.log(fcommand)
+	return fcommand
+	end
+
+	function makeclip(subs,sel)
 	local vstart, vend = 0, 0
 	if c_lastbutton == mag.convert.ascii(c_buttons1[1]) then
 	local lines_index = mag.line.index(subs, sel, mag.window.lang.message("selected_lines"), false, false)
@@ -244,61 +278,12 @@
 			end
 		end
 	end
-	mag.show.log("Encoding...")
-	local output = runcommand(ffmpegline(vstart,vend))
+	local duration = (vstart > 0 and vend > 0 ) and (vend - vstart) / 1000 or 0
+	local output   = runffmpegcommand(clipline(vstart,vend), duration, "Encoding...")
 	estatistics(output)
 	end
 
-	function ffmpegline2(startt,endt)
-	local fcommand = ""
-	--trim
-	fcommand = fcommand.." "..mag.string.format("-ss {%s} -to {%s}", mag.convert.ms_to_time(startt), mag.convert.ms_to_time(endt))
-	--input video
-	fcommand = fcommand..mag.string.format(" -i \"{%s}\"", pathconversion(getfilepath("video")))
-	--sync
-	fcommand = fcommand.." -copyts"
-	--filter and palette
-	local convertedfilter = c.giffilter
-	convertedfilter = mag.gsub(convertedfilter, "$fps",   c.giffps)
-	convertedfilter = mag.gsub(convertedfilter, "$width", c.gifwidth)
-	fcommand        = fcommand.." "..mag.string.format("-filter_complex \"{%s},split[a][b];[a]palettegen[p];[b][p]paletteuse\"", convertedfilter)
-	--palettegen
-	if not mag.is.empty(c.palettegenparams) then
-	fcommand        = mag.gsub(fcommand, "palettegen", "palettegen="..c.palettegenparams)
-	end
-	--paletteuse
-	if not mag.is.empty(c.paletteuseparams) then
-	fcommand        = mag.gsub(fcommand, "paletteuse", "paletteuse="..c.paletteuseparams)
-	end
-	--subtitle
-	if c.putsubtitle2 then
-	local subpath = pathconversion(getfilepath("subtitle"))
-	subpath = mag.gsub(subpath, ":", "\\:")
-	fcommand = mag.gsub(fcommand, "(%-filter_complex%s+\")", "%1"..mag.string.format("ass='{%s}',", subpath))
-	end
-	--overwrite
-	if not mag.match(c.outputpath, "{n}") then
-	fcommand = fcommand.." ".."-y"
-	end
-	--output video
-	local outputpath = c.outputpath2
-	outputpath       = mag.gsub(outputpath, "$subtitle", aegisub.decode_path("?script"))
-	outputpath       = mag.gsub(outputpath, "$video",    aegisub.decode_path("?video"))
-	outputpath       = pathconversion(outputpath)
-	if mag.match(outputpath, "{n}") then
-		for i = 1, 999 do
-			if not file_exists(mag.gsub(outputpath, "{n}", tostring(i))) then
-			outputpath = mag.gsub(outputpath, "{n}", tostring(i))
-			break
-			end
-		end
-	end
-	fcommand = fcommand.." ".."\""..outputpath.."\""
-	mag.show.log(fcommand)
-	return mag.string.format("ffmpeg {%s} 2>&1", fcommand)
-	end
-
-	function gifvideo(subs,sel)
+	function makegif(subs,sel)
 	local vstart, vend = 0, 0
 	local lines_index = mag.line.index(subs, sel, mag.window.lang.message("selected_lines"), false, false)
 	for i = 1, #lines_index do
@@ -311,19 +296,9 @@
 		vend = line.end_time
 		end
 	end
-	mag.show.log("Processing...")
-	local output = runcommand(ffmpegline2(vstart,vend))
+	local duration = (vstart > 0 and vend > 0 ) and (vend - vstart) / 1000 or 0
+	local output   = runffmpegcommand(gifline(vstart,vend), duration, "Creating...")
 	estatistics2(output)
-	end
-
-	function file_exists(name)
-	local f = io.open(name, 'r')
-	if f ~= nil then
-	io.close(f)
-	return true
-	else
-    return false
-	end
 	end
 
 	function estatistics(output)
@@ -334,7 +309,7 @@
 	local elevatedtime = mag.match(staline, "frames in ([%d%.]+[sm])")
 	if mag.n(totalframe) > 0 then mag.show.log(mag.string.format(c_lang.key1,totalframe,fps,elevatedtime)) end
 	else
-	mag.show.log(output)
+	mag.show.log(1, output)
 	end
 	end
 
@@ -343,7 +318,7 @@
 	if staline then
 	mag.show.log(c_lang.key2)
 	else
-	mag.show.log(output)
+	mag.show.log(1, output)
 	end
 	end
 
@@ -359,6 +334,66 @@
 	mag.show.log("DK3M1")
 	end
     return nil
+	end
+
+	function fileexists(name)
+	local f = io.open(name, 'r')
+	if f ~= nil then
+	io.close(f)
+	return true
+	else
+    return false
+	end
+	end
+
+	function runcommand(content)
+	local file = assert(io.popen(content, 'r'))
+	local output = file:read('*all')
+	mag.show.log(output)
+	file:close()
+	return output
+	end
+
+	function runffmpegcommand(content,duration,message)
+	local file       = io.popen(content, 'r')
+	local progressok = false
+	local output     = ""
+	for line in file:lines() do
+	output = output..line.."\n"
+    local h, m, s = line:match("out_time=(%d+):(%d+):(%d+)")
+    	if h and m and s and mag.n(h) < 1000 and duration > 0 then
+			if not progressok then
+			progressok = true
+			mag.show.log(message)
+			end
+        local elapsed   = mag.n(h) * 3600 + mag.n(m) * 60 + mag.n(s)
+        local progress  = elapsed / duration
+        local eta       = math.floor(duration - elapsed)
+        if eta < 0 then eta = 0 end
+        local boxcount  = 20
+        local filledbox = math.floor(progress * boxcount)
+        local emptybox  = boxcount - filledbox
+        local bar       = string.rep("◼", filledbox)..string.rep("◻", emptybox)
+        mag.show.log(mag.string.format("[{%s}] {%s}% | {%s}", bar, math.floor(progress*100), mag.convert.ms_to_time(eta * 100)))
+    	end
+	end
+	if progressok then mag.show.log(mag.string.format("[{%s}] {%s}% | {%s}", string.rep("◼", 20), 100, "0:00:00.00")) end
+	file:close()
+	return output
+	end
+
+	function getfilepath(type)
+	if type == "subtitle" then
+	return mag.string.format("{%s}\\{%s}",aegisub.decode_path("?script"), aegisub.file_name())
+	elseif type == "video" then
+	local properties = aegisub.project_properties()
+	return properties.video_file
+	end
+	end
+
+	function pathconversion(path)
+	path = mag.gsub(path, "\\", "/")
+	return path
 	end
 
 	function add_macro1(subs, sel)
@@ -386,13 +421,13 @@
 		mag.show.log(1, c_lang.key3)
 		else
 		c_lastbutton = ok
-		encodevideo(subs, sel)
+		makeclip(subs, sel)
 		end
 	elseif ok == mag.convert.ascii(c_buttons2[1]) then
 		if c.putsubtitle2 and aegisub.gui and aegisub.gui.is_modified() then
 		mag.show.log(1, c_lang.key3)
 		else
-		gifvideo(subs, sel)
+		makegif(subs, sel)
 		end
 	end
 	end
