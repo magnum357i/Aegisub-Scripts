@@ -69,7 +69,7 @@
 	in_lang["buttonKey5"]          = "Make"
 	in_lang["buttonKey6"]          = "Back"
 	in_lang["key1"]                = "Video Created: {%s} frames, {%s} FPS, {%s}"
-	in_lang["key2"]                = "GIF Created"
+	in_lang["key2"]                = "GIF Created: {%s}"
 	in_lang["key3"]                = "There are unsaved changes! Please save the file."
 	in_lang["key4"]                = "Getting audio list... This process runs just once when the program starts."
 	end
@@ -84,7 +84,7 @@
 	script_name          = c_lang.s_name
 	script_description   = c_lang.s_desc
 	script_author        = "Magnum357"
-	script_version       = "1.3.0"
+	script_version       = "1.3.3"
 	script_mag_version   = "1.1.5.0"
 	script_file_name     = "mag.encode"
 	script_file_ext      = ".lua"
@@ -104,7 +104,7 @@
 	c_audiolist          = {}
 
 	c                    = {}
-	c.customcommands     = "-c:v libx265 -c:a aac -b:a 192k -x265-params crf=20"
+	c.customcommands     = "-c:v libx265 -c:a aac -b:a 192k -x265-params crf=23 -vf \"scale=1280:720\""
 	c.putaudio           = true
 	c.putsubtitle        = true
 	c.putsubtitle2       = false
@@ -147,14 +147,14 @@
 
 	function clipline(startt,endt)
 	local fcommand = ""
-	--input video
-	fcommand = fcommand..mag.string.format("-i \"{%s}\"", pathconversion(getfilepath("video")))
-	--sync
-	fcommand = fcommand.." -copyts"
 	--trim
 	if mag.n(startt) ~= 0 and mag.n(endt) ~= 0 then
-	fcommand = fcommand.." "..mag.string.format("-ss {%s} -to {%s}", mag.convert.ms_to_time(startt), mag.convert.ms_to_time(endt))
+	fcommand = fcommand..mag.string.format("-ss {%s} -to {%s}", startt / 1000, endt / 1000)
 	end
+	--input video
+	fcommand = fcommand.." "..mag.string.format("-i \"{%s}\"", pathconversion(getfilepath("video")))
+	--sync
+	fcommand = fcommand.." -copyts"
 	--custom commands
 	if not mag.is.empty(c.customcommands) then
 	fcommand = fcommand.." "..c.customcommands
@@ -192,6 +192,8 @@
 	end
 	--progress
 	fcommand = fcommand.." ".."-progress pipe:1 -nostats"
+	--bench
+	fcommand = fcommand.." ".."-benchmark"
 	--output video
 	local outputpath = c.outputpath
 	outputpath       = mag.gsub(outputpath, "$subtitle", aegisub.decode_path("?script"))
@@ -214,7 +216,7 @@
 	function gifline(startt,endt)
 	local fcommand = ""
 	--trim
-	fcommand = fcommand.." "..mag.string.format("-ss {%s} -to {%s}", startt / 1000, endt / 1000)
+	fcommand = fcommand..mag.string.format("-ss {%s} -to {%s}", startt / 1000, endt / 1000)
 	--input video
 	fcommand = fcommand.." "..mag.string.format("-i \"{%s}\"", pathconversion(getfilepath("video")))
 	--sync
@@ -244,6 +246,8 @@
 	end
 	--progress
 	fcommand = fcommand.." ".."-progress pipe:1 -nostats"
+	--bench
+	fcommand = fcommand.." ".."-benchmark"
 	--output video
 	local outputpath = c.outputpath2
 	outputpath       = mag.gsub(outputpath, "$subtitle", aegisub.decode_path("?script"))
@@ -280,7 +284,7 @@
 	end
 	local duration = (vstart > 0 and vend > 0 ) and (vend - vstart) / 1000 or 0
 	local output   = runffmpegcommand(clipline(vstart,vend), duration, "Encoding...")
-	estatistics(output)
+	estatistics(output, "clip")
 	end
 
 	function makegif(subs,sel)
@@ -298,25 +302,25 @@
 	end
 	local duration = (vstart > 0 and vend > 0 ) and (vend - vstart) / 1000 or 0
 	local output   = runffmpegcommand(gifline(vstart,vend), duration, "Creating...")
-	estatistics2(output)
+	estatistics(output, "gif")
 	end
 
-	function estatistics(output)
-	local staline = mag.match(output,"\n(encoded [^\n]*)\n")
-	if staline then
-	local fps = mag.match(staline, "([%d%.]+) fps")
-	local totalframe = mag.match(staline, "encoded ([%d]+) frames")
-	local elevatedtime = mag.match(staline, "frames in ([%d%.]+[sm])")
-	if mag.n(totalframe) > 0 then mag.show.log(mag.string.format(c_lang.key1,totalframe,fps,elevatedtime)) end
-	else
-	mag.show.log(1, output)
-	end
-	end
-
-	function estatistics2(output)
-	local staline = mag.match(output,"fps=%s*[%d%.]+")
-	if staline then
-	mag.show.log(c_lang.key2)
+	function estatistics(output,type)
+	local rtime = mag.match(output,"\nbench:.*rtime=%s*([%d%.]+.)\n")
+	if rtime then
+	local totalframe, fps = mag.match(output,"frame=%s*(%d+)%s*fps=%s*([%d%.]+)%s*q=%s*[%-%d%.]+")
+		if not totalframe or not fps then
+		totalframe = 0
+		fps        = 0
+		else
+		fps   = math.floor(mag.n(fps))
+		rtime = mag.gsub(rtime, "%.%d+", "")
+		end
+		if type == "clip" then
+		mag.show.log(mag.string.format(c_lang.key1,totalframe,fps,rtime))
+		else
+		mag.show.log(mag.string.format(c_lang.key2,rtime))
+		end
 	else
 	mag.show.log(1, output)
 	end
